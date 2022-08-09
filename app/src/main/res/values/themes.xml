@@ -1,0 +1,33 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Pc" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange_button</item>
+        <item name="colorPrimaryVariant">@color/orange_font</item>
+        <item name="colorOnPrimary">@color/even_darker_grey</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/darker_grey</item>
+        <item name="colorSecondaryVariant">@color/grey</item>
+        <item name="colorOnSecondary">@color/even_darker_grey</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+    <style name= "AppTheme" parent= "Theme.Pc" >
+        <item name= "android:textViewStyle" > @style/AlataTextViewStyle </item>
+        <item name= "android:buttonStyle" > @style/AlataButtonStyle </item>
+        <item name="textInputStyle"> @style/MyCustomTextInputStyle </item>
+    </style>
+    <style name= "AlataTextViewStyle" parent= "android:Widget.TextView" >
+        <item name= "android:fontFamily" > @font/alata </item>
+        <item name="android:textColor"> @color/darker_grey </item>
+    </style>
+    <style name= "AlataButtonStyle" parent= "android:Widget.Holo.Button" >
+        <item name= "android:fontFamily" > @font/alata </item>
+        <item name="backgroundTint"> @color/orange_button</item>
+    </style>
+    <style name="MyCustomTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+<!--        <item name="hintTextAppearance">@font/alata</item>-->
+        <item name="textInputStyle">@font/alata</item>
+    </style>
+</resources>

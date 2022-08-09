@@ -1,0 +1,81 @@
+package com.example.pc.ui.adapters
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.data.models.local.Favourite
+import com.example.pc.data.models.network.Annonce
+import com.example.pc.databinding.SingleFavouriteBinding
+import com.example.pc.ui.viewmodels.FavouritesModel
+import com.squareup.picasso.Picasso
+
+class FavouritesAdapter(
+    private val onFavouriteClickListener: OnFavouriteClickListener,
+    private val viewModel: FavouritesModel
+): RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
+
+    interface OnFavouriteClickListener{
+        fun onFavouriteClicked(annonceId: String)
+        fun onDeleteClickListener(annonceId: String)
+    }
+    private var favouritesList = mutableListOf<Annonce>()
+
+    fun setFavouritesList(list: List<Annonce>){
+        favouritesList = list.toMutableList()
+        notifyDataSetChanged()
+    }
+
+    inner class FavouriteHolder(private val binding: SingleFavouriteBinding): RecyclerView.ViewHolder(binding.root){
+
+        fun bind(position: Int) {
+
+            val favourite = favouritesList[position]
+            val picasso = Picasso.get()
+
+            //set the ui elements
+
+            binding.apply {
+                favouriteTitle.text = favourite.title
+
+                //to change by the seller name by a call the viewModel
+                //??
+                val sellerName = viewModel.getTheSellerName(favourite.sellerId)
+                favouriteSeller.text = sellerName
+
+                favouritePrice.text = favourite.price.toString()
+
+
+                //including the image
+                picasso
+                    .load(favourite.pictures[0])
+                    .fit()
+                    .into(favouriteImage)
+
+                favouriteWhole.setOnClickListener {
+                    onFavouriteClickListener.onFavouriteClicked(favourite.id!!)
+                }
+
+                delete.setOnClickListener {
+                    onFavouriteClickListener.onDeleteClickListener(favourite.id!!)
+                }
+
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteHolder {
+        return FavouriteHolder(
+            SingleFavouriteBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: FavouriteHolder, position: Int) {
+        holder.bind(position)
+    }
+
+    override fun getItemCount() = favouritesList.size
+}

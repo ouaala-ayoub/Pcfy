@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accueil">Accueil</string>
+    <string name="recherche">Recherche</string>
+    <string name="utilisateur">Utilisateur</string>
+    <string name="favories">Favories</string>
+    <string name="cr_er_une_annonce">créer une annonce</string>
+    <string name="ajouter_une_annonce">Ajouter une annonce</string>
+    <string name="cree_un_compte">S\'inscrire</string>
+    <string name="pas_de_compte">Pas de compte ?</string>
+    <string name="description">Description</string>
+    <string name="supprimer">supprimer</string>
+</resources>

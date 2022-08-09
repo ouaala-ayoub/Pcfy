@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cree_un_compte">S\'inscrire</string>
+    <string name="pas_de_compte">Pas de compte ?</string>
+    <string name="description">Description</string>
+    <string name="supprimer">supprimer</string>
+</resources>

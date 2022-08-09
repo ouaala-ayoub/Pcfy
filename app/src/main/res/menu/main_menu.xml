@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:title="@string/accueil"
+        android:icon="@drawable/ic_baseline_home_24"/>
+    <item
+        android:id="@+id/searchFragment"
+        android:title="@string/recherche"
+        android:icon="@drawable/ic_baseline_search_24"/>
+    <item
+        android:id="@+id/favouritesFragment"
+        android:title="@string/favories"
+        android:icon="@drawable/ic_baseline_favorite_24"/>
+    <item
+        android:id="@+id/createAnnonceFragment"
+        android:title="@string/cr_er_une_annonce"
+        android:icon="@drawable/ic_baseline_note_add_24"/>
+    <item
+        android:id="@+id/loginGraph"
+        android:title="@string/utilisateur"
+        android:icon="@drawable/ic_baseline_person_24"/>
+</menu>
