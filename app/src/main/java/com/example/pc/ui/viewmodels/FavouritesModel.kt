@@ -31,6 +31,7 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if(response.isSuccessful && response.body() != null){
+                    Log.i(TAG, "onResponse user : ${response.body()}")
                     val favouritesIdList = response.body()!!.favourites
                     val favourites = mutableListOf<Annonce>()
 
@@ -42,12 +43,14 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
                                 response: Response<Annonce>
                             ) {
                                 if (response.isSuccessful && response.body() != null){
+                                    Log.i(TAG, "added element ")
                                     favourites.add(response.body()!!)
+                                    favouritesList.postValue(favourites)
                                 }
                                 else {
                                     Log.i(TAG, "response error: ${response.errorBody()}")
+                                    Log.e(TAG, "error adding elements " )
                                     isProgressBarTurning.postValue(false)
-                                    return
                                 }
                             }
 
@@ -55,13 +58,11 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
                                 Log.e(TAG, "onFailure: ${t.message}")
                                 errorMessage.postValue(t.message)
                                 isProgressBarTurning.postValue(false)
-                                return
                             }
 
                         })
                         isProgressBarTurning.postValue(false)
                     }
-                    favouritesList.postValue(favourites)
                 }
                 else{
                     Log.i(TAG, "response error: ${response.errorBody()}")
@@ -124,6 +125,11 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
                         deletedWithSuccess.postValue(false)
                         isProgressBarTurning.postValue(false)
                     }
+                }else{
+                    Log.e(TAG, "error body = ${response.errorBody()}" )
+                    Log.e(TAG, "error raw = ${response.raw()}" )
+                    deletedWithSuccess.postValue(false)
+                    isProgressBarTurning.postValue(false)
                 }
             }
 

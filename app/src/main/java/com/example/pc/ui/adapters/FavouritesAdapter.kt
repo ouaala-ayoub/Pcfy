@@ -3,6 +3,7 @@ package com.example.pc.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
 import com.example.pc.data.models.local.Favourite
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.databinding.SingleFavouriteBinding
@@ -29,6 +30,8 @@ class FavouritesAdapter(
 
         fun bind(position: Int) {
 
+
+
             val favourite = favouritesList[position]
             val picasso = Picasso.get()
 
@@ -46,10 +49,18 @@ class FavouritesAdapter(
 
 
                 //including the image
-                picasso
-                    .load(favourite.pictures[0])
-                    .fit()
-                    .into(favouriteImage)
+                if (favourite.pictures.isNotEmpty()){
+                    picasso
+                        .load(favourite.pictures[0])
+                        .fit()
+                        .into(favouriteImage)
+                }
+                else {
+                    picasso
+                        .load(R.drawable.image_not_found)
+                        .fit()
+                        .into(favouriteImage)
+                }
 
                 favouriteWhole.setOnClickListener {
                     onFavouriteClickListener.onFavouriteClicked(favourite.id!!)

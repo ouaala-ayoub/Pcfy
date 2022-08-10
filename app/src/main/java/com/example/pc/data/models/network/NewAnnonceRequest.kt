@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class NewAnnonceRequest(
     @SerializedName("announces")
-    val annonces: List<String>
+    val annonces: List<String> = listOf()
 )
