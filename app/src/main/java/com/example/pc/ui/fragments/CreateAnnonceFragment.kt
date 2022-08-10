@@ -110,7 +110,7 @@ class CreateAnnonceFragment : Fragment() {
                 viewModel.apply {
 
                     //to change
-                    addAnnonce(userId = "", annonceToAdd).observe(viewLifecycleOwner){
+                    addAnnonce(userId = "62e7fa498dd9b229c8057014", annonceToAdd).observe(viewLifecycleOwner){
                         isTurning.observe(viewLifecycleOwner){ isVisible->
                             progressBar.isVisible = isVisible
                         }

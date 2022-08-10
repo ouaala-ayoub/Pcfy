@@ -18,7 +18,7 @@ interface RetrofitService {
     fun getAnnonceById(@Path("id") annonceId: String): Call<Annonce>
 
     @POST("announces")
-    fun addAnnonce(@Body annonceToAdd: Annonce):Call<Annonce>
+    fun addAnnonce(@Body annonceToAdd: Annonce):Call<IdResponse>
 
     //handle users admin ?
 
@@ -26,6 +26,10 @@ interface RetrofitService {
     fun getUsers(): Call<List<User>>
 
     // ??
+
+    @POST("users/signin")
+    fun login()
+
     @GET("users/{id}")
     fun getUserById(@Path("id") userId: String): Call<User>
 

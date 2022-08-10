@@ -23,8 +23,9 @@ data class Annonce(
     val status: String = "neuf",
 
 
+    //just for testing
     @SerializedName("sellerId")
-    val sellerId: String = "",
+    val sellerId: String = "62e9565ecae1214474d89bfe",
 
     //non required
 

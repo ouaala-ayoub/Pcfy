@@ -18,6 +18,9 @@ class UserModel(private val repository: UserRepository): ViewModel() {
     //add business logic
     //sign up = addUser
 
+    private val userAdded = MutableLiveData<String?>()
+    val isTurning = MutableLiveData<Boolean>()
+
     val nameLiveData = MutableLiveData<String>()
     val nameHelperText = MutableLiveData<String>()
 
@@ -147,28 +150,35 @@ class UserModel(private val repository: UserRepository): ViewModel() {
 //        )
 //    }
 
-    fun signUp(userToAdd: User): IdResponse?{
+    fun signUp(userToAdd: User): MutableLiveData<String?>{
 
-        var responseToReturn: IdResponse? = null
+        isTurning.postValue(true)
 
         repository.addUser(userToAdd).enqueue(object : Callback<IdResponse>{
 
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse: response body = ${response.body()}")
-                    responseToReturn = response.body()
+                    userAdded.postValue(response.body()!!.objectId!!)
+                    isTurning.postValue(false)
                 }
                 else{
+                    Log.e(TAG, "response raw ${response.raw()}", )
+                    Log.e(TAG, "response body: ${response.body()}" )
                     Log.e(TAG, "response error body = ${response.errorBody()}")
                     Log.e(TAG, "response message = " + response.message())
+                    userAdded.postValue(null)
+                    isTurning.postValue(false)
                 }
             }
 
             override fun onFailure(call: Call<IdResponse>, t: Throwable) {
+                userAdded.postValue(null)
+                isTurning.postValue(false)
                 Log.e(TAG, "error message = ${t.message}")
             }
         })
-        return responseToReturn
+        return userAdded
     }
 
 }

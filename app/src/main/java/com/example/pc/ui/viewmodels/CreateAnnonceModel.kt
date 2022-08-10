@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.pc.data.models.network.NewAnnonceRequest
 import com.example.pc.data.models.network.Annonce
+import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.CreateAnnonceRepository
 import retrofit2.Call
@@ -56,17 +57,21 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
 
         isTurning.postValue(true)
 
-        createAnnonceRepository.addAnnonce(annonceToAdd).enqueue(object : Callback<Annonce> {
-            override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
+        createAnnonceRepository.addAnnonce(annonceToAdd).enqueue(object : Callback<IdResponse> {
+            override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if(response.isSuccessful && response.body() != null){
+
+                    val annonceId = response.body()!!.objectId
                     Log.i(TAG, "response body is ${response.body()}")
 
                     createAnnonceRepository.getUserById(userId).enqueue(object : Callback<User> {
                         override fun onResponse(call: Call<User>, response: Response<User>) {
                             if (response.isSuccessful && response.body() != null){
 
+                                Log.i(TAG, "user = ${response.body()} ")
+
                                 val annonceBody = response.body()!!.annonces
-                                annonceBody.add(annonceToAdd.id!!)
+                                annonceBody.add(annonceId!!)
                                 val annonceReqBody = NewAnnonceRequest(annonceBody)
 
                                 createAnnonceRepository.addAnnonceIdToUser(
@@ -123,7 +128,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                     requestSuccessful.postValue(false)
                 }
             }
-            override fun onFailure(call: Call<Annonce>, t: Throwable) {
+            override fun onFailure(call: Call<IdResponse>, t: Throwable) {
                 Log.e(TAG, t.message!!)
                 errorMessage.postValue(t.message)
                 requestSuccessful.postValue(false)

@@ -17,6 +17,9 @@ data class User(
     @SerializedName("password")
     val password: String,
 
+    @SerializedName("role")
+    val role: String = "user",
+
     //non required
 
     @SerializedName("_id")
@@ -47,7 +50,7 @@ data class User(
     @SerializedName("lockUntil")
     val lockUntil: Number? = null,
 
-    @SerializedName("annonces")
+    @SerializedName("announces")
     val annonces: MutableList<String> = mutableListOf(),
 
     @SerializedName("favourites")

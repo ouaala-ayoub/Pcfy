@@ -121,7 +121,8 @@ class UserFragment : Fragment() {
             signUpButton.setOnClickListener {
                 // to add a dialog ??
 
-                val imageUrl = uploadImage(imageUri)
+//                val imageUrl = uploadImage(imageUri)
+                val imageUrl = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
 
                 viewModel.apply {
                     val userToAdd = User(
@@ -129,25 +130,27 @@ class UserFragment : Fragment() {
                         binding!!.phoneEditText.text.toString(),
                         binding!!.emailEditText.text.toString(),
                         binding!!.passwordEditText.text.toString(),
-                        binding!!.cityEditText.text.toString(),
-                        binding!!.userTypeEditText.text.toString(),
-                        binding!!.organisationNameEditText.text.toString(),
-                        imageUrl
+                        city = binding!!.cityEditText.text.toString(),
+                        userType = binding!!.userTypeEditText.text.toString(),
+                        brand = binding!!.organisationNameEditText.text.toString(),
+                        imageUrl = imageUrl
                     )
+
+                    Log.i(TAG, "user to add : $userToAdd")
+
                     val response = signUp(userToAdd)
 
-                    if (response == null){
-                        Log.e(TAG, "something went wrong in the request" )
-                        requireActivity().toast(SGN_FAILED, Toast.LENGTH_LONG)
-
-                        //go to home fragment after fail
-                        goToHomeFragment()
-                    }else{
-                        Log.i(TAG, "signup successful")
-                        requireActivity().toast(SGN_SUCCESS, Toast.LENGTH_LONG)
-
-                        //go to home fragment after sign up
-                        goToHomeFragment()
+                    response.observe(viewLifecycleOwner){
+                        if(it.isNullOrBlank()){
+                            //dialog ?
+                            Log.i(TAG, "return : $it")
+                            requireContext().toast(SGN_FAILED, Toast.LENGTH_LONG)
+                            goToHomeFragment()
+                        }else {
+                            Log.i(TAG, "return : $it")
+                            requireContext().toast(SGN_SUCCESS, Toast.LENGTH_LONG)
+                            goToHomeFragment()
+                        }
                     }
                 }
             }
@@ -156,12 +159,13 @@ class UserFragment : Fragment() {
                 //image selection intent
                 setTheUploadImage()
             }
+
+            viewModel.isValidInput.observe(viewLifecycleOwner){ isActive ->
+                Log.i(TAG, "$isActive")
+                binding!!.signUpButton.isEnabled = isActive
+            }
         }
 
-        viewModel.isValidInput.observe(viewLifecycleOwner){ isActive ->
-            Log.i(TAG, "$isActive")
-            binding!!.signUpButton.isEnabled = isActive
-        }
     }
 
     private fun goToHomeFragment(){
@@ -170,16 +174,15 @@ class UserFragment : Fragment() {
     }
 
     private fun setUpTheTypeEditText(){
-        binding!!.userTypeTextField.editText?.setText(Status.NEW.status)
+
+        binding!!.userTypeTextField.editText?.setText(SellerType.SOLO.type)
 
         //to change !!!!!!!!!!!!??
         //set the adapter
-        val items = SellerType.values()
-        val values = mutableListOf<String>()
-
-        for (element in items){
-            values.add(element.type)
-        }
+        val values = listOf(
+            SellerType.PRO.type,
+            SellerType.SOLO.type
+        )
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
         (binding!!.userTypeTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
