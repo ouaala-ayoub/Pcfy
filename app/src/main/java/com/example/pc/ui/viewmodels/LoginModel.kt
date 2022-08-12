@@ -11,6 +11,8 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
     //to add repository
 
+    private val loginSuccessful = MutableLiveData<Boolean>()
+
     val userNameLiveData = MutableLiveData<String>()
     val passwordLiveData = MutableLiveData<String>()
     val isValidLiveData = MediatorLiveData<Boolean>().apply {
@@ -29,13 +31,12 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         val isValidPassword = !password.isNullOrBlank() && password.length>=PASS_MIN_LENGTH
         return isValidEmail && isValidPassword
     }
-    fun login(): Boolean{
+
+    fun login(userName: String, password: String): MutableLiveData<Boolean>{
         val isLoginSuccessful = false
-        //when the button is pressed
-        //handle the request
 
-        //repository.login()
+        repository.login(userName, password)
 
-        return isLoginSuccessful
+        return loginSuccessful
     }
 }

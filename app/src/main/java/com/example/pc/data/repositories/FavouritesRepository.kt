@@ -5,8 +5,7 @@ import com.example.pc.data.remote.RetrofitService
 
 class FavouritesRepository(private val retrofitService: RetrofitService) {
 
-    fun getUserById(userId: String) = retrofitService.getUserById(userId)
-    fun getAnnonceById(annonceId: String) = retrofitService.getAnnonceById(annonceId)
+    fun getFavourites(userId: String) = retrofitService.getFavourites(userId)
     fun updateFavourites(
         userId: String,
         newFavouritesList: NewFavouritesRequest

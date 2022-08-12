@@ -4,7 +4,7 @@ import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.remote.RetrofitService
 
 class LoginRepository(private val retrofitService: RetrofitService) {
-    // in-memory cache of the loggedInUser object
+//     in-memory cache of the loggedInUser object
 //    var user: LoggedInUser? = null
 //        private set
 //
@@ -38,4 +38,7 @@ class LoginRepository(private val retrofitService: RetrofitService) {
 //        // If user credentials will be cached in local storage, it is recommended it be encrypted
 //        // @see https://developer.android.com/training/articles/keystore
 //    }
+
+    fun login(userName: String, password: String) = retrofitService.login(userName, password)
+
 }

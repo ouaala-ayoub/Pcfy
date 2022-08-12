@@ -21,75 +21,103 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
     private var favouritesListLiveData = MutableLiveData<MutableList<Annonce>?>()
     private var deletedWithSuccess = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<String>()
+    private val isEmpty = MutableLiveData<Boolean>()
     val seller = MutableLiveData<User>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
 
+//    fun getFavourites(userId: String): LiveData<MutableList<Annonce>?>{
+//
+////        deletedWithSuccess.postValue(false)
+//        isProgressBarTurning.postValue(true)
+//
+//        favouritesRepository.getUserById(userId).enqueue(object :Callback<User>{
+//
+//            override fun onResponse(call: Call<User>, response: Response<User>) {
+//                if(response.isSuccessful && response.body() != null){
+//                    Log.i(TAG, "onResponse user : ${response.body()}")
+//                    val favouritesIdList = response.body()!!.favourites
+//                    val favourites = mutableListOf<Annonce>()
+//
+//                    for (id in favouritesIdList){
+//                        favouritesRepository.getAnnonceById(id).enqueue(object : Callback<Annonce>{
+//
+//                            override fun onResponse(
+//                                call: Call<Annonce>,
+//                                response: Response<Annonce>
+//                            ) {
+//                                if (response.isSuccessful && response.body() != null){
+//                                    Log.i(TAG, "added element ")
+//                                    favourites.add(response.body()!!)
+//                                    favouritesListLiveData.postValue(favourites)
+//                                }
+//                                else {
+//                                    Log.i(TAG, "response error: ${response.errorBody()}")
+//                                    Log.e(TAG, "error adding elements " )
+//                                    isProgressBarTurning.postValue(false)
+//                                }
+//                            }
+//
+//                            override fun onFailure(call: Call<Annonce>, t: Throwable) {
+//                                Log.e(TAG, "onFailure: ${t.message}")
+//                                errorMessage.postValue(t.message)
+//                                isProgressBarTurning.postValue(false)
+//                            }
+//
+//                        })
+//                        isProgressBarTurning.postValue(false)
+//                    }
+//
+//                }
+//                else{
+//                    Log.i(TAG, "response error: ${response.errorBody()}")
+//                    isProgressBarTurning.postValue(false)
+//                    return
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<User>, t: Throwable) {
+//                Log.e(TAG, "onFailure: ${t.message}")
+//                errorMessage.postValue(t.message)
+//                isProgressBarTurning.postValue(false)
+//            }
+//        })
+//        isProgressBarTurning.postValue(false)
+//        return favouritesListLiveData
+//    }
+
+
+
     fun getFavourites(userId: String): LiveData<MutableList<Annonce>?>{
-
-//        deletedWithSuccess.postValue(false)
         isProgressBarTurning.postValue(true)
-
-        favouritesRepository.getUserById(userId).enqueue(object :Callback<User>{
-
-            override fun onResponse(call: Call<User>, response: Response<User>) {
+        favouritesRepository.getFavourites(userId).enqueue(object : Callback<List<Annonce>>{
+            override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
                 if(response.isSuccessful && response.body() != null){
-                    Log.i(TAG, "onResponse user : ${response.body()}")
-                    val favouritesIdList = response.body()!!.favourites
-                    val favourites = mutableListOf<Annonce>()
-
-                    for (id in favouritesIdList){
-                        favouritesRepository.getAnnonceById(id).enqueue(object : Callback<Annonce>{
-
-                            override fun onResponse(
-                                call: Call<Annonce>,
-                                response: Response<Annonce>
-                            ) {
-                                if (response.isSuccessful && response.body() != null){
-                                    Log.i(TAG, "added element ")
-                                    favourites.add(response.body()!!)
-                                    favouritesListLiveData.postValue(favourites)
-                                }
-                                else {
-                                    Log.i(TAG, "response error: ${response.errorBody()}")
-                                    Log.e(TAG, "error adding elements " )
-                                    isProgressBarTurning.postValue(false)
-                                }
-                            }
-
-                            override fun onFailure(call: Call<Annonce>, t: Throwable) {
-                                Log.e(TAG, "onFailure: ${t.message}")
-                                errorMessage.postValue(t.message)
-                                isProgressBarTurning.postValue(false)
-                            }
-
-                        })
-                        isProgressBarTurning.postValue(false)
-                    }
-
+                    Log.i(TAG, "onResponse getFavourites: ${response.body()}")
+                    favouritesListLiveData.postValue((response.body()!!).toMutableList())
+                    isProgressBarTurning.postValue(false)
                 }
                 else{
-                    Log.i(TAG, "response error: ${response.errorBody()}")
-                    isProgressBarTurning.postValue(false)
-                    return
+                    Log.e(TAG, "error body = ${response.errorBody()}" )
+                    Log.e(TAG, "error raw = ${response.raw()}" )
+                    favouritesListLiveData.postValue(null)
                 }
             }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
+            override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
+                Log.e(TAG, "onFailure getFavourites : ${t.message}")
                 errorMessage.postValue(t.message)
+                favouritesListLiveData.postValue(null)
                 isProgressBarTurning.postValue(false)
             }
         })
-        isProgressBarTurning.postValue(false)
+
         return favouritesListLiveData
     }
-
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun deleteFavourite(userId: String, favouriteIdToDelete: String): MutableLiveData<Boolean>{
 
         isProgressBarTurning.postValue(true)
-
 
         val favourites = favouritesListLiveData.value
         val removed = favourites?.removeIf { annonce -> annonce.id == favouriteIdToDelete }
@@ -132,6 +160,14 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
             deletedWithSuccess.postValue(false)
         }
         return deletedWithSuccess
+    }
+
+    fun updateIsEmpty(): MutableLiveData<Boolean> {
+        if(favouritesListLiveData.value.isNullOrEmpty()){
+            isEmpty.postValue(true)
+        }
+        else isEmpty.postValue(false)
+        return isEmpty
     }
 
     fun getTheSellerName(userId: String): String{

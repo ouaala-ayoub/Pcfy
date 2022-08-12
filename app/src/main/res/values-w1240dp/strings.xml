@@ -4,4 +4,5 @@
     <string name="pas_de_compte">Pas de compte ?</string>
     <string name="description">Description</string>
     <string name="supprimer">supprimer</string>
+    <string name="pas_de_favories">Pas de favories</string>
 </resources>

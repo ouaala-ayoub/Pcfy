@@ -22,7 +22,7 @@ import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.FavouritesModel
 import com.example.pc.utils.toast
 
-private const val userId = "62e7fa498dd9b229c8057014"
+private const val userId = "62e9565ecae1214474d89bfe"
 private const val FAVOURITE_DELETED_SUCCESS = "suprimée des favories avec succes"
 private const val FAVOURITE_ERROR_MSG = "Erreur Inatendue"
 
@@ -78,7 +78,9 @@ class FavouritesFragment : Fragment() {
                 isProgressBarTurning.observe(viewLifecycleOwner){ isVisible ->
                     favouritesProgressBar.isVisible = isVisible
                 }
-
+                updateIsEmpty().observe(viewLifecycleOwner){ isVisible ->
+                    isEmpty.isVisible = isVisible
+                }
             }
         }
 

@@ -27,7 +27,7 @@ interface RetrofitService {
 
     // ??
 
-    @POST("users/signin")
+    @POST("auth/signin")
     fun login(@Body username: String,@Body password: String)
 
     @GET("users/{id}")
@@ -44,6 +44,10 @@ interface RetrofitService {
 
     //favourites
 //    ???
+
+    @GET("users/{id}/favourites")
+    fun getFavourites(@Path("id") userId: String): Call<List<Annonce>>
+
     @PUT("users/{id}")
     fun updateFavourites(@Path("id") userId: String, @Body favouriteToAddId: NewFavouritesRequest): Call<User>
 
