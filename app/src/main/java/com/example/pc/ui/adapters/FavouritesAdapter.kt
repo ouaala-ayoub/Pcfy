@@ -1,18 +1,21 @@
 package com.example.pc.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
-import com.example.pc.data.models.local.Favourite
 import com.example.pc.data.models.network.Annonce
+import com.example.pc.data.remote.RetrofitService
 import com.example.pc.databinding.SingleFavouriteBinding
 import com.example.pc.ui.viewmodels.FavouritesModel
 import com.squareup.picasso.Picasso
 
+private const val TAG = "FavouritesAdapter"
+
 class FavouritesAdapter(
     private val onFavouriteClickListener: OnFavouriteClickListener,
-    private val viewModel: FavouritesModel
+    private val viewModel: FavouritesModel,
 ): RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
 
     interface OnFavouriteClickListener{
@@ -28,32 +31,26 @@ class FavouritesAdapter(
 
     inner class FavouriteHolder(private val binding: SingleFavouriteBinding): RecyclerView.ViewHolder(binding.root){
 
+
         fun bind(position: Int) {
 
-
-
             val favourite = favouritesList[position]
+
             val picasso = Picasso.get()
+            Log.i(TAG, "binding : $favourite")
 
             //set the ui elements
-
             binding.apply {
                 favouriteTitle.text = favourite.title
 
-                //to change by the seller name by a call the viewModel
-                //??
                 val sellerName = viewModel.getTheSellerName(favourite.sellerId)
                 favouriteSeller.text = sellerName
 
                 favouritePrice.text = favourite.price.toString()
 
-
                 //including the image
-                if (favourite.pictures.isNotEmpty()){
-                    picasso
-                        .load(favourite.pictures[0])
-                        .fit()
-                        .into(favouriteImage)
+                if (favourite.pictures.isEmpty()){
+                    favouriteImage.setImageResource(R.drawable.ic_launcher_background)
                 }
                 else {
                     picasso

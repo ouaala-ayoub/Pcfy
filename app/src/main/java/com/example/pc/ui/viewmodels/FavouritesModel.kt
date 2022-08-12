@@ -1,6 +1,8 @@
 package com.example.pc.ui.viewmodels
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,13 +18,13 @@ private const val TAG = "FavouritesModel"
 
 class FavouritesModel(private val favouritesRepository: FavouritesRepository): ViewModel() {
 
-    private var favouritesList = MutableLiveData<List<Annonce>>()
+    private var favouritesListLiveData = MutableLiveData<MutableList<Annonce>?>()
     private var deletedWithSuccess = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<String>()
     val seller = MutableLiveData<User>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
 
-    fun getFavourites(userId: String): LiveData<List<Annonce>>{
+    fun getFavourites(userId: String): LiveData<MutableList<Annonce>?>{
 
 //        deletedWithSuccess.postValue(false)
         isProgressBarTurning.postValue(true)
@@ -45,7 +47,7 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
                                 if (response.isSuccessful && response.body() != null){
                                     Log.i(TAG, "added element ")
                                     favourites.add(response.body()!!)
-                                    favouritesList.postValue(favourites)
+                                    favouritesListLiveData.postValue(favourites)
                                 }
                                 else {
                                     Log.i(TAG, "response error: ${response.errorBody()}")
@@ -63,6 +65,7 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
                         })
                         isProgressBarTurning.postValue(false)
                     }
+
                 }
                 else{
                     Log.i(TAG, "response error: ${response.errorBody()}")
@@ -77,69 +80,57 @@ class FavouritesModel(private val favouritesRepository: FavouritesRepository): V
                 isProgressBarTurning.postValue(false)
             }
         })
-        return favouritesList
+        isProgressBarTurning.postValue(false)
+        return favouritesListLiveData
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.N)
     fun deleteFavourite(userId: String, favouriteIdToDelete: String): MutableLiveData<Boolean>{
 
-//        deletedWithSuccess = MutableLiveData()
         isProgressBarTurning.postValue(true)
 
-        //get the user first
-        favouritesRepository.getUserById(userId).enqueue(object :Callback<User>{
 
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                if(response.isSuccessful && response.body() != null){
+        val favourites = favouritesListLiveData.value
+        val removed = favourites?.removeIf { annonce -> annonce.id == favouriteIdToDelete }
+        favouritesListLiveData.postValue(favourites)
 
-                    val favouritesList = response.body()!!.favourites
+        val idsList = mutableListOf<String>()
+        if (!favourites.isNullOrEmpty()) {
+            for (favourite in favourites){
+                idsList.add(favourite.id!!)
+            }
+        }
 
-                    if (favouritesList.remove(favouriteIdToDelete)){
-                        favouritesRepository.updateFavourites(
-                            userId,
-                            NewFavouritesRequest(favouritesList)
-                        ).enqueue(object :Callback<User>{
+        if(removed != null && removed == true){
 
-                            override fun onResponse(call: Call<User>, response: Response<User>) {
-                                if(response.isSuccessful && response.body() != null){
-                                    getFavourites(userId)
-                                    Log.i(TAG, "onResponse: ${response.body()}")
-                                    isProgressBarTurning.postValue(false)
-                                    deletedWithSuccess.postValue(true)
-                                }
-                                else{
-                                    Log.i(TAG, "on delete response : ${response.errorBody()}")
-                                    isProgressBarTurning.postValue(false)
-                                    deletedWithSuccess.postValue(false)
-                                }
-                            }
-
-                            override fun onFailure(call: Call<User>, t: Throwable) {
-                                Log.e(TAG, "on delete failure Failure: ${t.message}" )
-                                deletedWithSuccess.postValue(false)
-                            }
-
-                        })
+            favouritesRepository.updateFavourites(
+                userId, NewFavouritesRequest(idsList)
+            ).enqueue(object : Callback<User>{
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        deletedWithSuccess.postValue(true)
+                        isProgressBarTurning.postValue(false)
                     }
                     else{
-                        Log.e(TAG, "something went wrong with deleting the favourite" )
+                        Log.e(TAG, "error body = ${response.errorBody()}" )
+                        Log.e(TAG, "error raw = ${response.raw()}" )
                         deletedWithSuccess.postValue(false)
                         isProgressBarTurning.postValue(false)
                     }
-                }else{
-                    Log.e(TAG, "error body = ${response.errorBody()}" )
-                    Log.e(TAG, "error raw = ${response.raw()}" )
-                    deletedWithSuccess.postValue(false)
-                    isProgressBarTurning.postValue(false)
                 }
-            }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "on get user Failure: ${t.message}")
-                deletedWithSuccess.postValue(false)
-                isProgressBarTurning.postValue(false)
-            }
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    deletedWithSuccess.postValue(false)
+                    Log.e(TAG, "onFailure delete : ${t.message}")
+                }
 
-        })
+            })
+        }
+        else{
+            isProgressBarTurning.postValue(false)
+            deletedWithSuccess.postValue(false)
+        }
         return deletedWithSuccess
     }
 
