@@ -50,12 +50,13 @@ class FavouritesAdapter(
 
                 //including the image
                 if (favourite.pictures.isEmpty()){
-                    favouriteImage.setImageResource(R.drawable.ic_launcher_background)
+                    favouriteImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                 }
                 else {
                     picasso
-                        .load(R.drawable.image_not_found)
+                        .load(favourite.pictures[0])
                         .fit()
+                        .centerCrop()
                         .into(favouriteImage)
                 }
 
