@@ -69,10 +69,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 //add a waiting thing progress bar maybe while waiting for the login
 
                 //login
-//                val isLoginSuccessful = viewModel.login()
-                val isLoginSuccessful = true
-                if(isLoginSuccessful) {
+//                val isAuthenticated = viewModel.login()
+
+                if(true) {
                     goToHomeFragment()
+//                    viewModel.login()
                 }
                 else {
                     //handle response error messages

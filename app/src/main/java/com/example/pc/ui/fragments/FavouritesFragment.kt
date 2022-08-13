@@ -73,13 +73,13 @@ class FavouritesFragment : Fragment() {
                     }
                     else{
                         adapter.setFavouritesList(favourites)
+                        updateIsEmpty().observe(viewLifecycleOwner){ isVisible ->
+                            isEmpty.isVisible = isVisible
+                        }
                     }
                 }
                 isProgressBarTurning.observe(viewLifecycleOwner){ isVisible ->
                     favouritesProgressBar.isVisible = isVisible
-                }
-                updateIsEmpty().observe(viewLifecycleOwner){ isVisible ->
-                    isEmpty.isVisible = isVisible
                 }
             }
         }
