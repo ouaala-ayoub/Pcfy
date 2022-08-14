@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
 import com.example.pc.data.models.network.Annonce
-import com.example.pc.data.remote.RetrofitService
 import com.example.pc.databinding.SingleFavouriteBinding
 import com.example.pc.ui.viewmodels.FavouritesModel
 import com.squareup.picasso.Picasso

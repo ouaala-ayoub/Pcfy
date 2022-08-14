@@ -1,6 +1,8 @@
 package com.example.pc.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
+import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentCreateAnnonceBinding
@@ -17,12 +20,10 @@ import com.example.pc.ui.viewmodels.LoginModel
 import com.example.pc.utils.toast
 
 private const val LOGIN_FAILED = "Erreur de Connexion"
+private const val LOGIN_SUCCESS = "Connecté avec success"
+private const val TAG = "LoginFragment"
 
 class LoginFragment : Fragment(), View.OnClickListener {
-
-    companion object {
-        fun newInstance() = LoginFragment()
-    }
 
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentLoginBinding? = null
@@ -66,23 +67,45 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         when(v?.id){
             R.id.login -> {
-                //add a waiting thing progress bar maybe while waiting for the login
 
-                //login
-//                val isAuthenticated = viewModel.login()
+                viewModel.apply {
 
-                if(true) {
-                    goToHomeFragment()
-//                    viewModel.login()
+                    val userName = binding!!.usernameInput.text.toString()
+                    val password = binding!!.passwordInput.text.toString()
+
+                    login(
+                        userName,
+                        password
+                    ).observe(viewLifecycleOwner){ tokenObject ->
+
+                        retrievedTokens.observe(viewLifecycleOwner){ retrievedTokens->
+                            if(retrievedTokens) {
+                                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                                with (sharedPref!!.edit()) {
+                                    putString(getString(R.string.refresh_token), tokenObject.refreshToken)
+                                    putString(getString(R.string.access_token), tokenObject.accessToken)
+                                    apply()
+                                }
+                                val token = Tokens(
+                                    sharedPref.getString(getString(R.string.access_token), "dog")!!,
+                                    sharedPref.getString(getString(R.string.refresh_token),"water")!!,
+                                )
+                                Log.i(TAG, "shared prefs : $token")
+                                requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
+                            }
+                            else{
+                                requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
+                            }
+                        }
+
+
+                    }
+
+                    isTurning.observe(viewLifecycleOwner){
+                        binding!!.loginProgressBar.isActivated = it
+                    }
                 }
-                else {
-                    //handle response error messages
-                    // exp = "user errors , internet errors, username and password are wrong ?"
-                    // to implement
 
-                    requireActivity().toast(ERROR_MSG, Toast.LENGTH_LONG)
-                }
-                //then go to home fragment
             }
             R.id.sign_up -> {
                 //sign up fragment

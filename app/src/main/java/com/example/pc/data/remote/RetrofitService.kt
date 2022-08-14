@@ -28,7 +28,7 @@ interface RetrofitService {
     // ??
 
     @POST("auth/signin")
-    fun login(@Body username: String,@Body password: String)
+    fun login(@Body userCredentials: UserCredentials): Call<Tokens>
 
     @GET("users/{id}")
     fun getUserById(@Path("id") userId: String): Call<User>

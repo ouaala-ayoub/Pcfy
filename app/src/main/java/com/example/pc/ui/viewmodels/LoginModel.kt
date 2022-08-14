@@ -1,17 +1,25 @@
 package com.example.pc.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.repositories.LoginRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private const val PASS_MIN_LENGTH = 8
+private const val TAG = "LoginModel"
 
 class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
     //to add repository
 
-    private val loginSuccessful = MutableLiveData<Boolean>()
+    val retrievedTokens = MutableLiveData<Boolean>()
+    private val tokens = MutableLiveData<Tokens>()
+    val isTurning = MutableLiveData<Boolean>()
 
     val userNameLiveData = MutableLiveData<String>()
     val passwordLiveData = MutableLiveData<String>()
@@ -32,11 +40,38 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return isValidEmail && isValidPassword
     }
 
-    fun login(userName: String, password: String): MutableLiveData<Boolean>{
-        val isLoginSuccessful = false
+    fun login(userName: String, password: String): MutableLiveData<Tokens>{
 
-        repository.login(userName, password)
+        isTurning.postValue(true)
 
-        return loginSuccessful
+        repository.login(userName, password).enqueue(object : Callback<Tokens>{
+            override fun onResponse(call: Call<Tokens>, response: Response<Tokens>) {
+                if(response.isSuccessful && response.body() != null){
+                    Log.i(TAG, "onResponse login : ${response.body()}")
+                    retrievedTokens.postValue(true)
+                    tokens.postValue(response.body())
+                    isTurning.postValue(false)
+                }
+                else{
+                    Log.e(TAG, "onResponse login : ${response.errorBody()}")
+                    Log.e(TAG, "onResponse login : ${response.code()}")
+                    retrievedTokens.postValue(false)
+                    isTurning.postValue(false)
+                }
+            }
+
+            override fun onFailure(call: Call<Tokens>, t: Throwable) {
+                Log.e(TAG, "onFailure login : ${t.message}")
+                Log.e(TAG, "onFailure: login : ${t.cause}")
+                retrievedTokens.postValue(false)
+                isTurning.postValue(false)
+            }
+        })
+
+        return tokens
+    }
+
+    fun retrieveTheUser(){
+
     }
 }

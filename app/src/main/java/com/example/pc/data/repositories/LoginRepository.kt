@@ -1,6 +1,7 @@
 package com.example.pc.data.repositories
 
 import com.example.pc.data.models.local.LoggedInUser
+import com.example.pc.data.models.network.UserCredentials
 import com.example.pc.data.remote.RetrofitService
 
 class LoginRepository(private val retrofitService: RetrofitService) {
@@ -39,6 +40,6 @@ class LoginRepository(private val retrofitService: RetrofitService) {
 //        // @see https://developer.android.com/training/articles/keystore
 //    }
 
-    fun login(userName: String, password: String) = retrofitService.login(userName, password)
+    fun login(userName: String, password: String) = retrofitService.login(UserCredentials(userName, password))
 
 }

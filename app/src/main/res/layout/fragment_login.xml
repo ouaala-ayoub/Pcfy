@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.LoginFragment"
-    android:background="@color/grey_background">
+    android:background="@color/grey_background"
+    tools:context=".ui.fragments.LoginFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -61,9 +61,9 @@
             android:layout_marginBottom="20dp"
             android:layout_weight="1"
             android:hint="Mot de passe"
+            app:endIconMode="password_toggle"
             app:startIconDrawable="@drawable/ic_baseline_lock_24"
-            app:startIconTint="@color/orange_button"
-            app:endIconMode="password_toggle">
+            app:startIconTint="@color/orange_button">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordInput"
@@ -116,6 +116,18 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <ProgressBar
+        android:id="@+id/login_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

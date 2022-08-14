@@ -17,8 +17,8 @@ data class User(
     @SerializedName("password")
     val password: String,
 
-    @SerializedName("role")
-    val role: String = "user",
+    @SerializedName("isAdmin")
+    val isAdmin: Boolean = false,
 
     //non required
 
