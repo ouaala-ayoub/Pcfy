@@ -1,8 +1,15 @@
 package com.example.pc.data.repositories
 
+import android.app.Activity
+import android.content.Context
+import com.example.pc.R
 import com.example.pc.data.models.local.LoggedInUser
+import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.models.network.UserCredentials
 import com.example.pc.data.remote.RetrofitService
+
+
+
 
 class LoginRepository(private val retrofitService: RetrofitService) {
 //     in-memory cache of the loggedInUser object
@@ -40,6 +47,9 @@ class LoginRepository(private val retrofitService: RetrofitService) {
 //        // @see https://developer.android.com/training/articles/keystore
 //    }
 
-    fun login(userName: String, password: String) = retrofitService.login(UserCredentials(userName, password))
+    init {
 
+    }
+
+    fun login(userName: String, password: String) = retrofitService.login(UserCredentials(userName, password))
 }

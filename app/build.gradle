@@ -4,6 +4,9 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdk 32
 
@@ -15,6 +18,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
     buildFeatures {
         viewBinding true
@@ -64,4 +68,10 @@ dependencies {
     //image loading
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //jwt auth
+    implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
+    implementation 'io.github.nefilim.kjwt:kjwt-jwks:0.5.3'
+
+    //kt core
+    implementation("io.arrow-kt:arrow-core")
 }

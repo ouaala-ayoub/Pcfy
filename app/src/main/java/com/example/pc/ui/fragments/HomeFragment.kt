@@ -1,15 +1,17 @@
 package com.example.pc.ui.fragments
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.data.models.network.Annonce
@@ -20,9 +22,10 @@ import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.viewmodels.HomeModel
 import com.example.pc.ui.viewmodels.HomeModelFactory
+import com.example.pc.utils.Token
 
 const val NUM_ROWS = 2
-const val TAG_HOME = "HomeFragment"
+private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
@@ -48,11 +51,11 @@ class HomeFragment : Fragment() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         annoncesRv = binding!!.annonceRv
         annoncesRv.layoutManager = GridLayoutManager(this.context, NUM_ROWS)
@@ -66,6 +69,7 @@ class HomeFragment : Fragment() {
         viewModel.isProgressBarTurning.observe(viewLifecycleOwner){
             binding!!.homeProgressBar.isVisible = it
         }
+
         return binding?.root
     }
 

@@ -1,11 +1,13 @@
 package com.example.pc.ui.viewmodels
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.repositories.LoginRepository
+import io.github.nefilim.kjwt.JWT
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,6 +52,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     Log.i(TAG, "onResponse login : ${response.body()}")
                     retrievedTokens.postValue(true)
                     tokens.postValue(response.body())
+//                    repository.setCurrentUserTokens(activity, tokens.value!!)
                     isTurning.postValue(false)
                 }
                 else{
@@ -71,7 +74,5 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return tokens
     }
 
-    fun retrieveTheUser(){
 
-    }
 }

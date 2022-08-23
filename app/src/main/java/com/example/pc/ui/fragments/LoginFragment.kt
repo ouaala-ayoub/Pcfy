@@ -18,6 +18,7 @@ import com.example.pc.databinding.FragmentCreateAnnonceBinding
 import com.example.pc.databinding.FragmentLoginBinding
 import com.example.pc.ui.viewmodels.LoginModel
 import com.example.pc.utils.toast
+import io.github.nefilim.kjwt.JWT
 
 private const val LOGIN_FAILED = "Erreur de Connexion"
 private const val LOGIN_SUCCESS = "Connecté avec success"
@@ -86,12 +87,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
                                     putString(getString(R.string.access_token), tokenObject.accessToken)
                                     apply()
                                 }
-                                val token = Tokens(
-                                    sharedPref.getString(getString(R.string.access_token), "dog")!!,
-                                    sharedPref.getString(getString(R.string.refresh_token),"water")!!,
-                                )
-                                Log.i(TAG, "shared prefs : $token")
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
+                                goToHomeFragment()
                             }
                             else{
                                 requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
