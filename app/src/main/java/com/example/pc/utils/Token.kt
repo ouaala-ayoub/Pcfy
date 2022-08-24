@@ -8,6 +8,9 @@ import com.example.pc.JWT_USER_ACCESS
 import com.example.pc.JWT_USER_REFRESH
 import com.example.pc.data.models.network.Tokens
 import io.github.nefilim.kjwt.*
+import io.github.nefilim.kjwt.ClaimsVerification.expired
+import io.github.nefilim.kjwt.ClaimsVerification.validateClaims
+import java.security.interfaces.RSAPublicKey
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -16,29 +19,28 @@ import java.util.*
 class Token {
     companion object {
 
-        fun verifyTokens(token: Tokens): Boolean{
+        fun accessTokenIsValid(activity: Activity): Boolean{
 
-            val refreshToken = token.refreshToken
-            val accessToken = token.accessToken
+            //get the token from local storage
+            val accessToken = LocalStorage.getAccessToken(activity) ?: return false
 
-            if (refreshToken == null || accessToken == null)
-                return false
+            //decode the token
+            val decodedAccessToken = JWT.decodeT(accessToken, JWSHMAC256Algorithm).orNull() ?: return false
 
-            return true
+            //return isValid
+            return verifyToken(decodedAccessToken, JWT_USER_ACCESS).isValid
         }
 
-        fun isExpired(token: String): Boolean{
-            return true
-        }
+        fun refreshTokenIsValid(activity: Activity): Boolean{
 
-        fun getUserId(activity: Activity): String?{
-            val accessToken = LocalStorage.getTokens(activity).accessToken
-            if(accessToken != null){
-                JWT.decode(accessToken).tap {
-                    return it.claimValue("id").orNull()
-                }
-            }
-            return null
+            //get the token from local storage
+            val refreshToken = LocalStorage.getRefreshToken(activity) ?: return false
+
+            //decode the token
+            val decodedRefreshToken = JWT.decodeT(refreshToken, JWSHMAC256Algorithm).orNull() ?: return false
+
+            //return isValid
+            return verifyToken(decodedRefreshToken, JWT_USER_REFRESH).isValid
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -67,30 +69,49 @@ class Token {
             return jwtToken
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun createRefreshToken(userId: String): String? {
+//        @RequiresApi(Build.VERSION_CODES.O)
+//        fun createRefreshToken(userId: String): String? {
+//
+//            val jwt = JWT.hs256 {
+//                claim("id", userId)
+//                issuedAt(
+//                    LocalDateTime.ofInstant(
+//                        Date(System.currentTimeMillis() ).toInstant(),
+//                        ZoneId.of("UTC")
+//                    )
+//                )
+//                expiresAt(
+//                    LocalDateTime.ofInstant(
+//                        Date(System.currentTimeMillis()  + 604800).toInstant(),
+//                        ZoneId.of("UTC")
+//                    )
+//                )
+//            }
+//
+//            var jwtToken: String? = null
+//            jwt.sign(JWT_USER_REFRESH).tap {
+//                jwtToken = it.rendered
+//            }
+//            return jwtToken
+//        }
 
-            val jwt = JWT.hs256 {
-                claim("id", userId)
-                issuedAt(
-                    LocalDateTime.ofInstant(
-                        Date(System.currentTimeMillis() ).toInstant(),
-                        ZoneId.of("UTC")
-                    )
-                )
-                expiresAt(
-                    LocalDateTime.ofInstant(
-                        Date(System.currentTimeMillis()  + 604800).toInstant(),
-                        ZoneId.of("UTC")
-                    )
-                )
+        private fun verifyToken(token: DecodedJWT<JWSHMAC256Algorithm>, secretKey: String): ClaimsValidatorResult {
+            val standardValidation: ClaimsValidator = { claims ->
+                validateClaims(
+                    expired,
+                )(claims)
             }
+            return verify(token, secretKey, standardValidation)
+        }
 
-            var jwtToken: String? = null
-            jwt.sign(JWT_USER_REFRESH).tap {
-                jwtToken = it.rendered
+        fun getUserId(activity: Activity): String?{
+            val accessToken = LocalStorage.getAccessToken(activity)
+            if(accessToken != null){
+                JWT.decode(accessToken).tap {
+                    return it.claimValue("id").orNull()
+                }
             }
-            return jwtToken
+            return null
         }
 
     }

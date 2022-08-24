@@ -49,7 +49,7 @@ class LocalStorage {
             )
         }
 
-        private fun getAccessToken(activity: Activity): String?{
+        fun getAccessToken(activity: Activity): String?{
             val accessToken: String?
             activity.apply {
                 accessToken = getPreferences(Context.MODE_PRIVATE)
@@ -60,7 +60,7 @@ class LocalStorage {
             return accessToken
         }
 
-        private fun getRefreshToken(activity: Activity): String?{
+        fun getRefreshToken(activity: Activity): String?{
             val accessToken: String?
             activity.apply {
                 accessToken = getPreferences(Context.MODE_PRIVATE)
