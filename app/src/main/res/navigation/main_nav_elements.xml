@@ -9,26 +9,6 @@
         android:name="com.example.pc.ui.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
-    <navigation android:id="@+id/loginGraph"
-        app:startDestination="@id/loginFragment">
-        <fragment
-            android:id="@+id/loginFragment"
-            android:name="com.example.pc.ui.fragments.LoginFragment"
-            android:label="fragment_login"
-            tools:layout="@layout/fragment_login">
-            <action
-                android:id="@+id/action_loginFragment_to_userFragment"
-                app:destination="@id/userFragment" />
-        </fragment>
-        <fragment
-            android:id="@+id/userFragment"
-            android:name="com.example.pc.ui.fragments.UserFragment"
-            android:label="fragment_user"
-            tools:layout="@layout/fragment_user" />
-        <action
-            android:id="@+id/action_global_homeFragment"
-            app:destination="@id/homeFragment" />
-    </navigation>
     <fragment
         android:id="@+id/favouritesFragment"
         android:name="com.example.pc.ui.fragments.FavouritesFragment"
@@ -50,4 +30,9 @@
         android:id="@+id/searchFragment"
         android:name="com.example.pc.ui.fragments.SearchFragment"
         android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="com.example.pc.UserInfoFragment"
+        android:label="fragment_user_info"
+        tools:layout="@layout/fragment_user_info" />
 </navigation>

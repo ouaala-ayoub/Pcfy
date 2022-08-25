@@ -24,6 +24,7 @@ import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.databinding.FragmentUserBinding
+import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.UserModel
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -169,8 +170,8 @@ class UserFragment : Fragment() {
     }
 
     private fun goToHomeFragment(){
-        val action = UserFragmentDirections.actionGlobalHomeFragment()
-        findNavController().navigate(action)
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setUpTheTypeEditText(){

@@ -1,6 +1,7 @@
 package com.example.pc.ui.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -18,7 +19,9 @@ import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentCreateAnnonceBinding
 import com.example.pc.databinding.FragmentLoginBinding
+import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.LoginModel
+import com.example.pc.utils.Auth
 import com.example.pc.utils.toast
 import io.github.nefilim.kjwt.JWT
 
@@ -31,11 +34,19 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentLoginBinding? = null
     private lateinit var viewModel: LoginModel
+    private lateinit var loginRepository: LoginRepository
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        if(!Auth.isAuthenticated(requireActivity())){
+            //load the user info fragment
+        }
+
+        loginRepository = LoginRepository(retrofitService, requireActivity())
         binding = FragmentLoginBinding.inflate(
             inflater,
             container,
@@ -50,7 +61,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         //if the user is already logged in ?
 
-        viewModel = LoginModel(LoginRepository(retrofitService, requireActivity()))
+        viewModel = LoginModel(loginRepository)
 
         binding!!.login.isEnabled = false
 
@@ -82,17 +93,17 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         userName,
                         password,
                         requireActivity()
-                    ).observe(viewLifecycleOwner){ tokenObject ->
+                    ).observe(viewLifecycleOwner){
 
                         retrievedTokens.observe(viewLifecycleOwner){ retrievedTokens->
                             if(retrievedTokens) {
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
-//                                isAuthenticated()
                                 Log.i(TAG, "loggedIn user Id: ${getTheUserIdOrNull()}")
-                                goToHomeFragment()
+                                goToMainActivity()
                             }
                             else{
                                 requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
+                                goToMainActivity()
                             }
                         }
 
@@ -112,9 +123,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun goToHomeFragment(){
-        val action = LoginFragmentDirections.actionGlobalHomeFragment()
-        findNavController().navigate(action)
+    private fun goToMainActivity(){
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun goToUserFragment(){
