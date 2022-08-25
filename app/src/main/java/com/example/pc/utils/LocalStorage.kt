@@ -26,14 +26,6 @@ class LocalStorage {
             }
         }
 
-        fun storeRefreshToken(activity: Activity, refreshToken: String){
-            val sharedPrefs = activity.getPreferences(Context.MODE_PRIVATE)
-            with (sharedPrefs!!.edit()) {
-                putString(activity.applicationContext.getString(R.string.refresh_token), refreshToken)
-                apply()
-            }
-        }
-
         fun storeAccessToken(activity: Activity, accessToken: String){
             val sharedPrefs = activity.getPreferences(Context.MODE_PRIVATE)
             with (sharedPrefs!!.edit()) {
