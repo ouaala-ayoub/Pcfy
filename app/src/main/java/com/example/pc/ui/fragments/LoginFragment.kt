@@ -1,6 +1,7 @@
 package com.example.pc.ui.fragments
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
@@ -42,12 +44,13 @@ class LoginFragment : Fragment(), View.OnClickListener {
         return binding?.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //if the user is already logged in ?
 
-        viewModel = LoginModel(LoginRepository(retrofitService))
+        viewModel = LoginModel(LoginRepository(retrofitService, requireActivity()))
 
         binding!!.login.isEnabled = false
 
@@ -76,17 +79,15 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
                     login(
                         userName,
-                        password
+                        password,
+                        requireActivity()
                     ).observe(viewLifecycleOwner){ tokenObject ->
 
                         retrievedTokens.observe(viewLifecycleOwner){ retrievedTokens->
                             if(retrievedTokens) {
-                                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-                                with (sharedPref!!.edit()) {
-                                    putString(getString(R.string.refresh_token), tokenObject.refreshToken)
-                                    putString(getString(R.string.access_token), tokenObject.accessToken)
-                                    apply()
-                                }
+
+
+
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
                                 goToHomeFragment()
                             }

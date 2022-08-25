@@ -54,6 +54,10 @@ interface RetrofitService {
     //add more
     // to learn
 
+    //to implement
+    @POST("auth/logout")
+    fun logout()
+
     companion object {
 
         //to learn

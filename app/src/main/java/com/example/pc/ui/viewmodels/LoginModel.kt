@@ -1,7 +1,9 @@
 package com.example.pc.ui.viewmodels
 
 import android.app.Activity
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,7 +44,8 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return isValidEmail && isValidPassword
     }
 
-    fun login(userName: String, password: String): MutableLiveData<Tokens>{
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun login(userName: String, password: String, activity: Activity): MutableLiveData<Tokens>{
 
         isTurning.postValue(true)
 
@@ -52,7 +55,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     Log.i(TAG, "onResponse login : ${response.body()}")
                     retrievedTokens.postValue(true)
                     tokens.postValue(response.body())
-//                    repository.setCurrentUserTokens(activity, tokens.value!!)
+                    repository.setCurrentTokens(activity, tokens.value!!)
                     isTurning.postValue(false)
                 }
                 else{
@@ -74,5 +77,16 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return tokens
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setCurrentTokens(activity: Activity){
+        if (tokens.value != null){
+            repository.setCurrentTokens(activity, tokens.value!!)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun isAuthenticated(): Boolean {
+        return repository.isLoggedIn
+    }
 
 }

@@ -2,22 +2,27 @@ package com.example.pc.data.repositories
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.pc.R
 import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.models.network.UserCredentials
 import com.example.pc.data.remote.RetrofitService
+import com.example.pc.utils.Auth
+import com.example.pc.utils.LocalStorage
+import com.example.pc.utils.Token
+import retrofit2.Call
 
 
-
-
-class LoginRepository(private val retrofitService: RetrofitService) {
+@RequiresApi(Build.VERSION_CODES.O)
+class LoginRepository(private val retrofitService: RetrofitService, activity: Activity) {
 //     in-memory cache of the loggedInUser object
-//    var user: LoggedInUser? = null
-//        private set
+    var user: LoggedInUser? = null
+        private set
 //
-//    val isLoggedIn: Boolean
-//        get() = user != null
+    val isLoggedIn: Boolean
+        get() = user != null
 //
 //    init {
 //        // If user credentials will be cached in local storage, it is recommended it be encrypted
@@ -25,31 +30,33 @@ class LoginRepository(private val retrofitService: RetrofitService) {
 //        user = null
 //    }
 //
-//    fun logout() {
-//        user = null
-//        retrofitService.logout()
-//    }
-//
-//    fun login(username: String, password: String): Result<LoggedInUser> {
-//        // handle login
-//        val result = retrofitService.login(username, password)
-//
-//        if (result is Result.Success) {
-//            setLoggedInUser(result.data)
-//        }
-//
-//        return result
-//    }
-//
-//    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-//        this.user = loggedInUser
-//        // If user credentials will be cached in local storage, it is recommended it be encrypted
-//        // @see https://developer.android.com/training/articles/keystore
-//    }
-
-    init {
-
+    fun logout() {
+        user = null
+        retrofitService.logout()
     }
 
-    fun login(userName: String, password: String) = retrofitService.login(UserCredentials(userName, password))
+    private fun setLoggedInUser(loggedInUser: LoggedInUser?) {
+        this.user = loggedInUser
+    }
+
+    init {
+        if (isAuthenticated(activity)) {
+            setLoggedInUser(
+                LoggedInUser(
+                    Token.getUserId(activity)!!
+                )
+            )
+        }
+        else setLoggedInUser(null)
+    }
+
+    fun setCurrentTokens(activity: Activity, token: Tokens){
+        LocalStorage.storeTokens(activity, token)
+    }
+
+    private fun isAuthenticated(activity: Activity) = Auth.isAuthenticated(activity)
+
+    fun login(userName: String, password: String): Call<Tokens> {
+        return retrofitService.login(UserCredentials(userName, password))
+    }
 }
