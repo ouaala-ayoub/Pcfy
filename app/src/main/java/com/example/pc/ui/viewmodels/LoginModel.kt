@@ -55,7 +55,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     Log.i(TAG, "onResponse login : ${response.body()}")
                     retrievedTokens.postValue(true)
                     tokens.postValue(response.body())
-                    repository.setCurrentTokens(activity, tokens.value!!)
+                    repository.setCurrentTokens(activity, response.body()!!)
                     isTurning.postValue(false)
                 }
                 else{
@@ -89,4 +89,9 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return repository.isLoggedIn
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getTheUserIdOrNull(): String?{
+        return if(isAuthenticated()) repository.user?.userId
+        else null
+    }
 }

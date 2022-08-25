@@ -67,6 +67,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         binding!!.signUp.setOnClickListener(this)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(v: View?) {
 
         when(v?.id){
@@ -85,10 +86,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
                         retrievedTokens.observe(viewLifecycleOwner){ retrievedTokens->
                             if(retrievedTokens) {
-
-
-
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
+//                                isAuthenticated()
+                                Log.i(TAG, "loggedIn user Id: ${getTheUserIdOrNull()}")
                                 goToHomeFragment()
                             }
                             else{
