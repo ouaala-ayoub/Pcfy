@@ -31,14 +31,15 @@ class HomeFragment : Fragment() {
 
     private lateinit var annoncesList: MutableLiveData<List<Annonce>>
     private lateinit var adapter: AnnoncesAdapter
-    private val retrofitService = RetrofitService.getInstance()
     private lateinit var viewModel: HomeModel
     private lateinit var annoncesRv: RecyclerView
+    private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentHomeBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
         viewModel = ViewModelProvider(
             this,
             HomeModelFactory(HomeRepository(retrofitService))

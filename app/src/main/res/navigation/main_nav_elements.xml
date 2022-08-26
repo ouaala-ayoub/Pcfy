@@ -32,7 +32,7 @@
         android:label="SearchFragment" />
     <fragment
         android:id="@+id/userInfoFragment"
-        android:name="com.example.pc.UserInfoFragment"
+        android:name="com.example.pc.ui.fragments.UserInfoFragment"
         android:label="fragment_user_info"
         tools:layout="@layout/fragment_user_info" />
 </navigation>

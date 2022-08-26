@@ -1,14 +1,17 @@
 package com.example.pc.ui.activities
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceRepository
+import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityAnnonceBinding
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.utils.toast
@@ -21,13 +24,19 @@ private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
 class AnnonceActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAnnonceBinding
+    private val retrofitService = RetrofitService.getInstance()
     private val viewModel = AnnonceModel(
         AnnonceRepository(
-            retrofitService = RetrofitService.getInstance()
+            retrofitService
         )
     )
+    private lateinit var userId: String
     private val picasso = Picasso.get()
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val loginRepository = LoginRepository(retrofitService, this)
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAnnonceBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -75,8 +84,16 @@ class AnnonceActivity : AppCompatActivity() {
 
                     addToFav.setOnClickListener {
                         if (annonce != null){
-                            //to change !!!!!!!! userId
-                            addToFavourites(userId = "", annonce)
+
+                            if (!loginRepository.isLoggedIn){
+                                goToLoginActivity()
+                            }
+
+                            else {
+                                userId = loginRepository.user!!.userId
+                            }
+
+                            addToFavourites(userId, annonce)
                             addedFavouriteToUser.observe(this@AnnonceActivity){
                                 if (it)
                                     doOnSuccess()
@@ -100,6 +117,11 @@ class AnnonceActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    private fun goToLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun doOnFail() {

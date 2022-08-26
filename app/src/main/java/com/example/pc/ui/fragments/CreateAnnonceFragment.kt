@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -16,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +27,9 @@ import com.example.pc.data.models.network.Category
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.CreateAnnonceRepository
+import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentCreateAnnonceBinding
+import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.viewmodels.CreateAnnonceModel
 import com.example.pc.ui.viewmodels.CreateAnnonceModelFactory
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -42,12 +46,29 @@ class CreateAnnonceFragment : Fragment() {
     private lateinit var viewModel: CreateAnnonceModel
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val retrofitService = RetrofitService.getInstance()
+    private lateinit var userId: String
     private var imagesUris = listOf<Uri>()
+
 
     //add the livedata validation
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val loginRepository = LoginRepository(
+            retrofitService,
+            requireActivity()
+        )
+
+        if (!loginRepository.isLoggedIn){
+            goToLoginActivity()
+        }
+
+        else {
+            userId = loginRepository.user!!.userId
+        }
+
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
@@ -62,6 +83,7 @@ class CreateAnnonceFragment : Fragment() {
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,7 +132,7 @@ class CreateAnnonceFragment : Fragment() {
                 viewModel.apply {
 
                     //to change
-                    addAnnonce(userId = "62e7fa498dd9b229c8057014", annonceToAdd).observe(viewLifecycleOwner){
+                    addAnnonce(userId, annonceToAdd).observe(viewLifecycleOwner){
                         isTurning.observe(viewLifecycleOwner){ isVisible->
                             progressBar.isVisible = isVisible
                         }
@@ -211,13 +233,18 @@ class CreateAnnonceFragment : Fragment() {
     }
 
     private fun doOnSuccess(){
-        requireActivity().applicationContext.toast(SUCCESS_MSG, Toast.LENGTH_SHORT)
+        requireContext().toast(SUCCESS_MSG, Toast.LENGTH_SHORT)
         //go to home fragment after the toast disappears
         goToHomeFragment()
     }
     private fun doOnFail(){
-        requireActivity().applicationContext.toast(ERROR_MSG, Toast.LENGTH_SHORT)
+        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
         //go to home fragment after the toast disappears
         goToHomeFragment()
+    }
+
+    private fun goToLoginActivity() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
     }
 }

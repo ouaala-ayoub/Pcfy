@@ -22,8 +22,10 @@ import com.example.pc.data.models.local.SellerType
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
+import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.databinding.FragmentUserBinding
+import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.UserModel
 import com.example.pc.utils.toast
@@ -46,6 +48,9 @@ class UserFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
@@ -139,9 +144,7 @@ class UserFragment : Fragment() {
 
                     Log.i(TAG, "user to add : $userToAdd")
 
-                    val response = signUp(userToAdd)
-
-                    response.observe(viewLifecycleOwner){
+                    signUp(userToAdd).observe(viewLifecycleOwner){
                         if(it.isNullOrBlank()){
                             //dialog ?
                             Log.i(TAG, "return : $it")
@@ -150,7 +153,7 @@ class UserFragment : Fragment() {
                         }else {
                             Log.i(TAG, "return : $it")
                             requireContext().toast(SGN_SUCCESS, Toast.LENGTH_LONG)
-                            goToHomeFragment()
+                            goToLoginPage()
                         }
                     }
                 }
@@ -166,11 +169,15 @@ class UserFragment : Fragment() {
                 binding!!.signUpButton.isEnabled = isActive
             }
         }
-
     }
 
     private fun goToHomeFragment(){
         val intent = Intent(requireContext(), MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goToLoginPage(){
+        val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
     }
 

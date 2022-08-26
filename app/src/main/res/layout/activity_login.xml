@@ -8,12 +8,15 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/login_fragment_container"
-        android:name="com.example.pc.ui.fragments.LoginFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/login_nav_elements" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

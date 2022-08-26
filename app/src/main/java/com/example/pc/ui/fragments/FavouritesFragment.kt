@@ -12,34 +12,59 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.FavouritesRepository
+import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentFavouritesBinding
 import com.example.pc.ui.activities.AnnonceActivity
+import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.FavouritesModel
 import com.example.pc.utils.toast
 
-private const val userId = "62e9565ecae1214474d89bfe"
 private const val FAVOURITE_DELETED_SUCCESS = "suprimée des favories avec succes"
 private const val FAVOURITE_ERROR_MSG = "Erreur Inatendue"
 private const val TAG = "FavouritesFragment"
 
 class FavouritesFragment : Fragment() {
+
     private var binding: FragmentFavouritesBinding? = null
     private lateinit var adapter: FavouritesAdapter
+    private lateinit var userId: String
     private var viewModel = FavouritesModel(FavouritesRepository(
         RetrofitService.getInstance()
     ))
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private lateinit var loginRepository: LoginRepository
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        loginRepository = LoginRepository(
+            RetrofitService.getInstance(),
+            requireActivity()
+        )
+
+        if (!loginRepository.isLoggedIn){
+            goToLoginActivity()
+        }
+
+        else {
+            userId = loginRepository.user!!.userId
+        }
+    }
+
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         adapter = FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener{
             override fun onFavouriteClicked(annonceId: String) {
                 goToAnnonceActivity(annonceId)
@@ -57,12 +82,6 @@ class FavouritesFragment : Fragment() {
                 }
             }
         }, viewModel)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
         binding = FragmentFavouritesBinding.inflate(inflater, container, false)
 
         binding!!.apply {
@@ -99,5 +118,10 @@ class FavouritesFragment : Fragment() {
     private fun returnToHomeFragment(){
         val action = FavouritesFragmentDirections.actionFavouritesFragmentToHomeFragment()
         findNavController().navigate(action)
+    }
+
+    private fun goToLoginActivity() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
     }
 }

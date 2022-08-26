@@ -40,12 +40,7 @@ class Token {
 
             val jwt = JWT.hs256 {
                 claim("id", userId)
-                issuedAt(
-                    LocalDateTime.ofInstant(
-                        Date(System.currentTimeMillis() ).toInstant(),
-                        ZoneId.of("UTC")
-                    )
-                )
+                issuedNow()
                 expiresAt(
                     LocalDateTime.ofInstant(
                         Date(System.currentTimeMillis()  + 900).toInstant(),
@@ -68,7 +63,7 @@ class Token {
             return isValid
         }
 
-        fun isExpired(token: DecodedJWT<JWSHMAC256Algorithm>, secretKey: String): Boolean {
+        private fun isExpired(token: DecodedJWT<JWSHMAC256Algorithm>, secretKey: String): Boolean {
             val standardValidation: ClaimsValidator = { claims ->
                 validateClaims(
                     expired,

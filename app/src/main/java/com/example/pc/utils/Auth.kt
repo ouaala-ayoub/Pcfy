@@ -11,7 +11,7 @@ import io.github.nefilim.kjwt.verify
 
 private const val TAG = "Auth"
 
-class Auth(loginRepository: LoginRepository) {
+class Auth(val loginRepository: LoginRepository) {
     companion object {
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -43,6 +43,5 @@ class Auth(loginRepository: LoginRepository) {
                 return false
             }
         }
-
     }
 }

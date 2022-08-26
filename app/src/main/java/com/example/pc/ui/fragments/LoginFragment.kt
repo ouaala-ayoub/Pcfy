@@ -124,7 +124,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun goToMainActivity(){
-        val intent = Intent(requireContext(), MainActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java)
         startActivity(intent)
     }
 
