@@ -22,6 +22,7 @@ import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.viewmodels.HomeModel
 import com.example.pc.ui.viewmodels.HomeModelFactory
+import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.Token
 
 const val NUM_ROWS = 2
@@ -57,6 +58,10 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+//        val test = LocalStorage.getTokens(requireActivity())
+//        Log.i(TAG, "tokens from home frag: $test")
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         annoncesRv = binding!!.annonceRv
         annoncesRv.layoutManager = GridLayoutManager(this.context, NUM_ROWS)

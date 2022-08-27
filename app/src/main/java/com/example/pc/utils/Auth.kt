@@ -1,6 +1,7 @@
 package com.example.pc.utils
 
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -14,9 +15,11 @@ private const val TAG = "Auth"
 class Auth(val loginRepository: LoginRepository) {
     companion object {
 
+        //fix this dogshit code
+
         @RequiresApi(Build.VERSION_CODES.O)
         fun isAuthenticated(
-            activity: Activity,
+            activity: Context,
         ): Boolean{
 
             try {

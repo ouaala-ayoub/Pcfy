@@ -1,7 +1,9 @@
 package com.example.pc.ui.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
 import com.example.pc.R
 
@@ -13,5 +15,14 @@ class LoginActivity : AppCompatActivity() {
         val navHost = supportFragmentManager.findFragmentById(R.id.login_fragment_container) as NavHostFragment
         val navController = navHost.navController
 
+    }
+
+    override fun onBackPressed() {
+        goToMainActivity()
+    }
+
+    private fun goToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }

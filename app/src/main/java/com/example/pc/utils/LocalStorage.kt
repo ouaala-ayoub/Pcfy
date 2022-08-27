@@ -2,65 +2,70 @@ package com.example.pc.utils
 
 import android.app.Activity
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.util.Log
 import com.example.pc.R
 import com.example.pc.data.models.network.Tokens
-import io.github.nefilim.kjwt.JWT
-import io.github.nefilim.kjwt.JWTKeyID
-import io.github.nefilim.kjwt.sign
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+
+private const val TAG = "LocalStorage"
 
 class LocalStorage {
 
     companion object {
 
-        fun storeTokens(activity: Activity, token: Tokens){
-            val sharedPrefs = activity.getPreferences(Context.MODE_PRIVATE)
+        fun storeTokens(activity: Context, token: Tokens){
+            val sharedPrefs = activity.getSharedPreferences("tokens",Context.MODE_PRIVATE)
             with (sharedPrefs!!.edit()) {
-                putString(activity.applicationContext.getString(R.string.refresh_token), token.refreshToken)
-                putString(activity.applicationContext.getString(R.string.access_token), token.accessToken)
+                putString(activity.resources.getString(R.string.refresh_token), token.refreshToken)
+                putString(activity.resources.getString(R.string.access_token), token.accessToken)
                 apply()
             }
+            Log.i(TAG, "stored Tokens: ${getTokens(activity)}")
         }
 
-        fun storeAccessToken(activity: Activity, accessToken: String){
-            val sharedPrefs = activity.getPreferences(Context.MODE_PRIVATE)
+        fun storeAccessToken(activity: Context, accessToken: String){
+            val sharedPrefs = activity.getSharedPreferences("tokens", Context.MODE_PRIVATE)
             with (sharedPrefs!!.edit()) {
                 putString(activity.applicationContext.getString(R.string.access_token), accessToken)
                 apply()
             }
         }
 
-        fun getTokens(activity: Activity): Tokens {
+        fun getTokens(activity: Context): Tokens {
             return Tokens(
                 getAccessToken(activity),
                 getRefreshToken(activity)
             )
         }
 
-        fun getAccessToken(activity: Activity): String?{
+        fun getAccessToken(activity: Context): String?{
             val accessToken: String?
             activity.apply {
-                accessToken = getPreferences(Context.MODE_PRIVATE)
+                accessToken = getSharedPreferences("tokens",Context.MODE_PRIVATE)
                     .getString(
-                        applicationContext.getString(R.string.access_token), "not_found"
+                        applicationContext.getString(R.string.access_token), null
                     )
             }
             return accessToken
         }
 
-        fun getRefreshToken(activity: Activity): String?{
+        fun getRefreshToken(activity: Context): String?{
             val accessToken: String?
             activity.apply {
-                accessToken = getPreferences(Context.MODE_PRIVATE)
+                accessToken = getSharedPreferences("tokens", Context.MODE_PRIVATE)
                     .getString(
-                        applicationContext.getString(R.string.refresh_token), "not_found"
+                        applicationContext.getString(R.string.refresh_token), null
                     )
             }
             return accessToken
+        }
+
+        fun deleteTokens(activity: Context) {
+            val sharedPrefs = activity.getSharedPreferences("tokens", Context.MODE_PRIVATE)
+            val editor = sharedPrefs.edit()
+            editor
+                .remove(activity.resources.getString(R.string.refresh_token))
+                .remove(activity.resources.getString(R.string.access_token))
+                .apply()
         }
 
     }

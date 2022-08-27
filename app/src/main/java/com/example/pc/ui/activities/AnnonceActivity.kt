@@ -85,7 +85,7 @@ class AnnonceActivity : AppCompatActivity() {
                     addToFav.setOnClickListener {
                         if (annonce != null){
 
-                            if (!loginRepository.isLoggedIn){
+                            if (!loginRepository.isLoggedIn()){
                                 goToLoginActivity()
                             }
 
@@ -108,8 +108,6 @@ class AnnonceActivity : AppCompatActivity() {
                     }
 
                 }
-
-
 
                 isProgressBarTurning.observe(this@AnnonceActivity) {
                     annonceProgressBar.isVisible = it

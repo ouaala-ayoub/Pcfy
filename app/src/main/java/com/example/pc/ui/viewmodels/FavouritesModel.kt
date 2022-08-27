@@ -16,7 +16,9 @@ import retrofit2.Response
 
 private const val TAG = "FavouritesModel"
 
-class FavouritesModel(private val favouritesRepository: FavouritesRepository): ViewModel() {
+class FavouritesModel(
+    private val favouritesRepository: FavouritesRepository
+): ViewModel() {
 
     private var favouritesListLiveData = MutableLiveData<MutableList<Annonce>?>()
     private var deletedWithSuccess = MutableLiveData<Boolean>()

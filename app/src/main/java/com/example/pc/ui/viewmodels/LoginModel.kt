@@ -7,8 +7,11 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.repositories.LoginRepository
+import com.example.pc.utils.LocalStorage
+import com.example.pc.utils.Token
 import io.github.nefilim.kjwt.JWT
 import retrofit2.Call
 import retrofit2.Callback
@@ -86,7 +89,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun isAuthenticated(): Boolean {
-        return repository.isLoggedIn
+        return repository.isLoggedIn.value!!
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

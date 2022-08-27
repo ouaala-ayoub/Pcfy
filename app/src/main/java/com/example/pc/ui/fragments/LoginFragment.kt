@@ -22,6 +22,7 @@ import com.example.pc.databinding.FragmentLoginBinding
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.LoginModel
 import com.example.pc.utils.Auth
+import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.toast
 import io.github.nefilim.kjwt.JWT
 
@@ -42,11 +43,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        if(!Auth.isAuthenticated(requireActivity())){
-            //load the user info fragment
-        }
-
-        loginRepository = LoginRepository(retrofitService, requireActivity())
+        loginRepository = LoginRepository(retrofitService, requireContext())
         binding = FragmentLoginBinding.inflate(
             inflater,
             container,
@@ -99,6 +96,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             if(retrievedTokens) {
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
                                 Log.i(TAG, "loggedIn user Id: ${getTheUserIdOrNull()}")
+                                val tokens = LocalStorage.getTokens(requireActivity())
                                 goToMainActivity()
                             }
                             else{
@@ -106,8 +104,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
                                 goToMainActivity()
                             }
                         }
-
-
                     }
 
                     isTurning.observe(viewLifecycleOwner){

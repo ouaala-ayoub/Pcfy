@@ -61,13 +61,13 @@ class CreateAnnonceFragment : Fragment() {
             requireActivity()
         )
 
-        if (!loginRepository.isLoggedIn){
-            goToLoginActivity()
-        }
-
-        else {
-            userId = loginRepository.user!!.userId
-        }
+//        if (!loginRepository.isLoggedIn){
+//            goToLoginActivity()
+//        }
+//
+//        else {
+//            userId = loginRepository.user!!.userId
+//        }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
