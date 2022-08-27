@@ -67,7 +67,7 @@ class FavouritesFragment : Fragment() {
 //        loginRepository.logout(requireContext())
 
         val isLoggedIn = loginRepository.isLoggedIn
-        Log.i(TAG, "isLoggedIn: $isLoggedIn")
+        Log.i(TAG, "isLoggedIn: ${isLoggedIn.value}")
 
         isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 

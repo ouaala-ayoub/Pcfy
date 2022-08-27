@@ -1,6 +1,5 @@
 package com.example.pc.data.repositories
 
-import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -12,6 +11,7 @@ import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.models.network.UserCredentials
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.utils.Auth
+import com.example.pc.utils.Auth.Companion.isAuthenticated
 import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.Token
 import retrofit2.Call
@@ -21,8 +21,10 @@ private const val TAG = "LoginRepository"
 @RequiresApi(Build.VERSION_CODES.O)
 class LoginRepository(private val retrofitService: RetrofitService,private val activity: Context) {
 
+
+
     var user: LoggedInUser? = null
-    var isLoggedIn = MutableLiveData<Boolean>()
+    var isLoggedIn = MutableLiveData(isAuthenticated())
 
     init {
         val checkForAuth = isAuthenticated()
@@ -49,7 +51,7 @@ class LoginRepository(private val retrofitService: RetrofitService,private val a
 
     fun setLoggedInUser(loggedInUser: LoggedInUser?) {
         isLoggedIn.postValue(true)
-        this.user = loggedInUser
+        user = loggedInUser
     }
 
     fun setCurrentTokens(token: Tokens){
@@ -57,7 +59,7 @@ class LoginRepository(private val retrofitService: RetrofitService,private val a
     }
 
     private fun isAuthenticated(): Boolean {
-        return Auth.isAuthenticated(activity)
+        return isAuthenticated(activity)
     }
 
     fun login(userName: String, password: String): Call<Tokens> {
