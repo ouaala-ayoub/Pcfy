@@ -20,6 +20,7 @@ class LocalStorage {
                 apply()
             }
             Log.i(TAG, "stored Tokens: ${getTokens(activity)}")
+
         }
 
         fun storeAccessToken(activity: Context, accessToken: String){
@@ -42,7 +43,7 @@ class LocalStorage {
             activity.apply {
                 accessToken = getSharedPreferences("tokens",Context.MODE_PRIVATE)
                     .getString(
-                        applicationContext.getString(R.string.access_token), null
+                        resources.getString(R.string.access_token), null
                     )
             }
             return accessToken
@@ -53,7 +54,7 @@ class LocalStorage {
             activity.apply {
                 accessToken = getSharedPreferences("tokens", Context.MODE_PRIVATE)
                     .getString(
-                        applicationContext.getString(R.string.refresh_token), null
+                        resources.getString(R.string.refresh_token), null
                     )
             }
             return accessToken

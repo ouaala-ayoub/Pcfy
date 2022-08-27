@@ -43,7 +43,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        loginRepository = LoginRepository(retrofitService, requireContext())
+        loginRepository = LoginRepository(retrofitService, requireContext().applicationContext)
         binding = FragmentLoginBinding.inflate(
             inflater,
             container,
@@ -96,7 +96,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             if(retrievedTokens) {
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
                                 Log.i(TAG, "loggedIn user Id: ${getTheUserIdOrNull()}")
-                                val tokens = LocalStorage.getTokens(requireActivity())
                                 goToMainActivity()
                             }
                             else{

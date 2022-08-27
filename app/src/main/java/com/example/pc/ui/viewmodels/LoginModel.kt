@@ -58,7 +58,15 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     Log.i(TAG, "onResponse login : ${response.body()}")
                     retrievedTokens.postValue(true)
                     tokens.postValue(response.body())
-                    repository.setCurrentTokens(activity, response.body()!!)
+                    repository.setCurrentTokens(response.body()!!)
+                    repository.isLoggedIn.postValue(true)
+                    repository.setLoggedInUser(
+                        LoggedInUser(
+                            Token.getUserId(activity)!!
+                        )
+                    )
+                    Log.i(TAG, "current token: ${LocalStorage.getTokens(activity)}")
+                    Log.i(TAG, "current user: ${repository.user}")
                     isTurning.postValue(false)
                 }
                 else{
@@ -78,13 +86,6 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         })
 
         return tokens
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun setCurrentTokens(activity: Activity){
-        if (tokens.value != null){
-            repository.setCurrentTokens(activity, tokens.value!!)
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -19,30 +19,18 @@ import retrofit2.Call
 private const val TAG = "LoginRepository"
 
 @RequiresApi(Build.VERSION_CODES.O)
-class LoginRepository(private val retrofitService: RetrofitService, activity: Context) {
+class LoginRepository(private val retrofitService: RetrofitService,private val activity: Context) {
 
     var user: LoggedInUser? = null
-    var isLoggedIn = MutableLiveData(false)
-
-    fun logout(activity: Activity) {
-        LocalStorage.deleteTokens(activity)
-        user = null
-//        retrofitService.logout()
-    }
-
-    fun setLoggedInUser(loggedInUser: LoggedInUser?) {
-        if (loggedInUser != null){
-            isLoggedIn.postValue(true)
-        }
-        this.user = loggedInUser
-    }
+    var isLoggedIn = MutableLiveData<Boolean>()
 
     init {
-        Log.i(TAG, "tokens : ${LocalStorage.getTokens(activity)}")
-        Log.i(TAG, "init  ${isAuthenticated(activity)}")
+        val checkForAuth = isAuthenticated()
+        Log.i(TAG, "init login Repo: $checkForAuth")
+        Log.i(TAG, "current tokens : ${LocalStorage.getTokens(activity)}")
+        isLoggedIn.postValue(checkForAuth)
 
-        if (isAuthenticated(activity)) {
-            isLoggedIn.postValue(true)
+        if (checkForAuth) {
             setLoggedInUser(
                 LoggedInUser(
                     Token.getUserId(activity)!!
@@ -52,11 +40,25 @@ class LoginRepository(private val retrofitService: RetrofitService, activity: Co
         else setLoggedInUser(null)
     }
 
-    fun setCurrentTokens(activity: Activity, token: Tokens){
+    fun logout() {
+        LocalStorage.deleteTokens(activity)
+        isLoggedIn.postValue(false)
+        user = null
+//        retrofitService.logout()
+    }
+
+    fun setLoggedInUser(loggedInUser: LoggedInUser?) {
+        isLoggedIn.postValue(true)
+        this.user = loggedInUser
+    }
+
+    fun setCurrentTokens(token: Tokens){
         LocalStorage.storeTokens(activity, token)
     }
 
-    private fun isAuthenticated(activity: Context) = Auth.isAuthenticated(activity)
+    private fun isAuthenticated(): Boolean {
+        return Auth.isAuthenticated(activity)
+    }
 
     fun login(userName: String, password: String): Call<Tokens> {
         return retrofitService.login(UserCredentials(userName, password))

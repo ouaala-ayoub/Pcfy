@@ -1,14 +1,10 @@
 package com.example.pc.utils
 
-import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.pc.data.repositories.LoginRepository
-import io.github.nefilim.kjwt.JWT
-import io.github.nefilim.kjwt.KJWTVerificationError
-import io.github.nefilim.kjwt.verify
 
 private const val TAG = "Auth"
 
@@ -19,21 +15,22 @@ class Auth(val loginRepository: LoginRepository) {
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun isAuthenticated(
-            activity: Context,
+            context: Context,
         ): Boolean{
 
             try {
                 Token.apply {
                     LocalStorage.apply {
-                        if (!accessTokenIsValid(activity)) return false
-                        if (!accessTokenIsExpired(activity)) return true
+                        if (!accessTokenIsValid(context)) return false
+                        if (!accessTokenIsExpired(context)) return true
                         else {
-                            if (refreshTokenIsValid(activity)) return false
-                            return if(refreshTokenIsExpired(activity)) false
+                            if (!refreshTokenIsValid(context)) return false
+                            return if(refreshTokenIsExpired(context)) false
                             else {
-                                val newAccessToken = createAccessToken(getUserId(activity)!!)
+                                val userId =  getUserId(context)!!
+                                val newAccessToken = createAccessToken(userId)
                                 if (newAccessToken != null) {
-                                    storeAccessToken(activity, newAccessToken)
+                                    storeAccessToken(context, newAccessToken)
                                 }
                                 true
                             }

@@ -58,7 +58,7 @@ class CreateAnnonceFragment : Fragment() {
 
         val loginRepository = LoginRepository(
             retrofitService,
-            requireActivity()
+            requireContext().applicationContext
         )
 
 //        if (!loginRepository.isLoggedIn){

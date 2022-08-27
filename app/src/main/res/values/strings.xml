@@ -27,4 +27,5 @@
     <string name="pas_de_favories">Pas de favories</string>
     <string name="refresh_token">"refresh token"</string>
     <string name="access_token">"access token"</string>
+    <string name="logout">Se Deconnecter</string>
 </resources>
