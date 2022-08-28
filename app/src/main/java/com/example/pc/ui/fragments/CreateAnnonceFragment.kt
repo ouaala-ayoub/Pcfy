@@ -35,7 +35,7 @@ import com.example.pc.ui.viewmodels.CreateAnnonceModelFactory
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.example.pc.utils.toast
 
-const val TAG_CREATE = "CreateAnnonceFragment"
+private const val TAG = "CreateAnnonceFragment"
 const val ERROR_MSG = "Erreur l'annonce n'est pas ajoutée"
 private const val SUCCESS_MSG = "Annonce ajoutée avec succes"
 
@@ -46,6 +46,7 @@ class CreateAnnonceFragment : Fragment() {
     private lateinit var viewModel: CreateAnnonceModel
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val retrofitService = RetrofitService.getInstance()
+    private lateinit var loginRepository: LoginRepository
     private lateinit var userId: String
     private var imagesUris = listOf<Uri>()
 
@@ -56,25 +57,17 @@ class CreateAnnonceFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val loginRepository = LoginRepository(
+        loginRepository = LoginRepository(
             retrofitService,
             requireContext().applicationContext
         )
-
-//        if (!loginRepository.isLoggedIn){
-//            goToLoginActivity()
-//        }
-//
-//        else {
-//            userId = loginRepository.user!!.userId
-//        }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val data: Intent? = result.data
-                Log.i(TAG_CREATE, "image retrieved")
-                Log.i(TAG_CREATE, "data is ${data?.data}: ")
+                Log.i(TAG, "image retrieved")
+                Log.i(TAG, "data is ${data?.data}: ")
                 updateImageText(data?.clipData?.itemCount)
 
                 if (data?.clipData != null) {
@@ -97,6 +90,7 @@ class CreateAnnonceFragment : Fragment() {
         return binding?.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(
@@ -104,51 +98,68 @@ class CreateAnnonceFragment : Fragment() {
             CreateAnnonceModelFactory(CreateAnnonceRepository(retrofitService))
         )[CreateAnnonceModel::class.java]
 
-        setTheStatueEditTextView()
-        setTheCategoriesEditText()
-        validateTheData()
+        val isLoggedIn = loginRepository.isLoggedIn
+        Log.i(TAG, "isLoggedIn: ${isLoggedIn.value}")
 
-        binding!!.apply {
+        isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
-            addButton.setOnClickListener {
+            if (!isLogged) {
+                Log.i(TAG, "isLogged in : $isLogged")
+                requireActivity().finish()
+                goToLoginActivity()
+            }
+            if(isLogged) {
 
-                var imagesList = mutableListOf<String>()
+                Log.i(TAG, "user: ${loginRepository.user}")
+                userId = loginRepository.user!!.userId
+                Log.i(TAG, "user id : $userId")
 
-                if (imagesUris.isNotEmpty()){
-                    imagesList = uploadImages(imagesUris)
-                }
+                setTheStatueEditTextView()
+                setTheCategoriesEditText()
+                validateTheData()
 
-                val annonceToAdd = viewModel.getTheAnnonce(
-                    viewModel.titleLiveData.value!!,
-                    binding!!.priceEditText.text.toString().toFloat(),
-                    imagesList,
-                    binding!!.categoryEditText.text.toString(),
-                    binding!!.statusEditText.text.toString(),
-                    binding!!.markEditText.text.toString(),
-                    binding!!.descriptionEditText.text.toString()
-                )
-                Log.i(TAG_CREATE, "$annonceToAdd")
+                binding!!.apply {
 
-                viewModel.apply {
+                    addButton.setOnClickListener {
 
-                    //to change
-                    addAnnonce(userId, annonceToAdd).observe(viewLifecycleOwner){
-                        isTurning.observe(viewLifecycleOwner){ isVisible->
-                            progressBar.isVisible = isVisible
+                        var imagesList = mutableListOf<String>()
+
+                        if (imagesUris.isNotEmpty()){
+                            imagesList = uploadImages(imagesUris)
                         }
-                        Log.i(TAG_CREATE, "response succes from fragment $it")
-                        if(it) doOnSuccess()
-                        else doOnFail()
+
+                        val annonceToAdd = viewModel.getTheAnnonce(
+                            viewModel.titleLiveData.value!!,
+                            binding!!.priceEditText.text.toString().toFloat(),
+                            imagesList,
+                            binding!!.categoryEditText.text.toString(),
+                            binding!!.statusEditText.text.toString(),
+                            binding!!.markEditText.text.toString(),
+                            binding!!.descriptionEditText.text.toString()
+                        )
+                        Log.i(TAG, "$annonceToAdd")
+
+                        viewModel.apply {
+
+                            //to change
+                            addAnnonce(userId, annonceToAdd).observe(viewLifecycleOwner){
+                                isTurning.observe(viewLifecycleOwner){ isVisible->
+                                    progressBar.isVisible = isVisible
+                                }
+                                Log.i(TAG, "response succes from fragment $it")
+                                if(it) doOnSuccess()
+                                else doOnFail()
+                            }
+                        }
+
+                    }
+
+                    imageSelection.setOnClickListener {
+                        setTheUploadImage()
                     }
                 }
-
-            }
-
-            imageSelection.setOnClickListener {
-                setTheUploadImage()
             }
         }
-
     }
 
     private fun setTheStatueEditTextView(){
@@ -215,20 +226,25 @@ class CreateAnnonceFragment : Fragment() {
     private fun validateTheData(){
 
         //by default the button is disabled
-        binding!!.addButton.isEnabled = false
+        binding!!.apply {
 
-        binding!!.titleEditText.doOnTextChanged { text, _, _, _ ->
-            viewModel.titleLiveData.value = text.toString()
-        }
-        binding!!.priceEditText.doOnTextChanged { text, _, _, _ ->
-            viewModel.priceLiveData.value = text.toString()
-        }
-        binding!!.imageNames.doOnTextChanged { text, _, _, _ ->
-            viewModel.imagesLiveData.value = text.toString()
-        }
+            addButton.isEnabled = false
 
-        viewModel.isValidInput.observe(viewLifecycleOwner){ isActive ->
-            binding!!.addButton.isEnabled = isActive
+            titleEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.titleLiveData.value = text.toString()
+            }
+
+            priceEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.priceLiveData.value = text.toString()
+            }
+
+            imageNames.doOnTextChanged { text, _, _, _ ->
+                viewModel.imagesLiveData.value = text.toString()
+            }
+
+            viewModel.isValidInput.observe(viewLifecycleOwner){ isActive ->
+                binding!!.addButton.isEnabled = isActive
+            }
         }
     }
 

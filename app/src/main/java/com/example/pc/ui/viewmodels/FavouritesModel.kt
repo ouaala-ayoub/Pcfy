@@ -10,6 +10,7 @@ import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.NewFavouritesRequest
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.FavouritesRepository
+import com.example.pc.data.repositories.LoginRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,7 +18,7 @@ import retrofit2.Response
 private const val TAG = "FavouritesModel"
 
 class FavouritesModel(
-    private val favouritesRepository: FavouritesRepository
+    private val favouritesRepository: FavouritesRepository,
 ): ViewModel() {
 
     private var favouritesListLiveData = MutableLiveData<MutableList<Annonce>?>()

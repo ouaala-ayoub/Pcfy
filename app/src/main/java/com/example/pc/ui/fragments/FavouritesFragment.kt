@@ -66,19 +66,14 @@ class FavouritesFragment : Fragment() {
 
 //        loginRepository.logout(requireContext())
 
-        val isLoggedIn = loginRepository.isLoggedIn
-        Log.i(TAG, "isLoggedIn: ${isLoggedIn.value}")
+        loginRepository.isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
-        isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
-            if (!isLogged){
-                Log.i(TAG, "isLogged in : $isLogged")
-                requireActivity().finish()
-                goToLoginActivity()
-            }
 
-            else {
+            if (isLogged) {
+                Log.i(TAG, "other case isLogged in : $isLogged")
                 Log.i(TAG, "user: ${loginRepository.user}")
+                if (loginRepository.user == null) return@observe
                 userId = loginRepository.user!!.userId
                 Log.i(TAG, "user id : $userId")
 
@@ -121,6 +116,11 @@ class FavouritesFragment : Fragment() {
                         }
                     }
                 }
+            }
+            else if (!isLogged){
+                Log.i(TAG, "isLogged in : $isLogged")
+                requireActivity().finish()
+                goToLoginActivity()
             }
         }
 
