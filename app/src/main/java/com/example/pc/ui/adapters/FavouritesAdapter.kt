@@ -42,8 +42,10 @@ class FavouritesAdapter(
             binding.apply {
                 favouriteTitle.text = favourite.title
 
-                val sellerName = viewModel.getTheSellerName(favourite.sellerId)
-                favouriteSeller.text = sellerName
+
+//                seller name
+//                val sellerName = viewModel.getTheSellerName(favourite.sellerId)
+//                favouriteSeller.text = sellerName
 
                 favouritePrice.text = favourite.price.toString()
 

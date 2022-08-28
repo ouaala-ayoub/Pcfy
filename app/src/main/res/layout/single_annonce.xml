@@ -23,9 +23,11 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/annonce_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <com.google.android.material.textview.MaterialTextView

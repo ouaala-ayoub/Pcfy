@@ -114,7 +114,7 @@ class FavouritesModel(
 
     fun getTheSellerName(userId: String): String{
         //to do
-        return ""
+        return "test"
     }
 
 }
