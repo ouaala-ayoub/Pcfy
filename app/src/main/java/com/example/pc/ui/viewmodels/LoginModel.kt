@@ -58,8 +58,8 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     Log.i(TAG, "onResponse login : ${response.body()}")
                     retrievedTokens.postValue(true)
                     tokens.postValue(response.body())
+
                     repository.setCurrentTokens(response.body()!!)
-                    repository.isLoggedIn.postValue(true)
                     repository.setLoggedInUser(
                         LoggedInUser(
                             Token.getUserId(activity)!!

@@ -1,20 +1,20 @@
 package com.example.pc.ui.activities
 
+import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
-import com.example.pc.ui.fragments.ERROR_MSG
 import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 const val TAG = "MainActivity"
 
@@ -53,10 +53,23 @@ class MainActivity : AppCompatActivity() {
         return when(item.itemId){
             R.id.logout -> {
                 loginRepository.logout()
+                reloadActivity()
+                true
+            }
+            R.id.settings -> {
+//                goToSettingsActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun reloadActivity() {
+        val i = Intent(this@MainActivity, MainActivity::class.java)
+        finish()
+        overridePendingTransition(0, 0)
+        startActivity(i)
+        overridePendingTransition(0, 0)
     }
 
 

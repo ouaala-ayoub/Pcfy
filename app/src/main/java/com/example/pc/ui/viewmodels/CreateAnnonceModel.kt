@@ -146,7 +146,8 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
         category: String,
         status: String,
         mark: String,
-        description: String
+        description: String,
+        sellerId: String
     ): Annonce{
         return Annonce(
             title,
@@ -155,7 +156,8 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
             category,
             status = status,
             mark = mark,
-            description = description
+            description = description,
+            sellerId = sellerId
         )
     }
 

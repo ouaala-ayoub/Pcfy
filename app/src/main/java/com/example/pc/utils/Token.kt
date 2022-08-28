@@ -24,11 +24,11 @@ class Token {
         fun accessTokenIsValid(activity: Context): Boolean{
             //get the token from local storage
             val accessToken = LocalStorage.getAccessToken(activity) ?: return false
-            Log.i(TAG, "accessTokenIsValid : access Token Retrieved $accessToken")
+            Log.i(TAG, "accessTokenIsValid : access Token Retrieved ")
 
             //decode the token
             val decodedAccessToken = JWT.decodeT(accessToken, JWSHMAC256Algorithm).orNull() ?: return false
-            Log.i(TAG, "accessTokenIsValid : access Token Decoded")
+            Log.i(TAG, "accessTokenIsValid : access Token Decoded $decodedAccessToken")
             
             //return isValid
             val isValid = isTokenValid(decodedAccessToken, JWT_USER_ACCESS)
@@ -38,7 +38,7 @@ class Token {
 
         fun refreshTokenIsValid(activity: Context): Boolean {
             //get the token from local storage
-            val refreshToken = LocalStorage.getAccessToken(activity) ?: return false
+            val refreshToken = LocalStorage.getRefreshToken(activity) ?: return false
             Log.i(TAG, "refreshTokenIsValid : refresh Token Retrieved")
 
             //decode the token
@@ -108,7 +108,7 @@ class Token {
 
         fun refreshTokenIsExpired(activity: Context): Boolean {
             //get the token from local storage
-            val refreshToken = LocalStorage.getAccessToken(activity) ?: return false
+            val refreshToken = LocalStorage.getRefreshToken(activity) ?: return false
             Log.i(TAG, "refreshTokenIsExpired refresh Token Retrieved")
             
             //decode the token
@@ -127,17 +127,16 @@ class Token {
             val refreshToken = LocalStorage.getRefreshToken(activity)
             Log.i(TAG, "refresh Token Retrieved to get userId $refreshToken")
 
-            if (Auth.isAuthenticated(activity)){
-                Log.i(TAG, "getUserId is authenticated: true")
-                if(refreshToken != null){
-                    Log.i(TAG, "getUserId refresh token $refreshToken ")
-                    JWT.decode(refreshToken).tap {
-                        val userId = it.claimValue("id").orNull()
-                        Log.i(TAG, "getUserId: current returned $userId")
-                        return userId
-                    }
+            if(refreshToken != null){
+                Log.i(TAG, "getUserId refresh token $refreshToken ")
+
+                JWT.decode(refreshToken).tap {
+                    val userId = it.claimValue("id").orNull()
+                    Log.i(TAG, "getUserId: current returned $userId")
+                    return userId
                 }
             }
+
             Log.i(TAG, "getUserId: returned null")
             return null
         }

@@ -3,6 +3,7 @@ package com.example.pc.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.databinding.SingleAnnonceBinding
 import com.squareup.picasso.Picasso
@@ -25,6 +26,10 @@ class AnnoncesAdapter(
         fun bind(position: Int){
             val annonce = annoncesList[position]
             binding.apply {
+
+                if (annonce.pictures.isEmpty()){
+                    annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                }
 
                 if(annonce.pictures.isNotEmpty()){
                     Picasso

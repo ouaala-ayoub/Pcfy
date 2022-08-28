@@ -34,7 +34,7 @@ class AnnonceActivity : AppCompatActivity() {
     private val picasso = Picasso.get()
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private val loginRepository = LoginRepository(retrofitService, this.applicationContext)
+    private lateinit var loginRepository: LoginRepository
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,17 +85,22 @@ class AnnonceActivity : AppCompatActivity() {
                     addToFav.setOnClickListener {
                         if (annonce != null){
 
+                            loginRepository = LoginRepository(
+                                retrofitService,
+                                this@AnnonceActivity.applicationContext
+                            )
+
                             val isLoggedIn = loginRepository.isLoggedIn
                             isLoggedIn.observe(this@AnnonceActivity){ isLogged ->
 
                                 Log.i(TAG, "isLogged: $isLogged")
 
-                                if (!isLogged){
-                                    goToLoginActivity()
+                                if (isLogged) {
+                                    userId = loginRepository.user!!.userId
                                 }
 
-                                else {
-                                    userId = loginRepository.user!!.userId
+                                else if (!isLogged){
+                                    goToLoginActivity()
                                 }
                             }
 

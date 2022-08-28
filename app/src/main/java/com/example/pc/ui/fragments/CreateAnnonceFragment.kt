@@ -135,7 +135,8 @@ class CreateAnnonceFragment : Fragment() {
                             binding!!.categoryEditText.text.toString(),
                             binding!!.statusEditText.text.toString(),
                             binding!!.markEditText.text.toString(),
-                            binding!!.descriptionEditText.text.toString()
+                            binding!!.descriptionEditText.text.toString(),
+                            userId
                         )
                         Log.i(TAG, "$annonceToAdd")
 
