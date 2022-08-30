@@ -31,7 +31,9 @@
     <string name="settings">Réglages</string>
     <string name="Oui">Oui</string>
     <string name="Cancel">Annuler</string>
-    <string name="confirm_title">Confirmation de l\'annonce</string>
-    <string name="confirm_message">lancer l\'annonce ?</string>
+    <string name="confirm_annonce_title">Confirmation de l\'annonce</string>
+    <string name="confirm_annonce_message">lancer l\'annonce ?</string>
     <string name="se_connecter">Se connecter</string>
+    <string name="confirm_user_title">Confirmation des informations</string>
+    <string name="confirm_user_message">Êtes vous sûre de vôs informations ?</string>
 </resources>

@@ -164,8 +164,8 @@ class CreateAnnonceFragment : Fragment() {
                                     }
                                 }
                             },
-                            getString(R.string.confirm_title),
-                            getString(R.string.confirm_title)
+                            title = getString(R.string.confirm_annonce_title),
+                            message = getString(R.string.confirm_annonce_message)
                             )
 
                     }
@@ -199,12 +199,10 @@ class CreateAnnonceFragment : Fragment() {
 
         //to change !!!!!!!!!!!!
         //set the adapter
-        val itemsCorr = Category.values()
-        val values = mutableListOf<String>()
-
-        for (element in itemsCorr){
-            values.add(element.title)
+        val values = Category.values().map {
+            category -> category.title
         }
+
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
         (binding!!.categoryTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
     }

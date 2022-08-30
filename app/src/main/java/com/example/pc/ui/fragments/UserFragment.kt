@@ -16,18 +16,17 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
-import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.models.local.SellerType
-import com.example.pc.data.models.network.Status
 import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.databinding.FragmentUserBinding
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.UserModel
+import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
@@ -48,7 +47,6 @@ class UserFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -126,37 +124,46 @@ class UserFragment : Fragment() {
 
             signUpButton.setOnClickListener {
                 // to add a dialog ??
+                makeDialog(
+                    requireContext(),
+                    object : OnDialogClicked {
+                        override fun onPositiveButtonClicked() {
 
-//                val imageUrl = uploadImage(imageUri)
-                val imageUrl = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+                            //val imageUrl = uploadImage(imageUri)
+                            val imageUrl = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
 
-                viewModel.apply {
-                    val userToAdd = User(
-                        binding!!.nameEditText.text.toString(),
-                        binding!!.phoneEditText.text.toString(),
-                        binding!!.emailEditText.text.toString(),
-                        binding!!.passwordEditText.text.toString(),
-                        city = binding!!.cityEditText.text.toString(),
-                        userType = binding!!.userTypeEditText.text.toString(),
-                        brand = binding!!.organisationNameEditText.text.toString(),
-                        imageUrl = imageUrl
-                    )
+                            viewModel.apply {
+                                val userToAdd = User(
+                                    binding!!.nameEditText.text.toString(),
+                                    binding!!.phoneEditText.text.toString(),
+                                    binding!!.emailEditText.text.toString(),
+                                    binding!!.passwordEditText.text.toString(),
+                                    city = binding!!.cityEditText.text.toString(),
+                                    userType = binding!!.userTypeEditText.text.toString(),
+                                    brand = binding!!.organisationNameEditText.text.toString(),
+                                    imageUrl = imageUrl
+                                )
 
-                    Log.i(TAG, "user to add : $userToAdd")
+                                Log.i(TAG, "user to add : $userToAdd")
 
-                    signUp(userToAdd).observe(viewLifecycleOwner){
-                        if(it.isNullOrBlank()){
-                            //dialog ?
-                            Log.i(TAG, "return : $it")
-                            requireContext().toast(SGN_FAILED, Toast.LENGTH_LONG)
-                            goToHomeFragment()
-                        }else {
-                            Log.i(TAG, "return : $it")
-                            requireContext().toast(SGN_SUCCESS, Toast.LENGTH_LONG)
-                            goToLoginPage()
+                                signUp(userToAdd).observe(viewLifecycleOwner){
+                                    if(it.isNullOrBlank()){
+                                        //dialog ?
+                                        Log.i(TAG, "return : $it")
+                                        requireContext().toast(SGN_FAILED, Toast.LENGTH_LONG)
+                                        goToHomeFragment()
+                                    }else {
+                                        Log.i(TAG, "return : $it")
+                                        requireContext().toast(SGN_SUCCESS, Toast.LENGTH_LONG)
+                                        goToLoginPage()
+                                    }
+                                }
+                            }
                         }
-                    }
-                }
+                    },
+                    getString(R.string.confirm_user_title),
+                    getString(R.string.confirm_user_message)
+                )
             }
 
             imageSelection.setOnClickListener {
@@ -187,10 +194,9 @@ class UserFragment : Fragment() {
 
         //to change !!!!!!!!!!!!??
         //set the adapter
-        val values = listOf(
-            SellerType.PRO.type,
-            SellerType.SOLO.type
-        )
+        val values = SellerType.values().map {
+            sellerType -> sellerType.type
+        }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
         (binding!!.userTypeTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
