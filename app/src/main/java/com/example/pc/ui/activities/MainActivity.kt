@@ -3,6 +3,7 @@ package com.example.pc.ui.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,7 +17,7 @@ import com.example.pc.data.repositories.LoginRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
-const val TAG = "MainActivity"
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,9 +42,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.options_menu, menu)
+
+        loginRepository.isLoggedIn.observe(this@MainActivity){
+            if(loginRepository.user == null){
+                Log.i(TAG, "onCreateOptionsMenu is logged in: $it")
+                inflater.inflate(R.menu.logged_out_options_menu, menu)
+            }
+            else {
+                Log.i(TAG, "onCreateOptionsMenu is logged in: $it")
+                inflater.inflate(R.menu.logged_in_options_menu, menu)
+            }
+
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -51,17 +64,29 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when(item.itemId){
+
+            R.id.login -> {
+                goToLoginActivity()
+                true
+            }
+
             R.id.logout -> {
                 loginRepository.logout()
                 reloadActivity()
                 true
             }
+
             R.id.settings -> {
 //                goToSettingsActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun goToLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun reloadActivity() {

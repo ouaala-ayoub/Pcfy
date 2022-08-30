@@ -33,4 +33,5 @@
     <string name="Cancel">Annuler</string>
     <string name="confirm_title">Confirmation de l\'annonce</string>
     <string name="confirm_message">lancer l\'annonce ?</string>
+    <string name="se_connecter">Se connecter</string>
 </resources>

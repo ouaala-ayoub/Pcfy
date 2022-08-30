@@ -68,9 +68,13 @@ class FavouritesFragment : Fragment() {
 
         loginRepository.isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
+            if (loginRepository.user == null){
+                Log.i(TAG, "isLogged in : $isLogged")
+                requireActivity().finish()
+                goToLoginActivity()
+            }
 
-
-            if (isLogged) {
+            else {
                 Log.i(TAG, "other case isLogged in : $isLogged")
                 Log.i(TAG, "user: ${loginRepository.user}")
                 if (loginRepository.user == null) return@observe
@@ -117,11 +121,7 @@ class FavouritesFragment : Fragment() {
                     }
                 }
             }
-            else if (!isLogged){
-                Log.i(TAG, "isLogged in : $isLogged")
-                requireActivity().finish()
-                goToLoginActivity()
-            }
+
         }
 
     }

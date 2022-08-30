@@ -7,4 +7,5 @@
     <string name="pas_de_favories">Pas de favories</string>
     <string name="logout">Se Deconnecter</string>
     <string name="settings">Réglages</string>
+    <string name="se_connecter">Se connecter</string>
 </resources>

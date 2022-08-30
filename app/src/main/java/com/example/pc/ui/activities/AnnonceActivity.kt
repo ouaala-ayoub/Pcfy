@@ -17,7 +17,7 @@ import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.utils.toast
 import com.squareup.picasso.Picasso
 
-private const val TAG_ANNONCE = "AnnonceActivity"
+private const val TAG = "AnnonceActivity"
 private const val ERROR_TEXT = "test erreur"
 private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
 
@@ -75,10 +75,10 @@ class AnnonceActivity : AppCompatActivity() {
                         }
                         productDescription.text = annonce.description
 
-                        Log.i(TAG_ANNONCE, "annonce = ${annonceToShow.value}")
+                        Log.i(TAG, "annonce = ${annonceToShow.value}")
                     } else {
                         applicationContext.toast(ERROR_TEXT, Toast.LENGTH_SHORT)
-                        Log.e(TAG_ANNONCE, "error: something went wrong")
+                        Log.e(TAG, "error: something went wrong")
                         goToMainActivity()
                     }
 

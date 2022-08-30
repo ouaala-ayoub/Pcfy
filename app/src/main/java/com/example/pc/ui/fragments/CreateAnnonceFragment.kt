@@ -64,16 +64,18 @@ class CreateAnnonceFragment : Fragment() {
             requireContext().applicationContext
         )
 
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                // There are no request codes
-                val data: Intent? = result.data
-                Log.i(TAG, "image retrieved")
-                Log.i(TAG, "data is ${data?.data}: ")
-                updateImageText(data?.clipData?.itemCount)
+        if (loginRepository.user != null) {
+            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    // There are no request codes
+                    val data: Intent? = result.data
+                    Log.i(TAG, "image retrieved")
+                    Log.i(TAG, "data is ${data?.data}: ")
+                    updateImageText(data?.clipData?.itemCount)
 
-                if (data?.clipData != null) {
-                    imagesUris = getImagesUris(data.clipData!!)
+                    if (data?.clipData != null) {
+                        imagesUris = getImagesUris(data.clipData!!)
+                    }
                 }
             }
         }
@@ -105,16 +107,18 @@ class CreateAnnonceFragment : Fragment() {
 
         isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
-            if (!isLogged) {
+            if (loginRepository.user == null) {
                 Log.i(TAG, "isLogged in : $isLogged")
                 requireActivity().finish()
                 goToLoginActivity()
             }
-            if(isLogged) {
+            else {
 
                 Log.i(TAG, "user: ${loginRepository.user}")
+                if (loginRepository.user == null) return@observe
                 userId = loginRepository.user!!.userId
                 Log.i(TAG, "user id : $userId")
+
 
                 setTheStatueEditTextView()
                 setTheCategoriesEditText()
