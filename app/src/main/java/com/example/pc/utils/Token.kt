@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.MutableLiveData
 import arrow.core.*
 import com.example.pc.JWT_USER_ACCESS
 import com.example.pc.JWT_USER_REFRESH
@@ -20,6 +21,8 @@ private const val TAG = "Token"
 
 class Token {
     companion object {
+
+        private val errorMessage = MutableLiveData<String>()
 
         fun accessTokenIsValid(activity: Context): Boolean{
             //get the token from local storage
@@ -59,23 +62,40 @@ class Token {
                 issuedNow()
                 expiresAt(
                     LocalDateTime.ofInstant(
-                        Date(System.currentTimeMillis()  + 900000).toInstant(),
+                        Date(System.currentTimeMillis()  + 900).toInstant(),
                         ZoneId.of("UTC")
                     )
                 )
             }
 
             var jwtToken: String? = null
-            jwt.sign(JWT_USER_REFRESH).tap {
-                jwtToken = it.rendered
-            }
+            jwt.sign(JWT_USER_ACCESS).fold(
+                {
+                    errorMessage.postValue(it.toString())
+                    Log.e(TAG, "createAccessToken error : ${errorMessage.value}" )
+                },
+                {
+                    jwtToken = it.rendered
+                }
+            )
+
             Log.i(TAG, "createAccessToken jwt signed : $jwtToken")
             return jwtToken
         }
 
         private fun isTokenValid(token: DecodedJWT<JWSHMAC256Algorithm>, secretKey: String): Boolean {
             val isValid: Boolean
-            val verificationRes = verifySignature<JWSHMAC256Algorithm>(token, secretKey).orNull()
+            var verificationRes: JWT<JWSHMAC256Algorithm>? = null
+            verifySignature(token, secretKey).fold(
+                {
+                    errorMessage.postValue(it.toString())
+                    Log.e(TAG, "isTokenValid error : ${errorMessage.value}", )
+                },
+                {
+                    verificationRes = it
+                }
+            )
+            Log.i(TAG, "isTokenValid verificationRes : $verificationRes")
             isValid = verificationRes != null
             return isValid
         }
@@ -130,11 +150,17 @@ class Token {
             if(refreshToken != null){
                 Log.i(TAG, "getUserId refresh token $refreshToken ")
 
-                JWT.decode(refreshToken).tap {
-                    val userId = it.claimValue("id").orNull()
-                    Log.i(TAG, "getUserId: current returned $userId")
-                    return userId
-                }
+                JWT.decode(refreshToken).fold(
+                    {
+                        errorMessage.postValue(it.toString())
+                        Log.e(TAG, "getUserId decoding token error : ${errorMessage.value}" )
+                    },
+                    {
+                        val userId = it.claimValue("id").orNull()
+                        Log.i(TAG, "getUserId: current returned $userId")
+                        return userId
+                    }
+                )
             }
 
             Log.i(TAG, "getUserId: returned null")

@@ -29,4 +29,8 @@
     <string name="access_token">"access token"</string>
     <string name="logout">Se Deconnecter</string>
     <string name="settings">Réglages</string>
+    <string name="Oui">Oui</string>
+    <string name="Cancel">Annuler</string>
+    <string name="confirm_title">Confirmation de l\'annonce</string>
+    <string name="confirm_message">lancer l\'annonce ?</string>
 </resources>

@@ -32,6 +32,8 @@ import com.example.pc.databinding.FragmentCreateAnnonceBinding
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.viewmodels.CreateAnnonceModel
 import com.example.pc.ui.viewmodels.CreateAnnonceModelFactory
+import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.makeDialog
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.example.pc.utils.toast
 
@@ -122,36 +124,45 @@ class CreateAnnonceFragment : Fragment() {
 
                     addButton.setOnClickListener {
 
-                        var imagesList = mutableListOf<String>()
+                        makeDialog(
+                            requireContext(),
+                            object: OnDialogClicked {
+                                override fun onPositiveButtonClicked() {
+                                    var imagesList = mutableListOf<String>()
 
-                        if (imagesUris.isNotEmpty()){
-                            imagesList = uploadImages(imagesUris)
-                        }
+                                    if (imagesUris.isNotEmpty()){
+                                        imagesList = uploadImages(imagesUris)
+                                    }
 
-                        val annonceToAdd = viewModel.getTheAnnonce(
-                            viewModel.titleLiveData.value!!,
-                            binding!!.priceEditText.text.toString().toFloat(),
-                            imagesList,
-                            binding!!.categoryEditText.text.toString(),
-                            binding!!.statusEditText.text.toString(),
-                            binding!!.markEditText.text.toString(),
-                            binding!!.descriptionEditText.text.toString(),
-                            userId
-                        )
-                        Log.i(TAG, "$annonceToAdd")
+                                    val annonceToAdd = viewModel.getTheAnnonce(
+                                        viewModel.titleLiveData.value!!,
+                                        binding!!.priceEditText.text.toString().toFloat(),
+                                        imagesList,
+                                        binding!!.categoryEditText.text.toString(),
+                                        binding!!.statusEditText.text.toString(),
+                                        binding!!.markEditText.text.toString(),
+                                        binding!!.descriptionEditText.text.toString(),
+                                        userId
+                                    )
+                                    Log.i(TAG, "$annonceToAdd")
 
-                        viewModel.apply {
+                                    viewModel.apply {
 
-                            //to change
-                            addAnnonce(userId, annonceToAdd).observe(viewLifecycleOwner){
-                                isTurning.observe(viewLifecycleOwner){ isVisible->
-                                    progressBar.isVisible = isVisible
+                                        //to change
+                                        addAnnonce(userId, annonceToAdd).observe(viewLifecycleOwner){
+                                            isTurning.observe(viewLifecycleOwner){ isVisible->
+                                                progressBar.isVisible = isVisible
+                                            }
+                                            Log.i(TAG, "response succes from fragment $it")
+                                            if(it) doOnSuccess()
+                                            else doOnFail()
+                                        }
+                                    }
                                 }
-                                Log.i(TAG, "response succes from fragment $it")
-                                if(it) doOnSuccess()
-                                else doOnFail()
-                            }
-                        }
+                            },
+                            getString(R.string.confirm_title),
+                            getString(R.string.confirm_title)
+                            )
 
                     }
 

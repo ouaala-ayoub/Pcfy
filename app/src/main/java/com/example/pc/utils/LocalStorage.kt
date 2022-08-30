@@ -50,14 +50,14 @@ class LocalStorage {
         }
 
         fun getRefreshToken(activity: Context): String?{
-            val accessToken: String?
+            val refreshToken: String?
             activity.apply {
-                accessToken = getSharedPreferences("tokens", Context.MODE_PRIVATE)
+                refreshToken = getSharedPreferences("tokens", Context.MODE_PRIVATE)
                     .getString(
                         resources.getString(R.string.refresh_token), null
                     )
             }
-            return accessToken
+            return refreshToken
         }
 
         fun deleteTokens(activity: Context) {
