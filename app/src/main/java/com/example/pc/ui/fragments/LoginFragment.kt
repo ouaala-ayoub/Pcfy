@@ -105,6 +105,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         }
                     }
 
+                    getErrorMessage().observe(viewLifecycleOwner) { error ->
+                        binding!!.errorMessage.text = error
+                    }
+
                     isTurning.observe(viewLifecycleOwner){
                         binding!!.loginProgressBar.isActivated = it
                     }

@@ -77,10 +77,19 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:gravity="start"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="15sp" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Connexion" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -128,6 +137,5 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

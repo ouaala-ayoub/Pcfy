@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.pc.R
+import okhttp3.ResponseBody
+import org.json.JSONObject
 
 interface OnDialogClicked{
     fun onPositiveButtonClicked()
@@ -29,6 +31,11 @@ fun makeDialog(
         }
         .setNegativeButton(context.resources.getString(R.string.Cancel), null)
         .show()
+}
+
+fun getError(responseBody: ResponseBody): String {
+    val jsonObj = JSONObject(responseBody.charStream().readText())
+    return jsonObj.getString("error")
 }
 
 
