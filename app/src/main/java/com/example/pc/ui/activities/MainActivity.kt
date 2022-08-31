@@ -48,11 +48,9 @@ class MainActivity : AppCompatActivity() {
 
         loginRepository.isLoggedIn.observe(this@MainActivity){
             if(loginRepository.user == null){
-                Log.i(TAG, "onCreateOptionsMenu is logged in: $it")
                 inflater.inflate(R.menu.logged_out_options_menu, menu)
             }
             else {
-                Log.i(TAG, "onCreateOptionsMenu is logged in: $it")
                 inflater.inflate(R.menu.logged_in_options_menu, menu)
             }
 
@@ -77,11 +75,16 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.settings -> {
-//                goToSettingsActivity()
+                goToSettingsActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun goToSettingsActivity(){
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun goToLoginActivity() {

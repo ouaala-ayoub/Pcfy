@@ -18,6 +18,10 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="false"
             android:noHistory="true" />

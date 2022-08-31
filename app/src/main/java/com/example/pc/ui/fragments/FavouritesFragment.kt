@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.FavouritesRepository
 import com.example.pc.data.repositories.LoginRepository
@@ -21,6 +22,8 @@ import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.FavouritesModel
+import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 
 private const val FAVOURITE_DELETED_SUCCESS = "suprimée des favories avec succes"
@@ -70,8 +73,22 @@ class FavouritesFragment : Fragment() {
 
             if (loginRepository.user == null){
                 Log.i(TAG, "isLogged in : $isLogged")
-                requireActivity().finish()
-                goToLoginActivity()
+                makeDialog(
+                    requireActivity(),
+                    object: OnDialogClicked {
+                        override fun onPositiveButtonClicked() {
+                            requireActivity().finish()
+                            goToLoginActivity()
+                        }
+
+                        override fun onNegativeButtonClicked() {
+//                            requireActivity().finish()
+                            returnToHomeFragment()
+                        }
+                    },
+                    getString(R.string.confirm_login_title),
+                    getString(R.string.confirm_login_message)
+                )
             }
 
             else {

@@ -109,8 +109,22 @@ class CreateAnnonceFragment : Fragment() {
 
             if (loginRepository.user == null) {
                 Log.i(TAG, "isLogged in : $isLogged")
-                requireActivity().finish()
-                goToLoginActivity()
+
+                makeDialog(
+                    requireActivity(),
+                    object: OnDialogClicked{
+                        override fun onPositiveButtonClicked() {
+//                            requireActivity().finish()
+                            goToLoginActivity()
+                        }
+
+                        override fun onNegativeButtonClicked() {
+                            goToHomeFragment()
+                        }
+                    },
+                    getString(R.string.confirm_login_title),
+                    getString(R.string.confirm_login_message)
+                )
             }
             else {
 
@@ -162,6 +176,10 @@ class CreateAnnonceFragment : Fragment() {
                                             else doOnFail()
                                         }
                                     }
+                                }
+
+                                override fun onNegativeButtonClicked() {
+
                                 }
                             },
                             title = getString(R.string.confirm_annonce_title),
