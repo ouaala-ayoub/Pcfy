@@ -22,7 +22,6 @@ fun makeDialog(
     title: String,
     message: String
 ){
-
     val myDialog = AlertDialog
         .Builder(context)
         .setTitle(title)
@@ -31,7 +30,7 @@ fun makeDialog(
         .setPositiveButton(context.resources.getString(R.string.Oui)) { _, _ ->
             onDialogClicked.onPositiveButtonClicked()
         }
-        .setNegativeButton(context.resources.getString(R.string.Cancel)){dialog, _ ->
+        .setNegativeButton(context.resources.getString(R.string.Cancel)){ _, _ ->
             onDialogClicked.onNegativeButtonClicked()
         }
         .show()

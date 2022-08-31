@@ -30,6 +30,7 @@ import com.example.pc.data.repositories.CreateAnnonceRepository
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentCreateAnnonceBinding
 import com.example.pc.ui.activities.LoginActivity
+import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.CreateAnnonceModel
 import com.example.pc.ui.viewmodels.CreateAnnonceModelFactory
 import com.example.pc.utils.OnDialogClicked
@@ -119,7 +120,7 @@ class CreateAnnonceFragment : Fragment() {
                         }
 
                         override fun onNegativeButtonClicked() {
-                            goToHomeFragment()
+                            reloadActivity()
                         }
                     },
                     getString(R.string.confirm_login_title),
@@ -179,7 +180,7 @@ class CreateAnnonceFragment : Fragment() {
                                 }
 
                                 override fun onNegativeButtonClicked() {
-
+//                                    _,_ -> null
                                 }
                             },
                             title = getString(R.string.confirm_annonce_title),
@@ -294,5 +295,13 @@ class CreateAnnonceFragment : Fragment() {
     private fun goToLoginActivity() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun reloadActivity() {
+        val i = Intent(requireActivity(), MainActivity::class.java)
+        requireActivity().finish()
+        requireActivity().overridePendingTransition(0, 0)
+        startActivity(i)
+        requireActivity().overridePendingTransition(0, 0)
     }
 }

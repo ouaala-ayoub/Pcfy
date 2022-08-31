@@ -20,6 +20,7 @@ import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentFavouritesBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
+import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.FavouritesModel
 import com.example.pc.utils.OnDialogClicked
@@ -82,8 +83,7 @@ class FavouritesFragment : Fragment() {
                         }
 
                         override fun onNegativeButtonClicked() {
-//                            requireActivity().finish()
-                            returnToHomeFragment()
+                            reloadActivity()
                         }
                     },
                     getString(R.string.confirm_login_title),
@@ -159,5 +159,13 @@ class FavouritesFragment : Fragment() {
     private fun goToLoginActivity() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun reloadActivity() {
+        val i = Intent(requireActivity(), MainActivity::class.java)
+        requireActivity().finish()
+        requireActivity().overridePendingTransition(0, 0)
+        startActivity(i)
+        requireActivity().overridePendingTransition(0, 0)
     }
 }
