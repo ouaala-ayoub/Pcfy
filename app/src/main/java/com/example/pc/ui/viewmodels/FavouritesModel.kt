@@ -65,11 +65,9 @@ class FavouritesModel(
         val removed = favourites?.removeIf { annonce -> annonce.id == favouriteIdToDelete }
         favouritesListLiveData.postValue(favourites)
 
-        val idsList = mutableListOf<String>()
+        var idsList: List<String> = listOf()
         if (!favourites.isNullOrEmpty()) {
-            for (favourite in favourites){
-                idsList.add(favourite.id!!)
-            }
+            idsList = favourites.map { annonce -> annonce.id!! }
         }
 
         if(removed != null && removed == true){
@@ -92,6 +90,7 @@ class FavouritesModel(
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     deletedWithSuccess.postValue(false)
+                    errorMessage.postValue(t.message)
                     Log.e(TAG, "onFailure delete : ${t.message}")
                 }
 
