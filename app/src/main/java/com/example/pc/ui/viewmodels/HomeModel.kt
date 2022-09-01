@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.repositories.HomeRepository
+import com.example.pc.utils.getError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,8 +34,10 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
                     annoncesList.postValue(response.body())
                 }
                 else {
+//                    val error = getError(response.errorBody()!!)
+//                    Log.e(TAG, "response error $error")
+//                    errorMessage.postValue(error)
                     isProgressBarTurning.postValue(false)
-                    Log.e(TAG, "response error ${response.errorBody()}")
                 }
             }
 

@@ -1,6 +1,7 @@
 package com.example.pc.ui.activities
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,8 +10,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
@@ -39,6 +42,18 @@ class MainActivity : AppCompatActivity() {
         val navController = navHost.navController
 
         bottomNav.setupWithNavController(navController)
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
+
+        Log.i(TAG, "current theme: $isNightTheme")
+
+        when (isNightTheme) {
+            false ->
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            true ->
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
 
     }
 
@@ -99,6 +114,5 @@ class MainActivity : AppCompatActivity() {
         startActivity(i)
         overridePendingTransition(0, 0)
     }
-
 
 }

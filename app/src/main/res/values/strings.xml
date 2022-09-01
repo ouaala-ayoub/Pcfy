@@ -25,8 +25,6 @@
     <string name="status"> status %1$s </string>
     <string name="supprimer">supprimer</string>
     <string name="pas_de_favories">Pas de favories</string>
-    <string name="refresh_token">"refresh token"</string>
-    <string name="access_token">"access token"</string>
     <string name="logout">Se Deconnecter</string>
     <string name="settings">Réglages</string>
     <string name="Oui">Oui</string>
@@ -45,6 +43,11 @@
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
+
+    <!--Preferences keys-->
+    <string name="dark_mode">dark_theme</string>
+    <string name="refresh_token">"refresh token"</string>
+    <string name="access_token">"access token"</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>

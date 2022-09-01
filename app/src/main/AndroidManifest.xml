@@ -20,6 +20,7 @@
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:exported="false"
+            android:parentActivityName=".ui.activities.MainActivity"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".ui.activities.LoginActivity"

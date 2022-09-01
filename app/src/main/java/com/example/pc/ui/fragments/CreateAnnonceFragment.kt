@@ -115,7 +115,6 @@ class CreateAnnonceFragment : Fragment() {
                     requireActivity(),
                     object: OnDialogClicked{
                         override fun onPositiveButtonClicked() {
-//                            requireActivity().finish()
                             goToLoginActivity()
                         }
 

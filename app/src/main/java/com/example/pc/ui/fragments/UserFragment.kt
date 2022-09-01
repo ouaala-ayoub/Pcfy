@@ -160,6 +160,9 @@ class UserFragment : Fragment() {
                                 }
                             }
                         }
+
+                        override fun onNegativeButtonClicked() {
+                        }
                     },
                     getString(R.string.confirm_user_title),
                     getString(R.string.confirm_user_message)
