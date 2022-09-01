@@ -30,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@+id/favourite_image"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/favourite_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,11 +39,10 @@
             android:gravity="center|start"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textColor="@color/grey_primary"
             android:textSize="20sp"
             tools:text="Title" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/favourite_seller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,11 +51,10 @@
             android:gravity="center|start"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textColor="@color/grey_primary"
             android:textSize="20sp"
             tools:text="Seller" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/favourite_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,18 +63,17 @@
             android:gravity="center|start"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textColor="@color/grey_primary"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="3000dh" />
 
     </LinearLayout>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="10dp"
         android:clickable="true"
         android:focusable="true"
         android:text="@string/supprimer"

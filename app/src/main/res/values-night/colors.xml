@@ -12,4 +12,5 @@
     <color name="darker_grey">#403D39</color>
     <color name="even_darker_grey">#252422</color>
     <color name="color_on_primary">@color/white_darker</color>
+    <color name="background_color">@color/even_darker_grey</color>
 </resources>

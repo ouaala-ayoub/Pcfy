@@ -28,11 +28,19 @@ class SettingsActivity : AppCompatActivity() {
 
         when (isNightTheme) {
             false ->{
-                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.white_darker))))
+                supportActionBar?.setBackgroundDrawable(
+                    ColorDrawable(
+                        getColor(R.color.white_darker)
+                    )
+                )
             }
 
             true ->{
-                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.even_darker_grey))))
+                supportActionBar?.setBackgroundDrawable(
+                    ColorDrawable(
+                        getColor(R.color.even_darker_grey)
+                    )
+                )
             }
         }
 

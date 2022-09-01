@@ -39,10 +39,8 @@
             android:gravity="center"
             android:lines="2"
             android:maxLines="2"
-            android:textColor="@color/grey_primary"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:fontFamily="@font/alata"
             tools:text="product name" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -55,7 +53,6 @@
             android:gravity="center"
             android:textColor="@color/orange_button"
             android:textSize="18sp"
-            app:fontFamily="@font/alata"
             tools:text="product price" />
 
     </LinearLayout>
