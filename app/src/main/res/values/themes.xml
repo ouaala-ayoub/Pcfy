@@ -20,11 +20,9 @@
     </style>
     <style name= "AlataTextViewStyle" parent= "android:Widget.TextView" >
         <item name= "android:fontFamily" > @font/alata </item>
-        <item name="android:textColor"> @color/darker_grey </item>
     </style>
     <style name= "AlataButtonStyle" parent= "android:Widget.Holo.Button" >
         <item name= "android:fontFamily" > @font/alata </item>
-        <item name="backgroundTint"> @color/orange_button</item>
     </style>
     <style name="MyCustomTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 <!--        <item name="hintTextAppearance">@font/alata</item>-->

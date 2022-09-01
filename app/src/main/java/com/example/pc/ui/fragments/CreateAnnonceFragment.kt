@@ -124,7 +124,7 @@ class CreateAnnonceFragment : Fragment() {
                     },
                     getString(R.string.confirm_login_title),
                     getString(R.string.confirm_login_message)
-                )
+                ).show()
             }
             else {
 
@@ -184,7 +184,7 @@ class CreateAnnonceFragment : Fragment() {
                             },
                             title = getString(R.string.confirm_annonce_title),
                             message = getString(R.string.confirm_annonce_message)
-                            )
+                            ).show()
 
                     }
 

@@ -1,9 +1,12 @@
 package com.example.pc.utils
 
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.example.pc.R
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -21,7 +24,7 @@ fun makeDialog(
     onDialogClicked: OnDialogClicked,
     title: String,
     message: String
-){
+): AlertDialog {
     val myDialog = AlertDialog
         .Builder(context)
         .setTitle(title)
@@ -30,10 +33,17 @@ fun makeDialog(
         .setPositiveButton(context.resources.getString(R.string.Oui)) { _, _ ->
             onDialogClicked.onPositiveButtonClicked()
         }
-        .setNegativeButton(context.resources.getString(R.string.Cancel)){ _, _ ->
+
+        .setNegativeButton(context.resources.getString(R.string.Cancel)){ dialog, _ ->
             onDialogClicked.onNegativeButtonClicked()
         }
-        .show()
+        .create()
+
+    myDialog.setOnCancelListener {
+        it.dismiss()
+    }
+
+    return myDialog
 }
 
 fun getError(responseBody: ResponseBody): String {

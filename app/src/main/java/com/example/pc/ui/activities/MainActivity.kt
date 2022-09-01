@@ -43,17 +43,17 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav.setupWithNavController(navController)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
+//        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+//        val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
+//
+//        Log.i(TAG, "current theme: $isNightTheme")
 
-        Log.i(TAG, "current theme: $isNightTheme")
-
-        when (isNightTheme) {
-            false ->
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            true ->
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
+//        when (isNightTheme) {
+//            false ->
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//            true ->
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//        }
 
     }
 

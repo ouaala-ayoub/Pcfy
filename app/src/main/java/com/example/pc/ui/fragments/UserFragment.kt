@@ -1,12 +1,12 @@
 package com.example.pc.ui.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDialog
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import com.example.pc.R
 import com.example.pc.data.models.local.SellerType
 import com.example.pc.data.models.network.User
@@ -39,6 +41,7 @@ private const val TAG = "UserFragment"
 class UserFragment : Fragment() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private var alertDialog: AppCompatDialog? = null
     private var binding: FragmentUserBinding? = null
     private val retrofitService = RetrofitService.getInstance()
     private val repository = UserRepository(retrofitService)
@@ -124,7 +127,7 @@ class UserFragment : Fragment() {
 
             signUpButton.setOnClickListener {
                 // to add a dialog ??
-                makeDialog(
+                alertDialog = makeDialog(
                     requireContext(),
                     object : OnDialogClicked {
                         override fun onPositiveButtonClicked() {
@@ -167,6 +170,7 @@ class UserFragment : Fragment() {
                     getString(R.string.confirm_user_title),
                     getString(R.string.confirm_user_message)
                 )
+                alertDialog!!.show()
             }
 
             imageSelection.setOnClickListener {
@@ -219,5 +223,12 @@ class UserFragment : Fragment() {
         //to implement
         return if (uri == null) null
         else ""
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (alertDialog != null && alertDialog!!.isShowing) {
+            alertDialog!!.dismiss()
+        }
     }
 }

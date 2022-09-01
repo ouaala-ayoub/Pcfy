@@ -1,5 +1,6 @@
 package com.example.pc.ui.fragments
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,7 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialog
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
@@ -36,6 +40,7 @@ class FavouritesFragment : Fragment() {
     private var binding: FragmentFavouritesBinding? = null
     private lateinit var adapter: FavouritesAdapter
     private var userId: String? = null
+    private var alertDialog: AppCompatDialog? = null
     private var viewModel = FavouritesModel(FavouritesRepository(
         RetrofitService.getInstance()
     ))
@@ -68,27 +73,27 @@ class FavouritesFragment : Fragment() {
             requireContext().applicationContext
         )
 
-//        loginRepository.logout(requireContext())
-
         loginRepository.isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
             if (loginRepository.user == null){
                 Log.i(TAG, "isLogged in : $isLogged")
-                makeDialog(
+                alertDialog = makeDialog(
                     requireActivity(),
                     object: OnDialogClicked {
                         override fun onPositiveButtonClicked() {
-                            requireActivity().finish()
                             goToLoginActivity()
                         }
 
                         override fun onNegativeButtonClicked() {
+                            requireActivity().finish()
                             reloadActivity()
+//                            returnToHomeFragment()
                         }
                     },
                     getString(R.string.confirm_login_title),
                     getString(R.string.confirm_login_message)
                 )
+                alertDialog!!.show()
             }
 
             else {
@@ -168,4 +173,30 @@ class FavouritesFragment : Fragment() {
         startActivity(i)
         requireActivity().overridePendingTransition(0, 0)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (alertDialog != null && alertDialog!!.isShowing) {
+            Log.i(TAG, "onDestroy: ${alertDialog?.isShowing}")
+            alertDialog!!.dismiss()
+        }
+    }
+
+//    class PurchaseConfirmationDialogFragment : DialogFragment() {
+//        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+//            AlertDialog.Builder(requireContext())
+//                .setTitle(R.string.confirm_login_title)
+//                .setMessage(getString(R.string.confirm_login_message))
+//                .setPositiveButton(getString(R.string.Oui)) { _, _ ->
+//
+//                }
+//                .setNegativeButton(getString(R.string.Cancel)){ _, _ ->
+//
+//                }
+//                .create()
+//
+//        companion object {
+//            const val TAG = "PurchaseConfirmationDialog"
+//        }
+//    }
 }
