@@ -12,6 +12,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        supportActionBar?.hide()
+
         val navHost = supportFragmentManager.findFragmentById(R.id.login_fragment_container) as NavHostFragment
         val navController = navHost.navController
 

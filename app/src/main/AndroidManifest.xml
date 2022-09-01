@@ -24,8 +24,7 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".ui.activities.LoginActivity"
-            android:exported="false"
-            android:noHistory="true" />
+            android:exported="false" />
         <activity
             android:name=".ui.activities.AnnonceActivity"
             android:exported="false"

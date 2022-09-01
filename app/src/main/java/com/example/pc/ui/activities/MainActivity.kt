@@ -2,6 +2,8 @@ package com.example.pc.ui.activities
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.white_darker))))
 
         loginRepository = LoginRepository(
             RetrofitService.getInstance(),

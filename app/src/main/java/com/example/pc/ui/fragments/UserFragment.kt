@@ -43,9 +43,11 @@ class UserFragment : Fragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var alertDialog: AppCompatDialog? = null
     private var binding: FragmentUserBinding? = null
-    private val retrofitService = RetrofitService.getInstance()
-    private val repository = UserRepository(retrofitService)
-    private val viewModel = UserModel(repository)
+    private val viewModel = UserModel(
+        UserRepository(
+            RetrofitService.getInstance()
+        )
+    )
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +56,8 @@ class UserFragment : Fragment() {
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                // There are no request codes
                 val data: Intent? = result.data
+                Log.i(TAG, "resultLauncher: ${data?.data}")
                 updateImageText(data?.clipData?.itemCount)
                 imageUri = data?.data
             }
@@ -125,6 +127,10 @@ class UserFragment : Fragment() {
                 }
             }
 
+            imageSelection.setOnClickListener {
+                setTheUploadImage()
+            }
+
             signUpButton.setOnClickListener {
                 // to add a dialog ??
                 alertDialog = makeDialog(
@@ -171,11 +177,6 @@ class UserFragment : Fragment() {
                     getString(R.string.confirm_user_message)
                 )
                 alertDialog!!.show()
-            }
-
-            imageSelection.setOnClickListener {
-                //image selection intent
-                setTheUploadImage()
             }
 
             viewModel.isValidInput.observe(viewLifecycleOwner){ isActive ->

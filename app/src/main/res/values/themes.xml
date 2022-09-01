@@ -3,14 +3,18 @@
     <style name="Theme.Pc" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange_button</item>
-        <item name="colorPrimaryVariant">@color/orange_font</item>
-        <item name="colorOnPrimary">@color/even_darker_grey</item>
+        <item name="colorPrimaryVariant">@color/white_darker</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorOnSurface">@color/even_darker_grey</item>
+        <item name="colorSurface">@color/white_darker</item>
+        <item name="android:colorBackground">@color/white_darker</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/darker_grey</item>
-        <item name="colorSecondaryVariant">@color/grey</item>
-        <item name="colorOnSecondary">@color/even_darker_grey</item>
+        <item name="colorSecondary">@color/orange_button</item>
+        <item name="colorSecondaryVariant">@color/orange_font</item>
+        <item name="colorOnSecondary">@color/white_darker</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" >@color/white_darker</item>
+
         <!-- Customize your theme here. -->
     </style>
     <style name= "AppTheme" parent= "Theme.Pc" >
@@ -20,12 +24,13 @@
     </style>
     <style name= "AlataTextViewStyle" parent= "android:Widget.TextView" >
         <item name= "android:fontFamily" > @font/alata </item>
+        <item name="android:textColor">@color/color_on_primary</item>
     </style>
     <style name= "AlataButtonStyle" parent= "android:Widget.Holo.Button" >
         <item name= "android:fontFamily" > @font/alata </item>
+        <item name="android:background">@color/orange_button</item>
     </style>
     <style name="MyCustomTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-<!--        <item name="hintTextAppearance">@font/alata</item>-->
         <item name="textInputStyle">@font/alata</item>
     </style>
 </resources>

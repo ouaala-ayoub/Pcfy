@@ -41,6 +41,8 @@ class AnnonceActivity : AppCompatActivity() {
         binding = ActivityAnnonceBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.hide()
+
         setContentView(binding.root)
 
         val id = intent.getSerializableExtra("id") as String

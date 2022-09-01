@@ -1,10 +1,9 @@
 <resources>
-    <string name="app_name">pc</string>
+    <string name="app_name">Pcfy</string>
     <string name="accueil">Accueil</string>
     <string name="recherche">Recherche</string>
     <string name="utilisateur">Utilisateur</string>
     <string name="favories">Favories</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cr_er_une_annonce">créer une annonce</string>
     <string name="category">Catégorie</string>
@@ -38,7 +37,7 @@
     <string name="confirm_login_message">Vous devez être connecté, Se connecter ?</string>
 
     <!--settings activity title-->
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Réglages</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

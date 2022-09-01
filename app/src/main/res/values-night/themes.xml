@@ -2,13 +2,14 @@
     <!-- Base application theme. -->
     <style name="Theme.Pc" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/even_darker_grey</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/orange_button</item>
+        <item name="colorPrimaryVariant">@color/even_darker_grey</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorOnSurface">@color/white_darker</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/orange_button</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/orange_font</item>
+        <item name="colorOnSecondary">@color/white_darker</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

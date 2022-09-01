@@ -11,5 +11,5 @@
     <color name="grey">#CCC5B9</color>
     <color name="darker_grey">#403D39</color>
     <color name="even_darker_grey">#252422</color>
-    <color name="color_primary">#252422</color>
+    <color name="color_on_primary">@color/white_darker</color>
 </resources>
