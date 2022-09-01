@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import com.example.pc.R
 
@@ -20,7 +21,20 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.white_darker))))
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
+
+        Log.i(TAG, "current theme: $isNightTheme")
+
+        when (isNightTheme) {
+            false ->{
+                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.white_darker))))
+            }
+
+            true ->{
+                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.even_darker_grey))))
+            }
+        }
 
         setContentView(R.layout.settings_activity)
         if (savedInstanceState == null) {
@@ -64,4 +78,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
     }
+//    fun isDarkTheme{
+//
+//    }
 }

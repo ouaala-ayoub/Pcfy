@@ -69,6 +69,10 @@ class LocalStorage {
                 .apply()
         }
 
+        fun isDarkTheme(context: Context){
+//            context.getSharedPreferences("")
+        }
+
     }
 }
 

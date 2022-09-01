@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.white_darker))))
 
         loginRepository = LoginRepository(
             RetrofitService.getInstance(),
@@ -53,10 +52,16 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "current theme: $isNightTheme")
 
         when (isNightTheme) {
-            false ->
+            false ->{
+                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.white_darker))))
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            true ->
+            }
+
+            true ->{
+                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.even_darker_grey))))
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+
         }
 
     }
