@@ -21,12 +21,6 @@ private const val TAG = "LoginRepository"
 @RequiresApi(Build.VERSION_CODES.O)
 class LoginRepository(private val retrofitService: RetrofitService,private val activity: Context) {
 
-    companion object {
-//        val isLoggedIn: MutableLiveData<Boolean>()
-    }
-
-
-
     var user: LoggedInUser? = null
     var isLoggedIn = MutableLiveData(isAuthenticated())
 
