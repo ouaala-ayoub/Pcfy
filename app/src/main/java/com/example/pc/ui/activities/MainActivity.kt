@@ -43,17 +43,17 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav.setupWithNavController(navController)
 
-//        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-//        val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
-//
-//        Log.i(TAG, "current theme: $isNightTheme")
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
 
-//        when (isNightTheme) {
-//            false ->
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//            true ->
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//        }
+        Log.i(TAG, "current theme: $isNightTheme")
+
+        when (isNightTheme) {
+            false ->
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            true ->
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
 
     }
 
@@ -108,10 +108,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun reloadActivity() {
-        val i = Intent(this@MainActivity, MainActivity::class.java)
+        val intent = Intent(this@MainActivity, MainActivity::class.java)
         finish()
         overridePendingTransition(0, 0)
-        startActivity(i)
+        startActivity(intent)
         overridePendingTransition(0, 0)
     }
 
