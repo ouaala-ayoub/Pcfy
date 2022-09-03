@@ -91,7 +91,6 @@
                 android:layout_marginBottom="10dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/darker_grey"
                 tools:text="description" />
         </LinearLayout>
     </ScrollView>

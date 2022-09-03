@@ -15,8 +15,6 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         val navHost = supportFragmentManager.findFragmentById(R.id.login_fragment_container) as NavHostFragment
-        val navController = navHost.navController
-
     }
 
     override fun onBackPressed() {

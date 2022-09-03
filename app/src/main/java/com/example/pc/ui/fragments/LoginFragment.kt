@@ -20,6 +20,7 @@ import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentCreateAnnonceBinding
 import com.example.pc.databinding.FragmentLoginBinding
 import com.example.pc.ui.activities.MainActivity
+import com.example.pc.ui.activities.UserCreateActivity
 import com.example.pc.ui.viewmodels.LoginModel
 import com.example.pc.utils.Auth
 import com.example.pc.utils.LocalStorage
@@ -123,13 +124,13 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun goToMainActivity(){
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(requireContext(), MainActivity::class.java)
         startActivity(intent)
     }
 
     private fun goToUserFragment(){
-        val action = LoginFragmentDirections.actionLoginFragmentToUserFragment()
-        findNavController().navigate(action)
+        val intent = Intent(requireContext(), UserCreateActivity::class.java)
+        startActivity(intent)
     }
 
 }

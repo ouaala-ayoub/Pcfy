@@ -39,7 +39,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.example.pc.utils.toast
 
 private const val TAG = "CreateAnnonceFragment"
-const val ERROR_MSG = "Erreur l'annonce n'est pas ajoutée"
+private const val ERROR_MSG = "Erreur l'annonce n'est pas ajoutée"
 private const val SUCCESS_MSG = "Annonce ajoutée avec succes"
 
 

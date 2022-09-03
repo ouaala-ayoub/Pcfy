@@ -125,12 +125,3 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel(
         })
     }
 }
-class AnnonceModelFactory constructor(private val repository: AnnonceRepository): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(AnnonceModel::class.java)) {
-            AnnonceModel(this.repository) as T
-        } else {
-            throw IllegalArgumentException("ViewModel Not Found")
-        }
-    }
-}

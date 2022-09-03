@@ -36,6 +36,7 @@
             android:layout_marginBottom="20dp"
             android:layout_weight="1"
             android:hint="Utilisateur"
+            app:startIconTint="@color/orange_button"
             app:startIconDrawable="@drawable/ic_baseline_person_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -58,6 +59,7 @@
             android:layout_marginBottom="20dp"
             android:layout_weight="1"
             android:hint="Mot de passe"
+            app:startIconTint="@color/orange_button"
             app:endIconMode="password_toggle"
             app:startIconDrawable="@drawable/ic_baseline_lock_24">
 

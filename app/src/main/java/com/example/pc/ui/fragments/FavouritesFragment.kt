@@ -51,6 +51,12 @@ class FavouritesFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        loginRepository = LoginRepository(
+            RetrofitService.getInstance(),
+            requireContext().applicationContext
+        )
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -68,16 +74,11 @@ class FavouritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loginRepository = LoginRepository(
-            RetrofitService.getInstance(),
-            requireContext().applicationContext
-        )
-
         loginRepository.isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
             if (loginRepository.user == null){
                 Log.i(TAG, "isLogged in : $isLogged")
-                alertDialog = makeDialog(
+                makeDialog(
                     requireActivity(),
                     object: OnDialogClicked {
                         override fun onPositiveButtonClicked() {
@@ -92,8 +93,7 @@ class FavouritesFragment : Fragment() {
                     },
                     getString(R.string.confirm_login_title),
                     getString(R.string.confirm_login_message)
-                )
-                alertDialog!!.show()
+                ).show()
             }
 
             else {
@@ -147,9 +147,6 @@ class FavouritesFragment : Fragment() {
         }
 
     }
-
-//
-
 
     private fun goToAnnonceActivity(annonceId: String){
         val intent = Intent(this.context, AnnonceActivity::class.java)

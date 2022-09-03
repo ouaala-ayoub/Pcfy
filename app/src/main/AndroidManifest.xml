@@ -18,13 +18,17 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.UserCreateActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.SettingsActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.MainActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.activities.MainActivity" />
         <activity
             android:name=".ui.activities.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true" />
         <activity
             android:name=".ui.activities.AnnonceActivity"
             android:exported="false"

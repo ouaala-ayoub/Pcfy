@@ -1,48 +1,45 @@
-package com.example.pc.ui.fragments
+package com.example.pc.ui.activities
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import com.example.pc.R
 import com.example.pc.data.models.local.SellerType
 import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserRepository
-import com.example.pc.databinding.FragmentUserBinding
-import com.example.pc.ui.activities.LoginActivity
-import com.example.pc.ui.activities.MainActivity
+import com.example.pc.databinding.ActivityUserCreateBinding
 import com.example.pc.ui.viewmodels.UserModel
 import com.example.pc.utils.OnDialogClicked
 import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
+
+private const val TAG = "UserCreateActivity"
 private const val SGN_SUCCESS = "Compte Créé avec succès"
 private const val SGN_FAILED = "Erreur lors du creation du compte"
 private const val IMAGE_NOT_SELECTED = "Aucune image selectionnée"
 private const val IMAGE_SELECTED = "Une image selectionnée"
-private const val TAG = "UserFragment"
 
-class UserFragment : Fragment() {
+class UserCreateActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityUserCreateBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var alertDialog: AppCompatDialog? = null
-    private var binding: FragmentUserBinding? = null
     private val viewModel = UserModel(
         UserRepository(
             RetrofitService.getInstance()
@@ -50,9 +47,11 @@ class UserFragment : Fragment() {
     )
     private var imageUri: Uri? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        supportActionBar?.hide()
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -62,30 +61,21 @@ class UserFragment : Fragment() {
                 imageUri = data?.data
             }
         }
-    }
+        binding = ActivityUserCreateBinding.inflate(layoutInflater)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentUserBinding.inflate(layoutInflater, container, false)
-        return binding?.root
-    }
+        super.onCreate(savedInstanceState)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         setUpTheTypeEditText()
 
-        binding!!.apply {
+        binding.apply {
             imageName.text = "Aucune image selectionnée"
             signUpButton.isEnabled = false
 
             nameEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     nameLiveData.value = text.toString()
-                    nameHelperText.observe(viewLifecycleOwner){
+                    nameHelperText.observe(this@UserCreateActivity){
                         nameTextField.helperText = it
                     }
                 }
@@ -94,7 +84,7 @@ class UserFragment : Fragment() {
             phoneEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     phoneLiveData.value = text.toString()
-                    phoneHelperText.observe(viewLifecycleOwner){
+                    phoneHelperText.observe(this@UserCreateActivity){
                         phoneTextField.helperText = it
                     }
                 }
@@ -103,7 +93,7 @@ class UserFragment : Fragment() {
             emailEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     emailLiveData.value = text.toString()
-                    emailHelperText.observe(viewLifecycleOwner){
+                    emailHelperText.observe(this@UserCreateActivity){
                         emailTextField.helperText = it
                     }
                 }
@@ -112,7 +102,7 @@ class UserFragment : Fragment() {
             passwordEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     passwordLiveData.value = text.toString()
-                    passwordHelperText.observe(viewLifecycleOwner){
+                    passwordHelperText.observe(this@UserCreateActivity){
                         passwordTextField.helperText = it
                     }
                 }
@@ -121,7 +111,7 @@ class UserFragment : Fragment() {
             retypePasswordEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     retypedPasswordLiveData.value = text.toString()
-                    retypedPasswordHelperText.observe(viewLifecycleOwner){
+                    retypedPasswordHelperText.observe(this@UserCreateActivity){
                         retypePasswordTextField.helperText = it
                     }
                 }
@@ -134,7 +124,7 @@ class UserFragment : Fragment() {
             signUpButton.setOnClickListener {
                 // to add a dialog ??
                 alertDialog = makeDialog(
-                    requireContext(),
+                    this@UserCreateActivity,
                     object : OnDialogClicked {
                         override fun onPositiveButtonClicked() {
 
@@ -143,27 +133,27 @@ class UserFragment : Fragment() {
 
                             viewModel.apply {
                                 val userToAdd = User(
-                                    binding!!.nameEditText.text.toString(),
-                                    binding!!.phoneEditText.text.toString(),
-                                    binding!!.emailEditText.text.toString(),
-                                    binding!!.passwordEditText.text.toString(),
-                                    city = binding!!.cityEditText.text.toString(),
-                                    userType = binding!!.userTypeEditText.text.toString(),
-                                    brand = binding!!.organisationNameEditText.text.toString(),
+                                    binding.nameEditText.text.toString(),
+                                    binding.phoneEditText.text.toString(),
+                                    binding.emailEditText.text.toString(),
+                                    binding.passwordEditText.text.toString(),
+                                    city = binding.cityEditText.text.toString(),
+                                    userType = binding.userTypeEditText.text.toString(),
+                                    brand = binding.organisationNameEditText.text.toString(),
                                     imageUrl = imageUrl
                                 )
 
                                 Log.i(TAG, "user to add : $userToAdd")
 
-                                signUp(userToAdd).observe(viewLifecycleOwner){
+                                signUp(userToAdd).observe(this@UserCreateActivity){
                                     if(it.isNullOrBlank()){
                                         //dialog ?
                                         Log.i(TAG, "return : $it")
-                                        requireContext().toast(SGN_FAILED, Toast.LENGTH_LONG)
+                                        this@UserCreateActivity.toast(SGN_FAILED, Toast.LENGTH_LONG)
                                         goToHomeFragment()
                                     }else {
                                         Log.i(TAG, "return : $it")
-                                        requireContext().toast(SGN_SUCCESS, Toast.LENGTH_LONG)
+                                        this@UserCreateActivity.toast(SGN_SUCCESS, Toast.LENGTH_LONG)
                                         goToLoginPage()
                                     }
                                 }
@@ -179,35 +169,38 @@ class UserFragment : Fragment() {
                 alertDialog!!.show()
             }
 
-            viewModel.isValidInput.observe(viewLifecycleOwner){ isActive ->
+            viewModel.isValidInput.observe(this@UserCreateActivity){ isActive ->
                 Log.i(TAG, "$isActive")
-                binding!!.signUpButton.isEnabled = isActive
+                binding.signUpButton.isEnabled = isActive
             }
         }
+
+        setContentView(binding.root)
+
     }
 
     private fun goToHomeFragment(){
-        val intent = Intent(requireContext(), MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
     private fun goToLoginPage(){
-        val intent = Intent(requireContext(), LoginActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 
     private fun setUpTheTypeEditText(){
 
-        binding!!.userTypeTextField.editText?.setText(SellerType.SOLO.type)
+        binding.userTypeTextField.editText?.setText(SellerType.SOLO.type)
 
         //to change !!!!!!!!!!!!??
         //set the adapter
         val values = SellerType.values().map {
-            sellerType -> sellerType.type
+                sellerType -> sellerType.type
         }
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
-        (binding!!.userTypeTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+        val adapter = ArrayAdapter(this, R.layout.list_item, values)
+        (binding.userTypeTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
     }
 
     private fun setTheUploadImage() {
@@ -216,8 +209,8 @@ class UserFragment : Fragment() {
     }
 
     private fun updateImageText(data: Any?){
-        if (data == null) binding!!.imageName.text = IMAGE_NOT_SELECTED
-        else binding!!.imageName.text = IMAGE_SELECTED
+        if (data == null) binding.imageName.text = IMAGE_NOT_SELECTED
+        else binding.imageName.text = IMAGE_SELECTED
     }
 
     private fun uploadImage(uri: Uri?): String?{

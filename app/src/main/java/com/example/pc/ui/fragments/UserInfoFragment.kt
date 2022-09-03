@@ -48,13 +48,19 @@ class UserInfoFragment : Fragment() {
                 requireContext().applicationContext
             )
         )
+
         userInfoModel.apply {
             getIsLoggedIn().observe(viewLifecycleOwner) {
                 val currentUser = getCurrentUser()
                 if (currentUser != null){
                     Log.i(TAG, "user id : ${currentUser.userId}")
-                    getUserById(currentUser.userId).observe(viewLifecycleOwner){
-
+                    getUserById(currentUser.userId).observe(viewLifecycleOwner){ user ->
+                        if (user != null){
+                            Log.i(TAG, "user retrieved : $user")
+                        }
+                        else {
+                            Log.e(TAG, "error retrieving the user : ${error.value}")
+                        }
                     }
                 }
                 else {
