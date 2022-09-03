@@ -22,6 +22,8 @@ import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.FavouritesRepository
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentFavouritesBinding
+import com.example.pc.databinding.FragmentUserInfoBinding
+import com.example.pc.databinding.NoUserConnectedBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
@@ -38,6 +40,7 @@ private const val TAG = "FavouritesFragment"
 class FavouritesFragment : Fragment() {
 
     private var binding: FragmentFavouritesBinding? = null
+    private var bindingNoUser: NoUserConnectedBinding? = null
     private lateinit var adapter: FavouritesAdapter
     private var userId: String? = null
     private var alertDialog: AppCompatDialog? = null
@@ -67,86 +70,80 @@ class FavouritesFragment : Fragment() {
 
         binding = FragmentFavouritesBinding.inflate(inflater, container, false)
 
-        return binding?.root
+        return if(loginRepository.user == null){
+            bindingNoUser = NoUserConnectedBinding.inflate(inflater, container, false)
+            bindingNoUser!!.loginFromUserInfo.setOnClickListener {
+                Log.i(TAG, "clicked login")
+                goToLoginActivity()
+            }
+            bindingNoUser!!.root
+        }else {
+            binding = FragmentFavouritesBinding.inflate(inflater, container, false)
+            binding!!.root
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (binding == null) {
+            Log.i(TAG, "binding check: binding $binding")
+            return
+        }
+
         loginRepository.isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
 
-            if (loginRepository.user == null){
-                Log.i(TAG, "isLogged in : $isLogged")
-                makeDialog(
-                    requireActivity(),
-                    object: OnDialogClicked {
-                        override fun onPositiveButtonClicked() {
-                            goToLoginActivity()
+            Log.i(TAG, "other case isLogged in : $isLogged")
+            Log.i(TAG, "user: ${loginRepository.user}")
+            if (loginRepository.user == null) return@observe
+            userId = loginRepository.user!!.userId
+            Log.i(TAG, "user id : $userId")
+
+            adapter = FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener{
+                override fun onFavouriteClicked(annonceId: String) {
+                    goToAnnonceActivity(annonceId)
+                }
+                override fun onDeleteClickListener(annonceId: String) {
+                    viewModel.deleteFavourite(userId!!, annonceId).observe(viewLifecycleOwner){deletedWithSuccess ->
+                        if(deletedWithSuccess) {
+                            requireContext().toast(FAVOURITE_DELETED_SUCCESS, Toast.LENGTH_SHORT)
                         }
-
-                        override fun onNegativeButtonClicked() {
-                            requireActivity().finish()
-                            reloadActivity()
-//                            returnToHomeFragment()
-                        }
-                    },
-                    getString(R.string.confirm_login_title),
-                    getString(R.string.confirm_login_message)
-                ).show()
-            }
-
-            else {
-                Log.i(TAG, "other case isLogged in : $isLogged")
-                Log.i(TAG, "user: ${loginRepository.user}")
-                if (loginRepository.user == null) return@observe
-                userId = loginRepository.user!!.userId
-                Log.i(TAG, "user id : $userId")
-
-                adapter = FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener{
-                    override fun onFavouriteClicked(annonceId: String) {
-                        goToAnnonceActivity(annonceId)
-                    }
-                    override fun onDeleteClickListener(annonceId: String) {
-                        viewModel.deleteFavourite(userId!!, annonceId).observe(viewLifecycleOwner){deletedWithSuccess ->
-                            if(deletedWithSuccess) {
-                                requireContext().toast(FAVOURITE_DELETED_SUCCESS, Toast.LENGTH_SHORT)
-                            }
-                            else {
-                                requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
-                            }
-                        }
-                    }
-                }, viewModel)
-
-                binding!!.apply {
-                    favouritesRv.layoutManager = LinearLayoutManager(activity)
-                    favouritesRv.adapter = adapter
-
-                    viewModel.apply {
-                        getFavourites(userId!!).observe(viewLifecycleOwner){ favourites ->
-                            if (favourites == null) {
-                                requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
-                                returnToHomeFragment()
-                            }
-                            else{
-                                Log.i(TAG, "favourites : $favourites")
-                                adapter.setFavouritesList(favourites)
-                                updateIsEmpty().observe(viewLifecycleOwner){ isVisible ->
-                                    isEmpty.isVisible = isVisible
-                                }
-                            }
-                        }
-                        isProgressBarTurning.observe(viewLifecycleOwner){ isVisible ->
-                            favouritesProgressBar.isVisible = isVisible
+                        else {
+                            requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
                         }
                     }
                 }
-            }
+            }, viewModel)
 
+            binding!!.apply {
+                favouritesRv.layoutManager = LinearLayoutManager(activity)
+                favouritesRv.adapter = adapter
+
+                viewModel.apply {
+                    getFavourites(userId!!).observe(viewLifecycleOwner){ favourites ->
+                        if (favourites == null) {
+                            requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
+                            returnToHomeFragment()
+                        }
+                        else{
+                            Log.i(TAG, "favourites : $favourites")
+                            adapter.setFavouritesList(favourites)
+                            updateIsEmpty().observe(viewLifecycleOwner){ isVisible ->
+                                isEmpty.isVisible = isVisible
+                            }
+                        }
+                    }
+                    isProgressBarTurning.observe(viewLifecycleOwner){ isVisible ->
+                        favouritesProgressBar.isVisible = isVisible
+                    }
+                }
+            }
         }
 
     }
+
+
 
     private fun goToAnnonceActivity(annonceId: String){
         val intent = Intent(this.context, AnnonceActivity::class.java)

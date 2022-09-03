@@ -1,6 +1,5 @@
 package com.example.pc.ui.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,21 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.navigation.fragment.findNavController
 import com.example.pc.R
-import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
-import com.example.pc.databinding.FragmentCreateAnnonceBinding
 import com.example.pc.databinding.FragmentLoginBinding
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.activities.UserCreateActivity
 import com.example.pc.ui.viewmodels.LoginModel
-import com.example.pc.utils.Auth
-import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.toast
-import io.github.nefilim.kjwt.JWT
 
 private const val LOGIN_FAILED = "Erreur de Connexion"
 private const val LOGIN_SUCCESS = "Connecté avec success"
@@ -111,7 +105,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                     }
 
                     isTurning.observe(viewLifecycleOwner){
-                        binding!!.loginProgressBar.isActivated = it
+                        binding!!.loginProgressBar.isVisible = it
                     }
                 }
 
