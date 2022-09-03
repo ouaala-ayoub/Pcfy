@@ -1,20 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.UserInfoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User Info"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:context=".ui.fragments.UserInfoFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background_color"
+            android:elevation="0dp">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/scrol_hide"
+                android:elevation="0dp"
+                android:scrollbarSize="0dp"
+                app:contentScrim="@color/white_darker"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/image_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        app:cardCornerRadius="80dp">
+
+                        <ImageView
+                            android:id="@+id/user_image"
+                            android:layout_width="@dimen/image_size"
+                            android:layout_height="@dimen/image_size"
+                            android:layout_gravity="top"
+                            android:contentDescription="@string/user_image"
+                            android:scaleType="centerCrop"
+                            tools:src="@tools:sample/avatars" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        tools:text="ayoub ouaala" />
+
+                    <TextView
+                        android:id="@+id/user_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        tools:text="type d'utilisateur : particulier" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:elevation="0dp"
+                android:orientation="vertical">
+
+
+                <Button
+                    android:id="@+id/user_info"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center|start"
+                    android:lines="2"
+                    android:text="@string/mes_informations"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/AlataTextView"
+                    android:textColor="@color/color_on_primary"
+                    android:textSize="17sp"
+                    app:icon="@drawable/ic_baseline_person_24"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/orange_button"
+                    app:strokeColor="@color/color_on_primary" />
+
+                <Button
+                    android:id="@+id/about"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center|start"
+                    android:lines="2"
+                    android:text="@string/propos"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/AlataTextView"
+                    android:textColor="@color/color_on_primary"
+                    android:textSize="17sp"
+                    app:icon="@drawable/ic_baseline_info_24"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/orange_button"
+                    app:strokeColor="@color/color_on_primary" />
+
+                <Button
+                    android:id="@+id/share"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center|start"
+                    android:lines="2"
+                    android:text="@string/partager"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/AlataTextView"
+                    android:textColor="@color/color_on_primary"
+                    android:textSize="17sp"
+                    app:icon="@drawable/ic_baseline_share_24"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/orange_button"
+                    app:strokeColor="@color/color_on_primary" />
+
+                <Button
+                    android:id="@+id/user_announces"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center|start"
+                    android:lines="2"
+                    android:text="@string/mes_annonces"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/AlataTextView"
+                    android:textColor="@color/color_on_primary"
+                    android:textSize="17sp"
+                    app:icon="@drawable/ic_baseline_note_add_24"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/orange_button"
+                    app:strokeColor="@color/color_on_primary" />
+
+                <Button
+                    android:id="@+id/logout"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center|start"
+                    android:lines="2"
+                    android:text="@string/logout"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/AlataTextView"
+                    android:textColor="@color/color_on_primary"
+                    android:textSize="17sp"
+                    app:icon="@drawable/ic_baseline_logout_24"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/orange_button"
+                    app:strokeColor="@color/color_on_primary" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/user_info_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

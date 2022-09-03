@@ -36,6 +36,12 @@
     <string name="confirm_login_title">Connexion requis</string>
     <string name="confirm_login_message">Vous devez être connecté, Se connecter ?</string>
 
+    <!--user info string resources-->
+    <string name="user_type">type du compte : %1$s </string>
+    <string name="mes_informations">Mes informations</string>
+    <string name="mes_annonces">Mes annonces</string>
+
+
     <!--settings activity title-->
     <string name="title_activity_settings">Réglages</string>
 
@@ -59,4 +65,8 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="pas_d_utilisateur_connect">Pas d\'utilisateur connecté</string>
+    <string name="propos">à-propos</string>
+    <string name="partager">Partager</string>
+    <string name="user_image">user image</string>
+
 </resources>

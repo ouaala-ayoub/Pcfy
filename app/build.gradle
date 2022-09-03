@@ -49,7 +49,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference:1.2.0'
 
     //test
     testImplementation 'junit:junit:4.13.2'
@@ -75,4 +75,6 @@ dependencies {
 
     //kt core
     implementation("io.arrow-kt:arrow-core")
+
+    //support scroll
 }

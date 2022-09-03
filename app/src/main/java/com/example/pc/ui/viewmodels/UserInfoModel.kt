@@ -38,8 +38,8 @@ class UserInfoModel(
                     isTurning.postValue(false)
                 }
                 else {
-                    error.postValue(getError(response.errorBody()!!))
-                    Log.e(TAG, "error body : ${error.value}")
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "error body : $error")
                     isTurning.postValue(false)
                 }
             }

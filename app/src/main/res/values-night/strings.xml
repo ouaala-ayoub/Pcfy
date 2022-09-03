@@ -15,4 +15,9 @@
     <string name="settings">Réglages</string>
     <string name="se_connecter">Se connecter</string>
     <string name="pas_d_utilisateur_connect">Pas d\'utilisateur connecté</string>
+    <string name="mes_informations">Mes informations</string>
+    <string name="mes_annonces">Mes annonces</string>
+    <string name="propos">à-propos</string>
+    <string name="partager">Partager</string>
+    <string name="user_image">user image</string>
 </resources>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="pas_d_utilisateur_connect">Pas d\'utilisateur connecté</string>
+    <string name="mes_informations">Mes informations</string>
+    <string name="mes_annonces">Mes annonces</string>
+    <string name="partager">Partager</string>
 </resources>

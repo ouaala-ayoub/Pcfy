@@ -101,7 +101,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                     }
 
                     getErrorMessage().observe(viewLifecycleOwner) { error ->
-                        binding!!.errorMessage.text = error
+                        binding!!.problemMessage.text = error
                     }
 
                     isTurning.observe(viewLifecycleOwner){

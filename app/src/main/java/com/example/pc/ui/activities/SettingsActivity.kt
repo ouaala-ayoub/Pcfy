@@ -64,7 +64,7 @@ class SettingsActivity : AppCompatActivity() {
 
                 val isChecked = it
                     .sharedPreferences
-                    .getBoolean(
+                    ?.getBoolean(
                         getString(R.string.dark_mode),
                         darkModePref.isChecked
                     )

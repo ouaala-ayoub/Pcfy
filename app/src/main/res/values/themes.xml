@@ -17,6 +17,7 @@
 
         <!-- Customize your theme here. -->
     </style>
+
     <style name= "AppTheme" parent= "Theme.Pc" >
         <item name= "android:textViewStyle" > @style/AlataTextViewStyle </item>
         <item name= "android:buttonStyle" > @style/AlataButtonStyle </item>
@@ -32,5 +33,10 @@
     </style>
     <style name="MyCustomTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="textInputStyle">@font/alata</item>
+    </style>
+    <style name="AlataTextView" parent= "android:Widget.TextView">
+        <item name="android:fontFamily" >
+            @font/alata
+        </item>
     </style>
 </resources>

@@ -143,8 +143,6 @@ class FavouritesFragment : Fragment() {
 
     }
 
-
-
     private fun goToAnnonceActivity(annonceId: String){
         val intent = Intent(this.context, AnnonceActivity::class.java)
         intent.putExtra("id", annonceId)
@@ -175,22 +173,4 @@ class FavouritesFragment : Fragment() {
             alertDialog!!.dismiss()
         }
     }
-
-//    class PurchaseConfirmationDialogFragment : DialogFragment() {
-//        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-//            AlertDialog.Builder(requireContext())
-//                .setTitle(R.string.confirm_login_title)
-//                .setMessage(getString(R.string.confirm_login_message))
-//                .setPositiveButton(getString(R.string.Oui)) { _, _ ->
-//
-//                }
-//                .setNegativeButton(getString(R.string.Cancel)){ _, _ ->
-//
-//                }
-//                .create()
-//
-//        companion object {
-//            const val TAG = "PurchaseConfirmationDialog"
-//        }
-//    }
 }

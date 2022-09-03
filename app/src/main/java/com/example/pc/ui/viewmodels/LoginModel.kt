@@ -73,10 +73,9 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     isTurning.postValue(false)
                 }
                 else{
-                    val error = getError(response.errorBody()!!)
+                    val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse test get error message $error")
-
-                    errorMessage.postValue(error)
+                    errorMessage.postValue(error?.message)
                     retrievedTokens.postValue(false)
                     isTurning.postValue(false)
                 }
@@ -84,7 +83,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
             override fun onFailure(call: Call<Tokens>, t: Throwable) {
                 Log.e(TAG, "onFailure login : ${t.message}")
-                Log.e(TAG, "onFailure: login : ${t.cause}")
+                errorMessage.postValue(t.message)
                 retrievedTokens.postValue(false)
                 isTurning.postValue(false)
             }

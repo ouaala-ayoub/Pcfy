@@ -4,5 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Error(
     @SerializedName("message")
-    val message: String
+    var message: String,
+
+    val code: Int
 )
