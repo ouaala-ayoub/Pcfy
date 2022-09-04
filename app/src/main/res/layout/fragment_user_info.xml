@@ -21,7 +21,7 @@
                 android:layout_height="@dimen/scrol_hide"
                 android:elevation="0dp"
                 android:scrollbarSize="0dp"
-                app:contentScrim="@color/white_darker"
+                app:contentScrim="@color/background_color"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -169,6 +169,24 @@
                     app:strokeColor="@color/color_on_primary" />
 
                 <Button
+                    android:id="@+id/website"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center|start"
+                    android:lines="2"
+                    android:text="@string/notre_site_web"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/AlataTextView"
+                    android:textColor="@color/color_on_primary"
+                    android:textSize="17sp"
+                    app:icon="@drawable/ic_baseline_web_24"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/orange_button"
+                    app:strokeColor="@color/color_on_primary" />
+
+                <Button
                     android:id="@+id/logout"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                     android:layout_width="match_parent"
@@ -185,6 +203,7 @@
                     app:iconPadding="10dp"
                     app:iconTint="@color/orange_button"
                     app:strokeColor="@color/color_on_primary" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

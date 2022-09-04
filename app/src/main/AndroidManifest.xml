@@ -18,6 +18,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".UserAnnoncesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.UserCreateActivity"
             android:exported="false" />
         <activity

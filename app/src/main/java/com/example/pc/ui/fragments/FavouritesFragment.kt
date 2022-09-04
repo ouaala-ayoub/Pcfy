@@ -68,8 +68,6 @@ class FavouritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentFavouritesBinding.inflate(inflater, container, false)
-
         return if(loginRepository.user == null){
             bindingNoUser = NoUserConnectedBinding.inflate(inflater, container, false)
             bindingNoUser!!.loginFromUserInfo.setOnClickListener {

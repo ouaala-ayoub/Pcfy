@@ -20,6 +20,9 @@ interface RetrofitService {
     @POST("announces")
     fun addAnnonce(@Body annonceToAdd: Annonce):Call<IdResponse>
 
+    @GET("users/{id}/announces")
+    fun getAnnounces(@Path("id") userId: String): Call<List<Annonce>>
+
     //handle users admin ?
 
     @GET("users")
