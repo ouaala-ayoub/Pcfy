@@ -25,9 +25,9 @@ class UserAnnoncesModel(
 ): ViewModel() {
 
     private val annoncesList = MutableLiveData<List<Annonce>>()
-    private val isTurning = MutableLiveData<Boolean>()
-    private val errorMessage = MutableLiveData<Error?>()
-    private val deletedAnnonce = MutableLiveData<Boolean>()
+    val isTurning = MutableLiveData<Boolean>()
+    val errorMessage = MutableLiveData<Error?>()
+    val deletedAnnonce = MutableLiveData<Boolean>()
 
     fun getAnnoncesById(userId: String): MutableLiveData<List<Annonce>> {
 

@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="scrol_hide">300dp</dimen>
     <dimen name="image_size">170dp</dimen>
+    <dimen name="annonces_rv_margin">15dp</dimen>
+    <dimen name="favourites_image_size">115dp</dimen>
 </resources>

@@ -56,6 +56,9 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
         savedInstanceState: Bundle?
     ): View?{
 
+        val activity = requireActivity() as MainActivity
+        activity.supportActionBar?.hide()
+
         val currentUser = userInfoModel.getCurrentUser()
 
         return if(currentUser == null){

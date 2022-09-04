@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +24,12 @@
         app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
 
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="Mes annonces :"
             android:textSize="18sp" />
 
@@ -34,10 +38,17 @@
 
 </com.google.android.material.appbar.AppBarLayout>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/annonces_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/annonces_rv_margin"
+        android:layout_marginTop="@dimen/annonces_rv_margin"
+        android:layout_marginEnd="@dimen/annonces_rv_margin"
+        android:layout_marginBottom="@dimen/annonces_rv_margin"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <ProgressBar

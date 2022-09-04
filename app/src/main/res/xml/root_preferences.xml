@@ -4,7 +4,7 @@
     <PreferenceCategory app:title="Visuelles">
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/dark_mode"
             android:summary="Changez le thème de l'application"
             android:title="Dark Mode" />

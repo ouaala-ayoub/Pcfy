@@ -23,6 +23,13 @@
         <item name= "android:buttonStyle" > @style/AlataButtonStyle </item>
         <item name="textInputStyle"> @style/MyCustomTextInputStyle </item>
     </style>
+
+    <style name="AppTheme.NoActionbar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
     <style name= "AlataTextViewStyle" parent= "android:Widget.TextView" >
         <item name= "android:fontFamily" > @font/alata </item>
         <item name="android:textColor">@color/color_on_primary</item>
