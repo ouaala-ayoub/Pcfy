@@ -22,7 +22,7 @@ class FavouritesAdapter(
     }
     private var favouritesList = mutableListOf<Annonce>()
 
-    fun setFavouritesList(list: List<Annonce>){
+    fun setList(list: List<Annonce>){
         favouritesList = list.toMutableList()
         notifyDataSetChanged()
     }

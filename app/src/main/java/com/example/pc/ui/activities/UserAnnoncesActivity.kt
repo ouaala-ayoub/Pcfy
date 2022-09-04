@@ -1,7 +1,6 @@
 package com.example.pc.ui.activities
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,10 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pc.R
-import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserInfoRepository
@@ -23,7 +19,7 @@ import com.example.pc.utils.toast
 
 private const val TAG = "UserAnnoncesActivity"
 private const val ANNONCE_DELETED_SUCCESS = ""
-private const val ANNONCE_ERROR_MSG = ""
+private const val ANNONCE_ERROR_MSG = "Erreur Inatendue"
 
 class UserAnnoncesActivity : AppCompatActivity() {
 
@@ -72,27 +68,40 @@ class UserAnnoncesActivity : AppCompatActivity() {
                 }
             }
         )
-        adapter.setFavouritesList(listOf(
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-            Annonce("test",155, mutableListOf(),"test", "pc gamer", "neuf"),
-        ))
-        binding.annoncesRv.adapter = adapter
-        binding.annoncesRv.layoutManager = LinearLayoutManager(this)
 
-        userAnnoncesModel.isTurning.observe(this){
-            binding.userAnnoncesProgressbar.isVisible = it
+
+        userAnnoncesModel.apply {
+            getAnnoncesById(userId).observe(this@UserAnnoncesActivity) { annonces ->
+
+                if (annonces == null) {
+                    this@UserAnnoncesActivity.toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
+                    returnToUserInfo()
+                }
+
+                if (annonces != null) {
+                    updateIsEmpty().observe(this@UserAnnoncesActivity) {
+                        binding.isEmpty.isVisible = it
+                    }
+                    Log.i(TAG, "favourites : $annonces")
+                    adapter.setList(annonces)
+                }
+            }
+        }
+
+        binding.apply {
+            annoncesRv.adapter = adapter
+            annoncesRv.layoutManager = LinearLayoutManager(this@UserAnnoncesActivity)
+
+            userAnnoncesModel.isTurning.observe(this@UserAnnoncesActivity){
+                userAnnoncesProgressbar.isVisible = it
+            }
         }
         setContentView(binding.root)
+    }
+
+    private fun returnToUserInfo() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun goToAnnonceActivity(userId: String) {
@@ -100,4 +109,10 @@ class UserAnnoncesActivity : AppCompatActivity() {
         intent.putExtra("id", userId)
         startActivity(intent)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "onDestroy: activity destroyed")
+    }
+
 }

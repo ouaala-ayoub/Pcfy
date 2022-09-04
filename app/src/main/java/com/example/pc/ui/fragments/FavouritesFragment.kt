@@ -1,6 +1,5 @@
 package com.example.pc.ui.fragments
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,26 +10,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.FavouritesRepository
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentFavouritesBinding
-import com.example.pc.databinding.FragmentUserInfoBinding
 import com.example.pc.databinding.NoUserConnectedBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.FavouritesModel
-import com.example.pc.utils.OnDialogClicked
-import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 
 private const val FAVOURITE_DELETED_SUCCESS = "suprimée des favories avec succes"
@@ -43,7 +36,6 @@ class FavouritesFragment : Fragment() {
     private var bindingNoUser: NoUserConnectedBinding? = null
     private lateinit var adapter: FavouritesAdapter
     private var userId: String? = null
-    private var alertDialog: AppCompatDialog? = null
     private var viewModel = FavouritesModel(FavouritesRepository(
         RetrofitService.getInstance()
     ))
@@ -126,7 +118,7 @@ class FavouritesFragment : Fragment() {
                         }
                         else{
                             Log.i(TAG, "favourites : $favourites")
-                            adapter.setFavouritesList(favourites)
+                            adapter.setList(favourites)
                             updateIsEmpty().observe(viewLifecycleOwner){ isVisible ->
                                 isEmpty.isVisible = isVisible
                             }
@@ -138,7 +130,6 @@ class FavouritesFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun goToAnnonceActivity(annonceId: String){
@@ -166,9 +157,7 @@ class FavouritesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (alertDialog != null && alertDialog!!.isShowing) {
-            Log.i(TAG, "onDestroy: ${alertDialog?.isShowing}")
-            alertDialog!!.dismiss()
-        }
+        binding = null
+        bindingNoUser = null
     }
 }

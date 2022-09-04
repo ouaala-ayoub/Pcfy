@@ -10,6 +10,9 @@ interface RetrofitService {
 
     //get annonces
 
+    @DELETE("announces/{id}")
+    fun deleteAnnonce(@Path("id") annonceId: String): Call<Annonce>
+
     @GET("announces")
     fun getAllAnnonces(): Call<List<Annonce>>
 
@@ -57,9 +60,6 @@ interface RetrofitService {
     //add more
     // to learn
 
-    //to implement
-    @POST("auth/logout")
-    fun logout()
 
     companion object {
 

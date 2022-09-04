@@ -10,7 +10,16 @@
     app:layout_constraintStart_toStartOf="parent"
     tools:context=".ui.activities.UserAnnoncesActivity">
 
-<com.google.android.material.appbar.AppBarLayout
+    <TextView
+        android:id="@+id/isEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Pas d'annonces"
+        android:textSize="18sp"
+        android:visibility="invisible" />
+
+    <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/background_color"

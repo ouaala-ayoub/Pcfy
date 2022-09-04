@@ -25,6 +25,7 @@ class UserAnnoncesModel(
 ): ViewModel() {
 
     private val annoncesList = MutableLiveData<List<Annonce>>()
+    private val isEmpty = MutableLiveData<Boolean>()
     val isTurning = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<Error?>()
     val deletedAnnonce = MutableLiveData<Boolean>()
@@ -61,8 +62,29 @@ class UserAnnoncesModel(
 
     fun deleteAnnonce(userId: String, annonceId: String): LiveData<Boolean>{
 
-        //to do
+        isTurning.postValue(true)
 
+        userInfoRepository.deleteAnnonce(annonceId).enqueue(object: Callback<Annonce>{
+            override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
+                if(response.isSuccessful && response.body() != null){
+                    deletedAnnonce.postValue(true)
+                    isTurning.postValue(false)
+                }
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "onResponse delete annonce: ${error?.message}")
+                    deletedAnnonce.postValue(false)
+                    isTurning.postValue(false)
+                }
+            }
+
+            override fun onFailure(call: Call<Annonce>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message}")
+                deletedAnnonce.postValue(false)
+                isTurning.postValue(false)
+            }
+
+        })
         return deletedAnnonce
     }
 
@@ -74,6 +96,14 @@ class UserAnnoncesModel(
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentUser(): LoggedInUser? {
         return loginRepository.user
+    }
+
+    fun updateIsEmpty(): MutableLiveData<Boolean> {
+        if(annoncesList.value.isNullOrEmpty()){
+            isEmpty.postValue(true)
+        }
+        else isEmpty.postValue(false)
+        return isEmpty
     }
 
 }
