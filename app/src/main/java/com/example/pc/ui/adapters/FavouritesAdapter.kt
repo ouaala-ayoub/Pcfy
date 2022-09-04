@@ -14,7 +14,6 @@ private const val TAG = "FavouritesAdapter"
 
 class FavouritesAdapter(
     private val onFavouriteClickListener: OnFavouriteClickListener,
-    private val viewModel: FavouritesModel,
 ): RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
 
     interface OnFavouriteClickListener{

@@ -20,6 +20,7 @@ import com.example.pc.databinding.FragmentUserInfoBinding
 import com.example.pc.databinding.NoUserConnectedBinding
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
+import com.example.pc.ui.activities.UserAnnoncesActivity
 import com.example.pc.ui.viewmodels.UserInfoModel
 import com.squareup.picasso.Picasso
 
@@ -43,6 +44,10 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
             retrofitService,
             requireContext().applicationContext
         )
+        userInfoModel = UserInfoModel(
+            UserInfoRepository(retrofitService),
+            loginRepository
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,7 +56,9 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
         savedInstanceState: Bundle?
     ): View?{
 
-        return if(loginRepository.user == null){
+        val currentUser = userInfoModel.getCurrentUser()
+
+        return if(currentUser == null){
             bindingNoUser = NoUserConnectedBinding.inflate(inflater, container, false)
             bindingNoUser!!.loginFromUserInfo.setOnClickListener {
                 goToLoginActivity()
@@ -59,6 +66,7 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
             bindingNoUser?.root
         }else {
             binding = FragmentUserInfoBinding.inflate(inflater, container, false)
+            userId = currentUser.userId
             binding?.root
         }
     }
@@ -66,11 +74,6 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        userInfoModel = UserInfoModel(
-            UserInfoRepository(retrofitService),
-            loginRepository
-        )
 
         if (binding == null) {
             Log.i(TAG, "binding check: binding $binding")
@@ -101,6 +104,7 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                                 )
                             }
                             else{
+                                //for test purposes
                                 val url = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
                                 picasso
                                     .load(user.imageUrl)
@@ -129,58 +133,6 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                 }
             }
         }
-
-        userInfoModel.apply {
-            getIsLoggedIn().observe(viewLifecycleOwner) {
-                Log.i(TAG, "observed: ")
-                val currentUser = getCurrentUser()
-                if (currentUser != null){
-                    Log.i(TAG, "user id : ${currentUser.userId}")
-                    getUserById(currentUser.userId).observe(viewLifecycleOwner){ user ->
-                        if (user != null){
-                            Log.i(TAG, "user retrieved : $user")
-
-                            binding!!.apply {
-                                userName.text = user.name
-                                userType.text = requireContext().getString(R.string.user_type, user.userType)
-
-                                Log.i(TAG, "image : ${user.imageUrl}")
-
-                                if (user.imageUrl.isNullOrBlank()){
-                                    Log.i(TAG, "image is null: yes")
-                                    userImage.setImageResource(
-                                        R.drawable.ic_baseline_no_photography_24
-                                    )
-                                }
-                                else{
-                                    val url = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-                                    picasso
-                                        .load(user.imageUrl)
-                                        .fit()
-                                        .centerCrop()
-                                        .into(userImage)
-                                }
-
-                                this@UserInfoFragment.apply {
-                                    userImage.setOnClickListener(this)
-                                    userInfo.setOnClickListener(this)
-                                    userAnnounces.setOnClickListener(this)
-                                    about.setOnClickListener(this)
-                                    share.setOnClickListener(this)
-                                    logout.setOnClickListener(this)
-                                }
-                            }
-                        }
-                        else {
-                            Log.e(TAG, "error retrieving the user : ${error.value}")
-                        }
-                    }
-                }
-                else {
-                    Log.e(TAG, "error message : ${error.value}")
-                }
-            }
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -194,7 +146,7 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                 //choose image intent
             }
             R.id.user_announces -> {
-
+                goToUserAnnonces(userId)
             }
             R.id.user_info -> {
 
@@ -210,6 +162,12 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                 reloadActivity()
             }
         }
+    }
+
+    private fun goToUserAnnonces(userId: String) {
+        val intent = Intent(requireContext(), UserAnnoncesActivity::class.java)
+        intent.putExtra("id", userId)
+        startActivity(intent)
     }
 
     override fun onDestroy() {

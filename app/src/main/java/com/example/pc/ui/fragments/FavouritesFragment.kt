@@ -112,7 +112,7 @@ class FavouritesFragment : Fragment() {
                         }
                     }
                 }
-            }, viewModel)
+            })
 
             binding!!.apply {
                 favouritesRv.layoutManager = LinearLayoutManager(activity)

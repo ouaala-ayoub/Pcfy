@@ -3,6 +3,7 @@ package com.example.pc.ui.viewmodels
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.local.LoggedInUser
@@ -26,6 +27,7 @@ class UserAnnoncesModel(
     private val annoncesList = MutableLiveData<List<Annonce>>()
     private val isTurning = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<Error?>()
+    private val deletedAnnonce = MutableLiveData<Boolean>()
 
     fun getAnnoncesById(userId: String): MutableLiveData<List<Annonce>> {
 
@@ -55,6 +57,13 @@ class UserAnnoncesModel(
         })
 
         return annoncesList
+    }
+
+    fun deleteAnnonce(userId: String, annonceId: String): LiveData<Boolean>{
+
+        //to do
+
+        return deletedAnnonce
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
