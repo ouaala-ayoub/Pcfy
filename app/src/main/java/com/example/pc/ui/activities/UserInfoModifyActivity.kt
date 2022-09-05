@@ -10,10 +10,13 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.example.pc.R
 import com.example.pc.data.models.local.SellerType
+import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.databinding.ActivityUserInfoModifyBinding
 import com.example.pc.ui.viewmodels.UserInfoModifyModel
+import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
@@ -57,9 +60,57 @@ class UserInfoModifyActivity : AppCompatActivity() {
                     else {
                         Log.i(TAG, "user retrieved : $oldUser")
 
+                        nameEditText.setText(oldUser.name)
+                        phoneEditText.setText(oldUser.phoneNumber)
+                        emailEditText.setText(oldUser.email)
+                        cityEditText.setText(oldUser.city)
+                        setUpTheTypeEditText(oldUser.userType)
+                        organisationNameEditText.setText(oldUser.brand)
 
+                        validateTheData()
 
+                        submitChanges.setOnClickListener {
+
+                            makeDialog(
+                                this@UserInfoModifyActivity,
+                                object: OnDialogClicked{
+                                    override fun onPositiveButtonClicked() {
+                                        val newUser = User(
+                                            name = nameEditText.text.toString(),
+                                            phoneNumber = phoneEditText.text.toString(),
+                                            email = emailEditText.text.toString(),
+                                            city = emailEditText.text.toString(),
+                                            userType = userTypeEditText.text.toString(),
+                                            brand = organisationNameEditText.text.toString(),
+                                            password = oldUser.password
+                                        )
+
+                                        updateUser(userToModifyId, newUser)
+                                            .observe(this@UserInfoModifyActivity){ annonceModified ->
+                                                //on annonce modification fail
+                                                if (!annonceModified){
+                                                    doOnFail(ERROR_SET_USER)
+                                                }
+                                                else {
+                                                    doOnSuccess(SUCCESS_SET_USER)
+                                                }
+                                            }
+
+                                    }
+
+                                    override fun onNegativeButtonClicked(){
+                                        //doNothing
+                                    }
+                                },
+                                getString(R.string.user_modify_dialog_title),
+                                getString(R.string.user_modify_dialog_message)
+                            )
+                        }
                     }
+                }
+
+                isValidInput.observe(this@UserInfoModifyActivity) {
+                    submitChanges.isEnabled = it
                 }
 
             }
@@ -83,7 +134,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setUpTheTypeEditText(default: String){
+    private fun setUpTheTypeEditText(default: String?){
 
         binding.userTypeEditText.setText(default)
 
@@ -126,24 +177,6 @@ class UserInfoModifyActivity : AppCompatActivity() {
                     emailLiveData.value = text.toString()
                     emailHelperText.observe(this@UserInfoModifyActivity){
                         emailTextField.helperText = it
-                    }
-                }
-            }
-
-            passwordEditText.doOnTextChanged { text, _, _, _ ->
-                viewModel.apply {
-                    passwordLiveData.value = text.toString()
-                    passwordHelperText.observe(this@UserInfoModifyActivity){
-                        passwordTextField.helperText = it
-                    }
-                }
-            }
-
-            retypePasswordEditText.doOnTextChanged { text, _, _, _ ->
-                viewModel.apply {
-                    retypedPasswordLiveData.value = text.toString()
-                    retypedPasswordHelperText.observe(this@UserInfoModifyActivity){
-                        retypePasswordTextField.helperText = it
                     }
                 }
             }

@@ -180,13 +180,13 @@ class UserCreateActivity : AppCompatActivity() {
     }
 
     private fun goToHomeFragment(){
+        finish()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
     private fun goToLoginPage(){
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+        finish()
     }
 
     private fun setUpTheTypeEditText(){

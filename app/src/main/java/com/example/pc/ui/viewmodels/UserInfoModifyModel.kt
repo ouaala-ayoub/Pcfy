@@ -29,21 +29,12 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
 
     val emailLiveData = MutableLiveData<String>()
     val emailHelperText = MutableLiveData<String>()
-
-    val passwordLiveData = MutableLiveData<String>()
-    val passwordHelperText = MutableLiveData<String>()
-
-    val retypedPasswordLiveData = MutableLiveData<String>()
-    val retypedPasswordHelperText = MutableLiveData<String>()
-
     val isValidInput = MediatorLiveData<Boolean>().apply {
         addSource(nameLiveData){ name ->
             this.value = validateTheData(
                 name,
                 phoneLiveData.value,
                 emailLiveData.value,
-                passwordLiveData.value,
-                retypedPasswordLiveData.value
             )
         }
         addSource(phoneLiveData){ phone ->
@@ -51,8 +42,6 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
                 nameLiveData.value,
                 phone,
                 emailLiveData.value,
-                passwordLiveData.value,
-                retypedPasswordLiveData.value
             )
         }
         addSource(emailLiveData){ email ->
@@ -60,26 +49,6 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
                 nameLiveData.value,
                 phoneLiveData.value,
                 email,
-                passwordLiveData.value,
-                retypedPasswordLiveData.value
-            )
-        }
-        addSource(passwordLiveData){ password ->
-            this.value = validateTheData(
-                nameLiveData.value,
-                phoneLiveData.value,
-                emailLiveData.value,
-                password,
-                retypedPasswordLiveData.value
-            )
-        }
-        addSource(retypedPasswordLiveData){ retypedPassword ->
-            this.value = validateTheData(
-                nameLiveData.value,
-                phoneLiveData.value,
-                emailLiveData.value,
-                passwordLiveData.value,
-                retypedPassword
             )
         }
     }
@@ -88,8 +57,6 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
         name: String?,
         phone: String?,
         email: String?,
-        password: String?,
-        retypedPassword: String?
     ): Boolean{
         val isValidName = !name.isNullOrBlank()
         val isValidPhone = phone?.length == 10 && phone.matches(".*[0-9].*".toRegex())
@@ -99,9 +66,6 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
             Patterns.EMAIL_ADDRESS.matcher(
                 email
             ).matches()
-
-        val isValidPassword = if (password.isNullOrBlank()) false else password.length >= 8
-        val isValidRetypedPassword = retypedPassword == password
 
         if (!isValidName){
             nameHelperText.value = "Entrez un nom"
@@ -115,15 +79,7 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
             emailHelperText.value = "Email Invalide"
         }else emailHelperText.value = ""
 
-        if (!isValidPassword){
-            passwordHelperText.value = "Au moins 8 caracteres"
-        }else passwordHelperText.value = ""
-
-        if (!isValidRetypedPassword){
-            retypedPasswordHelperText.value = "Mot de passes non identiques"
-        }else retypedPasswordHelperText.value = ""
-
-        return isValidName && isValidPhone && isValidEmail && isValidPassword && isValidRetypedPassword
+        return isValidName && isValidPhone && isValidEmail
     }
 
 
