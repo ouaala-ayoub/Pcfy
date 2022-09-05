@@ -6,4 +6,5 @@
     <dimen name="image_size">170dp</dimen>
     <dimen name="annonces_rv_margin">15dp</dimen>
     <dimen name="favourites_image_size">115dp</dimen>
+    <dimen name="annonce_modify_bar_size">200dp</dimen>
 </resources>

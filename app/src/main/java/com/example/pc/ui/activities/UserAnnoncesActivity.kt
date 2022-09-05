@@ -48,11 +48,11 @@ class UserAnnoncesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val adapter = FavouritesAdapter(
+
             object: FavouritesAdapter.OnFavouriteClickListener{
 
                 override fun onFavouriteClicked(annonceId: String) {
-//                    go to info annonce info change
-//                    ??????????????
+                   goToAnnonceModifyActivity(annonceId)
                 }
 
                 override fun onDeleteClickListener(annonceId: String) {
@@ -104,9 +104,9 @@ class UserAnnoncesActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun goToAnnonceActivity(userId: String) {
-        val intent = Intent(this, AnnonceActivity::class.java)
-        intent.putExtra("id", userId)
+    private fun goToAnnonceModifyActivity(annonceId: String) {
+        val intent = Intent(this, AnnonceModifyActivity::class.java)
+        intent.putExtra("id", annonceId)
         startActivity(intent)
     }
 

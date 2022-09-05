@@ -62,9 +62,11 @@ class UserAnnoncesModel(
 
     fun deleteAnnonce(userId: String, annonceId: String): LiveData<Boolean>{
 
+        //to add : delete the annonce id from the user object
         isTurning.postValue(true)
 
         userInfoRepository.deleteAnnonce(annonceId).enqueue(object: Callback<Annonce>{
+
             override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
                 if(response.isSuccessful && response.body() != null){
                     deletedAnnonce.postValue(true)
@@ -86,16 +88,6 @@ class UserAnnoncesModel(
 
         })
         return deletedAnnonce
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getIsLoggedIn(): MutableLiveData<Boolean> {
-        return loginRepository.isLoggedIn
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getCurrentUser(): LoggedInUser? {
-        return loginRepository.user
     }
 
     fun updateIsEmpty(): MutableLiveData<Boolean> {

@@ -57,6 +57,11 @@ interface RetrofitService {
     @PUT("users/{id}")
     fun updateFavourites(@Path("id") userId: String, @Body favouriteToAddId: NewFavouritesRequest): Call<User>
 
+    @PUT("users/{id}")
+    fun updateUserInfo(@Path("id") userId: String, @Body newUser: User): Call<User>
+
+    @PUT("announces/{id}")
+    fun updateAnnonceInfo(@Path("id") annonceId: String, @Body newAnnonce: Annonce): Call<Annonce>
     //add more
     // to learn
 

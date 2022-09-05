@@ -175,6 +175,8 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        val activity = requireActivity() as MainActivity
+        activity.supportActionBar?.show()
         binding = null
         bindingNoUser = null
     }

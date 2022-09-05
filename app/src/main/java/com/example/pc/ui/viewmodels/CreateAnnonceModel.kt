@@ -152,8 +152,8 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
         return Annonce(
             title,
             price,
-            images,
-            category,
+            pictures = images,
+            category = category,
             status = status,
             mark = mark,
             description = description,

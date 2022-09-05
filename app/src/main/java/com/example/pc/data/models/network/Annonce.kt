@@ -8,24 +8,23 @@ data class Annonce(
     //required = true
 
     @SerializedName("title")
-    val title: String = "Rx 580",
+    val title: String ,
 
     @SerializedName("price")
-    val price: Number = 2500,
+    val price: Number ,
+
+    @SerializedName("category")
+    val category: String ,
+
+    @SerializedName("status")
+    val status: String ,
 
     @SerializedName("pictures")
     val pictures: MutableList<String> = mutableListOf(),
 
-    @SerializedName("category")
-    val category: String = Category.GAMER.title,
-
-    @SerializedName("status")
-    val status: String = "neuf",
-
-
     //just for testing
     @SerializedName("sellerId")
-    val sellerId: String,
+    val sellerId: String? = null,
 
     //non required
 

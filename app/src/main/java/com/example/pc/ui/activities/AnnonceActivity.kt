@@ -57,7 +57,7 @@ class AnnonceActivity : AppCompatActivity() {
                         //bind the data to the views
 
                         //get the sellers name
-                        getSellerById(annonce.sellerId)
+                        getSellerById(annonce.sellerId!!)
 
                         //images first
                         if (annonce.pictures.isNotEmpty()) {

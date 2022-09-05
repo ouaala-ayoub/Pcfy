@@ -4,4 +4,6 @@
     <string name="mes_informations">Mes informations</string>
     <string name="mes_annonces">Mes annonces</string>
     <string name="partager">Partager</string>
+    <string name="confirmer_les_changements">Confirmer les changements</string>
+    <string name="modifier_la_description">Modifier la description</string>
 </resources>

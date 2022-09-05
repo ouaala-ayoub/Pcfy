@@ -2,12 +2,14 @@ package com.example.pc.ui.viewmodels
 
 import android.util.Log
 import android.util.Patterns
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.UserRepository
+import com.example.pc.utils.getError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,6 +19,8 @@ private const val TAG = "UserModel"
 class UserModel(private val repository: UserRepository): ViewModel() {
     //add business logic
     //sign up = addUser
+
+    private val updatedUser = MutableLiveData<Boolean>()
 
     private val userAdded = MutableLiveData<String?>()
     val isTurning = MutableLiveData<Boolean>()
@@ -126,30 +130,6 @@ class UserModel(private val repository: UserRepository): ViewModel() {
         return isValidName && isValidPhone && isValidEmail && isValidPassword && isValidRetypedPassword
     }
 
-//    fun getTheUser(
-//        title: String,
-//        phone: String,
-//        email: String,
-//        password: String,
-//        city: String,
-//        type: String,
-//        organizationName: String,
-//        imageUrl: String
-//    ): User? {
-//        return if (!isValidInput.value!!){
-//            null
-//        } else User(
-//            title,
-//            phone,
-//            email,
-//            password,
-//            city = city,
-//            userType = type,
-//            brand = organizationName,
-//            imageUrl = imageUrl
-//        )
-//    }
-
     fun signUp(userToAdd: User): MutableLiveData<String?>{
 
         isTurning.postValue(true)
@@ -157,10 +137,10 @@ class UserModel(private val repository: UserRepository): ViewModel() {
         repository.addUser(userToAdd).enqueue(object : Callback<IdResponse>{
 
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
+
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse: response body = ${response.body()}")
                     userAdded.postValue(response.body()!!.objectId!!)
-                    isTurning.postValue(false)
                 }
                 else{
                     Log.e(TAG, "response raw ${response.raw()}", )
@@ -168,8 +148,8 @@ class UserModel(private val repository: UserRepository): ViewModel() {
                     Log.e(TAG, "response error body = ${response.errorBody()}")
                     Log.e(TAG, "response message = " + response.message())
                     userAdded.postValue(null)
-                    isTurning.postValue(false)
                 }
+                isTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<IdResponse>, t: Throwable) {
@@ -179,6 +159,35 @@ class UserModel(private val repository: UserRepository): ViewModel() {
             }
         })
         return userAdded
+    }
+
+    fun updateUser(userId: String, newUser: User): LiveData<Boolean>{
+
+        isTurning.postValue(true)
+
+        repository.updateUserInfo(userId, newUser).enqueue(object: Callback<User>{
+
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if(response.isSuccessful && response.body() != null){
+                    updatedUser.postValue(true)
+                }
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "onResponse error code : ${error?.message}")
+                    updatedUser.postValue(false)
+                }
+                isTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "onFailure updateUser : ${t.message}")
+                updatedUser.postValue(false)
+                isTurning.postValue(false)
+            }
+
+        })
+
+        return updatedUser
     }
 
 }
