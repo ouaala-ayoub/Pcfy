@@ -61,6 +61,8 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if(response.isSuccessful && response.body() != null){
 
+                    //to ask about the id response
+
                     val annonceId = response.body()!!.objectId
                     Log.i(TAG, "response body is ${response.body()}")
 

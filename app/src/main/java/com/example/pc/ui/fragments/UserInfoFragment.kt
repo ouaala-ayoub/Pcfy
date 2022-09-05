@@ -154,10 +154,10 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                 goToUserInfoModify(userId)
             }
             R.id.about -> {
-
+                //about fragment
             }
             R.id.share -> {
-
+                // share the app play store link
             }
             R.id.logout ->{
                 loginRepository.logout()

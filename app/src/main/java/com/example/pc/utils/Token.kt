@@ -1,18 +1,15 @@
 package com.example.pc.utils
 
-import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
-import arrow.core.*
 import com.example.pc.JWT_USER_ACCESS
 import com.example.pc.JWT_USER_REFRESH
 import io.github.nefilim.kjwt.*
 import io.github.nefilim.kjwt.ClaimsVerification.expired
 import io.github.nefilim.kjwt.ClaimsVerification.validateClaims
-import okio.IOException
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
@@ -32,7 +29,6 @@ class Token {
             //decode the token
             val decodedAccessToken = JWT.decodeT(accessToken, JWSHMAC256Algorithm).orNull() ?: return false
             Log.i(TAG, "accessTokenIsValid : access Token Decoded $decodedAccessToken")
-            
             //return isValid
             val isValid = isTokenValid(decodedAccessToken, JWT_USER_ACCESS)
             Log.i(TAG, "accessTokenIsValid : access Token Is Valid: $isValid")
