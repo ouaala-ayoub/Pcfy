@@ -18,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        finish()
         goToMainActivity()
     }
 

@@ -1,7 +1,6 @@
 package com.example.pc.ui.fragments
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.preference.PreferenceManager
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
@@ -21,6 +19,7 @@ import com.example.pc.databinding.NoUserConnectedBinding
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.activities.UserAnnoncesActivity
+import com.example.pc.ui.activities.UserInfoModifyActivity
 import com.example.pc.ui.viewmodels.UserInfoModel
 import com.squareup.picasso.Picasso
 
@@ -152,7 +151,7 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                 goToUserAnnonces(userId)
             }
             R.id.user_info -> {
-
+                goToUserInfoModify(userId)
             }
             R.id.about -> {
 
@@ -165,6 +164,12 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                 reloadActivity()
             }
         }
+    }
+
+    private fun goToUserInfoModify(userId: String) {
+        val intent = Intent(requireContext(), UserInfoModifyActivity::class.java)
+        intent.putExtra("id", userId)
+        startActivity(intent)
     }
 
     private fun goToUserAnnonces(userId: String) {

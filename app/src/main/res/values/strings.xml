@@ -71,5 +71,6 @@
     <string name="notre_site_web">Notre site WEB</string>
     <string name="confirmer_les_changements">Confirmer les changements</string>
     <string name="modifier_la_description">Modifier la description</string>
+    <string name="changer_les_informations_de_votre_compte">Changer les informations de votre compte :</string>
 
 </resources>

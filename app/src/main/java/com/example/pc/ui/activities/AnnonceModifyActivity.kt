@@ -58,6 +58,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
 
                         // on annonce retrieved success
 
+                        //to add image adding and deleting
 
                         titleEditText.setText(annonce.title)
                         priceEditText.setText(annonce.price.toString())
@@ -132,6 +133,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
 
             //initialise the value of the live data to check
             submitChanges.isEnabled = true
+
             viewModel.apply {
                 titleLiveData.value = titleEditText.text.toString()
                 priceLiveData.value = priceEditText.text.toString()
@@ -167,9 +169,6 @@ class AnnonceModifyActivity : AppCompatActivity() {
    }
 
     private fun goToAnnoncesActivity() {
-//        val intent = Intent(this, UserAnnoncesActivity::class.java)
-//        startActivity(intent)
-
         finish()
     }
 

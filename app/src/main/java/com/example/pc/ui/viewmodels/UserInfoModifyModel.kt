@@ -6,21 +6,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.User
-import com.example.pc.data.repositories.UserRepository
+import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.utils.getError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val TAG = "UserModel"
+private const val TAG = "UserInfoModifyModel"
 
-class UserModel(private val repository: UserRepository): ViewModel() {
-    //add business logic
-    //sign up = addUser
+class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): ViewModel() {
 
-    private val userAdded = MutableLiveData<String?>()
+    private val oldUser = MutableLiveData<User>()
+    private val updatedUser = MutableLiveData<Boolean>()
     val isTurning = MutableLiveData<Boolean>()
 
     val nameLiveData = MutableLiveData<String>()
@@ -99,8 +97,8 @@ class UserModel(private val repository: UserRepository): ViewModel() {
         val isValidEmail = if (email.isNullOrBlank()) false
         else
             Patterns.EMAIL_ADDRESS.matcher(
-            email
-        ).matches()
+                email
+            ).matches()
 
         val isValidPassword = if (password.isNullOrBlank()) false else password.length >= 8
         val isValidRetypedPassword = retypedPassword == password
@@ -128,37 +126,59 @@ class UserModel(private val repository: UserRepository): ViewModel() {
         return isValidName && isValidPhone && isValidEmail && isValidPassword && isValidRetypedPassword
     }
 
-    fun signUp(userToAdd: User): MutableLiveData<String?>{
+
+    fun updateUser(userId: String, newUser: User): LiveData<Boolean> {
 
         isTurning.postValue(true)
 
-        repository.addUser(userToAdd).enqueue(object : Callback<IdResponse>{
+        userInfoRepository.updateUserInfo(userId, newUser).enqueue(object: Callback<User> {
 
-            override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
-
-                if (response.isSuccessful && response.body() != null) {
-                    Log.i(TAG, "onResponse: response body = ${response.body()}")
-                    userAdded.postValue(response.body()!!.objectId!!)
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if(response.isSuccessful && response.body() != null){
+                    updatedUser.postValue(true)
                 }
-                else{
-                    Log.e(TAG, "response raw ${response.raw()}", )
-                    Log.e(TAG, "response body: ${response.body()}" )
-                    Log.e(TAG, "response error body = ${response.errorBody()}")
-                    Log.e(TAG, "response message = " + response.message())
-                    userAdded.postValue(null)
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "onResponse error code : ${error?.message}")
+                    updatedUser.postValue(false)
                 }
                 isTurning.postValue(false)
             }
 
-            override fun onFailure(call: Call<IdResponse>, t: Throwable) {
-                userAdded.postValue(null)
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "onFailure updateUser : ${t.message}")
+                updatedUser.postValue(false)
                 isTurning.postValue(false)
-                Log.e(TAG, "error message = ${t.message}")
             }
+
         })
-        return userAdded
+
+        return updatedUser
     }
 
+    fun getUserById(userId: String): LiveData<User> {
 
+        isTurning.postValue(true)
 
+        userInfoRepository.getUserById(userId).enqueue(object: Callback<User>{
+
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful && response.body() != null){
+                    oldUser.postValue(response.body())
+                }
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "error body : $error")
+                }
+                isTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message}")
+                isTurning.postValue(false)
+            }
+        })
+
+        return oldUser
+    }
 }

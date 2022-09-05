@@ -7,5 +7,4 @@ import retrofit2.Call
 
 class UserRepository (private val retrofitService: RetrofitService){
     fun addUser(userToAdd: User): Call<IdResponse> = retrofitService.addUser(userToAdd)
-    fun updateUserInfo(userId: String, newUser: User) = retrofitService.updateUserInfo(userId, newUser)
 }
