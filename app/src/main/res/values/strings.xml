@@ -45,7 +45,6 @@
     <string name="mes_informations">Mes informations</string>
     <string name="mes_annonces">Mes annonces</string>
 
-
     <!--settings activity title-->
     <string name="title_activity_settings">Réglages</string>
 
@@ -61,6 +60,9 @@
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
+
+    <!--our website-->
+    <string name="pcfy_website">https://pcfy.vercel.app/</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>

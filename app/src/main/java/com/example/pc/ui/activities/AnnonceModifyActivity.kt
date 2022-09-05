@@ -33,6 +33,9 @@ class AnnonceModifyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        //hiding the action bar
+        supportActionBar?.hide()
+
         binding =   ActivityAnnonceModifyBinding.inflate(layoutInflater)
         viewModel = AnnonceModifyModel(AnnonceModifyRepository(RetrofitService.getInstance()))
         annonceToModifyId = intent.getStringExtra("id")!!

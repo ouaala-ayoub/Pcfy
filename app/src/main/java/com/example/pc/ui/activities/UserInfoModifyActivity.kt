@@ -33,6 +33,9 @@ class UserInfoModifyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        //hiding the action bar
+        supportActionBar?.hide()
+
         binding = ActivityUserInfoModifyBinding.inflate(layoutInflater)
         userToModifyId = intent.getStringExtra("id")!!
         viewModel = UserInfoModifyModel(
@@ -40,8 +43,6 @@ class UserInfoModifyActivity : AppCompatActivity() {
                 RetrofitService.getInstance()
             )
         )
-
-
 
         super.onCreate(savedInstanceState)
 

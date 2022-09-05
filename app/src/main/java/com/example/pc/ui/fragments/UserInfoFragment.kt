@@ -1,6 +1,7 @@
 package com.example.pc.ui.fragments
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
@@ -119,6 +121,7 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
                                 userImage.setOnClickListener(this)
                                 userInfo.setOnClickListener(this)
                                 userAnnounces.setOnClickListener(this)
+                                website.setOnClickListener(this)
                                 about.setOnClickListener(this)
                                 share.setOnClickListener(this)
                                 logout.setOnClickListener(this)
@@ -147,23 +150,37 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
             R.id.user_image -> {
                 //choose image intent
             }
-            R.id.user_announces -> {
-                goToUserAnnonces(userId)
-            }
+
             R.id.user_info -> {
                 goToUserInfoModify(userId)
             }
+
             R.id.about -> {
-                //about fragment
+                goToAboutFragment()
             }
+
             R.id.share -> {
                 // share the app play store link
             }
+
+            R.id.user_announces -> {
+                goToUserAnnonces(userId)
+            }
+
+            R.id.website -> {
+                openTheWebsite()
+            }
+
             R.id.logout ->{
                 loginRepository.logout()
                 reloadActivity()
             }
         }
+    }
+
+    private fun goToAboutFragment() {
+        val action = UserInfoFragmentDirections.actionUserInfoFragmentToInfoFragment()
+        findNavController().navigate(action)
     }
 
     private fun goToUserInfoModify(userId: String) {
@@ -198,6 +215,12 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
         activity.overridePendingTransition(0, 0)
         startActivity(intent)
         activity.overridePendingTransition(0, 0)
+    }
+
+    private fun openTheWebsite(){
+        val openURL = Intent(Intent.ACTION_VIEW)
+        openURL.data = Uri.parse(getString(R.string.pcfy_website))
+        startActivity(openURL)
     }
 
 }
