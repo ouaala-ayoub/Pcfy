@@ -71,7 +71,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
 
                         submitChanges.setOnClickListener {
 
-                            makeDialog(
+                            val dialog = makeDialog(
                                 this@UserInfoModifyActivity,
                                 object: OnDialogClicked{
                                     override fun onPositiveButtonClicked() {
@@ -79,7 +79,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                             name = nameEditText.text.toString(),
                                             phoneNumber = phoneEditText.text.toString(),
                                             email = emailEditText.text.toString(),
-                                            city = emailEditText.text.toString(),
+                                            city = cityEditText.text.toString(),
                                             userType = userTypeEditText.text.toString(),
                                             brand = organisationNameEditText.text.toString(),
                                             password = oldUser.password
@@ -104,7 +104,9 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                 },
                                 getString(R.string.user_modify_dialog_title),
                                 getString(R.string.user_modify_dialog_message)
+
                             )
+                            dialog.show()
                         }
                     }
                 }
@@ -153,6 +155,14 @@ class UserInfoModifyActivity : AppCompatActivity() {
         binding.apply {
 
             submitChanges.isEnabled = true
+
+            viewModel.apply {
+                initialiseLiveData(
+                    nameEditText.text.toString(),
+                    phoneEditText.text.toString(),
+                    emailEditText.text.toString()
+                )
+            }
 
             nameEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {

@@ -37,8 +37,8 @@
     <string name="confirm_login_message">Vous devez être connecté, Se connecter ?</string>
 
     <!--user modify dialog resources-->
-    <string name="user_modify_dialog_title"> Confirmations des changements</string>
-    <string name="user_modify_dialog_message"> Confirmations des changements</string>
+    <string name="user_modify_dialog_title"> Confirmation des changements</string>
+    <string name="user_modify_dialog_message"> Etes vous sûre de vos informations</string>
 
     <!--user info string resources-->
     <string name="user_type">type du compte : %1$s </string>

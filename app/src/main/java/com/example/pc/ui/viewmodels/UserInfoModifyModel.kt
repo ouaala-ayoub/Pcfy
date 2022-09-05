@@ -82,6 +82,11 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
         return isValidName && isValidPhone && isValidEmail
     }
 
+    fun initialiseLiveData(name: String, phone: String, email: String){
+        nameLiveData.value = name
+        phoneLiveData.value = phone
+        emailLiveData.value = email
+    }
 
     fun updateUser(userId: String, newUser: User): LiveData<Boolean> {
 

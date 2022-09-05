@@ -90,7 +90,7 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
             binding!!.apply {
                 userInfoModel.apply {
 
-                    val currentUser = getCurrentUser()
+                    val currentUser = getCurrentUser() ?: return@observe
 
                     getUserById(currentUser!!.userId).observe(viewLifecycleOwner) { user ->
                         if (user != null) {
