@@ -10,8 +10,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.example.pc.R
 import com.example.pc.data.models.network.Annonce
-import com.example.pc.data.models.network.Category
-import com.example.pc.data.models.network.Error
+import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceModifyRepository
@@ -121,7 +120,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
         binding.categoryTextField.editText?.setText(default)
 
         //set the adapter
-        val values = Category.values().map {
+        val values = CategoryEnum.values().map {
                 category -> category.title
         }
 

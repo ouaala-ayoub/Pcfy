@@ -53,8 +53,10 @@ class Token {
         @RequiresApi(Build.VERSION_CODES.O)
         fun createAccessToken(userId: String): String? {
 
+            val date = Date()
             val jwt = JWT.hs256 {
                 claim("id", userId)
+
                 issuedNow()
                 expiresAt(
                     LocalDateTime.ofInstant(

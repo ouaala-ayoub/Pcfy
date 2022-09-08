@@ -23,7 +23,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
-import com.example.pc.data.models.network.Category
+import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.CreateAnnonceRepository
@@ -213,11 +213,11 @@ class CreateAnnonceFragment : Fragment() {
     }
 
     private fun setTheCategoriesEditText(){
-        binding!!.categoryTextField.editText?.setText(Category.GAMER.title)
+        binding!!.categoryTextField.editText?.setText(CategoryEnum.GAMER.title)
 
         //to change !!!!!!!!!!!!
         //set the adapter
-        val values = Category.values().map {
+        val values = CategoryEnum.values().map {
             category -> category.title
         }
 

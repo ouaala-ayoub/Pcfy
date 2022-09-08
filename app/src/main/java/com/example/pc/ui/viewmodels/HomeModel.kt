@@ -15,6 +15,7 @@ import retrofit2.Response
 private const val TAG = "HomeModel"
 
 class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
+
     private val annoncesList = MutableLiveData<List<Annonce>>()
     private val errorMessage = MutableLiveData<Error>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
@@ -31,7 +32,6 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
                     Log.i(TAG, "response is successful = ${response.isSuccessful}")
                     Log.i(TAG, "response body is null = ${response.body() != null}")
                     Log.i(TAG, "response body ${response.body()} ")
-                    isProgressBarTurning.postValue(false)
                     annoncesList.postValue(response.body())
                 }
                 else {
@@ -40,8 +40,8 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
                     if (error != null){
                         errorMessage.postValue(error!!)
                     }
-                    isProgressBarTurning.postValue(false)
                 }
+                isProgressBarTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {

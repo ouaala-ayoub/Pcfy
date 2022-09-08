@@ -13,17 +13,20 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
+import com.example.pc.data.models.local.Category
 import com.example.pc.data.models.network.Annonce
+import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.HomeRepository
 import com.example.pc.databinding.FragmentHomeBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
+import com.example.pc.ui.adapters.CategoryAdapter
 import com.example.pc.ui.viewmodels.HomeModel
 import com.example.pc.ui.viewmodels.HomeModelFactory
-import com.example.pc.utils.LocalStorage
-import com.example.pc.utils.Token
 
 const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"
@@ -59,10 +62,35 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-//        val test = LocalStorage.getTokens(requireActivity())
-//        Log.i(TAG, "tokens from home frag: $test")
+        val categories = CategoryEnum.values().map {
+            category -> category.title
+        }
+//
+        Log.i(TAG, " categories: $categories")
+
+        val categoriesList = categories.map { categoryTitle ->
+            val categoryImage = getCategoryImage(categoryTitle)
+             Category(categoryImage, categoryTitle)
+        }
+//
+        val categoryAdapter = CategoryAdapter(
+            categoriesList,
+            object: CategoryAdapter.OnCategoryClickedListener {
+                override fun onCategoryClicked(title: String) {
+                    Log.i(TAG, "onCategoryClicked: $title")
+                }
+            }
+        )
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+//
+        binding!!.categoryRv.layoutManager = LinearLayoutManager(
+            this.context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        binding!!.categoryRv.adapter = categoryAdapter
+
         annoncesRv = binding!!.annonceRv
         annoncesRv.layoutManager = GridLayoutManager(this.context, NUM_ROWS)
         annoncesRv.adapter = adapter
@@ -77,6 +105,13 @@ class HomeFragment : Fragment() {
         }
 
         return binding?.root
+    }
+
+    private fun getCategoryImage(categoryTitle: String): Int {
+
+        // to implement
+
+        return R.drawable.ic_launcher_background
     }
 
     private fun goToAnnonceActivity(annonceId: String){

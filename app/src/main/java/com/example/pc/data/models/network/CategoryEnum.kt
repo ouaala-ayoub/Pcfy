@@ -1,6 +1,6 @@
 package com.example.pc.data.models.network
 
-enum class Category (val title: String){
+enum class CategoryEnum (val title: String){
 
     LAPTOP("ordinateurs portables"),
     GAMER("pc gamer"),
