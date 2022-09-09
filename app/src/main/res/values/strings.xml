@@ -81,5 +81,6 @@
 
     <!-- seller Info strings-->
     <string name="annonce_of">Les annonces de %1$s</string>
+    <string name="no_annonce">Pas d\'annonces</string>
 
 </resources>

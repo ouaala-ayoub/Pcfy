@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pc.R
@@ -71,6 +72,12 @@ class SellerInfoFragment : Fragment() {
                             Log.i(TAG, "annonces retrieved : $annonces")
 
                             setTheSellerInfo(seller)
+                            isTurning.observe(viewLifecycleOwner) {
+                                binding.sellerProgresBar.isVisible = it
+                            }
+                            updateIsEmpty().observe(viewLifecycleOwner) {
+                                binding.noAnnounces.isVisible = it
+                            }
 
                             val adapter = AnnoncesAdapter(
                                 object : AnnoncesAdapter.OnAnnonceClickListener {

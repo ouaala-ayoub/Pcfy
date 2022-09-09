@@ -17,6 +17,7 @@ private const val TAG = "SellerInfoModel"
 class SellerInfoModel(private val annonceRepository: AnnonceRepository): ViewModel() {
 
     val isTurning = MutableLiveData<Boolean>()
+    private val isEmpty = MutableLiveData<Boolean>()
     private val seller = MutableLiveData<User>()
     private val annoncesList = MutableLiveData<List<Annonce>>()
 
@@ -73,6 +74,14 @@ class SellerInfoModel(private val annonceRepository: AnnonceRepository): ViewMod
         })
 
         return annoncesList
+    }
+
+    fun updateIsEmpty(): MutableLiveData<Boolean> {
+        if(annoncesList.value.isNullOrEmpty()){
+            isEmpty.postValue(true)
+        }
+        else isEmpty.postValue(false)
+        return isEmpty
     }
 
 }
