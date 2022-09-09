@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 
 class LoginActivity : AppCompatActivity() {
@@ -13,8 +14,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         supportActionBar?.hide()
-
-        val navHost = supportFragmentManager.findFragmentById(R.id.login_fragment_container) as NavHostFragment
     }
 
     override fun onBackPressed() {

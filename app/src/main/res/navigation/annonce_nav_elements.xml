@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/annonce_nav_elements"
+    app:startDestination="@id/annonceFragment">
+
+    <fragment
+        android:id="@+id/annonceFragment"
+        android:name="com.example.pc.ui.fragments.AnnonceFragment"
+        android:label="fragment_annonce"
+        tools:layout="@layout/fragment_annonce" >
+        <action
+            android:id="@+id/action_annonceFragment_to_sellerInfoFragment"
+            app:destination="@id/sellerInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sellerInfoFragment"
+        android:name="com.example.pc.ui.fragments.SellerInfoFragment"
+        android:label="fragment_seller_info"
+        tools:layout="@layout/fragment_seller_info" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+</navigation>

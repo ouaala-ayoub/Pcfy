@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.example.pc.JWT_USER_ACCESS
 import com.example.pc.JWT_USER_REFRESH
+import com.example.pc.data.remote.RetrofitService
 import io.github.nefilim.kjwt.*
 import io.github.nefilim.kjwt.ClaimsVerification.expired
 import io.github.nefilim.kjwt.ClaimsVerification.validateClaims
@@ -52,6 +53,11 @@ class Token {
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun createAccessToken(userId: String): String? {
+
+            //to change
+            val retrofitService = RetrofitService.getInstance()
+//            val refreshToken = LocalStorage.getRefreshToken()
+//            retrofitService.getAccessToken()
 
             val date = Date()
             val jwt = JWT.hs256 {
@@ -139,7 +145,7 @@ class Token {
             return isExpired
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
+
         fun getUserId(activity: Context): String?{
 
             val refreshToken = LocalStorage.getRefreshToken(activity)

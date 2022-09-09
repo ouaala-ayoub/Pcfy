@@ -77,6 +77,7 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel(
             }
         })
     }
+
     fun addToFavourites(userId: String, annonceToAdd: Annonce){
 
         isProgressBarTurning.postValue(true)

@@ -65,14 +65,14 @@ class HomeFragment : Fragment() {
         val categories = CategoryEnum.values().map {
             category -> category.title
         }
-//
+
         Log.i(TAG, " categories: $categories")
 
         val categoriesList = categories.map { categoryTitle ->
             val categoryImage = getCategoryImage(categoryTitle)
              Category(categoryImage, categoryTitle)
         }
-//
+
         val categoryAdapter = CategoryAdapter(
             categoriesList,
             object: CategoryAdapter.OnCategoryClickedListener {
@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
         )
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-//
+
         binding!!.categoryRv.layoutManager = LinearLayoutManager(
             this.context,
             LinearLayoutManager.HORIZONTAL,
@@ -109,7 +109,9 @@ class HomeFragment : Fragment() {
 
     private fun getCategoryImage(categoryTitle: String): Int {
 
-        // to implement
+        when(categoryTitle) {
+            //to do
+        }
 
         return R.drawable.ic_launcher_background
     }

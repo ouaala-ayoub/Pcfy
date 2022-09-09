@@ -48,4 +48,5 @@ class CategoryAdapter(
     }
 
     override fun getItemCount() = categoriesList.size
+
 }

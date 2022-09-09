@@ -8,7 +8,7 @@ import retrofit2.http.*
 
 interface RetrofitService {
 
-    //get annonces
+    // announces
 
     @DELETE("announces/{id}")
     fun deleteAnnonce(@Path("id") annonceId: String): Call<Annonce>
@@ -16,7 +16,6 @@ interface RetrofitService {
     @GET("announces")
     fun getAllAnnonces(): Call<List<Annonce>>
 
-    // ??
     @GET("announces/{id}")
     fun getAnnonceById(@Path("id") annonceId: String): Call<Annonce>
 
@@ -31,11 +30,16 @@ interface RetrofitService {
     @GET("users")
     fun getUsers(): Call<List<User>>
 
-    // ??
+    // auth
 
     @POST("auth/signin")
     fun login(@Body userCredentials: UserCredentials): Call<Tokens>
 
+    @POST("auth/refresh")
+    fun getAccessToken(@Body refreshToken: String): Call<String>
+
+
+    //users
     @GET("users/{id}")
     fun getUserById(@Path("id") userId: String): Call<User>
 

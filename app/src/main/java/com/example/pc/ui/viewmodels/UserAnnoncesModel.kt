@@ -21,7 +21,6 @@ private const val TAG = "UserAnnoncesModel"
 
 class UserAnnoncesModel(
     private val userInfoRepository: UserInfoRepository,
-    private val loginRepository: LoginRepository
 ): ViewModel() {
 
     private val annoncesList = MutableLiveData<List<Annonce>>()
