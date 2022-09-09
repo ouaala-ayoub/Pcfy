@@ -4,16 +4,20 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pc.JWT_USER_ACCESS
 import com.example.pc.JWT_USER_REFRESH
+import com.example.pc.data.models.network.AccessToken
+import com.example.pc.data.models.network.RefreshToken
 import com.example.pc.data.remote.RetrofitService
 import io.github.nefilim.kjwt.*
 import io.github.nefilim.kjwt.ClaimsVerification.expired
 import io.github.nefilim.kjwt.ClaimsVerification.validateClaims
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.*
+import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private const val TAG = "Token"
 
@@ -21,6 +25,7 @@ class Token {
     companion object {
 
         private val errorMessage = MutableLiveData<String>()
+        val newAccessToken = MutableLiveData<String>()
 
         fun accessTokenIsValid(activity: Context): Boolean{
             //get the token from local storage
@@ -36,56 +41,27 @@ class Token {
             return isValid
         }
 
-        fun refreshTokenIsValid(activity: Context): Boolean {
-            //get the token from local storage
-            val refreshToken = LocalStorage.getRefreshToken(activity) ?: return false
-            Log.i(TAG, "refreshTokenIsValid : refresh Token Retrieved")
-
-            //decode the token
-            val decodedRefreshToken = JWT.decodeT(refreshToken, JWSHMAC256Algorithm).orNull() ?: return false
-            Log.i(TAG, "refreshTokenIsValid : decoded Refresh Token : $decodedRefreshToken")
-
-            //return isValid
-            val isValid = isTokenValid(decodedRefreshToken, JWT_USER_REFRESH)
-            Log.i(TAG, "refreshTokenIsValid : refresh Token Is Valid: $isValid")
-            return isValid
-        }
-
         @RequiresApi(Build.VERSION_CODES.O)
-        fun createAccessToken(userId: String): String? {
+        fun createAccessToken(context: Context): LiveData<String?>? {
 
             //to change
             val retrofitService = RetrofitService.getInstance()
-//            val refreshToken = LocalStorage.getRefreshToken()
-//            retrofitService.getAccessToken()
+            val refreshToken = LocalStorage.getRefreshToken(context) ?: return null
 
-            val date = Date()
-            val jwt = JWT.hs256 {
-                claim("id", userId)
-
-                issuedNow()
-                expiresAt(
-                    LocalDateTime.ofInstant(
-                        Date(System.currentTimeMillis()  + 900).toInstant(),
-                        ZoneId.of("UTC")
-                    )
-                )
-            }
-
-            var jwtToken: String? = null
-            jwt.sign(JWT_USER_ACCESS).fold(
-                {
-                    errorMessage.postValue(it.toString())
-                    Log.e(TAG, "createAccessToken error : ${errorMessage.value}" )
-                },
-                {
-                    jwtToken = it.rendered
+            retrofitService.getAccessToken(RefreshToken(refreshToken)).enqueue(object: Callback<AccessToken>{
+                override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
+                    Log.i(TAG, "onResponse: ${response.body()?.accessToken}")
+                    newAccessToken.postValue(response.body()?.accessToken)
                 }
-            )
 
-            Log.i(TAG, "createAccessToken jwt signed : $jwtToken")
-            return jwtToken
+                override fun onFailure(call: Call<AccessToken>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
+                }
+
+            })
+            return newAccessToken
         }
+
 
         private fun isTokenValid(token: DecodedJWT<JWSHMAC256Algorithm>, secretKey: String): Boolean {
             val isValid: Boolean
@@ -129,22 +105,6 @@ class Token {
             Log.i(TAG, "accessTokenIsExpired access Token Is Expired: $isExpired")
             return isExpired
         }
-
-        fun refreshTokenIsExpired(activity: Context): Boolean {
-            //get the token from local storage
-            val refreshToken = LocalStorage.getRefreshToken(activity) ?: return false
-            Log.i(TAG, "refreshTokenIsExpired refresh Token Retrieved")
-            
-            //decode the token
-            val decodedRefreshToken = JWT.decodeT(refreshToken, JWSHMAC256Algorithm).orNull() ?: return false
-            Log.i(TAG, "refreshTokenIsExpired decoded Refresh Token")
-            
-            //return isValid
-            val isExpired = isExpired(decodedRefreshToken, JWT_USER_REFRESH)
-            Log.i(TAG, "refreshTokenIsExpired refresh Token Is Expired: $isExpired")
-            return isExpired
-        }
-
 
         fun getUserId(activity: Context): String?{
 

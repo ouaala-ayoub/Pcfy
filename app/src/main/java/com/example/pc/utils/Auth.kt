@@ -11,8 +11,6 @@ private const val TAG = "Auth"
 class Auth(val loginRepository: LoginRepository) {
     companion object {
 
-        //fix this dogshit code
-
         @RequiresApi(Build.VERSION_CODES.O)
         fun isAuthenticated(
             context: Context,
@@ -22,18 +20,12 @@ class Auth(val loginRepository: LoginRepository) {
                 Token.apply {
                     LocalStorage.apply {
                         if (!accessTokenIsValid(context)) return false
-                        if (!accessTokenIsExpired(context)) return true
+                        return if (!accessTokenIsExpired(context)) true
                         else {
-                            if (!refreshTokenIsValid(context)) return false
-                            return if(refreshTokenIsExpired(context)) false
-                            else {
-                                val userId =  getUserId(context)!!
-                                val newAccessToken = createAccessToken(userId)
-                                if (newAccessToken != null) {
-                                    storeAccessToken(context, newAccessToken)
-                                }
-                                true
-                            }
+                            val newAccessToken = createAccessToken(context)?.value ?: return false
+                            Log.i(TAG, "isAuthenticated new access token: $newAccessToken")
+                            storeAccessToken(context, newAccessToken)
+                            true
                         }
                     }
                 }

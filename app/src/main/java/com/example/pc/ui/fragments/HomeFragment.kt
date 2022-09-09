@@ -21,12 +21,14 @@ import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.HomeRepository
+import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentHomeBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.adapters.CategoryAdapter
 import com.example.pc.ui.viewmodels.HomeModel
 import com.example.pc.ui.viewmodels.HomeModelFactory
+import com.example.pc.utils.Auth
 
 private const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"

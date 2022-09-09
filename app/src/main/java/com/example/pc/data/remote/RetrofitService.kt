@@ -36,7 +36,7 @@ interface RetrofitService {
     fun login(@Body userCredentials: UserCredentials): Call<Tokens>
 
     @POST("auth/refresh")
-    fun getAccessToken(@Body refreshToken: String): Call<String>
+    fun getAccessToken(@Body refreshToken: RefreshToken): Call<AccessToken>
 
 
     //users
