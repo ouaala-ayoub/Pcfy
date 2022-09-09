@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.Pc">
+        <item name="android:forceDarkAllowed">true</item>
+        <item name="android:textViewStyle">@style/AlataTextViewStyle</item>
+        <item name="android:buttonStyle">@style/AlataButtonStyle</item>
+        <item name="textInputStyle">@style/MyCustomTextInputStyle</item>
+    </style>
+
+</resources>
