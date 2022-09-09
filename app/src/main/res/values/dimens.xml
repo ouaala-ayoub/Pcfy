@@ -11,4 +11,5 @@
     <dimen name="category_card_height">105dp</dimen>
     <dimen name="category_card_width">60dp</dimen>
     <dimen name="category_image_size">45dp</dimen>
+    <dimen name="seller_image_size">120dp</dimen>
 </resources>

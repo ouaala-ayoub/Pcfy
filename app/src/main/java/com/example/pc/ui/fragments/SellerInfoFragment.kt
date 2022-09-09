@@ -19,6 +19,7 @@ import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.viewmodels.SellerInfoModel
 import com.example.pc.utils.toast
+import com.squareup.picasso.Picasso
 
 private const val NUM_ROWS = 2
 private const val TAG = "SellerInfoFragment"
@@ -103,6 +104,18 @@ class SellerInfoFragment : Fragment() {
 
             val sellName = seller.name
 
+//            sellerImage to add
+            if (seller.imageUrl.isNullOrBlank()){
+                sellerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+            }
+            else {
+                Picasso
+                    .get()
+                    .load(seller.imageUrl)
+                    .fit()
+                    .centerCrop()
+                    .into(sellerImage)
+            }
             sellerName.text = sellName
             sellerType.text = seller.userType
             sellerCity.text = seller.city
