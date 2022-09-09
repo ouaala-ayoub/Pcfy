@@ -28,7 +28,7 @@ import com.example.pc.ui.adapters.CategoryAdapter
 import com.example.pc.ui.viewmodels.HomeModel
 import com.example.pc.ui.viewmodels.HomeModelFactory
 
-const val NUM_ROWS = 2
+private const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {

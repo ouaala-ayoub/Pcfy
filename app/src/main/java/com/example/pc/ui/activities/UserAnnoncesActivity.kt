@@ -38,10 +38,6 @@ class UserAnnoncesActivity : AppCompatActivity() {
         userAnnoncesModel = UserAnnoncesModel(
             UserInfoRepository(
                 retrofitService,
-            ),
-            LoginRepository(
-                retrofitService,
-                this.applicationContext
             )
         )
 

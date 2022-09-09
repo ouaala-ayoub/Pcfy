@@ -31,7 +31,7 @@ class AnnoncesAdapter(
                     annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                 }
 
-                if(annonce.pictures.isNotEmpty()){
+                else {
                     Picasso
                         .get()
                         .load(annonce.pictures[0])

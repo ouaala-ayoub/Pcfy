@@ -79,4 +79,7 @@
     <string name="modifier_la_description">Modifier la description</string>
     <string name="changer_les_informations_de_votre_compte">Changer les informations de votre compte :</string>
 
+    <!-- seller Info strings-->
+    <string name="annonce_of">Les annonces de %1$s</string>
+
 </resources>

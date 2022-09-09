@@ -41,8 +41,7 @@
             android:noHistory="true" />
         <activity
             android:name=".ui.activities.AnnonceActivity"
-            android:exported="false"
-            android:noHistory="true" />
+            android:exported="false" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true">
