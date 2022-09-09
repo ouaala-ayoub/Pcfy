@@ -1,12 +1,11 @@
 package com.example.pc.ui.activities
 
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
@@ -14,10 +13,9 @@ import com.example.pc.R
 
 private const val TAG = "SettingsFragment"
 
-
 class SettingsActivity : AppCompatActivity() {
 
-    @RequiresApi(Build.VERSION_CODES.M)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
             false ->{
                 supportActionBar?.setBackgroundDrawable(
                     ColorDrawable(
-                        getColor(R.color.white_darker)
+                        ContextCompat.getColor(this, R.color.white_darker)
                     )
                 )
             }
@@ -38,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
             true ->{
                 supportActionBar?.setBackgroundDrawable(
                     ColorDrawable(
-                        getColor(R.color.even_darker_grey)
+                        ContextCompat.getColor(this, R.color.even_darker_grey)
                     )
                 )
             }

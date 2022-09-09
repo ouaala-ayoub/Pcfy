@@ -2,14 +2,12 @@ package com.example.pc.ui.fragments
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
@@ -37,7 +35,6 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
     private lateinit var userId: String
     private var picasso = Picasso.get()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,7 +48,6 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,7 +71,6 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -140,7 +135,6 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(v: View?) {
 
         Log.i(TAG, "onClick: clicked ${v?.id}")

@@ -9,10 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
@@ -21,7 +18,6 @@ import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentAnnonceBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
-import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.utils.toast
 import com.squareup.picasso.Picasso
@@ -43,7 +39,6 @@ class AnnonceFragment : Fragment() {
     private lateinit var userId: String
     private val picasso = Picasso.get()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private lateinit var loginRepository: LoginRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +49,6 @@ class AnnonceFragment : Fragment() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

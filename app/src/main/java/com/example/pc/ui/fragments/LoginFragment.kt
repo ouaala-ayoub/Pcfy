@@ -1,7 +1,6 @@
 package com.example.pc.ui.fragments
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.example.pc.R
@@ -32,7 +30,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private lateinit var viewModel: LoginModel
     private lateinit var loginRepository: LoginRepository
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,7 +44,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
         return binding?.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -70,7 +66,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
         binding!!.signUp.setOnClickListener(this)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(v: View?) {
 
         when(v?.id){

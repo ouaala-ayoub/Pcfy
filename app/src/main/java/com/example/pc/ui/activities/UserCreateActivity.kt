@@ -3,7 +3,6 @@ package com.example.pc.ui.activities
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,7 +12,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.widget.doOnTextChanged
 import com.example.pc.R
@@ -48,7 +46,6 @@ class UserCreateActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         supportActionBar?.hide()
@@ -129,6 +126,7 @@ class UserCreateActivity : AppCompatActivity() {
                         override fun onPositiveButtonClicked() {
 
                             //val imageUrl = uploadImage(imageUri)
+                            //to fix
                             val imageUrl = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
 
                             viewModel.apply {

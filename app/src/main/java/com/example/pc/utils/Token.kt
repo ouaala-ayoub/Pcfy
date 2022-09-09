@@ -1,20 +1,16 @@
 package com.example.pc.utils
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pc.JWT_USER_ACCESS
-import com.example.pc.JWT_USER_REFRESH
 import com.example.pc.data.models.network.AccessToken
 import com.example.pc.data.models.network.RefreshToken
 import com.example.pc.data.remote.RetrofitService
 import io.github.nefilim.kjwt.*
 import io.github.nefilim.kjwt.ClaimsVerification.expired
 import io.github.nefilim.kjwt.ClaimsVerification.validateClaims
-import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +37,6 @@ class Token {
             return isValid
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
         fun createAccessToken(context: Context): LiveData<String?>? {
 
             //to change
@@ -62,7 +57,6 @@ class Token {
             return newAccessToken
         }
 
-
         private fun isTokenValid(token: DecodedJWT<JWSHMAC256Algorithm>, secretKey: String): Boolean {
             val isValid: Boolean
             var verificationRes: JWT<JWSHMAC256Algorithm>? = null
@@ -76,7 +70,7 @@ class Token {
                 }
             )
             Log.i(TAG, "isTokenValid verificationRes : $verificationRes")
-            isValid = verificationRes != null
+            isValid = (verificationRes != null)
             return isValid
         }
 

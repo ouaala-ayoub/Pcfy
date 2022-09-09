@@ -1,14 +1,12 @@
 package com.example.pc.ui.fragments
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -21,14 +19,12 @@ import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.HomeRepository
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentHomeBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.adapters.CategoryAdapter
 import com.example.pc.ui.viewmodels.HomeModel
 import com.example.pc.ui.viewmodels.HomeModelFactory
-import com.example.pc.utils.Auth
 
 private const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"
@@ -58,7 +54,6 @@ class HomeFragment : Fragment() {
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

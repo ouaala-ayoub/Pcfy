@@ -10,10 +10,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
@@ -32,7 +31,6 @@ class MainActivity : AppCompatActivity(){
     private lateinit var loginRepository: LoginRepository
     private lateinit var binding: ActivityMainBinding
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,12 +56,12 @@ class MainActivity : AppCompatActivity(){
 
         when (isNightTheme) {
             false ->{
-                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.white_darker))))
+                supportActionBar?.setBackgroundDrawable(ColorDrawable((ContextCompat.getColor(this, R.color.white_darker))))
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
 
             true ->{
-                supportActionBar?.setBackgroundDrawable(ColorDrawable((getColor(R.color.even_darker_grey))))
+                supportActionBar?.setBackgroundDrawable(ColorDrawable((ContextCompat.getColor(this, R.color.even_darker_grey))))
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
 
@@ -71,7 +69,6 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
 
@@ -87,7 +84,6 @@ class MainActivity : AppCompatActivity(){
         return super.onCreateOptionsMenu(menu)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when(item.itemId){

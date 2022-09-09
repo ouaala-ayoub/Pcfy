@@ -1,9 +1,7 @@
 package com.example.pc.ui.viewmodels
 
 import android.app.Activity
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,8 +12,6 @@ import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.Token
 import com.example.pc.utils.getError
-import io.github.nefilim.kjwt.JWT
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,7 +46,6 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return isValidEmail && isValidPassword
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun login(userName: String, password: String, activity: Activity): MutableLiveData<Tokens>{
 
         isTurning.postValue(true)
@@ -96,12 +91,10 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return errorMessage
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun isAuthenticated(): Boolean {
         return repository.isLoggedIn.value!!
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getTheUserIdOrNull(): String?{
         return if(isAuthenticated()) repository.user?.userId
         else null

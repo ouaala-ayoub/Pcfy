@@ -1,15 +1,11 @@
 package com.example.pc.ui.viewmodels
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.Error
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.utils.getError
 import retrofit2.Call

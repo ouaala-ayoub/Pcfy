@@ -1,8 +1,6 @@
 package com.example.pc.ui.viewmodels
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +8,6 @@ import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.NewFavouritesRequest
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.FavouritesRepository
-import com.example.pc.data.repositories.LoginRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,13 +53,16 @@ class FavouritesModel(
         return favouritesListLiveData
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     fun deleteFavourite(userId: String, favouriteIdToDelete: String): MutableLiveData<Boolean>{
 
         isProgressBarTurning.postValue(true)
 
         val favourites = favouritesListLiveData.value
-        val removed = favourites?.removeIf { annonce -> annonce.id == favouriteIdToDelete }
+
+        val removed = favourites?.removeAll {
+            annonce -> annonce.id == favouriteIdToDelete
+        }
         favouritesListLiveData.postValue(favourites)
 
         var idsList: List<String> = listOf()

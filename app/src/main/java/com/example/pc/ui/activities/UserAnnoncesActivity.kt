@@ -1,16 +1,13 @@
 package com.example.pc.ui.activities
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.data.remote.RetrofitService
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.databinding.ActivityUserAnnoncesBinding
 import com.example.pc.ui.adapters.FavouritesAdapter
@@ -28,7 +25,6 @@ class UserAnnoncesActivity : AppCompatActivity() {
     private lateinit var userId: String
     private lateinit var userAnnoncesModel: UserAnnoncesModel
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //to change with fragment ?

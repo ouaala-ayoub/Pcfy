@@ -1,8 +1,6 @@
 package com.example.pc.ui.viewmodels
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,12 +52,10 @@ class UserInfoModel(
         return user
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentUser(): LoggedInUser? {
         return loginRepository.user
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getIsLoggedIn(): LiveData<Boolean> {
         return loginRepository.isLoggedIn
     }
