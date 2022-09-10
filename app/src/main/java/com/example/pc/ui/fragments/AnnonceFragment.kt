@@ -86,8 +86,11 @@ class AnnonceFragment : Fragment() {
 
                         //the seller name
                         seller.observe(viewLifecycleOwner){
-                            productSeller.text = it
+                            sellerName.text = it.name
                         }
+//                        set the seller image
+//                        selleerImage
+
                         productDescription.text = annonce.description
 
                         Log.i(TAG, "annonce = ${annonceToShow.value}")
@@ -135,6 +138,9 @@ class AnnonceFragment : Fragment() {
                     }
 
                     productSeller.setOnClickListener {
+                        goToSellerPage(annonce.sellerId!!)
+                    }
+                    sellerInfo.setOnClickListener {
                         goToSellerPage(annonce.sellerId!!)
                     }
 

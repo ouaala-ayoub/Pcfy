@@ -9,6 +9,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/add_to_fav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -25,7 +27,7 @@
             <ImageView
                 android:id="@+id/product_images"
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
+                android:layout_height="@dimen/annonce_image_height"
                 android:src="@drawable/ic_launcher_background" />
 
             <TextView
@@ -65,17 +67,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/product_seller"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                tools:text="product seller"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -94,6 +85,60 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 tools:text="description" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/product_seller"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/store_height"
+                android:backgroundTint="@color/background_color"
+                app:cardElevation="5dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:cardCornerRadius="25dp">
+
+                    <ImageView
+                        android:id="@+id/selleer_image"
+                        android:layout_width="@dimen/store_image_size"
+                        android:layout_height="@dimen/store_image_size"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/avatars" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/seller_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textSize="15sp"
+                    tools:text="product seller" />
+
+                <Button
+                    android:id="@+id/seller_info"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="@string/visiter"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/AlataTextView"
+                    android:textColor="@color/color_on_primary"
+                    android:textSize="15sp"
+                    app:cardCornerRadius="25dp"
+                    app:strokeColor="@color/color_on_primary" />
+
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 

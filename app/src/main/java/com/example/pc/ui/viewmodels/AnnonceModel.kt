@@ -17,7 +17,7 @@ private const val TAG = "AnnonceModel"
 class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel() {
 
     val annonceToShow = MutableLiveData<Annonce>()
-    val seller = MutableLiveData<String>()
+    val seller = MutableLiveData<User>()
     val addedFavouriteToUser = MutableLiveData<Boolean>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<String>()
@@ -62,7 +62,7 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel(
                 if(response.isSuccessful && response.body() != null){
                     Log.i(TAG, "response body: ${response.body()}")
                     isProgressBarTurning.postValue(false)
-                    seller.postValue(response.body()!!.name)
+                    seller.postValue(response.body())
                 }
                 else{
                     isProgressBarTurning.postValue(false)
