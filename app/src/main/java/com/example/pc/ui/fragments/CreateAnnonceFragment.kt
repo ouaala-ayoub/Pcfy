@@ -40,7 +40,6 @@ private const val TAG = "CreateAnnonceFragment"
 private const val ERROR_MSG = "Erreur l'annonce n'est pas ajoutée"
 private const val SUCCESS_MSG = "Annonce ajoutée avec succes"
 
-
 class CreateAnnonceFragment : Fragment() {
 
     private var binding: FragmentCreateAnnonceBinding? = null
@@ -50,7 +49,6 @@ class CreateAnnonceFragment : Fragment() {
     private lateinit var loginRepository: LoginRepository
     private lateinit var userId: String
     private var imagesUris = listOf<Uri>()
-
 
     //add the livedata validation
 

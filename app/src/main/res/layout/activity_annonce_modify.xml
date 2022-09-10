@@ -19,7 +19,6 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="0dp"
                 android:scrollbarSize="0dp"
                 app:contentScrim="@color/background_color"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">

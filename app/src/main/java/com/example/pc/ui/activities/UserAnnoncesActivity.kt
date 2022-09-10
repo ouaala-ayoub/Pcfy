@@ -7,11 +7,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.databinding.ActivityUserAnnoncesBinding
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.UserAnnoncesModel
+import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 
 private const val TAG = "UserAnnoncesActivity"
@@ -49,14 +52,24 @@ class UserAnnoncesActivity : AppCompatActivity() {
 
                 override fun onDeleteClickListener(annonceId: String) {
                     //to do
-                    userAnnoncesModel.deleteAnnonce(userId, annonceId).observe(this@UserAnnoncesActivity){deletedWithSuccess ->
-                        if(deletedWithSuccess) {
-                            baseContext.toast(ANNONCE_DELETED_SUCCESS, Toast.LENGTH_SHORT)
-                        }
-                        else {
-                            baseContext.toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
-                        }
-                    }
+                    makeDialog(
+                        this@UserAnnoncesActivity,
+                        object : OnDialogClicked {
+                            override fun onPositiveButtonClicked() {
+                                userAnnoncesModel.deleteAnnonce(userId, annonceId).observe(this@UserAnnoncesActivity){deletedWithSuccess ->
+                                    if(deletedWithSuccess) {
+                                        baseContext.toast(ANNONCE_DELETED_SUCCESS, Toast.LENGTH_SHORT)
+                                    }
+                                    else {
+                                        baseContext.toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
+                                    }
+                                }
+                            }
+                            override fun onNegativeButtonClicked() {}
+                        },
+                        getString(R.string.annonce_delete_dialog_title),
+                        getString(R.string.annonce_delete_dialog_message)
+                    ).show()
                 }
             }
         )
