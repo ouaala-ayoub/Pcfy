@@ -24,7 +24,7 @@ import com.example.pc.ui.viewmodels.FavouritesModel
 import com.example.pc.utils.toast
 
 private const val FAVOURITE_DELETED_SUCCESS = "suprimée des favories avec succes"
-private const val FAVOURITE_ERROR_MSG = "Erreur Inatendue"
+private const val FAVOURITE_ERROR_MSG = "Erreur inattendue"
 private const val TAG = "FavouritesFragment"
 
 class FavouritesFragment : Fragment() {
@@ -107,7 +107,7 @@ class FavouritesFragment : Fragment() {
                     getFavourites(userId!!).observe(viewLifecycleOwner){ favourites ->
                         if (favourites == null) {
                             requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
-                            returnToHomeFragment()
+                            reloadActivity()
                         }
                         else{
                             Log.i(TAG, "favourites : $favourites")

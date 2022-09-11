@@ -92,15 +92,21 @@ class HomeFragment : Fragment() {
         annoncesRv.layoutManager = GridLayoutManager(this.context, NUM_ROWS)
         annoncesRv.adapter = adapter
 
-        annoncesList = viewModel.getAnnoncesList()
+        viewModel.apply {
+            getAnnoncesList().observe(viewLifecycleOwner){ annonces ->
+                updateIsEmpty().observe(viewLifecycleOwner) { msg ->
+                    Log.i(TAG, "updateIsEmpty: $msg")
+                    binding!!.noAnnonce.text = msg
+                }
+                if (annonces != null)
+                    adapter.setAnnoncesList(annonces)
+            }
 
-        annoncesList.observe(viewLifecycleOwner){ annonces ->
-            adapter.setAnnoncesList(annonces)
-        }
-        viewModel.isProgressBarTurning.observe(viewLifecycleOwner){
-            binding!!.homeProgressBar.isVisible = it
-        }
+            isProgressBarTurning.observe(viewLifecycleOwner){
+                binding!!.homeProgressBar.isVisible = it
+            }
 
+        }
         return binding?.root
     }
 

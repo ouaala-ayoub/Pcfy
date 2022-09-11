@@ -1,6 +1,7 @@
 package com.example.pc.ui.viewmodels
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,14 +14,17 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val TAG = "HomeModel"
+private const val NO_ANNONCE = "Pas d'annonces"
+private const val ERROR_MSG = "Erreur inattendue"
 
 class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
 
-    private val annoncesList = MutableLiveData<List<Annonce>>()
+    private val annoncesList = MutableLiveData<List<Annonce>?>()
     private val errorMessage = MutableLiveData<Error>()
+    private val emptyMsg = MutableLiveData<String>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
 
-    fun getAnnoncesList(): MutableLiveData<List<Annonce>>{
+    fun getAnnoncesList(): MutableLiveData<List<Annonce>?>{
 
         val response = homeRepository.getAnnonces()
         isProgressBarTurning.postValue(true)
@@ -40,16 +44,28 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
                     if (error != null){
                         errorMessage.postValue(error!!)
                     }
+                    annoncesList.postValue(null)
                 }
                 isProgressBarTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
                 isProgressBarTurning.postValue(false)
+                annoncesList.postValue(null)
                 Log.e(TAG, "onFailure : ${t.message}")
             }
         })
         return annoncesList
+    }
+
+    fun updateIsEmpty(): LiveData<String>{
+        if (annoncesList.value?.isEmpty() == true){
+            emptyMsg.postValue(NO_ANNONCE)
+        }
+        if (annoncesList.value == null){
+            emptyMsg.postValue(ERROR_MSG)
+        }
+        return emptyMsg
     }
 
 }

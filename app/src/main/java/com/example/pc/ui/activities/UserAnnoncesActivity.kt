@@ -19,7 +19,7 @@ import com.example.pc.utils.toast
 
 private const val TAG = "UserAnnoncesActivity"
 private const val ANNONCE_DELETED_SUCCESS = ""
-private const val ANNONCE_ERROR_MSG = "Erreur Inatendue"
+private const val ANNONCE_ERROR_MSG = "Erreur inattendue"
 
 class UserAnnoncesActivity : AppCompatActivity() {
 
