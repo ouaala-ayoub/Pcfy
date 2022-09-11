@@ -2,6 +2,7 @@ package com.example.pc.data.models.network
 
 enum class CategoryEnum (val title: String){
 
+    ALL("tous"),
     LAPTOP("ordinateurs portables"),
     GAMER("pc gamer"),
     TABLET("tablettes"),

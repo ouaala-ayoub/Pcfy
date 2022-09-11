@@ -66,8 +66,7 @@ class HomeFragment : Fragment() {
         Log.i(TAG, " categories: $categories")
 
         val categoriesList = categories.map { categoryTitle ->
-            val categoryImage = getCategoryImage(categoryTitle)
-             Category(categoryImage, categoryTitle)
+             Category( categoryTitle)
         }
 
         val categoryAdapter = CategoryAdapter(
@@ -108,15 +107,6 @@ class HomeFragment : Fragment() {
 
         }
         return binding?.root
-    }
-
-    private fun getCategoryImage(categoryTitle: String): Int {
-
-        when(categoryTitle) {
-            //to do
-        }
-
-        return R.drawable.ic_launcher_background
     }
 
     private fun goToAnnonceActivity(annonceId: String){

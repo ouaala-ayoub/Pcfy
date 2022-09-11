@@ -83,7 +83,7 @@
                         tools:text="Sale" />
 
                     <TextView
-                        android:id="@+id/seller_website"
+                        android:id="@+id/seller_contect"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start"

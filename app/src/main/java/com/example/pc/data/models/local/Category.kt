@@ -1,6 +1,10 @@
 package com.example.pc.data.models.local
 
 data class Category(
-    val imageRes: Int,
-    val title: String
-)
+    val title: String,
+    var isClicked: Boolean = false
+){
+    fun reverseClicked(){
+        isClicked = !isClicked
+    }
+}

@@ -8,9 +8,9 @@
     <dimen name="favourites_image_size">115dp</dimen>
     <dimen name="annonce_modify_bar_size">200dp</dimen>
     <dimen name="category_margin">25dp</dimen>
-    <dimen name="category_card_height">105dp</dimen>
+    <dimen name="category_card_height">80dp</dimen>
     <dimen name="category_card_width">60dp</dimen>
-    <dimen name="category_image_size">45dp</dimen>
+    <dimen name="category_image_size">40dp</dimen>
     <dimen name="seller_image_size">120dp</dimen>
     <dimen name="store_image_size">80dp</dimen>
     <dimen name="store_height">120dp</dimen>

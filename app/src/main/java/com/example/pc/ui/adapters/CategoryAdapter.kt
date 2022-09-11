@@ -1,8 +1,11 @@
 package com.example.pc.ui.adapters
 
+import android.graphics.Paint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.data.models.local.Category
 import com.example.pc.databinding.SingleCategoryBinding
@@ -19,15 +22,38 @@ class CategoryAdapter(
     interface OnCategoryClickedListener {
         fun onCategoryClicked(title: String)
     }
+    private var currentClicked = 0
 
     inner class CategoryHolder(private val binding: SingleCategoryBinding): RecyclerView.ViewHolder(binding.root) {
+
+        private fun initialise(){
+            categoriesList[currentClicked].isClicked = true
+        }
+
         fun bind(position: Int){
+
+            initialise()
+
             val category = categoriesList[position]
             binding.apply {
-                categoryImage.setImageResource(category.imageRes)
+
                 categoryTitle.text = category.title
-                wholeCategory.setOnClickListener {
-                    onClick.onCategoryClicked(category.title)
+                setFlags(category, categoryTitle)
+
+                categoryTitle.setOnClickListener {
+
+                    if (category.isClicked){
+                        onClick.onCategoryClicked(category.title)
+                    }
+                    else {
+                        categoriesList[currentClicked].reverseClicked()
+                        notifyItemChanged(currentClicked)
+
+                        category.reverseClicked()
+                        setFlags(category, categoryTitle)
+                        currentClicked = position
+                        onClick.onCategoryClicked(category.title)
+                    }
                 }
             }
         }
@@ -48,5 +74,20 @@ class CategoryAdapter(
     }
 
     override fun getItemCount() = categoriesList.size
+
+
+
+    private fun inverseFlag(){
+
+    }
+
+    private fun setFlags(category: Category, textView: TextView){
+        if (category.isClicked){
+            textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        }
+        else {
+            textView.paintFlags = 0
+        }
+    }
 
 }

@@ -123,6 +123,8 @@ class SellerInfoFragment : Fragment() {
                     .centerCrop()
                     .into(sellerImage)
             }
+
+            sellerContect.text = seller.phoneNumber
             sellerName.text = sellName
             sellerType.text = seller.userType
             sellerCity.text = seller.city
