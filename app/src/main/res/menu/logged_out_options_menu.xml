@@ -5,6 +5,13 @@
         android:id="@+id/settings"
         android:title="@string/settings" />
     <item
+        android:id="@+id/share"
+        android:title="@string/partager" />
+    <item
+        android:id="@+id/website"
+        android:title="@string/notre_site_web" />
+    <item
         android:id="@+id/login"
         android:title="@string/se_connecter" />
+
 </menu>

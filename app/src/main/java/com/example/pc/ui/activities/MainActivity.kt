@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -64,9 +65,7 @@ class MainActivity : AppCompatActivity(){
                 supportActionBar?.setBackgroundDrawable(ColorDrawable((ContextCompat.getColor(this, R.color.even_darker_grey))))
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
-
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -87,6 +86,15 @@ class MainActivity : AppCompatActivity(){
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when(item.itemId){
+
+            R.id.website -> {
+                openTheWebsite()
+                true
+            }
+
+            R.id.share -> {
+                true
+            }
 
             R.id.login -> {
                 goToLoginActivity()
@@ -123,5 +131,11 @@ class MainActivity : AppCompatActivity(){
         overridePendingTransition(0, 0)
         startActivity(intent)
         overridePendingTransition(0, 0)
+    }
+
+    private fun openTheWebsite(){
+        val openURL = Intent(Intent.ACTION_VIEW)
+        openURL.data = Uri.parse(getString(R.string.pcfy_website))
+        startActivity(openURL)
     }
 }

@@ -79,11 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:elevation="0dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -181,6 +177,42 @@
                 android:textColor="@color/color_on_primary"
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_info_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/orange_button"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/rate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center|start"
+                android:lines="2"
+                android:text="@string/ratez_notre_application"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_rate_review_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/orange_button"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/contact"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center|start"
+                android:lines="2"
+                android:text="@string/contactez_nous"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_contact_support_24"
                 app:iconPadding="10dp"
                 app:iconTint="@color/orange_button"
                 app:strokeColor="@color/color_on_primary" />

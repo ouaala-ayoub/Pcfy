@@ -87,5 +87,7 @@
     <string name="annonce_delete_dialog_title">Demande de confirmation</string>
     <string name="annonce_delete_dialog_message">Êtes vous sûre de supprimer cette annonce ?</string>
     <string name="visiter">Visiter</string>
+    <string name="contactez_nous">Contactez-nous</string>
+    <string name="ratez_notre_application">Ratez notre Application</string>
 
 </resources>
