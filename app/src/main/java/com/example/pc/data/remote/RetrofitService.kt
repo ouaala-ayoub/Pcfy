@@ -66,6 +66,9 @@ interface RetrofitService {
 
     @PUT("announces/{id}")
     fun updateAnnonceInfo(@Path("id") annonceId: String, @Body newAnnonce: Annonce): Call<Annonce>
+
+    @GET
+    fun search(): Call<List<Annonce>>
     //add more
     // to learn
 

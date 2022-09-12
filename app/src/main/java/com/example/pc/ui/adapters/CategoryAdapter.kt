@@ -1,12 +1,17 @@
 package com.example.pc.ui.adapters
 
 import android.graphics.Paint
+import android.graphics.Typeface
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
 import com.example.pc.data.models.local.Category
 import com.example.pc.databinding.SingleCategoryBinding
 
@@ -52,6 +57,7 @@ class CategoryAdapter(
                         category.reverseClicked()
                         setFlags(category, categoryTitle)
                         currentClicked = position
+
                         onClick.onCategoryClicked(category.title)
                     }
                 }
@@ -75,17 +81,13 @@ class CategoryAdapter(
 
     override fun getItemCount() = categoriesList.size
 
-
-
-    private fun inverseFlag(){
-
-    }
-
     private fun setFlags(category: Category, textView: TextView){
         if (category.isClicked){
+            textView.setTypeface(null, Typeface.BOLD)
             textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         }
         else {
+            textView.setTypeface(null, Typeface.NORMAL)
             textView.paintFlags = 0
         }
     }

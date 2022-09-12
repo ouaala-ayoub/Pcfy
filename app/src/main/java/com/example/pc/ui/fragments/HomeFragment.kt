@@ -31,16 +31,24 @@ private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
-    private lateinit var annoncesList: MutableLiveData<List<Annonce>>
     private lateinit var adapter: AnnoncesAdapter
     private lateinit var viewModel: HomeModel
     private lateinit var annoncesRv: RecyclerView
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentHomeBinding? = null
+    private lateinit var categoriesList: List<Category>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
+        val categories = CategoryEnum.values().map {
+                category -> category.title
+        }
+
+        categoriesList = categories.map { categoryTitle ->
+            Category( categoryTitle)
+        }
 
         viewModel = ViewModelProvider(
             this,
@@ -59,26 +67,17 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val categories = CategoryEnum.values().map {
-            category -> category.title
-        }
-
-        Log.i(TAG, " categories: $categories")
-
-        val categoriesList = categories.map { categoryTitle ->
-             Category( categoryTitle)
-        }
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         val categoryAdapter = CategoryAdapter(
             categoriesList,
             object: CategoryAdapter.OnCategoryClickedListener {
                 override fun onCategoryClicked(title: String) {
+                    //send the request
                     Log.i(TAG, "onCategoryClicked: $title")
                 }
             }
         )
-
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         binding!!.categoryRv.layoutManager = LinearLayoutManager(
             this.context,
