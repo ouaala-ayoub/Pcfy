@@ -27,9 +27,7 @@ class LoginRepository(private val retrofitService: RetrofitService,private val a
 
         if (checkForAuth) {
             setLoggedInUser(
-                LoggedInUser(
-                    Token.getUserId(activity)!!
-                )
+                Token.getPayload(activity)!!
             )
         }
         else setLoggedInUser(null)

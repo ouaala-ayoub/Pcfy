@@ -1,6 +1,7 @@
 package com.example.pc.data.models.network
 
 import com.example.pc.data.models.local.Detail
+import com.example.pc.data.models.local.LoggedInUser
 import com.google.gson.annotations.SerializedName
 
 data class Annonce(
@@ -23,8 +24,8 @@ data class Annonce(
     val pictures: MutableList<String> = mutableListOf(),
 
     //just for testing
-    @SerializedName("sellerId")
-    val sellerId: String? = null,
+    @SerializedName("seller")
+    val seller: LoggedInUser? = null,
 
     //non required
 

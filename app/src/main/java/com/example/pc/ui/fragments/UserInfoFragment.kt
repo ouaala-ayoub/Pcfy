@@ -89,7 +89,7 @@ class UserInfoFragment : Fragment(),  View.OnClickListener {
 
                     val currentUser = getCurrentUser() ?: return@observe
 
-                    getUserById(currentUser!!.userId).observe(viewLifecycleOwner) { user ->
+                    getUserById(currentUser.userId).observe(viewLifecycleOwner) { user ->
                         if (user != null) {
                             userName.text = user.name
                             userType.text = requireContext().getString(R.string.user_type, user.userType)

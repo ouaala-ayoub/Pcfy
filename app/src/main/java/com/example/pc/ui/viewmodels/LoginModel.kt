@@ -59,9 +59,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
                     repository.setCurrentTokens(response.body()!!)
                     repository.setLoggedInUser(
-                        LoggedInUser(
-                            Token.getUserId(activity)!!
-                        )
+                        Token.getPayload(activity)!!
                     )
                     Log.i(TAG, "current token: ${LocalStorage.getTokens(activity)}")
                     Log.i(TAG, "current user: ${repository.user}")
@@ -91,7 +89,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return errorMessage
     }
 
-    fun isAuthenticated(): Boolean {
+    private fun isAuthenticated(): Boolean {
         return repository.isLoggedIn.value!!
     }
 

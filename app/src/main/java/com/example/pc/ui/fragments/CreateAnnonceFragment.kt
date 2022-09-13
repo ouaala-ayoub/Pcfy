@@ -21,6 +21,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
+import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
@@ -47,7 +48,7 @@ class CreateAnnonceFragment : Fragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var loginRepository: LoginRepository
-    private lateinit var userId: String
+    private lateinit var currentUser: LoggedInUser
     private var imagesUris = listOf<Uri>()
 
     //add the livedata validation
@@ -122,11 +123,9 @@ class CreateAnnonceFragment : Fragment() {
             }
             else {
 
-                Log.i(TAG, "user: ${loginRepository.user}")
                 if (loginRepository.user == null) return@observe
-                userId = loginRepository.user!!.userId
-                Log.i(TAG, "user id : $userId")
-
+                currentUser = loginRepository.user!!
+                Log.i(TAG, "user id : $currentUser")
 
                 setTheStatueEditTextView()
                 setTheCategoriesEditText()
@@ -154,14 +153,14 @@ class CreateAnnonceFragment : Fragment() {
                                         binding!!.statusEditText.text.toString(),
                                         binding!!.markEditText.text.toString(),
                                         binding!!.descriptionEditText.text.toString(),
-                                        userId
+                                        currentUser
                                     )
                                     Log.i(TAG, "$annonceToAdd")
 
                                     viewModel.apply {
 
                                         //to change
-                                        addAnnonce(userId, annonceToAdd).observe(viewLifecycleOwner){
+                                        addAnnonce(currentUser.userId, annonceToAdd).observe(viewLifecycleOwner){
                                             isTurning.observe(viewLifecycleOwner){ isVisible->
                                                 progressBar.isVisible = isVisible
                                             }

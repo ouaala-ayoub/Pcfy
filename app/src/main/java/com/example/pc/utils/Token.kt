@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pc.JWT_USER_ACCESS
+import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.AccessToken
 import com.example.pc.data.models.network.RefreshToken
 import com.example.pc.data.remote.RetrofitService
@@ -100,7 +101,7 @@ class Token {
             return isExpired
         }
 
-        fun getUserId(activity: Context): String?{
+        fun getPayload(activity: Context): LoggedInUser?{
 
             val refreshToken = LocalStorage.getRefreshToken(activity)
             Log.i(TAG, "refresh Token Retrieved to get userId $refreshToken")
@@ -115,8 +116,15 @@ class Token {
                     },
                     {
                         val userId = it.claimValue("id").orNull()
-                        Log.i(TAG, "getUserId: current returned $userId")
-                        return userId
+                        val userName = it.claimValue("name").orNull()
+                        val currentUser = LoggedInUser(
+                            userId!!,
+                            userName!!
+                        )
+
+                        Log.i(TAG, "getUserId: current returned $currentUser")
+
+                        return currentUser
                     }
                 )
             }

@@ -70,7 +70,7 @@ class AnnonceFragment : Fragment() {
                         //bind the data to the views
 
                         //get the sellers name
-                        getSellerById(annonce.sellerId!!)
+                        getSellerById(annonce.seller!!.userId)
 
                         //images first
                         if (annonce.pictures.isNotEmpty()) {
@@ -138,10 +138,10 @@ class AnnonceFragment : Fragment() {
                     }
 
                     productSeller.setOnClickListener {
-                        goToSellerPage(annonce.sellerId!!)
+                        goToSellerPage(annonce.seller!!.userId)
                     }
                     sellerInfo.setOnClickListener {
-                        goToSellerPage(annonce.sellerId!!)
+                        goToSellerPage(annonce.seller!!.userId)
                     }
 
                 }

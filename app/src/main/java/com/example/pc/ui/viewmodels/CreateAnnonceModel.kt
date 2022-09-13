@@ -2,6 +2,7 @@ package com.example.pc.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.NewAnnonceRequest
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.IdResponse
@@ -149,7 +150,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
         status: String,
         mark: String,
         description: String,
-        sellerId: String
+        seller: LoggedInUser
     ): Annonce{
         return Annonce(
             title,
@@ -159,7 +160,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
             status = status,
             mark = mark,
             description = description,
-            sellerId = sellerId
+            seller = seller
         )
     }
 
