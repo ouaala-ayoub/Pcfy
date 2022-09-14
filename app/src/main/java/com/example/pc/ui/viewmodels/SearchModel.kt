@@ -17,15 +17,20 @@ private const val ERROR_MSG = "Erreur inattendue"
 
 class SearchModel(private val searchRepository: SearchRepository) : ViewModel(){
 
-    private val searchResult = MutableLiveData<List<Annonce>?>()
-    private val searchMessage = MutableLiveData<String>()
+    val searchResult = MutableLiveData<List<Annonce>?>()
+    val searchMessage = MutableLiveData<String>()
     val isTurning = MutableLiveData<Boolean>()
 
-    fun search(): LiveData<List<Annonce>?>{
+    fun search(searchKey: String?){
+
+        if(searchKey.isNullOrBlank()){
+            searchResult.postValue(listOf())
+            return
+        }
 
         isTurning.postValue(true)
 
-        searchRepository.getResult().enqueue(object: Callback<List<Annonce>>{
+        searchRepository.getSearchResult(searchKey).enqueue(object: Callback<List<Annonce>>{
 
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
                 if(response.isSuccessful && response.body() != null){
@@ -43,10 +48,9 @@ class SearchModel(private val searchRepository: SearchRepository) : ViewModel(){
             }
 
         })
-        return searchResult
     }
 
-    fun updateSearchMessage(): LiveData<String> {
+    fun updateSearchMessage() {
 
         if (searchResult.value?.isEmpty() == true){
             searchMessage.postValue(EMPTY_MSG)
@@ -54,8 +58,10 @@ class SearchModel(private val searchRepository: SearchRepository) : ViewModel(){
         else if (searchResult.value == null){
             searchMessage.postValue(ERROR_MSG)
         }
+        else {
+            searchMessage.postValue("")
+        }
 
-        return searchMessage
     }
 
 }

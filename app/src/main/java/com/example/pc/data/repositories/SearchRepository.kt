@@ -5,6 +5,6 @@ import com.example.pc.data.remote.RetrofitService
 class SearchRepository (private val retrofitService: RetrofitService){
 
     //to change
-    fun getResult() = retrofitService.search()
+    fun getSearchResult(searchKey: String?) = retrofitService.getAllAnnonces(null, searchKey)
 
 }
