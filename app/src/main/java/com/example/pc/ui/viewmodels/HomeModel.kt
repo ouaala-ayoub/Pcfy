@@ -19,14 +19,14 @@ private const val ERROR_MSG = "Erreur inattendue"
 
 class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
 
-    private val annoncesList = MutableLiveData<List<Annonce>?>()
-    private val errorMessage = MutableLiveData<Error>()
-    private val emptyMsg = MutableLiveData<String>()
+    val annoncesList = MutableLiveData<List<Annonce>?>()
+    val emptyMsg = MutableLiveData<String>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
+    private val errorMessage = MutableLiveData<Error?>()
 
-    fun getAnnoncesList(): MutableLiveData<List<Annonce>?>{
+    fun getAnnoncesListAll(): MutableLiveData<List<Annonce>?>{
 
-        val response = homeRepository.getAnnonces()
+        val response = homeRepository.getAnnonces(null, null)
         isProgressBarTurning.postValue(true)
 
         response.enqueue(object :Callback<List<Annonce>>{
@@ -34,7 +34,6 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
 
                 if (response.isSuccessful && response.body() != null){
                     Log.i(TAG, "response is successful = ${response.isSuccessful}")
-                    Log.i(TAG, "response body is null = ${response.body() != null}")
                     Log.i(TAG, "response body ${response.body()} ")
                     annoncesList.postValue(response.body())
                 }
@@ -42,7 +41,7 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "response error $error")
                     if (error != null){
-                        errorMessage.postValue(error!!)
+                        errorMessage.postValue(error)
                     }
                     annoncesList.postValue(null)
                 }
@@ -50,31 +49,56 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
             }
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
+                Log.e(TAG, "onFailure : ${t.message}")
                 isProgressBarTurning.postValue(false)
                 annoncesList.postValue(null)
-                Log.e(TAG, "onFailure : ${t.message}")
             }
         })
         return annoncesList
     }
 
-    fun updateIsEmpty(): LiveData<String>{
+    fun getAnnoncesByCategory(category: String){
+
+        isProgressBarTurning.postValue(true)
+
+        homeRepository.getAnnoncesByCategory(category).enqueue(object: Callback<List<Annonce>>{
+            override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
+                if (response.isSuccessful && response.body() != null){
+                    Log.i(TAG, "response body ${response.body()} ")
+                    annoncesList.postValue(response.body())
+                }
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "response error $error")
+                    if (error != null){
+                        errorMessage.postValue(error)
+                    }
+                    annoncesList.postValue(null)
+                }
+                isProgressBarTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message}")
+                isProgressBarTurning.postValue(false)
+                annoncesList.postValue(null)
+            }
+
+        })
+
+
+    }
+
+    fun updateIsEmpty(){
         if (annoncesList.value?.isEmpty() == true){
             emptyMsg.postValue(NO_ANNONCE)
         }
-        if (annoncesList.value == null){
+        else if (annoncesList.value == null){
             emptyMsg.postValue(ERROR_MSG)
         }
-        return emptyMsg
-    }
-
-}
-class HomeModelFactory constructor(private val repository: HomeRepository): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(HomeModel::class.java)) {
-            HomeModel(this.repository) as T
-        } else {
-            throw IllegalArgumentException("ViewModel Not Found")
+        else {
+            emptyMsg.postValue("")
         }
     }
+
 }

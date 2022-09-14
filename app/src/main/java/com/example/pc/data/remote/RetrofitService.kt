@@ -1,6 +1,8 @@
 package com.example.pc.data.remote
 
+import com.example.pc.data.models.local.Category
 import com.example.pc.data.models.network.*
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,13 +16,13 @@ interface RetrofitService {
     fun deleteAnnonce(@Path("id") annonceId: String): Call<Annonce>
 
     @GET("announces")
-    fun getAllAnnonces(): Call<List<Annonce>>
+    fun getAllAnnonces(@Query("c") category: String?, @Query("s") searchBody: String?): Call<List<Annonce>>
 
     @GET("announces/{id}")
     fun getAnnonceById(@Path("id") annonceId: String): Call<Annonce>
 
     @POST("announces")
-    fun addAnnonce(@Body annonceToAdd: Annonce):Call<IdResponse>
+    fun addAnnonce(@Body annonceToAdd: RequestBody):Call<IdResponse>
 
     @GET("users/{id}/announces")
     fun getAnnounces(@Path("id") userId: String): Call<List<Annonce>>

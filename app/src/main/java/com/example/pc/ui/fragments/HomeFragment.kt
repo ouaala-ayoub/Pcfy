@@ -8,14 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pc.R
 import com.example.pc.data.models.local.Category
-import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.HomeRepository
@@ -24,7 +21,6 @@ import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.adapters.CategoryAdapter
 import com.example.pc.ui.viewmodels.HomeModel
-import com.example.pc.ui.viewmodels.HomeModelFactory
 
 private const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"
@@ -50,10 +46,7 @@ class HomeFragment : Fragment() {
             Category( categoryTitle)
         }
 
-        viewModel = ViewModelProvider(
-            this,
-            HomeModelFactory(HomeRepository(retrofitService))
-        )[HomeModel::class.java]
+        viewModel = HomeModel(HomeRepository(retrofitService))
 
         adapter = AnnoncesAdapter(object: AnnoncesAdapter.OnAnnonceClickListener{
             override fun onAnnonceClick(annonceId: String) {
@@ -73,8 +66,16 @@ class HomeFragment : Fragment() {
             categoriesList,
             object: CategoryAdapter.OnCategoryClickedListener {
                 override fun onCategoryClicked(title: String) {
-                    //send the request
-                    Log.i(TAG, "onCategoryClicked: $title")
+                    if (title == CategoryEnum.ALL.title){
+                        viewModel.apply {
+                            getAnnoncesListAll()
+                        }
+                    }
+                    else {
+                        viewModel.apply {
+                            getAnnoncesByCategory(title)
+                        }
+                    }
                 }
             }
         )
@@ -91,13 +92,18 @@ class HomeFragment : Fragment() {
         annoncesRv.adapter = adapter
 
         viewModel.apply {
-            getAnnoncesList().observe(viewLifecycleOwner){ annonces ->
-                updateIsEmpty().observe(viewLifecycleOwner) { msg ->
+            getAnnoncesListAll()
+            annoncesList.observe(viewLifecycleOwner){ annonces ->
+
+                if (annonces != null)
+                    adapter.setAnnoncesList(annonces)
+
+                updateIsEmpty()
+                emptyMsg.observe(viewLifecycleOwner) { msg ->
                     Log.i(TAG, "updateIsEmpty: $msg")
                     binding!!.noAnnonce.text = msg
                 }
-                if (annonces != null)
-                    adapter.setAnnoncesList(annonces)
+
             }
 
             isProgressBarTurning.observe(viewLifecycleOwner){

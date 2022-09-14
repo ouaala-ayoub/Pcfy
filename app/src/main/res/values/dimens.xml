@@ -15,4 +15,6 @@
     <dimen name="store_image_size">80dp</dimen>
     <dimen name="store_height">120dp</dimen>
     <dimen name="annonce_image_height">400dp</dimen>
+    <dimen name="annonce_size">100dp</dimen>
+    <dimen name="annonce_image_size">80dp</dimen>
 </resources>
