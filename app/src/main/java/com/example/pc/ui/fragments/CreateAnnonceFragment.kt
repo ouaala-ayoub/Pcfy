@@ -164,13 +164,13 @@ class CreateAnnonceFragment : Fragment() {
                                             addAnnonce(
                                                 currentUser.userId,
                                                 annonceToAdd,
-                                                reqBody
-                                            ).observe(viewLifecycleOwner) {
+//                                                reqBody
+                                            ).observe(viewLifecycleOwner) { requestSuccess ->
                                                 isTurning.observe(viewLifecycleOwner) { isVisible ->
                                                     progressBar.isVisible = isVisible
                                                 }
                                                 Log.i(TAG, "response succes from fragment $it")
-                                                if (it) doOnSuccess()
+                                                if (requestSuccess) doOnSuccess()
                                                 else doOnFail()
                                             }
                                         }

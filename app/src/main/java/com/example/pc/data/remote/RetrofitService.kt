@@ -25,7 +25,7 @@ interface RetrofitService {
     @POST("announces")
     fun addAnnonce(
         @FieldMap annoncesFields: HashMap<String, String>,
-        @Field("pictures") files: RequestBody
+//        @Field("pictures") files: RequestBody
     )
     :Call<IdResponse>
 

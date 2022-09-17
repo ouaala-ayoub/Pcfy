@@ -63,12 +63,12 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     fun addAnnonce(
         userId: String,
         annonceToAdd: HashMap<String, String>,
-        files: RequestBody
+//        files: RequestBody
     ): LiveData<Boolean>{
 
         isTurning.postValue(true)
 
-        createAnnonceRepository.addAnnonce(annonceToAdd, files).enqueue(object : Callback<IdResponse> {
+        createAnnonceRepository.addAnnonce(annonceToAdd).enqueue(object : Callback<IdResponse> {
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if(response.isSuccessful && response.body() != null){
 
@@ -98,9 +98,9 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                                             requestSuccessful.postValue(true)
                                         }
                                         else {
-                                            Log.e(TAG, "response error is ${response.errorBody()} ")
-                                            Log.i(TAG, "response message ${response.message()} ")
-                                            Log.i(TAG, "response code ${response.code()} ")
+                                            Log.e(TAG, "response error is addAnnonceIdToUser ${response.errorBody()} ")
+                                            Log.i(TAG, "response message addAnnonceIdToUser ${response.message()} ")
+                                            Log.i(TAG, "response code addAnnonceIdToUser ${response.code()} ")
                                             isTurning.postValue(false)
                                             requestSuccessful.postValue(false)
                                         }
@@ -116,11 +116,11 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                             }
                             else{
                                 val error = getError(response.errorBody()!!, response.code())
-                                Log.e(TAG, "onResponse: $error")
-                                Log.e(TAG, "response error is ${response.errorBody()} ")
-                                Log.i(TAG, "response message ${response.message()} ")
-                                Log.i(TAG, "response code ${response.code()} ")
-                                Log.i(TAG, "response raw ${response.raw()} ")
+                                Log.e(TAG, "onResponse getUserById: $error")
+                                Log.e(TAG, "response error is getUserById ${response.errorBody()} ")
+                                Log.i(TAG, "response message getUserById ${response.message()} ")
+                                Log.i(TAG, "response code getUserById ${response.code()} ")
+                                Log.i(TAG, "response raw getUserById ${response.raw()} ")
                                 isTurning.postValue(false)
                                 requestSuccessful.postValue(false)
                             }
@@ -136,17 +136,17 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                 }
                 else {
                     val error = getError(response.errorBody()!!, response.code())
-                    Log.e(TAG, "onResponse: $error")
-                    Log.e(TAG, "response error is ${response.errorBody()} ")
-                    Log.i(TAG, "response message ${response.message()} ")
-                    Log.i(TAG, "response code ${response.code()} ")
-                    Log.i(TAG, "response raw ${response.raw()} ")
+                    Log.e(TAG, "onResponse addAnnonce : $error")
+                    Log.e(TAG, "response error is addAnnonce ${response.errorBody()} ")
+                    Log.i(TAG, "response message addAnnonce ${response.message()} ")
+                    Log.i(TAG, "response code addAnnonce ${response.code()} ")
+                    Log.i(TAG, "response raw addAnnonce ${response.raw()} ")
                     isTurning.postValue(false)
                     requestSuccessful.postValue(false)
                 }
             }
             override fun onFailure(call: Call<IdResponse>, t: Throwable) {
-                Log.e(TAG, t.message!!)
+                Log.e(TAG, "addAnnonce${t.message!!}")
                 errorMessage.postValue(t.message)
                 requestSuccessful.postValue(false)
                 isTurning.postValue(false)
