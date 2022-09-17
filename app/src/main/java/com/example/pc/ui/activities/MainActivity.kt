@@ -27,7 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
@@ -45,9 +45,11 @@ class MainActivity : AppCompatActivity(){
             retrofitService,
             LoginRepository(retrofitService, this)
         )
+        authModel.auth(this@MainActivity)
 
         bottomNav = findViewById(R.id.bottom_nav)
-        val navHost = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navHost =
+            supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHost.navController
 
         bottomNav.setupWithNavController(navController)
@@ -58,13 +60,27 @@ class MainActivity : AppCompatActivity(){
         Log.i(TAG, "current theme: $isNightTheme")
 
         when (isNightTheme) {
-            false ->{
-                supportActionBar?.setBackgroundDrawable(ColorDrawable((ContextCompat.getColor(this, R.color.white_darker))))
+            false -> {
+                supportActionBar?.setBackgroundDrawable(
+                    ColorDrawable(
+                        (ContextCompat.getColor(
+                            this,
+                            R.color.white_darker
+                        ))
+                    )
+                )
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
 
-            true ->{
-                supportActionBar?.setBackgroundDrawable(ColorDrawable((ContextCompat.getColor(this, R.color.even_darker_grey))))
+            true -> {
+                supportActionBar?.setBackgroundDrawable(
+                    ColorDrawable(
+                        (ContextCompat.getColor(
+                            this,
+                            R.color.even_darker_grey
+                        ))
+                    )
+                )
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
@@ -74,23 +90,27 @@ class MainActivity : AppCompatActivity(){
         val inflater: MenuInflater = menuInflater
 
         authModel.apply {
-            auth(this@MainActivity)
-            auth.observe(this@MainActivity){
-                if(!isAuth()){
-                    inflater.inflate(R.menu.logged_out_options_menu, menu)
-                }
-                else if (isAuth()){
+            auth.observe(this@MainActivity) {
+                if (isAuth()) {
+                    Log.i(TAG, "onCreateOptionsMenu: logged_out")
                     inflater.inflate(R.menu.logged_in_options_menu, menu)
+                    return@observe
+                } else {
+                    Log.i(TAG, "onCreateOptionsMenu: logged_out")
+                    inflater.inflate(R.menu.logged_out_options_menu, menu)
+                    return@observe
                 }
             }
         }
+
+
 
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        return when(item.itemId){
+        return when (item.itemId) {
 
             R.id.website -> {
                 openTheWebsite()
@@ -120,7 +140,7 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
-    private fun goToSettingsActivity(){
+    private fun goToSettingsActivity() {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
@@ -138,7 +158,7 @@ class MainActivity : AppCompatActivity(){
         overridePendingTransition(0, 0)
     }
 
-    private fun openTheWebsite(){
+    private fun openTheWebsite() {
         val openURL = Intent(Intent.ACTION_VIEW)
         openURL.data = Uri.parse(getString(R.string.pcfy_website))
         startActivity(openURL)
