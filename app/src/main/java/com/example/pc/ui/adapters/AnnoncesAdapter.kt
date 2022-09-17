@@ -1,12 +1,16 @@
 package com.example.pc.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
 import com.example.pc.data.models.network.Annonce
+import com.example.pc.data.models.network.Error
 import com.example.pc.databinding.SingleAnnonceBinding
 import com.squareup.picasso.Picasso
+
+private const val TAG = "AnnoncesAdapter"
 
 class AnnoncesAdapter(
     private val annonceClickListener: OnAnnonceClickListener
@@ -27,23 +31,32 @@ class AnnoncesAdapter(
             val annonce = annoncesList[position]
             binding.apply {
 
-                if (annonce.pictures.isEmpty()){
-                    annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                try {
+
+                    if (annonce.pictures.isEmpty()){
+                        annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                    }
+
+                    else {
+                        if (annonce.pictures[0].isNotBlank()){
+                            Picasso
+                                .get()
+                                .load(annonce.pictures[0])
+                                .into(annonceImage)
+                        }
+                    }
+
+                    annonceTitle.text = annonce.title
+                    annoncePrice.text = "${annonce.price} Dh"
+
+                    binding.annonce.setOnClickListener {
+                        annonceClickListener.onAnnonceClick(annonce.id!!)
+                    }
+                }
+                catch (e: Throwable){
+                    Log.e(TAG, "bind: $annonce error ${e.message}")
                 }
 
-                else {
-                    Picasso
-                        .get()
-                        .load(annonce.pictures[0])
-                        .into(annonceImage)
-                }
-
-                annonceTitle.text = annonce.title
-                annoncePrice.text = "${annonce.price} Dh"
-
-                binding.annonce.setOnClickListener {
-                    annonceClickListener.onAnnonceClick(annonce.id!!)
-                }
                 //add favourite button
             }
         }

@@ -19,6 +19,7 @@ import com.example.pc.databinding.FragmentAnnonceBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.viewmodels.AnnonceModel
+import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.toast
 import com.squareup.picasso.Picasso
 
@@ -39,7 +40,7 @@ class AnnonceFragment : Fragment() {
     private lateinit var userId: String
     private val picasso = Picasso.get()
 
-    private lateinit var loginRepository: LoginRepository
+    private lateinit var authModel: AuthModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,29 +70,34 @@ class AnnonceFragment : Fragment() {
                     if (annonceToShow.value != null) {
                         //bind the data to the views
 
-                        //get the sellers name
-                        getSellerById(annonce.seller!!.userId)
+                        try {
+                            getSellerById(annonce.seller!!.userId)
 
-                        //images first
-                        if (annonce.pictures.isNotEmpty()) {
-                            picasso
-                                .load(annonce.pictures[0])
-                                .fit()
-                                .into(productImages)
-                        }
+                            //images first
+                            if (annonce.pictures.isNotEmpty()) {
+                                picasso
+                                    .load(annonce.pictures[0])
+                                    .fit()
+                                    .into(productImages)
+                            }
 
-                        productTitle.text = annonce.title
-                        productPrice.text = getString(R.string.price, annonce.price.toInt())
-                        productStatus.text = getString(R.string.status, annonce.status)
+                            productTitle.text = annonce.title
+                            productPrice.text = getString(R.string.price, annonce.price.toInt())
+                            productStatus.text = getString(R.string.status, annonce.status)
 
-                        //the seller name
-                        seller.observe(viewLifecycleOwner){
-                            sellerName.text = it.name
-                        }
+                            //the seller name
+                            seller.observe(viewLifecycleOwner){
+                                sellerName.text = it.name
+                            }
 //                        set the seller image
 //                        selleerImage
 
-                        productDescription.text = annonce.description
+                            productDescription.text = annonce.description
+
+                        }catch (e: Throwable){
+                            Log.e(TAG, "binding error : ${e.message}" )
+                        }
+                        //get the sellers name
 
                         Log.i(TAG, "annonce = ${annonceToShow.value}")
                     } else {
@@ -103,32 +109,31 @@ class AnnonceFragment : Fragment() {
                     addToFav.setOnClickListener {
                         if (annonce != null){
 
-                            loginRepository = LoginRepository(
+                            authModel = AuthModel(
                                 retrofitService,
-                                requireContext()
+                                null
                             )
 
-                            val isLoggedIn = loginRepository.isLoggedIn
-                            isLoggedIn.observe(viewLifecycleOwner){ isLogged ->
+                            authModel.auth(requireContext())
 
-                                Log.i(TAG, "isLogged: $isLogged")
+                            authModel.apply {
+                                auth.observe(viewLifecycleOwner){
 
-                                if (isLogged) {
-                                    userId = loginRepository.user!!.userId
+                                    if (isAuth()) {
+                                        userId = getPayload()!!.id
+                                        addToFavourites(userId, annonce)
+                                        addedFavouriteToUser.observe(viewLifecycleOwner){
+                                            if (it)
+                                                doOnSuccess()
+                                            else
+                                                doOnFail()
+                                        }
+                                    }
+
+                                    else {
+                                        goToLoginActivity()
+                                    }
                                 }
-
-                                else if (!isLogged){
-                                    goToLoginActivity()
-                                }
-                            }
-
-
-                            addToFavourites(userId, annonce)
-                            addedFavouriteToUser.observe(viewLifecycleOwner){
-                                if (it)
-                                    doOnSuccess()
-                                else
-                                    doOnFail()
                             }
                         }
                         else {

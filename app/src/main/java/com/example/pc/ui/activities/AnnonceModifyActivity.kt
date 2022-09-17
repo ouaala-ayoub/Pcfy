@@ -9,13 +9,16 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.example.pc.R
+import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceModifyRepository
+import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityAnnonceModifyBinding
 import com.example.pc.ui.viewmodels.AnnonceModifyModel
+import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
@@ -29,6 +32,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAnnonceModifyBinding
     private lateinit var viewModel: AnnonceModifyModel
     private lateinit var annonceToModifyId: String
+    private val retrofitService = RetrofitService.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,7 +40,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         binding =   ActivityAnnonceModifyBinding.inflate(layoutInflater)
-        viewModel = AnnonceModifyModel(AnnonceModifyRepository(RetrofitService.getInstance()))
+        viewModel = AnnonceModifyModel(AnnonceModifyRepository(retrofitService))
         annonceToModifyId = intent.getStringExtra("id")!!
 
         super.onCreate(savedInstanceState)
@@ -78,7 +82,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                 category = categoryEditText.text.toString(),
                                 status = statusEditText.text.toString(),
                                 mark = markEditText.text.toString(),
-                                description = descriptionEditText.text.toString()
+                                description = descriptionEditText.text.toString(),
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
                                 .observe(this@AnnonceModifyActivity){ annonceModified ->
@@ -87,7 +91,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                         doOnFail(ERROR_SET_ANNONCE)
                                     }
                                     else {
-                                        doOnSuccess()
+                                        doOnSuccess(SUCCESS_SET_ANNONCE)
                                     }
                             }
                         }
@@ -104,12 +108,10 @@ class AnnonceModifyActivity : AppCompatActivity() {
         binding.statusTextField.editText?.setText(default)
 
         //set the adapter
-        val items = Status.values()
-        val values = mutableListOf<String>()
-
-        for (element in items){
-            values.add(element.status)
+        val values = Status.values().map {
+            it -> it.status
         }
+
         val adapter = ArrayAdapter(this, R.layout.list_item, values)
         (binding.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
     }
@@ -165,8 +167,8 @@ class AnnonceModifyActivity : AppCompatActivity() {
         geToMainActivity()
     }
 
-   private fun doOnSuccess(){
-       this.toast(SUCCESS_SET_ANNONCE, Toast.LENGTH_SHORT)
+   private fun doOnSuccess(message: String){
+       this.toast(message, Toast.LENGTH_SHORT)
        goToAnnoncesActivity()
    }
 

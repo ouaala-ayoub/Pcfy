@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,7 @@ import com.example.pc.databinding.FragmentHomeBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.adapters.CategoryAdapter
+import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.HomeModel
 
 private const val NUM_ROWS = 2
@@ -38,12 +38,10 @@ class HomeFragment : Fragment() {
 
         super.onCreate(savedInstanceState)
 
-        val categories = CategoryEnum.values().map {
+        categoriesList = CategoryEnum.values().map {
                 category -> category.title
-        }
-
-        categoriesList = categories.map { categoryTitle ->
-            Category( categoryTitle)
+        }.map {
+                categoryTitle -> Category( categoryTitle)
         }
 
         viewModel = HomeModel(HomeRepository(retrofitService))

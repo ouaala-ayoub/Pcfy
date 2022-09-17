@@ -11,8 +11,8 @@
     android:focusable="true">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,8 +23,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/annonce_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="@dimen/annonce_size"
+            android:layout_height="@dimen/annonce_size"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:scaleType="centerCrop"

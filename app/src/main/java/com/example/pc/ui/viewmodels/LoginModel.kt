@@ -58,11 +58,8 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     tokens.postValue(response.body())
 
                     repository.setCurrentTokens(response.body()!!)
-                    repository.setLoggedInUser(
-                        Token.getPayload(activity)!!
-                    )
+
                     Log.i(TAG, "current token: ${LocalStorage.getTokens(activity)}")
-                    Log.i(TAG, "current user: ${repository.user}")
                     isTurning.postValue(false)
                 }
                 else{
@@ -89,12 +86,4 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return errorMessage
     }
 
-    private fun isAuthenticated(): Boolean {
-        return repository.isLoggedIn.value!!
-    }
-
-    fun getTheUserIdOrNull(): String?{
-        return if(isAuthenticated()) repository.user?.userId
-        else null
-    }
 }

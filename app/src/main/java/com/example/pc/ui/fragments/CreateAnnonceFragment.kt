@@ -3,12 +3,9 @@ package com.example.pc.ui.fragments
 import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +15,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.models.local.LoggedInUser
@@ -30,13 +25,11 @@ import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.CreateAnnonceRepository
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentCreateAnnonceBinding
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.CreateAnnonceModel
-import com.example.pc.ui.viewmodels.CreateAnnonceModelFactory
 import com.example.pc.utils.OnDialogClicked
 import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
@@ -171,7 +164,7 @@ class CreateAnnonceFragment : Fragment() {
                                             addAnnonce(
                                                 currentUser.userId,
                                                 annonceToAdd,
-                                                reqBody!!
+                                                reqBody
                                             ).observe(viewLifecycleOwner) {
                                                 isTurning.observe(viewLifecycleOwner) { isVisible ->
                                                     progressBar.isVisible = isVisible

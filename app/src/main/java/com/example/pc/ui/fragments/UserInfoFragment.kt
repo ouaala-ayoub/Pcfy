@@ -137,7 +137,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                             isVisible = false
                         }
                         disconnected.apply {
-                            isActivated = true
                             isVisible = true
                             loginFromUserInfo.setOnClickListener {
                                 goToLoginActivity()

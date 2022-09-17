@@ -1,6 +1,7 @@
 package com.example.pc.ui.viewmodels
 
 import android.util.Log
+import androidx.core.net.toFile
 import androidx.lifecycle.*
 import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.NewAnnonceRequest
@@ -8,9 +9,14 @@ import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.CreateAnnonceRepository
+import com.example.pc.utils.getError
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.await
 
 //temporary
 
@@ -54,11 +60,15 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
         return isValidTitle && isValidPrice && isValidImagesInput
     }
 
-    fun addAnnonce(userId: String, annonceToAdd: Annonce): LiveData<Boolean>{
+    fun addAnnonce(
+        userId: String,
+        annonceToAdd: HashMap<String, String>,
+        files: RequestBody
+    ): LiveData<Boolean>{
 
         isTurning.postValue(true)
 
-        createAnnonceRepository.addAnnonce(annonceToAdd).enqueue(object : Callback<IdResponse> {
+        createAnnonceRepository.addAnnonce(annonceToAdd, files).enqueue(object : Callback<IdResponse> {
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if(response.isSuccessful && response.body() != null){
 
@@ -105,6 +115,8 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                                 })
                             }
                             else{
+                                val error = getError(response.errorBody()!!, response.code())
+                                Log.e(TAG, "onResponse: $error")
                                 Log.e(TAG, "response error is ${response.errorBody()} ")
                                 Log.i(TAG, "response message ${response.message()} ")
                                 Log.i(TAG, "response code ${response.code()} ")
@@ -123,6 +135,8 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                     })
                 }
                 else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "onResponse: $error")
                     Log.e(TAG, "response error is ${response.errorBody()} ")
                     Log.i(TAG, "response message ${response.message()} ")
                     Log.i(TAG, "response code ${response.code()} ")
@@ -142,36 +156,4 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
         return requestSuccessful
     }
 
-    fun getTheAnnonce(
-        title: String,
-        price: Number,
-        images: MutableList<String>,
-        category: String,
-        status: String,
-        mark: String,
-        description: String,
-        seller: LoggedInUser
-    ): Annonce{
-        return Annonce(
-            title,
-            price,
-            pictures = images,
-            category = category,
-            status = status,
-            mark = mark,
-            description = description,
-            seller = seller
-        )
-    }
-
-}
-
-class CreateAnnonceModelFactory constructor(private val repository: CreateAnnonceRepository): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(CreateAnnonceModel::class.java)) {
-            CreateAnnonceModel(this.repository) as T
-        } else {
-            throw IllegalArgumentException("ViewModel Not Found")
-        }
-    }
 }

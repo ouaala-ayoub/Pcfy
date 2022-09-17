@@ -36,24 +36,18 @@ class FavouritesFragment : Fragment() {
     private var binding: FragmentFavouritesBinding? = null
     private lateinit var adapter: FavouritesAdapter
     private lateinit var userId: String
+    private val retrofitService = RetrofitService.getInstance()
     private var viewModel = FavouritesModel(
         FavouritesRepository(
-            RetrofitService.getInstance()
+            retrofitService
         )
     )
     private lateinit var authModel: AuthModel
-    private val retrofitService = RetrofitService.getInstance()
-//    private lateinit var loginRepository: LoginRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        loginRepository = LoginRepository(
-//            RetrofitService.getInstance(),
-//            requireContext().applicationContext
-//        )
-
-        authModel = AuthModel(retrofitService)
+        authModel = AuthModel(retrofitService, null)
 
     }
 
@@ -63,8 +57,6 @@ class FavouritesFragment : Fragment() {
     ): View? {
 
         binding = FragmentFavouritesBinding.inflate(inflater, container, false)
-
-
 
         return binding?.root
     }
@@ -146,71 +138,11 @@ class FavouritesFragment : Fragment() {
                         }
                     }
                 }
-
-
             }
         }
         super.onViewCreated(view, savedInstanceState)
 
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        if (binding == null) {
-//            Log.i(TAG, "binding check: binding $binding")
-//            return
-//        }
-//
-//        loginRepository.isLoggedIn.observe(viewLifecycleOwner) { isLogged ->
-//
-//            Log.i(TAG, "other case isLogged in : $isLogged")
-//            Log.i(TAG, "user: ${loginRepository.user}")
-//            if (loginRepository.user == null) return@observe
-//            userId = loginRepository.user!!.userId
-//            Log.i(TAG, "user id : $userId")
-//
-//            adapter = FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener{
-//                override fun onFavouriteClicked(annonceId: String) {
-//                    goToAnnonceActivity(annonceId)
-//                }
-//                override fun onDeleteClickListener(annonceId: String) {
-//                    viewModel.deleteFavourite(userId!!, annonceId).observe(viewLifecycleOwner){deletedWithSuccess ->
-//                        if(deletedWithSuccess) {
-//                            requireContext().toast(FAVOURITE_DELETED_SUCCESS, Toast.LENGTH_SHORT)
-//                        }
-//                        else {
-//                            requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
-//                        }
-//                    }
-//                }
-//            })
-//
-//            binding!!.apply {
-//                favouritesRv.layoutManager = LinearLayoutManager(activity)
-//                favouritesRv.adapter = adapter
-//
-//                viewModel.apply {
-//                    getFavourites(userId!!).observe(viewLifecycleOwner){ favourites ->
-//                        if (favourites == null) {
-//                            requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
-//                            reloadActivity()
-//                        }
-//                        else{
-//                            Log.i(TAG, "favourites : $favourites")
-//                            adapter.setList(favourites)
-//                            updateIsEmpty().observe(viewLifecycleOwner){ isVisible ->
-//                                isEmpty.isVisible = isVisible
-//                            }
-//                        }
-//                    }
-//                    isProgressBarTurning.observe(viewLifecycleOwner){ isVisible ->
-//                        favouritesProgressBar.isVisible = isVisible
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     private fun goToAnnonceActivity(annonceId: String) {
         val intent = Intent(this.context, AnnonceActivity::class.java)
@@ -218,10 +150,10 @@ class FavouritesFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun returnToHomeFragment() {
-        val action = FavouritesFragmentDirections.actionFavouritesFragmentToHomeFragment()
-        findNavController().navigate(action)
-    }
+//    private fun returnToHomeFragment() {
+//        val action = FavouritesFragmentDirections.actionFavouritesFragmentToHomeFragment()
+//        findNavController().navigate(action)
+//    }
 
     private fun goToLoginActivity() {
         val intent = Intent(requireContext(), LoginActivity::class.java)

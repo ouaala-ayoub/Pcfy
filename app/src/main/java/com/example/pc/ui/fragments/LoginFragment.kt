@@ -85,7 +85,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         retrievedTokens.observe(viewLifecycleOwner){ retrievedTokens->
                             if(retrievedTokens) {
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
-                                Log.i(TAG, "loggedIn user Id: ${getTheUserIdOrNull()}")
                                 goToMainActivity()
                             }
                             else{
