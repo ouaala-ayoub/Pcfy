@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.User
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.utils.getError
 import retrofit2.Call
@@ -17,10 +15,9 @@ private const val TAG = "UserInfoModel"
 
 class UserInfoModel(
     private val userInfoRepository: UserInfoRepository,
-    private val loginRepository: LoginRepository
     ) : ViewModel(){
 
-    private val user = MutableLiveData<User>()
+    val userRetrieved = MutableLiveData<User>()
     val isTurning = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>()
 
@@ -32,7 +29,7 @@ class UserInfoModel(
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful && response.body() != null){
-                    user.postValue(response.body())
+                    userRetrieved.postValue(response.body())
                     isTurning.postValue(false)
                 }
                 else {
@@ -49,14 +46,6 @@ class UserInfoModel(
             }
         })
 
-        return user
-    }
-
-    fun getCurrentUser(): LoggedInUser? {
-        return loginRepository.user
-    }
-
-    fun getIsLoggedIn(): LiveData<Boolean> {
-        return loginRepository.isLoggedIn
+        return userRetrieved
     }
 }

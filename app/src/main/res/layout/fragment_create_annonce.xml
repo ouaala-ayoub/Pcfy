@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/create_annonce_form"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="15dp"
@@ -180,6 +181,37 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/no_user_connected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pas_d_utilisateur_connect"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/login_from_user_info"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/login_from_user_info"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/login_from_user_info"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:minHeight="48dp"
+        android:text="@string/se_connecter"
+        android:visibility="invisible"
+        android:textColor="@color/orange_button"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/no_user_connected" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_button"

@@ -49,16 +49,15 @@ class UserInfoModifyActivity : AppCompatActivity() {
         binding.apply {
             viewModel.apply {
 
-                getUserById(userToModifyId).observe(this@UserInfoModifyActivity){ oldUser ->
+                getUserById(userToModifyId).observe(this@UserInfoModifyActivity) { oldUser ->
 
-                    isTurning.observe(this@UserInfoModifyActivity){ isTurning ->
+                    isTurning.observe(this@UserInfoModifyActivity) { isTurning ->
                         userModifyProgressBar.isVisible = isTurning
                     }
 
                     if (oldUser == null) {
                         doOnFail(ERROR_GET_USER)
-                    }
-                    else {
+                    } else {
                         Log.i(TAG, "user retrieved : $oldUser")
 
                         nameEditText.setText(oldUser.name)
@@ -74,7 +73,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
 
                             val dialog = makeDialog(
                                 this@UserInfoModifyActivity,
-                                object: OnDialogClicked{
+                                object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
                                         val newUser = User(
                                             name = nameEditText.text.toString(),
@@ -87,19 +86,18 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                         )
 
                                         updateUser(userToModifyId, newUser)
-                                            .observe(this@UserInfoModifyActivity){ annonceModified ->
+                                            .observe(this@UserInfoModifyActivity) { annonceModified ->
                                                 //on annonce modification fail
-                                                if (!annonceModified){
+                                                if (!annonceModified) {
                                                     doOnFail(ERROR_SET_USER)
-                                                }
-                                                else {
+                                                } else {
                                                     doOnSuccess(SUCCESS_SET_USER)
                                                 }
                                             }
 
                                     }
 
-                                    override fun onNegativeButtonClicked(){
+                                    override fun onNegativeButtonClicked() {
                                         //doNothing
                                     }
                                 },
@@ -137,21 +135,21 @@ class UserInfoModifyActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setUpTheTypeEditText(default: String?){
+    private fun setUpTheTypeEditText(default: String?) {
 
         binding.userTypeEditText.setText(default)
 
         //to change !!!!!!!!!!!!??
         //set the adapter
-        val values = SellerType.values().map {
-                sellerType -> sellerType.type
+        val values = SellerType.values().map { sellerType ->
+            sellerType.type
         }
 
         val adapter = ArrayAdapter(this, R.layout.list_item, values)
         (binding.userTypeTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
     }
 
-    private fun validateTheData(){
+    private fun validateTheData() {
 
         binding.apply {
 
@@ -168,7 +166,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
             nameEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     nameLiveData.value = text.toString()
-                    nameHelperText.observe(this@UserInfoModifyActivity){
+                    nameHelperText.observe(this@UserInfoModifyActivity) {
                         nameTextField.helperText = it
                     }
                 }
@@ -177,7 +175,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
             phoneEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     phoneLiveData.value = text.toString()
-                    phoneHelperText.observe(this@UserInfoModifyActivity){
+                    phoneHelperText.observe(this@UserInfoModifyActivity) {
                         phoneTextField.helperText = it
                     }
                 }
@@ -186,7 +184,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
             emailEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     emailLiveData.value = text.toString()
-                    emailHelperText.observe(this@UserInfoModifyActivity){
+                    emailHelperText.observe(this@UserInfoModifyActivity) {
                         emailTextField.helperText = it
                     }
                 }
