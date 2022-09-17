@@ -38,7 +38,7 @@ class LocalStorage {
             )
         }
 
-        fun getAccessToken(activity: Context): String?{
+        private fun getAccessToken(activity: Context): String?{
             val accessToken: String?
             activity.apply {
                 accessToken = getSharedPreferences("tokens",Context.MODE_PRIVATE)
@@ -49,7 +49,7 @@ class LocalStorage {
             return accessToken
         }
 
-        fun getRefreshToken(activity: Context): String?{
+        private fun getRefreshToken(activity: Context): String?{
             val refreshToken: String?
             activity.apply {
                 refreshToken = getSharedPreferences("tokens", Context.MODE_PRIVATE)
@@ -73,10 +73,6 @@ class LocalStorage {
                 return false
             }
             return true
-        }
-
-        fun isDarkTheme(context: Context){
-//            context.getSharedPreferences("")
         }
 
     }
