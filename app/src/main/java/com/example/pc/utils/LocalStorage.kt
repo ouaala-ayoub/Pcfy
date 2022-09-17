@@ -33,8 +33,8 @@ class LocalStorage {
 
         fun getTokens(activity: Context): Tokens {
             return Tokens(
-                getAccessToken(activity),
-                getRefreshToken(activity)
+                getRefreshToken(activity),
+                getAccessToken(activity)
             )
         }
 
@@ -60,13 +60,19 @@ class LocalStorage {
             return refreshToken
         }
 
-        fun deleteTokens(activity: Context) {
-            val sharedPrefs = activity.getSharedPreferences("tokens", Context.MODE_PRIVATE)
-            val editor = sharedPrefs.edit()
-            editor
-                .remove(activity.resources.getString(R.string.refresh_token))
-                .remove(activity.resources.getString(R.string.access_token))
-                .apply()
+        fun deleteTokens(activity: Context) : Boolean{
+            try {
+                val sharedPrefs = activity.getSharedPreferences("tokens", Context.MODE_PRIVATE)
+                val editor = sharedPrefs.edit()
+                editor
+                    .remove(activity.resources.getString(R.string.refresh_token))
+                    .remove(activity.resources.getString(R.string.access_token))
+                    .apply()
+            }
+            catch (e: Throwable){
+                return false
+            }
+            return true
         }
 
         fun isDarkTheme(context: Context){

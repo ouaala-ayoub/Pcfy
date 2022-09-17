@@ -12,16 +12,16 @@ import com.example.pc.data.remote.RetrofitService
 import io.github.nefilim.kjwt.*
 import io.github.nefilim.kjwt.ClaimsVerification.expired
 import io.github.nefilim.kjwt.ClaimsVerification.validateClaims
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.*
 
 private const val TAG = "Token"
 
 class Token {
+
     companion object {
 
         private val errorMessage = MutableLiveData<String>()
+        val refreshing = MutableLiveData<Boolean>()
         val newAccessToken = MutableLiveData<String>()
 
         fun accessTokenIsValid(activity: Context): Boolean{
@@ -38,22 +38,24 @@ class Token {
             return isValid
         }
 
-        fun createAccessToken(context: Context): LiveData<String?>? {
+        fun createAccessToken(context: Context): LiveData<String>? {
 
             //to change
+            refreshing.postValue(true)
             val retrofitService = RetrofitService.getInstance()
             val refreshToken = LocalStorage.getRefreshToken(context) ?: return null
 
             retrofitService.getAccessToken(RefreshToken(refreshToken)).enqueue(object: Callback<AccessToken>{
                 override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
-                    Log.i(TAG, "onResponse: ${response.body()?.accessToken}")
+                    Log.i(TAG, "new access token: ${response.body()?.accessToken}")
                     newAccessToken.postValue(response.body()?.accessToken)
+                    refreshing.postValue(false)
                 }
 
                 override fun onFailure(call: Call<AccessToken>, t: Throwable) {
+                    refreshing.postValue(false)
                     Log.e(TAG, "onFailure: ${t.message}")
                 }
-
             })
             return newAccessToken
         }
