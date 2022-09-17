@@ -30,7 +30,6 @@ class AuthModel(private val retrofitService: RetrofitService): ViewModel() {
                     auth.postValue(response.body())
                 }
                 else {
-                    Log.i(TAG, "auth ${response.body()}")
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "error: $error")
                     auth.postValue(null)
@@ -50,7 +49,7 @@ class AuthModel(private val retrofitService: RetrofitService): ViewModel() {
     }
 
     fun isAuth(): Boolean {
-        return auth.value != null
+        return auth.value?.body != null
     }
 
 }
