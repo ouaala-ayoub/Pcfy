@@ -21,6 +21,7 @@ import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityMainBinding
+import com.example.pc.ui.viewmodels.AuthModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -29,8 +30,9 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity(){
 
     private lateinit var bottomNav: BottomNavigationView
-    private lateinit var loginRepository: LoginRepository
     private lateinit var binding: ActivityMainBinding
+    private val retrofitService = RetrofitService.getInstance()
+    private lateinit var authModel: AuthModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +41,9 @@ class MainActivity : AppCompatActivity(){
 
         setContentView(binding.root)
 
-        loginRepository = LoginRepository(
-            RetrofitService.getInstance(),
-            this.applicationContext
+        authModel = AuthModel(
+            retrofitService,
+            LoginRepository(retrofitService, this)
         )
 
         bottomNav = findViewById(R.id.bottom_nav)
@@ -71,15 +73,18 @@ class MainActivity : AppCompatActivity(){
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
 
-        loginRepository.isLoggedIn.observe(this@MainActivity){
-            if(loginRepository.user == null){
-                inflater.inflate(R.menu.logged_out_options_menu, menu)
+        authModel.apply {
+            auth(this@MainActivity)
+            auth.observe(this@MainActivity){
+                if(!isAuth()){
+                    inflater.inflate(R.menu.logged_out_options_menu, menu)
+                }
+                else if (isAuth()){
+                    inflater.inflate(R.menu.logged_in_options_menu, menu)
+                }
             }
-            else {
-                inflater.inflate(R.menu.logged_in_options_menu, menu)
-            }
-
         }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -102,7 +107,7 @@ class MainActivity : AppCompatActivity(){
             }
 
             R.id.logout -> {
-                loginRepository.logout()
+                authModel.logout()
                 reloadActivity()
                 true
             }

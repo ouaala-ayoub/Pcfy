@@ -1,7 +1,7 @@
 package com.example.pc.data.remote
 
-import com.example.pc.data.models.local.Category
 import com.example.pc.data.models.network.*
+import okhttp3.FormBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -21,8 +21,13 @@ interface RetrofitService {
     @GET("announces/{id}")
     fun getAnnonceById(@Path("id") annonceId: String): Call<Annonce>
 
+    @FormUrlEncoded
     @POST("announces")
-    fun addAnnonce(@Body annonceToAdd: RequestBody):Call<IdResponse>
+    fun addAnnonce(
+        @FieldMap annoncesFields: HashMap<String, String>,
+        @Field("pictures") files: RequestBody
+    )
+    :Call<IdResponse>
 
     @GET("users/{id}/announces")
     fun getAnnounces(@Path("id") userId: String): Call<List<Annonce>>
@@ -39,6 +44,9 @@ interface RetrofitService {
 
     @POST("auth/refresh")
     fun getAccessToken(@Body refreshToken: RefreshToken): Call<AccessToken>
+
+    @POST("auth")
+    fun auth(@Body tokens: Tokens): Call<AuthBody?>
 
 
     //users
@@ -68,11 +76,6 @@ interface RetrofitService {
 
     @PUT("announces/{id}")
     fun updateAnnonceInfo(@Path("id") annonceId: String, @Body newAnnonce: Annonce): Call<Annonce>
-
-    @GET
-    fun search(): Call<List<Annonce>>
-    //add more
-    // to learn
 
 
     companion object {
