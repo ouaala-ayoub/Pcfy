@@ -97,8 +97,11 @@ class CreateAnnonceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
         authModel.apply {
+
+            isTurning.observe(viewLifecycleOwner){
+                binding!!.progressBar.isVisible = it
+            }
 
             auth(requireContext())
             auth.observe(viewLifecycleOwner) {
@@ -110,7 +113,7 @@ class CreateAnnonceFragment : Fragment() {
                     currentUser = LoggedInUser(payload.id, payload.name)
                     Log.i(TAG, "user id: $currentUser")
 
-
+                    showForm()
                     setTheStatueEditTextView()
                     setTheCategoriesEditText()
                     validateTheData()
@@ -123,19 +126,6 @@ class CreateAnnonceFragment : Fragment() {
                                 requireContext(),
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
-                                        var imagesList = mutableListOf<String>()
-
-                                        if (imagesUris.isNotEmpty()) {
-                                            imagesList = uploadImages(imagesUris)
-                                        }
-
-                                        val filePath = imagesUris[0].path
-                                        val file = filePath?.let { it1 -> File(it1) }
-                                        Log.i(TAG, "file Path : $file")
-
-                                        val reqBody =
-                                            filePath!!.toRequestBody("image/*".toMediaTypeOrNull())
-                                        Log.i(TAG, "reqBody: $reqBody")
 
                                         val annonceToAdd = HashMap<String, String>()
 
@@ -182,41 +172,48 @@ class CreateAnnonceFragment : Fragment() {
                                 title = getString(R.string.confirm_annonce_title),
                                 message = getString(R.string.confirm_annonce_message)
                             ).show()
-
-                        }
-                        imageSelection.setOnClickListener {
-                            setTheUploadImage()
                         }
                     }
 
                 } else {
                     Log.i(TAG, "user not connected auth body $it")
-
-                    binding!!.apply {
-                        createAnnonceForm.apply {
-                            isActivated = false
-                            isVisible = false
-                        }
-
-                        addButton.apply {
-                            isVisible = false
-                            isActivated = false
-                        }
-
-                        noUserConnected.isVisible = true
-                        loginFromUserInfo.apply {
-                            isVisible = true
-                            setOnClickListener {
-                                goToLoginActivity()
-                            }
-                        }
-                    }
+                    showNoUserConnected()
                 }
 
             }
 
         }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun showForm(){
+        binding!!.apply {
+            createAnnonceForm.apply {
+                isActivated = true
+                isVisible = true
+            }
+
+            addButton.apply {
+                isVisible = true
+                isActivated = true
+            }
+            imageSelection.setOnClickListener {
+                setTheUploadImage()
+            }
+        }
+
+    }
+
+    private fun showNoUserConnected(){
+        binding!!.apply {
+            noUserConnected.isVisible = true
+            loginFromUserInfo.apply {
+                isVisible = true
+                setOnClickListener {
+                    goToLoginActivity()
+                }
+            }
+        }
     }
 
     private fun setTheStatueEditTextView() {
@@ -259,11 +256,6 @@ class CreateAnnonceFragment : Fragment() {
         else binding!!.imageNames.text = "$quantity Images Selectionnées "
     }
 
-    private fun uploadImages(uriList: List<Uri>): MutableList<String> {
-
-        //to implement
-        return mutableListOf()
-    }
 
     private fun getImagesUris(clipData: ClipData): List<Uri> {
         val imagesList = mutableListOf<Uri>()

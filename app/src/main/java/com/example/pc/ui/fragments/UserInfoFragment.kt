@@ -66,7 +66,15 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         authModel.apply {
             auth(requireContext())
             auth.observe(viewLifecycleOwner) {
+
+                isTurning.observe(viewLifecycleOwner){
+                    binding!!.userInfoProgressbar.isVisible = it
+                }
+
                 if (isAuth()) {
+
+                    showForm()
+
                     userInfoModel.apply {
                         binding!!.apply {
 
@@ -78,10 +86,12 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                             userRetrieved.observe(viewLifecycleOwner) { user ->
                                 if (user != null) {
                                     userName.text = user.name
-                                    userType.text = requireContext().getString(
-                                        R.string.user_type,
-                                        user.userType
-                                    )
+                                    if (!user.userType.isNullOrBlank()) {
+                                        userType.text = requireContext().getString(
+                                            R.string.user_type,
+                                            user.userType
+                                        )
+                                    }
 
                                     Log.i(TAG, "image : ${user.imageUrl}")
 
@@ -123,26 +133,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                     }
                 } else if (!isAuth()) {
                     //user is not authenticated do this
-                    binding!!.apply {
-                        userInfoAppBar.apply {
-                            isVisible = false
-                            isActivated = false
-                        }
-                        scrollView.apply {
-                            isActivated = false
-                            isVisible = false
-                        }
-                        userInfoProgressbar.apply {
-                            isActivated = false
-                            isVisible = false
-                        }
-                        disconnected.apply {
-                            isVisible = true
-                            loginFromUserInfo.setOnClickListener {
-                                goToLoginActivity()
-                            }
-                        }
-                    }
+                    showNoUser()
                 }
             }
         }
@@ -181,6 +172,30 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
             R.id.logout -> {
                 authModel.logout()
                 reloadActivity()
+            }
+        }
+    }
+
+    private fun showForm() {
+        binding!!.apply {
+            userInfoAppBar.apply {
+                isVisible = true
+                isActivated = true
+            }
+            scrollView.apply {
+                isActivated = true
+                isVisible = true
+            }
+        }
+    }
+
+    private fun showNoUser() {
+        binding!!.apply {
+            disconnected.apply {
+                isVisible = true
+                loginFromUserInfo.setOnClickListener {
+                    goToLoginActivity()
+                }
             }
         }
     }

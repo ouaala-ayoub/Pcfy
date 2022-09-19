@@ -22,8 +22,12 @@ class AuthModel(
 ) : ViewModel() {
 
     val auth = MutableLiveData<AuthBody?>()
+    val isTurning = MutableLiveData<Boolean>()
 
     fun auth(context: Context) {
+
+        isTurning.postValue(true)
+
         val tokens = LocalStorage.getTokens(context)
         Log.i(TAG, "auth tokens: $tokens")
         retrofitService.auth(tokens).enqueue(object : Callback<AuthBody?> {
@@ -41,11 +45,13 @@ class AuthModel(
                     Log.e(TAG, "error: $error")
                     auth.postValue(null)
                 }
+                isTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<AuthBody?>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message}")
                 auth.postValue(null)
+                isTurning.postValue(false)
             }
 
         })
