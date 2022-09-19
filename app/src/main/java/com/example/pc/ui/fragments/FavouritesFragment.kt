@@ -9,22 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pc.R
-import com.example.pc.data.models.network.AuthBody
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.FavouritesRepository
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentFavouritesBinding
-import com.example.pc.databinding.NoUserConnectedBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.FavouritesModel
-import com.example.pc.utils.Token
 import com.example.pc.utils.toast
 
 private const val FAVOURITE_DELETED_SUCCESS = "suprimée des favories avec succes"
@@ -46,9 +40,7 @@ class FavouritesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         authModel = AuthModel(retrofitService, null)
-
     }
 
     override fun onCreateView(

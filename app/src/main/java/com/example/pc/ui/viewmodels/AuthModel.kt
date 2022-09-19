@@ -2,7 +2,6 @@ package com.example.pc.ui.viewmodels
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.AuthBody
@@ -61,7 +60,7 @@ class AuthModel(
         return auth.value?.body != null
     }
 
-    fun logout(){
+    fun logout() {
         loginRepository?.logout()
     }
 

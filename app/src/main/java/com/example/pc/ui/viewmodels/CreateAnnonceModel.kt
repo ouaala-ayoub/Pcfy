@@ -63,7 +63,6 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     fun addAnnonce(
         userId: String,
         annonceToAdd: HashMap<String, String>,
-//        files: RequestBody
     ): LiveData<Boolean>{
 
         isTurning.postValue(true)

@@ -164,7 +164,6 @@ class CreateAnnonceFragment : Fragment() {
                                             addAnnonce(
                                                 currentUser.userId,
                                                 annonceToAdd,
-//                                                reqBody
                                             ).observe(viewLifecycleOwner) { requestSuccess ->
                                                 isTurning.observe(viewLifecycleOwner) { isVisible ->
                                                     progressBar.isVisible = isVisible

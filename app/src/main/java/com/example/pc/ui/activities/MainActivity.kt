@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         authModel.apply {
             auth.observe(this@MainActivity) {
                 if (isAuth()) {
-                    Log.i(TAG, "onCreateOptionsMenu: logged_out")
+                    Log.i(TAG, "onCreateOptionsMenu: logged_in")
                     inflater.inflate(R.menu.logged_in_options_menu, menu)
                     return@observe
                 } else {

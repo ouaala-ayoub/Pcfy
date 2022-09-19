@@ -14,7 +14,6 @@ class CreateAnnonceRepository(private val retrofitService: RetrofitService) {
     //add calls
     fun addAnnonce(
         annonceFields: HashMap<String, String>,
-//        images: RequestBody
     ): Call<IdResponse> = retrofitService.addAnnonce(annonceFields)
 
     fun addAnnonceIdToUser(
