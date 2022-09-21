@@ -47,7 +47,16 @@ class AnnoncesAdapter(
                     }
 
                     annonceTitle.text = annonce.title
-                    annoncePrice.text = "${annonce.price} Dh"
+
+                    val sellerName = annonce.seller?.userName
+                    if(sellerName != null){
+                        annonceSeller.text = sellerName
+                    }
+
+                    annoncePrice.text = binding.root.resources.getString(
+                        R.string.price,
+                        annonce.price.toString()
+                    )
 
                     binding.annonce.setOnClickListener {
                         annonceClickListener.onAnnonceClick(annonce.id!!)

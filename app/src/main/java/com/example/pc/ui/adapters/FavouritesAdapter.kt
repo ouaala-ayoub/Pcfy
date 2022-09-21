@@ -1,5 +1,6 @@
 package com.example.pc.ui.adapters
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,21 +15,22 @@ private const val TAG = "FavouritesAdapter"
 
 class FavouritesAdapter(
     private val onFavouriteClickListener: OnFavouriteClickListener,
-): RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
+) : RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
 
-    interface OnFavouriteClickListener{
+    interface OnFavouriteClickListener {
         fun onFavouriteClicked(annonceId: String)
         fun onDeleteClickListener(annonceId: String)
     }
+
     private var favouritesList = mutableListOf<Annonce>()
 
-    fun setList(list: List<Annonce>){
+    fun setList(list: List<Annonce>) {
         favouritesList = list.toMutableList()
         notifyDataSetChanged()
     }
 
-    inner class FavouriteHolder(private val binding: SingleFavouriteBinding): RecyclerView.ViewHolder(binding.root){
-
+    inner class FavouriteHolder(private val binding: SingleFavouriteBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(position: Int) {
 
@@ -41,18 +43,20 @@ class FavouritesAdapter(
             binding.apply {
                 favouriteTitle.text = favourite.title
 
+                val sellerName = favourite.seller!!.userName
 
-//                seller name
-//                val sellerName = viewModel.getTheSellerName(favourite.sellerId)
-//                favouriteSeller.text = sellerName
+                favouriteSeller.text = sellerName
 
-                favouritePrice.text = favourite.price.toString()
+
+                favouritePrice.text = binding.root.resources.getString(
+                    R.string.price,
+                    favourite.price.toString()
+                )
 
                 //including the image
-                if (favourite.pictures.isEmpty()){
+                if (favourite.pictures.isEmpty()) {
                     favouriteImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
-                }
-                else {
+                } else {
                     picasso
                         .load(favourite.pictures[0])
                         .fit()

@@ -48,7 +48,8 @@
             android:gravity="center|start"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textSize="20sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             tools:text="Title" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -60,7 +61,7 @@
             android:gravity="center|start"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textSize="20sp"
+            android:textSize="15sp"
             tools:text="Seller" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -72,8 +73,8 @@
             android:gravity="center|start"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:textColor="@color/orange_button"
+            android:textSize="15sp"
             tools:text="3000dh" />
 
     </LinearLayout>

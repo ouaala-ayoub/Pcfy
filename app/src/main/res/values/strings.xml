@@ -19,7 +19,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="cree_un_compte">S\'inscrire</string>
     <string name="pas_de_compte">Pas un membre ?</string>
-    <string name="price"> %1$d Dh </string>
+    <string name="price"> %1$s Dh </string>
     <string name="description">Description</string>
     <string name="status"> status %1$s </string>
     <string name="supprimer">supprimer</string>
