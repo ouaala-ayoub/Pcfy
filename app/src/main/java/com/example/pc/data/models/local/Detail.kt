@@ -1,6 +1,6 @@
 package com.example.pc.data.models.local
 
 data class Detail(
-    val title: String,
-    val body: String
+    var title: String,
+    var body: String
 )

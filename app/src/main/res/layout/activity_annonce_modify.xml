@@ -57,7 +57,8 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/addDetails"
+                android:textAllCaps="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/ajouter_des_details"
@@ -192,8 +193,6 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
 
     <ProgressBar
         android:id="@+id/annonce_modify_progress_bar"

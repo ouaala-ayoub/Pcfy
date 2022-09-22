@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -30,12 +31,14 @@ fun makeDialog(
     context: Context,
     onDialogClicked: OnDialogClicked,
     title: String,
-    message: String
+    message: String,
+    view: View? = null
 ): AlertDialog {
     val myDialog = AlertDialog
         .Builder(context)
         .setTitle(title)
         .setMessage(message)
+        .setView(view)
         .setCancelable(false)
         .setPositiveButton(context.resources.getString(R.string.Oui)) { _, _ ->
             onDialogClicked.onPositiveButtonClicked()
@@ -66,9 +69,6 @@ fun getError(responseBody: ResponseBody, code: Int): Error? {
 }
 
 fun getTheErrorMessage(error: Error){
-    if (error.code == 404){
-        error.message = ERROR404
-    }
     when(error.code){
         404 -> error.message = ERROR404
         500 -> error.message = ERROR500

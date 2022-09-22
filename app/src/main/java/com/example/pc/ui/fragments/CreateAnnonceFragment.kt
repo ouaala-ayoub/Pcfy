@@ -36,8 +36,6 @@ import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.*
-
 
 private const val TAG = "CreateAnnonceFragment"
 private const val ERROR_MSG = "Erreur l'annonce n'est pas ajoutée"
@@ -235,7 +233,6 @@ class CreateAnnonceFragment : Fragment() {
     private fun setTheCategoriesEditText() {
         binding!!.categoryTextField.editText?.setText(CategoryEnum.GAMER.title)
 
-        //to change !!!!!!!!!!!!
         //set the adapter
         val values = CategoryEnum.values().map { category ->
             category.title

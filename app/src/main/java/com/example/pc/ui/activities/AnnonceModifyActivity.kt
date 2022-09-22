@@ -8,17 +8,20 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
-import com.example.pc.data.models.local.LoggedInUser
+import com.example.pc.data.models.local.Detail
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceModifyRepository
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityAnnonceModifyBinding
+import com.example.pc.databinding.AddDetailBinding
+import com.example.pc.ui.adapters.AddDetailsAdapter
 import com.example.pc.ui.viewmodels.AnnonceModifyModel
-import com.example.pc.ui.viewmodels.AuthModel
+import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
@@ -60,11 +63,44 @@ class AnnonceModifyActivity : AppCompatActivity() {
 
                     else {
 
+                        var newDetailsList = annonce.details
                         Log.i(TAG, "annonce retrieved : $annonce")
 
                         // on annonce retrieved success
 
                         //to add image adding and deleting
+
+                        addDetails.setOnClickListener {
+                            // open the dialog
+                            val detailsViewBinding = AddDetailBinding.inflate(layoutInflater)
+                            val details = annonce.details ?: listOf()
+                            val detailsAddAdapter = AddDetailsAdapter(
+                                details as MutableList<Detail>
+                            )
+
+                            detailsViewBinding.apply {
+                                addDetailsRv.adapter = detailsAddAdapter
+                                addDetailsRv.layoutManager = LinearLayoutManager(this@AnnonceModifyActivity)
+                            }
+
+                            makeDialog(
+                                this@AnnonceModifyActivity,
+                                object: OnDialogClicked{
+                                    override fun onPositiveButtonClicked() {
+                                        newDetailsList = detailsAddAdapter.detailsList
+                                        Log.i(TAG, "newDetailsList: $newDetailsList")
+                                    }
+
+                                    override fun onNegativeButtonClicked() {
+                                        Log.i(TAG, "onNegativeButtonClicked: clicked")
+                                    }
+                                },
+                                "Ajouter des details",
+                                "",
+                                detailsViewBinding.root
+                            ).show()
+
+                        }
 
                         titleEditText.setText(annonce.title)
                         priceEditText.setText(annonce.price.toString())
@@ -83,6 +119,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                 status = statusEditText.text.toString(),
                                 mark = markEditText.text.toString(),
                                 description = descriptionEditText.text.toString(),
+                                details = newDetailsList
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
                                 .observe(this@AnnonceModifyActivity){ annonceModified ->
