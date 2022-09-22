@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
+import com.example.pc.data.models.local.Detail
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceRepository
 import com.example.pc.databinding.FragmentAnnonceBinding
@@ -88,15 +89,21 @@ class AnnonceFragment : Fragment() {
                             productStatus.text = getString(R.string.status, annonce.status)
 
                             val details = annonce.details
-                            if (!details.isNullOrEmpty()){
+                            if (!details.isNullOrEmpty()) {
                                 //setting the details recycler view
-                                detailsAdapter = DetailsAdapter(annonce.details)
-                                detailsRv.adapter = detailsAdapter
-                                detailsRv.layoutManager = LinearLayoutManager(requireContext())
+                                detailsAdapter = DetailsAdapter(
+                                    annonce.details
+                                )
+                                detailsRv.apply {
+                                    adapter = detailsAdapter
+                                    isNestedScrollingEnabled = false
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(requireContext())
+                                }
                             }
 
                             //the seller field
-                            seller.observe(viewLifecycleOwner){ seller ->
+                            seller.observe(viewLifecycleOwner) { seller ->
                                 sellerName.text = seller.name
 //                                picasso
 //                                    .load(seller.imageUrl)
@@ -107,8 +114,8 @@ class AnnonceFragment : Fragment() {
 
                             productDescription.text = annonce.description
 
-                        }catch (e: Throwable){
-                            Log.e(TAG, "binding error : ${e.message}" )
+                        } catch (e: Throwable) {
+                            Log.e(TAG, "binding error : ${e.message}")
                         }
                         //get the sellers name
                     } else {
@@ -118,7 +125,7 @@ class AnnonceFragment : Fragment() {
                     }
 
                     addToFav.setOnClickListener {
-                        if (annonce != null){
+                        if (annonce != null) {
 
                             authModel = AuthModel(
                                 retrofitService,
@@ -128,26 +135,23 @@ class AnnonceFragment : Fragment() {
                             authModel.auth(requireContext())
 
                             authModel.apply {
-                                auth.observe(viewLifecycleOwner){
+                                auth.observe(viewLifecycleOwner) {
 
                                     if (isAuth()) {
                                         userId = getPayload()!!.id
                                         addToFavourites(userId, annonce)
-                                        addedFavouriteToUser.observe(viewLifecycleOwner){
+                                        addedFavouriteToUser.observe(viewLifecycleOwner) {
                                             if (it)
                                                 doOnSuccess()
                                             else
                                                 doOnFail()
                                         }
-                                    }
-
-                                    else {
+                                    } else {
                                         goToLoginActivity()
                                     }
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             //consider Fail
                             doOnFail()
                         }
@@ -191,7 +195,7 @@ class AnnonceFragment : Fragment() {
         requireContext().toast(SUCCESS_TEXT, Toast.LENGTH_SHORT)
     }
 
-    private fun goToMainActivity(){
+    private fun goToMainActivity() {
         val activity = requireActivity() as AnnonceActivity
         activity.finish()
     }
