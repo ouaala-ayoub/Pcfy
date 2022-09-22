@@ -38,15 +38,15 @@ class HomeFragment : Fragment() {
 
         super.onCreate(savedInstanceState)
 
-        categoriesList = CategoryEnum.values().map {
-                category -> category.title
-        }.map {
-                categoryTitle -> Category( categoryTitle)
+        categoriesList = CategoryEnum.values().map { category ->
+            category.title
+        }.map { categoryTitle ->
+            Category(categoryTitle)
         }
 
         viewModel = HomeModel(HomeRepository(retrofitService))
 
-        adapter = AnnoncesAdapter(object: AnnoncesAdapter.OnAnnonceClickListener{
+        adapter = AnnoncesAdapter(object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
                 goToAnnonceActivity(annonceId)
             }
@@ -62,14 +62,13 @@ class HomeFragment : Fragment() {
 
         val categoryAdapter = CategoryAdapter(
             categoriesList,
-            object: CategoryAdapter.OnCategoryClickedListener {
+            object : CategoryAdapter.OnCategoryClickedListener {
                 override fun onCategoryClicked(title: String) {
-                    if (title == CategoryEnum.ALL.title){
+                    if (title == CategoryEnum.ALL.title) {
                         viewModel.apply {
                             getAnnoncesListAll()
                         }
-                    }
-                    else {
+                    } else {
                         viewModel.apply {
                             getAnnoncesByCategory(title)
                         }
@@ -91,7 +90,7 @@ class HomeFragment : Fragment() {
 
         viewModel.apply {
             getAnnoncesListAll()
-            annoncesList.observe(viewLifecycleOwner){ annonces ->
+            annoncesList.observe(viewLifecycleOwner) { annonces ->
 
                 if (annonces != null)
                     adapter.setAnnoncesList(annonces)
@@ -104,7 +103,7 @@ class HomeFragment : Fragment() {
 
             }
 
-            isProgressBarTurning.observe(viewLifecycleOwner){
+            isProgressBarTurning.observe(viewLifecycleOwner) {
                 binding!!.homeProgressBar.isVisible = it
             }
 
@@ -112,7 +111,7 @@ class HomeFragment : Fragment() {
         return binding?.root
     }
 
-    private fun goToAnnonceActivity(annonceId: String){
+    private fun goToAnnonceActivity(annonceId: String) {
         val intent = Intent(activity, AnnonceActivity::class.java)
         intent.putExtra("id", annonceId)
         startActivity(intent)

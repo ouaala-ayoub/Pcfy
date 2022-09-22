@@ -25,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         Log.i(TAG, "current theme: $isNightTheme")
 
         when (isNightTheme) {
-            false ->{
+            false -> {
                 supportActionBar?.setBackgroundDrawable(
                     ColorDrawable(
                         ContextCompat.getColor(this, R.color.white_darker)
@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
                 )
             }
 
-            true ->{
+            true -> {
                 supportActionBar?.setBackgroundDrawable(
                     ColorDrawable(
                         ContextCompat.getColor(this, R.color.even_darker_grey)
@@ -69,7 +69,7 @@ class SettingsActivity : AppCompatActivity() {
 
                 Log.i(TAG, "onCreatePreferences: dark mode is checked $isChecked")
 
-                when(isChecked){
+                when (isChecked) {
                     true -> {
                         Log.i(TAG, "onCreatePreferences: switching to dark mode")
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

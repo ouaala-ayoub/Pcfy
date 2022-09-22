@@ -42,7 +42,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
         //hiding the action bar
         supportActionBar?.hide()
 
-        binding =   ActivityAnnonceModifyBinding.inflate(layoutInflater)
+        binding = ActivityAnnonceModifyBinding.inflate(layoutInflater)
         viewModel = AnnonceModifyModel(AnnonceModifyRepository(retrofitService))
         annonceToModifyId = intent.getStringExtra("id")!!
 
@@ -50,18 +50,16 @@ class AnnonceModifyActivity : AppCompatActivity() {
 
         binding.apply {
             viewModel.apply {
-                getAnnonce(annonceToModifyId).observe(this@AnnonceModifyActivity){ annonce ->
+                getAnnonce(annonceToModifyId).observe(this@AnnonceModifyActivity) { annonce ->
 
                     isTurning.observe(this@AnnonceModifyActivity) {
                         annonceModifyProgressBar.isVisible = it
                     }
 
-                   // on annonce retrieved fail
+                    // on annonce retrieved fail
                     if (annonce == null) {
                         doOnFail(ERROR_GET_ANNONCE)
-                    }
-
-                    else {
+                    } else {
 
                         var newDetailsList = annonce.details
                         Log.i(TAG, "annonce retrieved : $annonce")
@@ -80,12 +78,13 @@ class AnnonceModifyActivity : AppCompatActivity() {
 
                             detailsViewBinding.apply {
                                 addDetailsRv.adapter = detailsAddAdapter
-                                addDetailsRv.layoutManager = LinearLayoutManager(this@AnnonceModifyActivity)
+                                addDetailsRv.layoutManager =
+                                    LinearLayoutManager(this@AnnonceModifyActivity)
                             }
 
                             makeDialog(
                                 this@AnnonceModifyActivity,
-                                object: OnDialogClicked{
+                                object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
                                         newDetailsList = detailsAddAdapter.detailsList
                                         Log.i(TAG, "newDetailsList: $newDetailsList")
@@ -122,15 +121,14 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                 details = newDetailsList
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
-                                .observe(this@AnnonceModifyActivity){ annonceModified ->
+                                .observe(this@AnnonceModifyActivity) { annonceModified ->
                                     //on annonce modification fail
-                                    if (!annonceModified){
+                                    if (!annonceModified) {
                                         doOnFail(ERROR_SET_ANNONCE)
-                                    }
-                                    else {
+                                    } else {
                                         doOnSuccess(SUCCESS_SET_ANNONCE)
                                     }
-                            }
+                                }
                         }
                     }
                 }
@@ -140,34 +138,34 @@ class AnnonceModifyActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    private fun setTheStatueEditTextView(default: String){
+    private fun setTheStatueEditTextView(default: String) {
         //default is the annonce attribute value
         binding.statusTextField.editText?.setText(default)
 
         //set the adapter
-        val values = Status.values().map {
-            it -> it.status
+        val values = Status.values().map { it ->
+            it.status
         }
 
         val adapter = ArrayAdapter(this, R.layout.list_item, values)
         (binding.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
     }
 
-    private fun setTheCategoriesEditText(default: String){
+    private fun setTheCategoriesEditText(default: String) {
 
         //default is the annonce attribute value
         binding.categoryTextField.editText?.setText(default)
 
         //set the adapter
-        val values = CategoryEnum.values().map {
-                category -> category.title
+        val values = CategoryEnum.values().map { category ->
+            category.title
         }
 
         val adapter = ArrayAdapter(this, R.layout.list_item, values)
         (binding.categoryTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
     }
 
-    private fun validateTheData(){
+    private fun validateTheData() {
 
         //by default the button is disabled
         binding.apply {
@@ -188,7 +186,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
                 viewModel.priceLiveData.value = text.toString()
             }
 
-            viewModel.isValidInput.observe(this@AnnonceModifyActivity){ isActive ->
+            viewModel.isValidInput.observe(this@AnnonceModifyActivity) { isActive ->
                 binding.submitChanges.isEnabled = isActive
             }
         }
@@ -204,10 +202,10 @@ class AnnonceModifyActivity : AppCompatActivity() {
         geToMainActivity()
     }
 
-   private fun doOnSuccess(message: String){
-       this.toast(message, Toast.LENGTH_SHORT)
-       goToAnnoncesActivity()
-   }
+    private fun doOnSuccess(message: String) {
+        this.toast(message, Toast.LENGTH_SHORT)
+        goToAnnoncesActivity()
+    }
 
     private fun goToAnnoncesActivity() {
         finish()

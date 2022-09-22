@@ -14,31 +14,31 @@ private const val TAG = "AnnoncesAdapter"
 
 class AnnoncesAdapter(
     private val annonceClickListener: OnAnnonceClickListener
-): RecyclerView.Adapter<AnnoncesAdapter.AnnonceHolder>() {
+) : RecyclerView.Adapter<AnnoncesAdapter.AnnonceHolder>() {
 
     interface OnAnnonceClickListener {
         fun onAnnonceClick(annonceId: String)
     }
+
     private var annoncesList = listOf<Annonce>()
 
-    fun setAnnoncesList(annonceToSet: List<Annonce>){
+    fun setAnnoncesList(annonceToSet: List<Annonce>) {
         annoncesList = annonceToSet
         notifyDataSetChanged()
     }
 
-    inner class AnnonceHolder(private val binding: SingleAnnonceBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(position: Int){
+    inner class AnnonceHolder(private val binding: SingleAnnonceBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
             val annonce = annoncesList[position]
             binding.apply {
 
                 try {
 
-                    if (annonce.pictures.isEmpty()){
+                    if (annonce.pictures.isEmpty()) {
                         annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
-                    }
-
-                    else {
-                        if (annonce.pictures[0].isNotBlank()){
+                    } else {
+                        if (annonce.pictures[0].isNotBlank()) {
                             Picasso
                                 .get()
                                 .load(annonce.pictures[0])
@@ -49,7 +49,7 @@ class AnnoncesAdapter(
                     annonceTitle.text = annonce.title
 
                     val sellerName = annonce.seller?.userName
-                    if(sellerName != null){
+                    if (sellerName != null) {
                         annonceSeller.text = sellerName
                     }
 
@@ -61,8 +61,7 @@ class AnnoncesAdapter(
                     binding.annonce.setOnClickListener {
                         annonceClickListener.onAnnonceClick(annonce.id!!)
                     }
-                }
-                catch (e: Throwable){
+                } catch (e: Throwable) {
                     Log.e(TAG, "bind: $annonce error ${e.message}")
                 }
 

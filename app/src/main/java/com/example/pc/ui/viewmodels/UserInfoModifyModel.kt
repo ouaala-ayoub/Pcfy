@@ -15,7 +15,7 @@ import retrofit2.Response
 
 private const val TAG = "UserInfoModifyModel"
 
-class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): ViewModel() {
+class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository) : ViewModel() {
 
     private val oldUser = MutableLiveData<User>()
     private val updatedUser = MutableLiveData<Boolean>()
@@ -30,21 +30,21 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
     val emailLiveData = MutableLiveData<String>()
     val emailHelperText = MutableLiveData<String>()
     val isValidInput = MediatorLiveData<Boolean>().apply {
-        addSource(nameLiveData){ name ->
+        addSource(nameLiveData) { name ->
             this.value = validateTheData(
                 name,
                 phoneLiveData.value,
                 emailLiveData.value,
             )
         }
-        addSource(phoneLiveData){ phone ->
+        addSource(phoneLiveData) { phone ->
             this.value = validateTheData(
                 nameLiveData.value,
                 phone,
                 emailLiveData.value,
             )
         }
-        addSource(emailLiveData){ email ->
+        addSource(emailLiveData) { email ->
             this.value = validateTheData(
                 nameLiveData.value,
                 phoneLiveData.value,
@@ -57,7 +57,7 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
         name: String?,
         phone: String?,
         email: String?,
-    ): Boolean{
+    ): Boolean {
         val isValidName = !name.isNullOrBlank()
         val isValidPhone = phone?.length == 10 && phone.matches(".*[0-9].*".toRegex())
 
@@ -67,22 +67,22 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
                 email
             ).matches()
 
-        if (!isValidName){
+        if (!isValidName) {
             nameHelperText.value = "Entrez un nom"
-        }else nameHelperText.value = ""
+        } else nameHelperText.value = ""
 
-        if(!isValidPhone){
+        if (!isValidPhone) {
             phoneHelperText.value = "Doit etre composé de 10 chiffres"
-        }else phoneHelperText.value = ""
+        } else phoneHelperText.value = ""
 
         if (!isValidEmail) {
             emailHelperText.value = "Email Invalide"
-        }else emailHelperText.value = ""
+        } else emailHelperText.value = ""
 
         return isValidName && isValidPhone && isValidEmail
     }
 
-    fun initialiseLiveData(name: String, phone: String, email: String){
+    fun initialiseLiveData(name: String, phone: String, email: String) {
         nameLiveData.value = name
         phoneLiveData.value = phone
         emailLiveData.value = email
@@ -92,13 +92,12 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
 
         isTurning.postValue(true)
 
-        userInfoRepository.updateUserInfo(userId, newUser).enqueue(object: Callback<User> {
+        userInfoRepository.updateUserInfo(userId, newUser).enqueue(object : Callback<User> {
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     updatedUser.postValue(true)
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse error code : ${error?.message}")
                     updatedUser.postValue(false)
@@ -121,13 +120,12 @@ class UserInfoModifyModel(private val userInfoRepository: UserInfoRepository): V
 
         isTurning.postValue(true)
 
-        userInfoRepository.getUserById(userId).enqueue(object: Callback<User>{
+        userInfoRepository.getUserById(userId).enqueue(object : Callback<User> {
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     oldUser.postValue(response.body())
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "error body : $error")
                 }

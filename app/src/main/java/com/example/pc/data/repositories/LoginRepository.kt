@@ -9,13 +9,13 @@ import retrofit2.Call
 
 private const val TAG = "LoginRepository"
 
-class LoginRepository(private val retrofitService: RetrofitService,private val activity: Context) {
+class LoginRepository(private val retrofitService: RetrofitService, private val activity: Context) {
 
     fun logout() {
         LocalStorage.deleteTokens(activity)
     }
 
-    fun setCurrentTokens(token: Tokens){
+    fun setCurrentTokens(token: Tokens) {
         LocalStorage.storeTokens(activity, token)
     }
 

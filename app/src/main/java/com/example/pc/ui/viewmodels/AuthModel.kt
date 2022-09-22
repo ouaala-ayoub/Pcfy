@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pc.data.models.network.AuthBody
 import com.example.pc.data.models.network.BodyX
 import com.example.pc.data.models.network.Payload
 import com.example.pc.data.remote.RetrofitService

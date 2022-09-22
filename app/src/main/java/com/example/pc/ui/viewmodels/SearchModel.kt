@@ -15,28 +15,27 @@ private const val TAG = "SearchModel"
 private const val EMPTY_MSG = "Pas de resultats trouvés"
 private const val ERROR_MSG = "Erreur inattendue"
 
-class SearchModel(private val searchRepository: SearchRepository) : ViewModel(){
+class SearchModel(private val searchRepository: SearchRepository) : ViewModel() {
 
     val searchResult = MutableLiveData<List<Annonce>?>()
     val searchMessage = MutableLiveData<String>()
     val isTurning = MutableLiveData<Boolean>()
 
-    fun search(searchKey: String?){
+    fun search(searchKey: String?) {
 
-        if(searchKey.isNullOrBlank()){
+        if (searchKey.isNullOrBlank()) {
             searchResult.postValue(listOf())
             return
         }
 
         isTurning.postValue(true)
 
-        searchRepository.getSearchResult(searchKey).enqueue(object: Callback<List<Annonce>>{
+        searchRepository.getSearchResult(searchKey).enqueue(object : Callback<List<Annonce>> {
 
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     searchResult.postValue(response.body())
-                }
-                else {
+                } else {
                     searchResult.postValue(null)
                 }
                 isTurning.postValue(false)
@@ -52,13 +51,11 @@ class SearchModel(private val searchRepository: SearchRepository) : ViewModel(){
 
     fun updateSearchMessage() {
 
-        if (searchResult.value?.isEmpty() == true){
+        if (searchResult.value?.isEmpty() == true) {
             searchMessage.postValue(EMPTY_MSG)
-        }
-        else if (searchResult.value == null){
+        } else if (searchResult.value == null) {
             searchMessage.postValue(ERROR_MSG)
-        }
-        else {
+        } else {
             searchMessage.postValue("")
         }
 

@@ -22,7 +22,8 @@ import retrofit2.await
 
 private const val TAG = "CreateAnnonceModel"
 
-class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepository): ViewModel() {
+class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepository) :
+    ViewModel() {
 
     private val errorMessage = MutableLiveData<String>()
     private val requestSuccessful = MutableLiveData<Boolean>()
@@ -32,17 +33,17 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     val isTurning = MutableLiveData<Boolean>()
     val isValidInput = MediatorLiveData<Boolean>().apply {
 
-        addSource(titleLiveData){ title ->
+        addSource(titleLiveData) { title ->
             val price = priceLiveData.value
             val images = imagesLiveData.value
             this.value = validateData(title, price, images)
         }
-        addSource(priceLiveData){ price ->
+        addSource(priceLiveData) { price ->
             val title = titleLiveData.value
             val images = imagesLiveData.value
             this.value = validateData(title, price, images)
         }
-        addSource(imagesLiveData){images ->
+        addSource(imagesLiveData) { images ->
             val title = titleLiveData.value
             val price = priceLiveData.value
             this.value = validateData(title, price, images)
@@ -51,9 +52,9 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
 
     //get the user id ??
 
-    private fun validateData(title: String?, price: String?, images: String?): Boolean{
+    private fun validateData(title: String?, price: String?, images: String?): Boolean {
 
-        val isValidTitle =  !title.isNullOrBlank()
+        val isValidTitle = !title.isNullOrBlank()
         val isValidPrice = !price.isNullOrBlank()
         val isValidImagesInput = !images.isNullOrBlank()
 
@@ -63,13 +64,13 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     fun addAnnonce(
         userId: String,
         annonceToAdd: HashMap<String, String>,
-    ): LiveData<Boolean>{
+    ): LiveData<Boolean> {
 
         isTurning.postValue(true)
 
         createAnnonceRepository.addAnnonce(annonceToAdd).enqueue(object : Callback<IdResponse> {
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
 
                     //to ask about the id response
 
@@ -78,7 +79,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
 
                     createAnnonceRepository.getUserById(userId).enqueue(object : Callback<User> {
                         override fun onResponse(call: Call<User>, response: Response<User>) {
-                            if (response.isSuccessful && response.body() != null){
+                            if (response.isSuccessful && response.body() != null) {
 
                                 Log.i(TAG, "user = ${response.body()} ")
 
@@ -90,16 +91,27 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                                     //to change
                                     userId,
                                     annonceReqBody
-                                ).enqueue(object: Callback<User>{
-                                    override fun onResponse(call: Call<User>, response: Response<User>) {
-                                        if (response.isSuccessful && response.body() != null){
+                                ).enqueue(object : Callback<User> {
+                                    override fun onResponse(
+                                        call: Call<User>,
+                                        response: Response<User>
+                                    ) {
+                                        if (response.isSuccessful && response.body() != null) {
                                             isTurning.postValue(false)
                                             requestSuccessful.postValue(true)
-                                        }
-                                        else {
-                                            Log.e(TAG, "response error is addAnnonceIdToUser ${response.errorBody()} ")
-                                            Log.i(TAG, "response message addAnnonceIdToUser ${response.message()} ")
-                                            Log.i(TAG, "response code addAnnonceIdToUser ${response.code()} ")
+                                        } else {
+                                            Log.e(
+                                                TAG,
+                                                "response error is addAnnonceIdToUser ${response.errorBody()} "
+                                            )
+                                            Log.i(
+                                                TAG,
+                                                "response message addAnnonceIdToUser ${response.message()} "
+                                            )
+                                            Log.i(
+                                                TAG,
+                                                "response code addAnnonceIdToUser ${response.code()} "
+                                            )
                                             isTurning.postValue(false)
                                             requestSuccessful.postValue(false)
                                         }
@@ -112,8 +124,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                                         Log.e(TAG, t.message!!)
                                     }
                                 })
-                            }
-                            else{
+                            } else {
                                 val error = getError(response.errorBody()!!, response.code())
                                 Log.e(TAG, "onResponse getUserById: $error")
                                 Log.e(TAG, "response error is getUserById ${response.errorBody()} ")
@@ -132,8 +143,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                             isTurning.postValue(false)
                         }
                     })
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse addAnnonce : $error")
                     Log.e(TAG, "response error is addAnnonce ${response.errorBody()} ")
@@ -144,6 +154,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                     requestSuccessful.postValue(false)
                 }
             }
+
             override fun onFailure(call: Call<IdResponse>, t: Throwable) {
                 Log.e(TAG, "addAnnonce${t.message!!}")
                 errorMessage.postValue(t.message)

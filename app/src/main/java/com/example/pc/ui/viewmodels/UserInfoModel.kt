@@ -15,7 +15,7 @@ private const val TAG = "UserInfoModel"
 
 class UserInfoModel(
     private val userInfoRepository: UserInfoRepository,
-    ) : ViewModel(){
+) : ViewModel() {
 
     val userRetrieved = MutableLiveData<User>()
     val isTurning = MutableLiveData<Boolean>()
@@ -25,14 +25,13 @@ class UserInfoModel(
 
         isTurning.postValue(true)
 
-        userInfoRepository.getUserById(userId).enqueue(object: Callback<User>{
+        userInfoRepository.getUserById(userId).enqueue(object : Callback<User> {
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     userRetrieved.postValue(response.body())
                     isTurning.postValue(false)
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "error body : $error")
                     isTurning.postValue(false)

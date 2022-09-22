@@ -50,14 +50,15 @@ class UserCreateActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                Log.i(TAG, "resultLauncher: ${data?.data}")
-                updateImageText(data?.clipData?.itemCount)
-                imageUri = data?.data
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
+                    Log.i(TAG, "resultLauncher: ${data?.data}")
+                    updateImageText(data?.clipData?.itemCount)
+                    imageUri = data?.data
+                }
             }
-        }
         binding = ActivityUserCreateBinding.inflate(layoutInflater)
 
         super.onCreate(savedInstanceState)
@@ -72,7 +73,7 @@ class UserCreateActivity : AppCompatActivity() {
             nameEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     nameLiveData.value = text.toString()
-                    nameHelperText.observe(this@UserCreateActivity){
+                    nameHelperText.observe(this@UserCreateActivity) {
                         nameTextField.helperText = it
                     }
                 }
@@ -81,7 +82,7 @@ class UserCreateActivity : AppCompatActivity() {
             phoneEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     phoneLiveData.value = text.toString()
-                    phoneHelperText.observe(this@UserCreateActivity){
+                    phoneHelperText.observe(this@UserCreateActivity) {
                         phoneTextField.helperText = it
                     }
                 }
@@ -90,7 +91,7 @@ class UserCreateActivity : AppCompatActivity() {
             emailEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     emailLiveData.value = text.toString()
-                    emailHelperText.observe(this@UserCreateActivity){
+                    emailHelperText.observe(this@UserCreateActivity) {
                         emailTextField.helperText = it
                     }
                 }
@@ -99,7 +100,7 @@ class UserCreateActivity : AppCompatActivity() {
             passwordEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     passwordLiveData.value = text.toString()
-                    passwordHelperText.observe(this@UserCreateActivity){
+                    passwordHelperText.observe(this@UserCreateActivity) {
                         passwordTextField.helperText = it
                     }
                 }
@@ -108,7 +109,7 @@ class UserCreateActivity : AppCompatActivity() {
             retypePasswordEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     retypedPasswordLiveData.value = text.toString()
-                    retypedPasswordHelperText.observe(this@UserCreateActivity){
+                    retypedPasswordHelperText.observe(this@UserCreateActivity) {
                         retypePasswordTextField.helperText = it
                     }
                 }
@@ -127,7 +128,8 @@ class UserCreateActivity : AppCompatActivity() {
 
                             //val imageUrl = uploadImage(imageUri)
                             //to fix
-                            val imageUrl = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+                            val imageUrl =
+                                "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
 
                             viewModel.apply {
                                 val userToAdd = User(
@@ -143,15 +145,18 @@ class UserCreateActivity : AppCompatActivity() {
 
                                 Log.i(TAG, "user to add : $userToAdd")
 
-                                signUp(userToAdd).observe(this@UserCreateActivity){
-                                    if(it.isNullOrBlank()){
+                                signUp(userToAdd).observe(this@UserCreateActivity) {
+                                    if (it.isNullOrBlank()) {
                                         //dialog ?
                                         Log.i(TAG, "return : $it")
                                         this@UserCreateActivity.toast(SGN_FAILED, Toast.LENGTH_LONG)
                                         goToHomeFragment()
-                                    }else {
+                                    } else {
                                         Log.i(TAG, "return : $it")
-                                        this@UserCreateActivity.toast(SGN_SUCCESS, Toast.LENGTH_LONG)
+                                        this@UserCreateActivity.toast(
+                                            SGN_SUCCESS,
+                                            Toast.LENGTH_LONG
+                                        )
                                         goToLoginPage()
                                     }
                                 }
@@ -167,7 +172,7 @@ class UserCreateActivity : AppCompatActivity() {
                 alertDialog!!.show()
             }
 
-            viewModel.isValidInput.observe(this@UserCreateActivity){ isActive ->
+            viewModel.isValidInput.observe(this@UserCreateActivity) { isActive ->
                 Log.i(TAG, "$isActive")
                 binding.signUpButton.isEnabled = isActive
             }
@@ -177,24 +182,24 @@ class UserCreateActivity : AppCompatActivity() {
 
     }
 
-    private fun goToHomeFragment(){
+    private fun goToHomeFragment() {
         finish()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
-    private fun goToLoginPage(){
+    private fun goToLoginPage() {
         finish()
     }
 
-    private fun setUpTheTypeEditText(){
+    private fun setUpTheTypeEditText() {
 
         binding.userTypeTextField.editText?.setText(SellerType.SOLO.type)
 
         //to change !!!!!!!!!!!!??
         //set the adapter
-        val values = SellerType.values().map {
-                sellerType -> sellerType.type
+        val values = SellerType.values().map { sellerType ->
+            sellerType.type
         }
 
         val adapter = ArrayAdapter(this, R.layout.list_item, values)
@@ -206,12 +211,12 @@ class UserCreateActivity : AppCompatActivity() {
         resultLauncher.launch(intent)
     }
 
-    private fun updateImageText(data: Any?){
+    private fun updateImageText(data: Any?) {
         if (data == null) binding.imageName.text = IMAGE_NOT_SELECTED
         else binding.imageName.text = IMAGE_SELECTED
     }
 
-    private fun uploadImage(uri: Uri?): String?{
+    private fun uploadImage(uri: Uri?): String? {
         //to implement
         return if (uri == null) null
         else ""

@@ -28,11 +28,11 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
     val passwordLiveData = MutableLiveData<String>()
     private val errorMessage = MutableLiveData("")
     val isValidLiveData = MediatorLiveData<Boolean>().apply {
-        addSource(userNameLiveData){ username->
+        addSource(userNameLiveData) { username ->
             val password = passwordLiveData.value
             this.value = validateData(username, password)
         }
-        addSource(passwordLiveData){ password->
+        addSource(passwordLiveData) { password ->
             val email = userNameLiveData.value
             this.value = validateData(email, password)
         }
@@ -40,17 +40,17 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
     private fun validateData(email: String?, password: String?): Boolean {
         val isValidEmail = !email.isNullOrBlank() && email.contains("@")
-        val isValidPassword = !password.isNullOrBlank() && password.length>=PASS_MIN_LENGTH
+        val isValidPassword = !password.isNullOrBlank() && password.length >= PASS_MIN_LENGTH
         return isValidEmail && isValidPassword
     }
 
-    fun login(userName: String, password: String, activity: Activity): MutableLiveData<Tokens>{
+    fun login(userName: String, password: String, activity: Activity): MutableLiveData<Tokens> {
 
         isTurning.postValue(true)
 
-        repository.login(userName, password).enqueue(object : Callback<Tokens>{
+        repository.login(userName, password).enqueue(object : Callback<Tokens> {
             override fun onResponse(call: Call<Tokens>, response: Response<Tokens>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse login : ${response.body()}")
                     retrievedTokens.postValue(true)
                     tokens.postValue(response.body())
@@ -59,8 +59,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
                     Log.i(TAG, "current token: ${LocalStorage.getTokens(activity)}")
                     isTurning.postValue(false)
-                }
-                else{
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse test get error message $error")
                     errorMessage.postValue(error?.message)

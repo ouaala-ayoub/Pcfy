@@ -44,10 +44,10 @@ class UserAnnoncesActivity : AppCompatActivity() {
 
         val adapter = FavouritesAdapter(
 
-            object: FavouritesAdapter.OnFavouriteClickListener{
+            object : FavouritesAdapter.OnFavouriteClickListener {
 
                 override fun onFavouriteClicked(annonceId: String) {
-                   goToAnnonceModifyActivity(annonceId)
+                    goToAnnonceModifyActivity(annonceId)
                 }
 
                 override fun onDeleteClickListener(annonceId: String) {
@@ -56,15 +56,19 @@ class UserAnnoncesActivity : AppCompatActivity() {
                         this@UserAnnoncesActivity,
                         object : OnDialogClicked {
                             override fun onPositiveButtonClicked() {
-                                userAnnoncesModel.deleteAnnonce(userId, annonceId).observe(this@UserAnnoncesActivity){deletedWithSuccess ->
-                                    if(deletedWithSuccess) {
-                                        baseContext.toast(ANNONCE_DELETED_SUCCESS, Toast.LENGTH_SHORT)
+                                userAnnoncesModel.deleteAnnonce(userId, annonceId)
+                                    .observe(this@UserAnnoncesActivity) { deletedWithSuccess ->
+                                        if (deletedWithSuccess) {
+                                            baseContext.toast(
+                                                ANNONCE_DELETED_SUCCESS,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                        } else {
+                                            baseContext.toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
+                                        }
                                     }
-                                    else {
-                                        baseContext.toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
-                                    }
-                                }
                             }
+
                             override fun onNegativeButtonClicked() {}
                         },
                         getString(R.string.annonce_delete_dialog_title),
@@ -97,7 +101,7 @@ class UserAnnoncesActivity : AppCompatActivity() {
             annoncesRv.adapter = adapter
             annoncesRv.layoutManager = LinearLayoutManager(this@UserAnnoncesActivity)
 
-            userAnnoncesModel.isTurning.observe(this@UserAnnoncesActivity){
+            userAnnoncesModel.isTurning.observe(this@UserAnnoncesActivity) {
                 userAnnoncesProgressbar.isVisible = it
             }
         }

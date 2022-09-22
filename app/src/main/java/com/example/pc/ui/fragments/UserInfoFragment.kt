@@ -67,7 +67,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
             auth(requireContext())
             auth.observe(viewLifecycleOwner) {
 
-                isTurning.observe(viewLifecycleOwner){
+                isTurning.observe(viewLifecycleOwner) {
                     binding!!.userInfoProgressbar.isVisible = it
                 }
 

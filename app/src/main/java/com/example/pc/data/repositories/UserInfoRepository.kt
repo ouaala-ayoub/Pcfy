@@ -8,6 +8,9 @@ class UserInfoRepository(private val retrofitService: RetrofitService) {
     fun getUserById(userId: String) = retrofitService.getUserById(userId)
     fun getAnnonces(userId: String) = retrofitService.getAnnounces(userId)
     fun deleteAnnonce(annonceId: String) = retrofitService.deleteAnnonce(annonceId)
-    fun updateUserInfo(userId: String, newUser: User) = retrofitService.updateUserInfo(userId, newUser)
-    fun updateAnnonces(userId: String, newAnnonceList: NewAnnonceRequest) = retrofitService.updateAnnonces(userId, newAnnonceList)
+    fun updateUserInfo(userId: String, newUser: User) =
+        retrofitService.updateUserInfo(userId, newUser)
+
+    fun updateAnnonces(userId: String, newAnnonceList: NewAnnonceRequest) =
+        retrofitService.updateAnnonces(userId, newAnnonceList)
 }

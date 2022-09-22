@@ -8,10 +8,11 @@ import com.example.pc.databinding.SingleDetailBinding
 
 class DetailsAdapter(
     private val detailsList: List<Detail>
-): RecyclerView.Adapter<DetailsAdapter.DetailsHolder>() {
+) : RecyclerView.Adapter<DetailsAdapter.DetailsHolder>() {
 
-    inner class DetailsHolder(private val binding: SingleDetailBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(position: Int){
+    inner class DetailsHolder(private val binding: SingleDetailBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
 
             val detail = detailsList[position]
 

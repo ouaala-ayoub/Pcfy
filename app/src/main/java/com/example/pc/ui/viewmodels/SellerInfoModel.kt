@@ -14,7 +14,7 @@ import retrofit2.Response
 
 private const val TAG = "SellerInfoModel"
 
-class SellerInfoModel(private val annonceRepository: AnnonceRepository): ViewModel() {
+class SellerInfoModel(private val annonceRepository: AnnonceRepository) : ViewModel() {
 
     val isTurning = MutableLiveData<Boolean>()
     private val isEmpty = MutableLiveData<Boolean>()
@@ -25,13 +25,12 @@ class SellerInfoModel(private val annonceRepository: AnnonceRepository): ViewMod
 
         isTurning.postValue(true)
 
-        annonceRepository.getUserById(userId).enqueue(object: Callback<User> {
+        annonceRepository.getUserById(userId).enqueue(object : Callback<User> {
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     seller.postValue(response.body())
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "error body : $error")
                 }
@@ -51,15 +50,14 @@ class SellerInfoModel(private val annonceRepository: AnnonceRepository): ViewMod
 
         isTurning.postValue(true)
 
-        annonceRepository.getUserAnnonces(userId).enqueue(object: Callback<List<Annonce>> {
+        annonceRepository.getUserAnnonces(userId).enqueue(object : Callback<List<Annonce>> {
 
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse body ${response.body()}")
                     annoncesList.postValue(response.body())
                     isTurning.postValue(false)
-                }
-                else{
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse error $error")
                     isTurning.postValue(false)
@@ -77,10 +75,9 @@ class SellerInfoModel(private val annonceRepository: AnnonceRepository): ViewMod
     }
 
     fun updateIsEmpty(): MutableLiveData<Boolean> {
-        if(annoncesList.value.isNullOrEmpty()){
+        if (annoncesList.value.isNullOrEmpty()) {
             isEmpty.postValue(true)
-        }
-        else isEmpty.postValue(false)
+        } else isEmpty.postValue(false)
         return isEmpty
     }
 

@@ -18,24 +18,25 @@ import com.example.pc.databinding.SingleCategoryBinding
 private const val TAG = "CategoryAdapter"
 
 
-
 class CategoryAdapter(
     private val categoriesList: List<Category>,
     private val onClick: OnCategoryClickedListener
-    ): RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
+) : RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
 
     interface OnCategoryClickedListener {
         fun onCategoryClicked(title: String)
     }
+
     private var currentClicked = 0
 
-    inner class CategoryHolder(private val binding: SingleCategoryBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class CategoryHolder(private val binding: SingleCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        private fun initialise(){
+        private fun initialise() {
             categoriesList[currentClicked].isClicked = true
         }
 
-        fun bind(position: Int){
+        fun bind(position: Int) {
 
             initialise()
 
@@ -47,10 +48,9 @@ class CategoryAdapter(
 
                 categoryTitle.setOnClickListener {
 
-                    if (category.isClicked){
+                    if (category.isClicked) {
                         onClick.onCategoryClicked(category.title)
-                    }
-                    else {
+                    } else {
                         categoriesList[currentClicked].reverseClicked()
                         notifyItemChanged(currentClicked)
 
@@ -81,12 +81,11 @@ class CategoryAdapter(
 
     override fun getItemCount() = categoriesList.size
 
-    private fun setFlags(category: Category, textView: TextView){
-        if (category.isClicked){
+    private fun setFlags(category: Category, textView: TextView) {
+        if (category.isClicked) {
             textView.setTypeface(null, Typeface.BOLD)
             textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        }
-        else {
+        } else {
             textView.setTypeface(null, Typeface.NORMAL)
             textView.paintFlags = 0
         }

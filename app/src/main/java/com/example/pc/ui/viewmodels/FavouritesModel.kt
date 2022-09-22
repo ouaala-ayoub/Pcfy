@@ -18,7 +18,7 @@ private const val ERROR_MSG = "Erreur inattendue"
 
 class FavouritesModel(
     private val favouritesRepository: FavouritesRepository,
-): ViewModel() {
+) : ViewModel() {
 
     var favouritesListLiveData = MutableLiveData<MutableList<Annonce>?>()
     var deletedWithSuccess = MutableLiveData<Boolean>()
@@ -27,19 +27,18 @@ class FavouritesModel(
     val seller = MutableLiveData<User>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
 
-    fun getFavourites(userId: String){
+    fun getFavourites(userId: String) {
 
         isProgressBarTurning.postValue(true)
 
-        favouritesRepository.getFavourites(userId).enqueue(object : Callback<List<Annonce>>{
+        favouritesRepository.getFavourites(userId).enqueue(object : Callback<List<Annonce>> {
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse getFavourites: ${response.body()}")
                     favouritesListLiveData.postValue((response.body()!!).toMutableList())
-                }
-                else{
-                    Log.e(TAG, "error body = ${response.errorBody()}" )
-                    Log.e(TAG, "error raw = ${response.raw()}" )
+                } else {
+                    Log.e(TAG, "error body = ${response.errorBody()}")
+                    Log.e(TAG, "error raw = ${response.raw()}")
                     favouritesListLiveData.postValue(null)
                 }
                 isProgressBarTurning.postValue(false)
@@ -55,14 +54,14 @@ class FavouritesModel(
     }
 
 
-    fun deleteFavourite(userId: String, favouriteIdToDelete: String): MutableLiveData<Boolean>{
+    fun deleteFavourite(userId: String, favouriteIdToDelete: String): MutableLiveData<Boolean> {
 
         isProgressBarTurning.postValue(true)
 
         val favourites = favouritesListLiveData.value
 
-        val removed = favourites?.removeAll {
-            annonce -> annonce.id == favouriteIdToDelete
+        val removed = favourites?.removeAll { annonce ->
+            annonce.id == favouriteIdToDelete
         }
         favouritesListLiveData.postValue(favourites)
 
@@ -71,18 +70,17 @@ class FavouritesModel(
             idsList = favourites.map { annonce -> annonce.id!! }
         }
 
-        if(removed != null && removed == true){
+        if (removed != null && removed == true) {
 
             favouritesRepository.updateFavourites(
                 userId, NewFavouritesRequest(idsList)
-            ).enqueue(object : Callback<User>{
+            ).enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if (response.isSuccessful && response.body() != null) {
                         deletedWithSuccess.postValue(true)
-                    }
-                    else{
-                        Log.e(TAG, "error body = ${response.errorBody()}" )
-                        Log.e(TAG, "error raw = ${response.raw()}" )
+                    } else {
+                        Log.e(TAG, "error body = ${response.errorBody()}")
+                        Log.e(TAG, "error raw = ${response.raw()}")
                         deletedWithSuccess.postValue(false)
                     }
                     isProgressBarTurning.postValue(false)
@@ -95,8 +93,7 @@ class FavouritesModel(
                 }
 
             })
-        }
-        else{
+        } else {
             isProgressBarTurning.postValue(false)
             deletedWithSuccess.postValue(false)
         }
@@ -104,18 +101,16 @@ class FavouritesModel(
     }
 
     fun updateIsEmpty() {
-        if (favouritesListLiveData.value?.isEmpty() == true){
+        if (favouritesListLiveData.value?.isEmpty() == true) {
             emptyMsg.postValue(NO_ANNONCE)
-        }
-        else if (favouritesListLiveData.value == null){
+        } else if (favouritesListLiveData.value == null) {
             emptyMsg.postValue(ERROR_MSG)
-        }
-        else {
+        } else {
             emptyMsg.postValue("")
         }
     }
 
-    fun getTheSellerName(userId: String): String{
+    fun getTheSellerName(userId: String): String {
         //to do
         return "test"
     }

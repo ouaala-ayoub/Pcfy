@@ -19,7 +19,7 @@ private const val TAG = "UserAnnoncesModel"
 
 class UserAnnoncesModel(
     private val userInfoRepository: UserInfoRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val annoncesList = MutableLiveData<MutableList<Annonce>?>()
     private val isEmpty = MutableLiveData<Boolean>()
@@ -31,15 +31,14 @@ class UserAnnoncesModel(
 
         isTurning.postValue(true)
 
-        userInfoRepository.getAnnonces(userId).enqueue(object: Callback<List<Annonce>> {
+        userInfoRepository.getAnnonces(userId).enqueue(object : Callback<List<Annonce>> {
 
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse body ${response.body()}")
                     annoncesList.postValue(response.body()!!.toMutableList())
                     isTurning.postValue(false)
-                }
-                else{
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     errorMessage.postValue(error)
                     Log.e(TAG, "onResponse error $error")
@@ -57,48 +56,53 @@ class UserAnnoncesModel(
         return annoncesList
     }
 
-    fun deleteAnnonce(userId: String, annonceId: String): LiveData<Boolean>{
+    fun deleteAnnonce(userId: String, annonceId: String): LiveData<Boolean> {
 
         //to add : delete the annonce id from the user object
 
 
-
         isTurning.postValue(true)
 
-        userInfoRepository.deleteAnnonce(annonceId).enqueue(object: Callback<Annonce>{
+        userInfoRepository.deleteAnnonce(annonceId).enqueue(object : Callback<Annonce> {
 
             override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
 
                     deletedAnnonce.postValue(true)
 
                     val annonces = annoncesList.value
                     var idsList: List<String> = listOf()
-                    val removed = annonces?.removeAll {
-                            annonce -> annonce.id == annonceId
+                    val removed = annonces?.removeAll { annonce ->
+                        annonce.id == annonceId
                     }
                     if (!annonces.isNullOrEmpty()) {
                         idsList = annonces.map { annonce -> annonce.id!! }
                     }
                     annoncesList.postValue(annonces)
 
-                    if(removed != null && removed == true){
+                    if (removed != null && removed == true) {
 
-                        userInfoRepository.updateAnnonces(userId, NewAnnonceRequest(idsList)).enqueue(object: Callback<User>{
+                        userInfoRepository.updateAnnonces(userId, NewAnnonceRequest(idsList))
+                            .enqueue(object : Callback<User> {
 
-                            override fun onResponse(call: Call<User>, response: Response<User>) {
-                                Log.i(TAG, "onResponse: deleted from user annonces with success")
-                            }
+                                override fun onResponse(
+                                    call: Call<User>,
+                                    response: Response<User>
+                                ) {
+                                    Log.i(
+                                        TAG,
+                                        "onResponse: deleted from user annonces with success"
+                                    )
+                                }
 
-                            override fun onFailure(call: Call<User>, t: Throwable) {
-                                Log.e(TAG, "onFailure: ${t.message}")
-                            }
-                            
-                        })
+                                override fun onFailure(call: Call<User>, t: Throwable) {
+                                    Log.e(TAG, "onFailure: ${t.message}")
+                                }
+
+                            })
 
                     }
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse delete annonce: ${error?.message}")
                     deletedAnnonce.postValue(false)
@@ -117,10 +121,9 @@ class UserAnnoncesModel(
     }
 
     fun updateIsEmpty(): MutableLiveData<Boolean> {
-        if(annoncesList.value.isNullOrEmpty()){
+        if (annoncesList.value.isNullOrEmpty()) {
             isEmpty.postValue(true)
-        }
-        else isEmpty.postValue(false)
+        } else isEmpty.postValue(false)
         return isEmpty
     }
 

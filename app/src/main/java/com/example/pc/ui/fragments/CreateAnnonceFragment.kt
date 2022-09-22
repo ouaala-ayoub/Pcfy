@@ -97,7 +97,7 @@ class CreateAnnonceFragment : Fragment() {
 
         authModel.apply {
 
-            isTurning.observe(viewLifecycleOwner){
+            isTurning.observe(viewLifecycleOwner) {
                 binding!!.progressBar.isVisible = it
             }
 
@@ -184,7 +184,7 @@ class CreateAnnonceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun showForm(){
+    private fun showForm() {
         binding!!.apply {
             createAnnonceForm.apply {
                 isActivated = true
@@ -202,7 +202,7 @@ class CreateAnnonceFragment : Fragment() {
 
     }
 
-    private fun showNoUserConnected(){
+    private fun showNoUserConnected() {
         binding!!.apply {
             noUserConnected.isVisible = true
             loginFromUserInfo.apply {

@@ -17,30 +17,29 @@ private const val TAG = "HomeModel"
 private const val NO_ANNONCE = "Pas d'annonces"
 private const val ERROR_MSG = "Erreur inattendue"
 
-class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
+class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
     val annoncesList = MutableLiveData<List<Annonce>?>()
     val emptyMsg = MutableLiveData<String>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<Error?>()
 
-    fun getAnnoncesListAll(): MutableLiveData<List<Annonce>?>{
+    fun getAnnoncesListAll(): MutableLiveData<List<Annonce>?> {
 
         val response = homeRepository.getAnnonces(null, null)
         isProgressBarTurning.postValue(true)
 
-        response.enqueue(object :Callback<List<Annonce>>{
+        response.enqueue(object : Callback<List<Annonce>> {
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
 
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "response is successful = ${response.isSuccessful}")
                     Log.i(TAG, "response body ${response.body()} ")
                     annoncesList.postValue(response.body())
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "response error $error")
-                    if (error != null){
+                    if (error != null) {
                         errorMessage.postValue(error)
                     }
                     annoncesList.postValue(null)
@@ -57,20 +56,19 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
         return annoncesList
     }
 
-    fun getAnnoncesByCategory(category: String){
+    fun getAnnoncesByCategory(category: String) {
 
         isProgressBarTurning.postValue(true)
 
-        homeRepository.getAnnoncesByCategory(category).enqueue(object: Callback<List<Annonce>>{
+        homeRepository.getAnnoncesByCategory(category).enqueue(object : Callback<List<Annonce>> {
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "response body ${response.body()} ")
                     annoncesList.postValue(response.body())
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "response error $error")
-                    if (error != null){
+                    if (error != null) {
                         errorMessage.postValue(error)
                     }
                     annoncesList.postValue(null)
@@ -89,14 +87,12 @@ class HomeModel(private val homeRepository: HomeRepository): ViewModel() {
 
     }
 
-    fun updateIsEmpty(){
-        if (annoncesList.value?.isEmpty() == true){
+    fun updateIsEmpty() {
+        if (annoncesList.value?.isEmpty() == true) {
             emptyMsg.postValue(NO_ANNONCE)
-        }
-        else if (annoncesList.value == null){
+        } else if (annoncesList.value == null) {
             emptyMsg.postValue(ERROR_MSG)
-        }
-        else {
+        } else {
             emptyMsg.postValue("")
         }
     }

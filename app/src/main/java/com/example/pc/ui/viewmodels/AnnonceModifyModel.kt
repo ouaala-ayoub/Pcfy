@@ -14,9 +14,10 @@ import retrofit2.Response
 
 private const val TAG = "AnnonceModifyModel"
 
-class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepository): ViewModel() {
+class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepository) :
+    ViewModel() {
 
-//    private val errorMessage = MutableLiveData<String>()
+    //    private val errorMessage = MutableLiveData<String>()
     private val oldAnnonce = MutableLiveData<Annonce>()
     private val updatedAnnonce = MutableLiveData<Boolean>()
     val titleLiveData = MutableLiveData<String>()
@@ -24,36 +25,35 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
     val isTurning = MutableLiveData<Boolean>()
     val isValidInput = MediatorLiveData<Boolean>().apply {
 
-        addSource(titleLiveData){ title ->
+        addSource(titleLiveData) { title ->
             val price = priceLiveData.value
             this.value = validateData(title, price)
         }
-        addSource(priceLiveData){ price ->
+        addSource(priceLiveData) { price ->
             val title = titleLiveData.value
             this.value = validateData(title, price)
         }
     }
 
-    private fun validateData(title: String?, price: String?): Boolean{
+    private fun validateData(title: String?, price: String?): Boolean {
 
-        val isValidTitle =  !title.isNullOrBlank()
+        val isValidTitle = !title.isNullOrBlank()
         val isValidPrice = !price.isNullOrBlank()
 
         return isValidTitle && isValidPrice
     }
 
-    fun getAnnonce(annonceId: String): LiveData<Annonce>{
+    fun getAnnonce(annonceId: String): LiveData<Annonce> {
 
         isTurning.postValue(true)
 
-        annonceModifyRepository.getAnnonceById(annonceId).enqueue(object: Callback<Annonce>{
+        annonceModifyRepository.getAnnonceById(annonceId).enqueue(object : Callback<Annonce> {
 
             override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse: ${response.body()}")
                     oldAnnonce.postValue(response.body())
-                }
-                else {
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse updateAnnonceInfo : ${error?.message}")
                 }
@@ -73,26 +73,26 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
 
         isTurning.postValue(true)
 
-        annonceModifyRepository.updateAnnonce(annonceId, newAnnonce).enqueue(object: Callback<Annonce>{
+        annonceModifyRepository.updateAnnonce(annonceId, newAnnonce)
+            .enqueue(object : Callback<Annonce> {
 
-            override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
-                if (response.isSuccessful && response.body() != null){
-                    Log.i(TAG, "onResponse: ${response.body()}")
-                    updatedAnnonce.postValue(true)
+                override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        Log.i(TAG, "onResponse: ${response.body()}")
+                        updatedAnnonce.postValue(true)
+                    } else {
+                        Log.e(TAG, "onResponse updateAnnonceInfo : ${response.code()}")
+                        updatedAnnonce.postValue(false)
+                    }
+                    isTurning.postValue(false)
                 }
-                else {
-                    Log.e(TAG, "onResponse updateAnnonceInfo : ${response.code()}")
-                    updatedAnnonce.postValue(false)
+
+                override fun onFailure(call: Call<Annonce>, t: Throwable) {
+                    Log.e(TAG, "onFailure updateAnnonceInfo: ${t.message}")
+                    isTurning.postValue(false)
                 }
-                isTurning.postValue(false)
-            }
 
-            override fun onFailure(call: Call<Annonce>, t: Throwable) {
-                Log.e(TAG, "onFailure updateAnnonceInfo: ${t.message}")
-                isTurning.postValue(false)
-            }
-
-        })
+            })
         return updatedAnnonce
     }
 }

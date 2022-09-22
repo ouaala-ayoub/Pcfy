@@ -14,7 +14,7 @@ import retrofit2.Response
 
 private const val TAG = "AnnonceModel"
 
-class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel() {
+class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel() {
 
     val annonceToShow = MutableLiveData<Annonce>()
     val seller = MutableLiveData<User>()
@@ -23,21 +23,20 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel(
     private val errorMessage = MutableLiveData<String>()
 
     //add business logic
-    fun getAnnonceById(annonceId: String){
+    fun getAnnonceById(annonceId: String) {
 
         isProgressBarTurning.postValue(true)
 
         annonceRepository.getAnnonceById(annonceId).enqueue(
-            object : Callback<Annonce>{
+            object : Callback<Annonce> {
 
                 override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
-                    if (response.isSuccessful && response.body() != null){
+                    if (response.isSuccessful && response.body() != null) {
                         Log.i(TAG, "response body: ${response.body()}")
 //                        annonceToReturn = response.body()
                         annonceToShow.postValue(response.body())
                         isProgressBarTurning.postValue(false)
-                    }
-                    else {
+                    } else {
                         Log.i(TAG, "response error body: ${response.errorBody()}")
                         Log.i(TAG, "response raw ${response.raw()}")
                         isProgressBarTurning.postValue(false)
@@ -46,25 +45,24 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel(
 
                 override fun onFailure(call: Call<Annonce>, t: Throwable) {
                     errorMessage.postValue(t.message)
-                    Log.e(TAG, "onFailure: ${t.message}", )
+                    Log.e(TAG, "onFailure: ${t.message}")
                     isProgressBarTurning.postValue(false)
                 }
             }
         )
     }
 
-    fun getSellerById(userId: String){
+    fun getSellerById(userId: String) {
 
         isProgressBarTurning.postValue(true)
 
-        annonceRepository.getUserById(userId).enqueue(object : Callback<User>{
+        annonceRepository.getUserById(userId).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "response body: ${response.body()}")
                     isProgressBarTurning.postValue(false)
                     seller.postValue(response.body())
-                }
-                else{
+                } else {
                     isProgressBarTurning.postValue(false)
                     Log.i(TAG, "response error body: ${response.errorBody()}")
                     Log.i(TAG, "response raw ${response.raw()}")
@@ -78,13 +76,13 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel(
         })
     }
 
-    fun addToFavourites(userId: String, annonceToAdd: Annonce){
+    fun addToFavourites(userId: String, annonceToAdd: Annonce) {
 
         isProgressBarTurning.postValue(true)
 
-        annonceRepository.getUserById(userId).enqueue(object : Callback<User>{
+        annonceRepository.getUserById(userId).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
 
                     //add the favourite to the favourites list
                     val favouriteList = response.body()!!.favourites
@@ -93,32 +91,32 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository): ViewModel(
                         favouriteList
                     )
 
-                    annonceRepository.addToFavourites(userId, requestBody).enqueue(object : Callback<User>{
-                        override fun onResponse(call: Call<User>, response: Response<User>) {
-                            if (response.isSuccessful && response.body() != null){
-                                addedFavouriteToUser.postValue(true)
-                                isProgressBarTurning.postValue(false)
+                    annonceRepository.addToFavourites(userId, requestBody)
+                        .enqueue(object : Callback<User> {
+                            override fun onResponse(call: Call<User>, response: Response<User>) {
+                                if (response.isSuccessful && response.body() != null) {
+                                    addedFavouriteToUser.postValue(true)
+                                    isProgressBarTurning.postValue(false)
+                                } else {
+                                    Log.i(TAG, "response error body: ${response.errorBody()}")
+                                    Log.i(TAG, "response raw ${response.raw()}")
+                                    addedFavouriteToUser.postValue(false)
+                                    isProgressBarTurning.postValue(false)
+                                }
                             }
-                            else{
-                                Log.i(TAG, "response error body: ${response.errorBody()}")
-                                Log.i(TAG, "response raw ${response.raw()}")
+
+                            override fun onFailure(call: Call<User>, t: Throwable) {
+                                errorMessage.postValue(t.message)
+                                Log.e(TAG, "onFailure: ${t.message}")
                                 addedFavouriteToUser.postValue(false)
                                 isProgressBarTurning.postValue(false)
                             }
-                        }
-
-                        override fun onFailure(call: Call<User>, t: Throwable) {
-                            errorMessage.postValue(t.message)
-                            Log.e(TAG, "onFailure: ${t.message}", )
-                            addedFavouriteToUser.postValue(false)
-                            isProgressBarTurning.postValue(false)
-                        }
-                    })
+                        })
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}", )
+                Log.e(TAG, "onFailure: ${t.message}")
                 errorMessage.postValue(t.message)
                 addedFavouriteToUser.postValue(false)
                 isProgressBarTurning.postValue(false)

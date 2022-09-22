@@ -55,20 +55,18 @@ class SellerInfoFragment : Fragment() {
 
             getUserById(sellerId).observe(viewLifecycleOwner) { seller ->
 
-                if (seller == null){
+                if (seller == null) {
                     doOnGetSellerFail()
                     return@observe
-                }
-                else {
+                } else {
 
                     setTheSellerInfo(seller)
 
-                    getSellerAnnonces(sellerId).observe(viewLifecycleOwner) {  annonces ->
+                    getSellerAnnonces(sellerId).observe(viewLifecycleOwner) { annonces ->
 
-                        if (annonces == null){
+                        if (annonces == null) {
                             doOnGetSellerFail()
-                        }
-                        else {
+                        } else {
                             Log.i(TAG, "annonces retrieved : $annonces")
 
                             setTheSellerInfo(seller)
@@ -106,16 +104,15 @@ class SellerInfoFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun setTheSellerInfo(seller: User){
+    private fun setTheSellerInfo(seller: User) {
         binding.apply {
 
             val sellName = seller.name
 
 //            sellerImage to add
-            if (seller.imageUrl.isNullOrBlank()){
+            if (seller.imageUrl.isNullOrBlank()) {
                 sellerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
-            }
-            else {
+            } else {
                 Picasso
                     .get()
                     .load(seller.imageUrl)

@@ -59,7 +59,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         binding!!.passwordInput.doOnTextChanged { text, _, _, _ ->
             viewModel.passwordLiveData.value = text.toString()
         }
-        viewModel.isValidLiveData.observe(viewLifecycleOwner){ isActive->
+        viewModel.isValidLiveData.observe(viewLifecycleOwner) { isActive ->
             binding!!.login.isEnabled = isActive
         }
         binding!!.login.setOnClickListener(this)
@@ -68,7 +68,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
 
-        when(v?.id){
+        when (v?.id) {
             R.id.login -> {
 
                 viewModel.apply {
@@ -80,14 +80,13 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         userName,
                         password,
                         requireActivity()
-                    ).observe(viewLifecycleOwner){
+                    ).observe(viewLifecycleOwner) {
 
-                        retrievedTokens.observe(viewLifecycleOwner){ retrievedTokens->
-                            if(retrievedTokens) {
+                        retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
+                            if (retrievedTokens) {
                                 requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
                                 goToMainActivity()
-                            }
-                            else{
+                            } else {
                                 requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
                                 goToMainActivity()
                             }
@@ -98,7 +97,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         binding!!.problemMessage.text = error
                     }
 
-                    isTurning.observe(viewLifecycleOwner){
+                    isTurning.observe(viewLifecycleOwner) {
                         binding!!.loginProgressBar.isVisible = it
                     }
                 }
@@ -111,12 +110,12 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun goToMainActivity(){
+    private fun goToMainActivity() {
         val intent = Intent(requireContext(), MainActivity::class.java)
         startActivity(intent)
     }
 
-    private fun goToUserFragment(){
+    private fun goToUserFragment() {
         val intent = Intent(requireContext(), UserCreateActivity::class.java)
         startActivity(intent)
     }

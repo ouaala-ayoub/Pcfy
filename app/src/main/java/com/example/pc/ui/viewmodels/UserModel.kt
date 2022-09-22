@@ -16,7 +16,7 @@ import retrofit2.Response
 
 private const val TAG = "UserModel"
 
-class UserModel(private val repository: UserRepository): ViewModel() {
+class UserModel(private val repository: UserRepository) : ViewModel() {
     //add business logic
     //sign up = addUser
 
@@ -39,7 +39,7 @@ class UserModel(private val repository: UserRepository): ViewModel() {
     val retypedPasswordHelperText = MutableLiveData<String>()
 
     val isValidInput = MediatorLiveData<Boolean>().apply {
-        addSource(nameLiveData){ name ->
+        addSource(nameLiveData) { name ->
             this.value = validateTheData(
                 name,
                 phoneLiveData.value,
@@ -48,7 +48,7 @@ class UserModel(private val repository: UserRepository): ViewModel() {
                 retypedPasswordLiveData.value
             )
         }
-        addSource(phoneLiveData){ phone ->
+        addSource(phoneLiveData) { phone ->
             this.value = validateTheData(
                 nameLiveData.value,
                 phone,
@@ -57,7 +57,7 @@ class UserModel(private val repository: UserRepository): ViewModel() {
                 retypedPasswordLiveData.value
             )
         }
-        addSource(emailLiveData){ email ->
+        addSource(emailLiveData) { email ->
             this.value = validateTheData(
                 nameLiveData.value,
                 phoneLiveData.value,
@@ -66,7 +66,7 @@ class UserModel(private val repository: UserRepository): ViewModel() {
                 retypedPasswordLiveData.value
             )
         }
-        addSource(passwordLiveData){ password ->
+        addSource(passwordLiveData) { password ->
             this.value = validateTheData(
                 nameLiveData.value,
                 phoneLiveData.value,
@@ -75,7 +75,7 @@ class UserModel(private val repository: UserRepository): ViewModel() {
                 retypedPasswordLiveData.value
             )
         }
-        addSource(retypedPasswordLiveData){ retypedPassword ->
+        addSource(retypedPasswordLiveData) { retypedPassword ->
             this.value = validateTheData(
                 nameLiveData.value,
                 phoneLiveData.value,
@@ -92,57 +92,56 @@ class UserModel(private val repository: UserRepository): ViewModel() {
         email: String?,
         password: String?,
         retypedPassword: String?
-    ): Boolean{
+    ): Boolean {
         val isValidName = !name.isNullOrBlank()
         val isValidPhone = phone?.length == 10 && phone.matches(".*[0-9].*".toRegex())
 
         val isValidEmail = if (email.isNullOrBlank()) false
         else
             Patterns.EMAIL_ADDRESS.matcher(
-            email
-        ).matches()
+                email
+            ).matches()
 
         val isValidPassword = if (password.isNullOrBlank()) false else password.length >= 8
         val isValidRetypedPassword = retypedPassword == password
 
-        if (!isValidName){
+        if (!isValidName) {
             nameHelperText.value = "Entrez un nom"
-        }else nameHelperText.value = ""
+        } else nameHelperText.value = ""
 
-        if(!isValidPhone){
+        if (!isValidPhone) {
             phoneHelperText.value = "Doit etre composé de 10 chiffres"
-        }else phoneHelperText.value = ""
+        } else phoneHelperText.value = ""
 
         if (!isValidEmail) {
             emailHelperText.value = "Email Invalide"
-        }else emailHelperText.value = ""
+        } else emailHelperText.value = ""
 
-        if (!isValidPassword){
+        if (!isValidPassword) {
             passwordHelperText.value = "Au moins 8 caracteres"
-        }else passwordHelperText.value = ""
+        } else passwordHelperText.value = ""
 
-        if (!isValidRetypedPassword){
+        if (!isValidRetypedPassword) {
             retypedPasswordHelperText.value = "Mot de passes non identiques"
-        }else retypedPasswordHelperText.value = ""
+        } else retypedPasswordHelperText.value = ""
 
         return isValidName && isValidPhone && isValidEmail && isValidPassword && isValidRetypedPassword
     }
 
-    fun signUp(userToAdd: User): MutableLiveData<String?>{
+    fun signUp(userToAdd: User): MutableLiveData<String?> {
 
         isTurning.postValue(true)
 
-        repository.addUser(userToAdd).enqueue(object : Callback<IdResponse>{
+        repository.addUser(userToAdd).enqueue(object : Callback<IdResponse> {
 
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
 
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse: response body = ${response.body()}")
                     userAdded.postValue(response.body()!!.objectId!!)
-                }
-                else{
-                    Log.e(TAG, "response raw ${response.raw()}", )
-                    Log.e(TAG, "response body: ${response.body()}" )
+                } else {
+                    Log.e(TAG, "response raw ${response.raw()}")
+                    Log.e(TAG, "response body: ${response.body()}")
                     Log.e(TAG, "response error body = ${response.errorBody()}")
                     Log.e(TAG, "response message = " + response.message())
                     userAdded.postValue(null)
@@ -158,7 +157,6 @@ class UserModel(private val repository: UserRepository): ViewModel() {
         })
         return userAdded
     }
-
 
 
 }
