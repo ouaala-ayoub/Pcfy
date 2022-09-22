@@ -25,15 +25,6 @@
             app:contentScrim="@color/background_color"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
 
-            <TextView
-                android:id="@+id/populaires"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="Nos Produits :"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -62,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
                 android:orientation="horizontal"
                 android:overScrollMode="never"

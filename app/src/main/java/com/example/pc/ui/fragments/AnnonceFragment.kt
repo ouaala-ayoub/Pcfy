@@ -1,7 +1,6 @@
 package com.example.pc.ui.fragments
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,13 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceRepository
-import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.FragmentAnnonceBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
+import com.example.pc.ui.adapters.DetailsAdapter
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.toast
@@ -30,15 +30,16 @@ private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
 class AnnonceFragment : Fragment() {
 
     private var binding: FragmentAnnonceBinding? = null
+    private lateinit var annonceId: String
+    private lateinit var userId: String
+    private lateinit var detailsAdapter: DetailsAdapter
     private val retrofitService = RetrofitService.getInstance()
+    private val picasso = Picasso.get()
     private val viewModel = AnnonceModel(
         AnnonceRepository(
             retrofitService
         )
     )
-    private lateinit var annonceId: String
-    private lateinit var userId: String
-    private val picasso = Picasso.get()
 
     private lateinit var authModel: AuthModel
 
@@ -67,6 +68,7 @@ class AnnonceFragment : Fragment() {
                 getAnnonceById(annonceId)
 
                 annonceToShow.observe(viewLifecycleOwner) { annonce ->
+
                     if (annonceToShow.value != null) {
                         //bind the data to the views
 
@@ -82,15 +84,26 @@ class AnnonceFragment : Fragment() {
                             }
 
                             productTitle.text = annonce.title
-                            productPrice.text = getString(R.string.price, annonce.price.toInt())
+                            productPrice.text = getString(R.string.price, annonce.price.toString())
                             productStatus.text = getString(R.string.status, annonce.status)
 
-                            //the seller name
-                            seller.observe(viewLifecycleOwner){
-                                sellerName.text = it.name
+                            val details = annonce.details
+                            if (!details.isNullOrEmpty()){
+                                //setting the details recycler view
+                                detailsAdapter = DetailsAdapter(annonce.details)
+                                detailsRv.adapter = detailsAdapter
+                                detailsRv.layoutManager = LinearLayoutManager(requireContext())
                             }
-//                        set the seller image
-//                        selleerImage
+
+                            //the seller field
+                            seller.observe(viewLifecycleOwner){ seller ->
+                                sellerName.text = seller.name
+//                                picasso
+//                                    .load(seller.imageUrl)
+//                                    .fit()
+//                                    .centerCrop()
+//                                    .into(selleerImage)
+                            }
 
                             productDescription.text = annonce.description
 
@@ -98,8 +111,6 @@ class AnnonceFragment : Fragment() {
                             Log.e(TAG, "binding error : ${e.message}" )
                         }
                         //get the sellers name
-
-                        Log.i(TAG, "annonce = ${annonceToShow.value}")
                     } else {
                         requireContext().toast(ERROR_TEXT, Toast.LENGTH_SHORT)
                         Log.e(TAG, "error: something went wrong")

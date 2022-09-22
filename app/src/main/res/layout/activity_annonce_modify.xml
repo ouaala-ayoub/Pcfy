@@ -56,6 +56,13 @@
             android:elevation="0dp"
             android:orientation="vertical">
 
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ajouter_des_details"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/titleTextField"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -174,19 +181,19 @@
                     android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/submit_changes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/confirmer_les_changements" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/submit_changes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/confirmer_les_changements" />
+
 
     <ProgressBar
         android:id="@+id/annonce_modify_progress_bar"
