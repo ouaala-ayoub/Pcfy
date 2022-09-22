@@ -80,7 +80,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
                             val payload = getPayload()!!
                             user = LoggedInUser(payload.id, payload.name)
-                            Log.i(TAG, "current user: $userRetrieved")
+                            Log.i(TAG, "current user: $user")
 
                             getUserById(user.userId)
                             userRetrieved.observe(viewLifecycleOwner) { user ->
