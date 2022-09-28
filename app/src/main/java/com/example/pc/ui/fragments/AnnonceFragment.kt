@@ -21,6 +21,7 @@ import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.adapters.DetailsAdapter
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
+import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.example.pc.utils.toast
 import com.squareup.picasso.Picasso
 
@@ -79,7 +80,7 @@ class AnnonceFragment : Fragment() {
                             //images first
                             if (annonce.pictures.isNotEmpty()) {
                                 picasso
-                                    .load(annonce.pictures[0])
+                                    .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
                                     .fit()
                                     .into(productImages)
                             }

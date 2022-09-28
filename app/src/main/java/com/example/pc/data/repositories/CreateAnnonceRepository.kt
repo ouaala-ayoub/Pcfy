@@ -9,12 +9,15 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Multipart
+import retrofit2.http.Part
 
 class CreateAnnonceRepository(private val retrofitService: RetrofitService) {
     //add calls
     fun addAnnonce(
-        annonceFields: HashMap<String, String>,
-    ): Call<IdResponse> = retrofitService.addAnnonce(annonceFields)
+        annonce: RequestBody,
+    ): Call<IdResponse> = retrofitService.addAnnonce(
+        annonce,
+    )
 
     fun addAnnonceIdToUser(
         userId: String,

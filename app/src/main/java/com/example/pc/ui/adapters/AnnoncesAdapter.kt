@@ -8,6 +8,7 @@ import com.example.pc.R
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.Error
 import com.example.pc.databinding.SingleAnnonceBinding
+import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.squareup.picasso.Picasso
 
 private const val TAG = "AnnoncesAdapter"
@@ -41,7 +42,7 @@ class AnnoncesAdapter(
                         if (annonce.pictures[0].isNotBlank()) {
                             Picasso
                                 .get()
-                                .load(annonce.pictures[0])
+                                .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
                                 .into(annonceImage)
                         }
                     }

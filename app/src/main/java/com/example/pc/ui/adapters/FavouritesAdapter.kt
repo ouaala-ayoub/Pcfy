@@ -9,6 +9,7 @@ import com.example.pc.R
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.databinding.SingleFavouriteBinding
 import com.example.pc.ui.viewmodels.FavouritesModel
+import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.squareup.picasso.Picasso
 
 private const val TAG = "FavouritesAdapter"
@@ -58,7 +59,7 @@ class FavouritesAdapter(
                     favouriteImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                 } else {
                     picasso
-                        .load(favourite.pictures[0])
+                        .load("$BASE_AWS_S3_LINK${favourite.pictures[0]}")
                         .fit()
                         .centerCrop()
                         .into(favouriteImage)

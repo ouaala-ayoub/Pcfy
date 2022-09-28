@@ -31,11 +31,15 @@ import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.CreateAnnonceModel
 import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.URIPathHelper
 import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 private const val TAG = "CreateAnnonceFragment"
 private const val ERROR_MSG = "Erreur l'annonce n'est pas ajoutée"
@@ -67,6 +71,7 @@ class CreateAnnonceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -109,7 +114,7 @@ class CreateAnnonceFragment : Fragment() {
                     Log.i(TAG, "isAuth: $it")
                     val payload = getPayload()!!
                     currentUser = LoggedInUser(payload.id, payload.name)
-                    Log.i(TAG, "user id: $currentUser")
+                    Log.i(TAG, "user : $currentUser")
 
                     showForm()
                     setTheStatueEditTextView()
@@ -125,27 +130,49 @@ class CreateAnnonceFragment : Fragment() {
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
 
-                                        val annonceToAdd = HashMap<String, String>()
+                                        val imagesPart = getImagesRequestBody()
 
-                                        annonceToAdd["title"] =
-                                            viewModel.titleLiveData.value!!
-                                        annonceToAdd["price"] =
-                                            binding!!.priceEditText.text.toString()
-                                        annonceToAdd["category"] =
-                                            binding!!.categoryEditText.text.toString()
-                                        annonceToAdd["status"] =
-                                            binding!!.statusEditText.text.toString()
-                                        annonceToAdd["mark"] =
-                                            binding!!.markEditText.text.toString()
-                                        annonceToAdd["description"] =
-                                            binding!!.descriptionEditText.text.toString()
-                                        annonceToAdd["seller[id]"] =
-                                            currentUser.userId
-                                        annonceToAdd["seller[name]"] =
-                                            currentUser.userName
+                                        val builder = MultipartBody.Builder()
+                                            .setType(MultipartBody.FORM)
+                                            .addFormDataPart(
+                                                "title",
+                                                viewModel.titleLiveData.value!!
+                                            )
+                                            .addFormDataPart(
+                                                "price",
+                                                binding!!.priceEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "category",
+                                                binding!!.categoryEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "status",
+                                                binding!!.statusEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "mark",
+                                                binding!!.markEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "description",
+                                                binding!!.descriptionEditText.text.toString()
+                                            )
+                                            .addFormDataPart("seller[id]", currentUser.userId)
+                                            .addFormDataPart("seller[name]", currentUser.userName)
 
+                                        var i = 0
+                                        for (body in imagesPart){
+                                            val imageName = body.key
+                                            builder.addFormDataPart(
+                                                "pictures",
+                                                imageName,
+                                                imagesPart[imageName]!!
+                                            )
+                                            i++
+                                        }
+                                        val annonceToAdd = builder.build()
 
-                                        Log.i(TAG, "$annonceToAdd")
 
                                         viewModel.apply {
                                             //to change
@@ -156,7 +183,10 @@ class CreateAnnonceFragment : Fragment() {
                                                 isTurning.observe(viewLifecycleOwner) { isVisible ->
                                                     progressBar.isVisible = isVisible
                                                 }
-                                                Log.i(TAG, "response succes from fragment $it")
+                                                Log.i(
+                                                    TAG,
+                                                    "response succes from fragment $requestSuccess"
+                                                )
                                                 if (requestSuccess) doOnSuccess()
                                                 else doOnFail()
                                             }
@@ -218,14 +248,11 @@ class CreateAnnonceFragment : Fragment() {
         //default is new
         binding!!.statusTextField.editText?.setText(Status.NEW.status)
 
-        //to change !!!!!!!!!!!!??
         //set the adapter
-        val items = Status.values()
-        val values = mutableListOf<String>()
-
-        for (element in items) {
-            values.add(element.status)
+        val values = Status.values().map { status ->
+            status.status
         }
+
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
         (binding!!.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
     }
@@ -316,4 +343,24 @@ class CreateAnnonceFragment : Fragment() {
         startActivity(i)
         requireActivity().overridePendingTransition(0, 0)
     }
+
+    private fun getImagesRequestBody(): HashMap<String, RequestBody> {
+
+        val partsList = HashMap<String, RequestBody>()
+        val uriPathHelper = URIPathHelper()
+
+        for (uri in imagesUris){
+            val filePath = uriPathHelper.getPath(requireContext(), uri)
+            val file = File(filePath)
+            Log.i(TAG, "getImagesRequestBody: file $file")
+            val requestFile: RequestBody =
+                file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+            partsList[file.name] = requestFile
+        }
+        Log.i(TAG, "getRequestBody: $partsList")
+        return partsList
+
+    }
+
 }

@@ -41,8 +41,8 @@ class AuthModel(
                         LocalStorage.storeAccessToken(context, newAccessToken)
                     }
                 } else {
-                    val error = getError(response.errorBody()!!, response.code())
-                    Log.e(TAG, "error: $error")
+//                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "non authenticated")
                     auth.postValue(null)
                 }
                 isTurning.postValue(false)

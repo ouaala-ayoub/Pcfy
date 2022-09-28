@@ -2,6 +2,7 @@ package com.example.pc.data.remote
 
 import com.example.pc.data.models.network.*
 import okhttp3.FormBody
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -16,18 +17,18 @@ interface RetrofitService {
     fun deleteAnnonce(@Path("id") annonceId: String): Call<Annonce>
 
     @GET("announces")
-    fun getAllAnnonces(@Query("c") category: String?, @Query("s") searchBody: String?): Call<List<Annonce>>
+    fun getAllAnnonces(
+        @Query("c") category: String?,
+        @Query("s") searchBody: String?
+    ): Call<List<Annonce>>
 
     @GET("announces/{id}")
     fun getAnnonceById(@Path("id") annonceId: String): Call<Annonce>
 
-    @FormUrlEncoded
     @POST("announces")
     fun addAnnonce(
-        @FieldMap annoncesFields: HashMap<String, String>,
-//        @Field("pictures") files: RequestBody
-    )
-    :Call<IdResponse>
+        @Body annonceToAdd: RequestBody,
+    ): Call<IdResponse>
 
     @GET("users/{id}/announces")
     fun getAnnounces(@Path("id") userId: String): Call<List<Annonce>>
@@ -58,7 +59,10 @@ interface RetrofitService {
     fun deleteUser(@Path("id") userId: String): Call<IdResponse>
 
     @PUT("users/{id}") //????
-    fun updateAnnonces(@Path("id") userId: String, @Body annonceToAddId: NewAnnonceRequest): Call<User>
+    fun updateAnnonces(
+        @Path("id") userId: String,
+        @Body annonceToAddId: NewAnnonceRequest
+    ): Call<User>
 
     //favourites
 //    ???
@@ -67,7 +71,10 @@ interface RetrofitService {
     fun getFavourites(@Path("id") userId: String): Call<List<Annonce>>
 
     @PUT("users/{id}")
-    fun updateFavourites(@Path("id") userId: String, @Body favouriteToAddId: NewFavouritesRequest): Call<User>
+    fun updateFavourites(
+        @Path("id") userId: String,
+        @Body favouriteToAddId: NewFavouritesRequest
+    ): Call<User>
 
     @PUT("users/{id}")
     fun updateUserInfo(@Path("id") userId: String, @Body newUser: User): Call<User>
@@ -82,7 +89,7 @@ interface RetrofitService {
         private const val BASE_URL = "https://pcfy.vercel.app/api/"
         private var retrofitService: RetrofitService? = null
 
-        fun getInstance() : RetrofitService {
+        fun getInstance(): RetrofitService {
             if (retrofitService == null) {
                 val retrofit = Retrofit.Builder()
                     .baseUrl(BASE_URL)

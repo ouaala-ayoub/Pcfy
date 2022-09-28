@@ -65,7 +65,6 @@ dependencies {
 
     //image loading
     implementation 'com.squareup.picasso:picasso:2.71828'
-
     //jwt auth
     implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
     implementation 'io.github.nefilim.kjwt:kjwt-jwks:0.5.3'
