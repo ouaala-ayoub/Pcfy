@@ -13,14 +13,13 @@ private const val MAX_SIZE = 5
 private const val TAG = "AddDetailsAdapter"
 
 class AddDetailsAdapter(
-    val detailsList: MutableList<Detail>
+    var detailsList: MutableList<Detail>
 ) : RecyclerView.Adapter<AddDetailsAdapter.AddDetailsHolder>() {
 
     fun addEmptyField(): Boolean {
         return if (detailsList.size < MAX_SIZE) {
             val newDetail = Detail("", "")
             detailsList.add(newDetail)
-//            notifyItemInserted(detailsList.size)
             notifyDataSetChanged()
             Log.i(TAG, "details list : $detailsList")
             true
@@ -30,8 +29,15 @@ class AddDetailsAdapter(
         }
     }
 
-    fun deleteElement() {
+    fun deleteElement(position: Int) {
 
+        if (detailsList.size == 0) {
+            return
+        } else {
+            detailsList.removeAt(position)
+            notifyDataSetChanged()
+        }
+        Log.i(TAG, "deleteElement:${detailsList.size}")
     }
 
     inner class AddDetailsHolder(private val binding: SingleDetailFieldBinding) :
@@ -54,7 +60,7 @@ class AddDetailsAdapter(
                 bodyEditText.setText(detail.body)
 
                 if (position <= size - 2) {
-                    addEmptyField.isVisible = false
+//                    addEmptyField.isVisible = false
                     addEmptyField.setOnClickListener(null)
                 } else {
                     addEmptyField.apply {
@@ -63,6 +69,9 @@ class AddDetailsAdapter(
                             addEmptyField()
                         }
                     }
+                }
+                deleteField.setOnClickListener {
+                    deleteElement(position)
                 }
             }
         }

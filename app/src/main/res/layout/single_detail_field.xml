@@ -5,38 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/titleTextField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Titre">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/titleEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:fontFamily="@font/alata"
-                android:inputType="text"
-                android:lines="1"
-                android:textStyle="bold" />
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/bodyTextField"
@@ -59,6 +38,48 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/titleTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Titre">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/titleEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/alata"
+                android:inputType="text"
+                android:lines="1"
+                android:textStyle="bold" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/delete_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:layout_weight="0"
+            android:backgroundTint="@android:color/transparent"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/ic_delete" />
+
         <ImageButton
             android:id="@+id/add_empty_field"
             android:layout_width="wrap_content"
@@ -66,8 +87,10 @@
             android:layout_gravity="center|center_vertical"
             android:layout_weight="0"
             android:backgroundTint="@android:color/transparent"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:srcCompat="@drawable/ic_baseline_add_24" />
 
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

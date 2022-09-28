@@ -61,17 +61,21 @@ class AnnonceModifyActivity : AppCompatActivity() {
                         doOnFail(ERROR_GET_ANNONCE)
                     } else {
 
-                        var newDetailsList = annonce.details
                         Log.i(TAG, "annonce retrieved : $annonce")
+                        var details = annonce.details
 
                         // on annonce retrieved success
-
                         //to add image adding and deleting
 
                         addDetails.setOnClickListener {
                             // open the dialog
                             val detailsViewBinding = AddDetailBinding.inflate(layoutInflater)
-                            val details = annonce.details ?: listOf()
+
+                            if (details.isNullOrEmpty()) {
+                                details = mutableListOf(Detail("", ""))
+                            }
+
+                            Log.i(TAG, "details: $details")
                             val detailsAddAdapter = AddDetailsAdapter(
                                 details as MutableList<Detail>
                             )
@@ -86,16 +90,17 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                 this@AnnonceModifyActivity,
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
-                                        newDetailsList = detailsAddAdapter.detailsList
-                                        Log.i(TAG, "newDetailsList: $newDetailsList")
+                                        details = detailsAddAdapter.detailsList
+                                        Log.i(TAG, "details : $details")
+                                        Log.i(TAG, "details from adapter : ${detailsAddAdapter.detailsList}")
                                     }
 
                                     override fun onNegativeButtonClicked() {
                                         Log.i(TAG, "onNegativeButtonClicked: clicked")
                                     }
                                 },
-                                "Ajouter des details",
-                                "",
+                                getString(R.string.detail_title),
+                                null,
                                 detailsViewBinding.root
                             ).show()
 
@@ -118,7 +123,8 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                 status = statusEditText.text.toString(),
                                 mark = markEditText.text.toString(),
                                 description = descriptionEditText.text.toString(),
-                                details = newDetailsList
+                                details = details,
+                                pictures = annonce.pictures
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
                                 .observe(this@AnnonceModifyActivity) { annonceModified ->
@@ -143,7 +149,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
         binding.statusTextField.editText?.setText(default)
 
         //set the adapter
-        val values = Status.values().map { it ->
+        val values = Status.values().map {
             it.status
         }
 
