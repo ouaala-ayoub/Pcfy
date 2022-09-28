@@ -53,7 +53,7 @@ interface RetrofitService {
     fun getUserById(@Path("id") userId: String): Call<User>
 
     @POST("users")
-    fun addUser(@Body user: User): Call<IdResponse>
+    fun addUser(@Body user: RequestBody): Call<IdResponse>
 
     @DELETE("users/{id}")
     fun deleteUser(@Path("id") userId: String): Call<IdResponse>

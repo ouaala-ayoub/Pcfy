@@ -35,7 +35,7 @@ fun makeDialog(
     context: Context,
     onDialogClicked: OnDialogClicked,
     title: String,
-    message: String,
+    message: String?,
     view: View? = null
 ): AlertDialog {
     val myDialog = AlertDialog

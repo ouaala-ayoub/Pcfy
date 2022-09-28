@@ -16,15 +16,20 @@ import androidx.appcompat.app.AppCompatDialog
 import androidx.core.widget.doOnTextChanged
 import com.example.pc.R
 import com.example.pc.data.models.local.SellerType
-import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.databinding.ActivityUserCreateBinding
 import com.example.pc.ui.viewmodels.UserModel
 import com.example.pc.utils.OnDialogClicked
+import com.example.pc.utils.URIPathHelper
 import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 
 private const val TAG = "UserCreateActivity"
@@ -126,24 +131,37 @@ class UserCreateActivity : AppCompatActivity() {
                     object : OnDialogClicked {
                         override fun onPositiveButtonClicked() {
 
-                            //val imageUrl = uploadImage(imageUri)
-                            //to fix
-                            val imageUrl =
-                                "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+                            val imageBody = imageUri?.let { it1 -> getImagesRequestBody(it1) }
 
                             viewModel.apply {
-                                val userToAdd = User(
-                                    binding.nameEditText.text.toString(),
-                                    binding.phoneEditText.text.toString(),
-                                    binding.emailEditText.text.toString(),
-                                    binding.passwordEditText.text.toString(),
-                                    city = binding.cityEditText.text.toString(),
-                                    userType = binding.userTypeEditText.text.toString(),
-                                    brand = binding.organisationNameEditText.text.toString(),
-                                    imageUrl = imageUrl
-                                )
+                                val builder = MultipartBody.Builder()
+                                    .setType(MultipartBody.FORM)
+                                    .addFormDataPart("name", binding.nameEditText.text.toString())
+                                    .addFormDataPart("phone", binding.phoneEditText.text.toString())
+                                    .addFormDataPart("email", binding.emailEditText.text.toString())
+                                    .addFormDataPart(
+                                        "password",
+                                        binding.passwordEditText.text.toString()
+                                    )
+                                    .addFormDataPart("city", binding.cityEditText.text.toString())
+                                    .addFormDataPart(
+                                        "type",
+                                        binding.userTypeEditText.text.toString()
+                                    )
+                                    .addFormDataPart(
+                                        "brand",
+                                        binding.organisationNameEditText.text.toString()
+                                    )
 
-                                Log.i(TAG, "user to add : $userToAdd")
+                                if (imageBody != null) {
+                                    builder.addFormDataPart(
+                                        "picture",
+                                        imageBody.imageName,
+                                        imageBody.imageReqBody
+                                    )
+                                }
+
+                                val userToAdd = builder.build()
 
                                 signUp(userToAdd).observe(this@UserCreateActivity) {
                                     if (it.isNullOrBlank()) {
@@ -216,10 +234,16 @@ class UserCreateActivity : AppCompatActivity() {
         else binding.imageName.text = IMAGE_SELECTED
     }
 
-    private fun uploadImage(uri: Uri?): String? {
-        //to implement
-        return if (uri == null) null
-        else ""
+    private fun getImagesRequestBody(uri: Uri): ImageInfo {
+
+        val file = File(URIPathHelper().getPath(this, uri))
+        val requestFile: RequestBody =
+            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+        return ImageInfo(
+            file.name,
+            requestFile
+        )
     }
 
     override fun onDestroy() {
@@ -229,3 +253,5 @@ class UserCreateActivity : AppCompatActivity() {
         }
     }
 }
+
+class ImageInfo(val imageName: String, val imageReqBody: RequestBody)

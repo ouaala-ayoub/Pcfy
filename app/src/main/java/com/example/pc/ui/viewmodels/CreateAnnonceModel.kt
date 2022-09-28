@@ -1,22 +1,16 @@
 package com.example.pc.ui.viewmodels
 
 import android.util.Log
-import androidx.core.net.toFile
 import androidx.lifecycle.*
-import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.NewAnnonceRequest
-import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.CreateAnnonceRepository
 import com.example.pc.utils.getError
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.await
 
 //temporary
 

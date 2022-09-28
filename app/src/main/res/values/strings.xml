@@ -91,4 +91,6 @@
     <string name="ratez_notre_application">Ratez notre Application</string>
     <string name="ajouter_des_details">Ajouter des details</string>
 
+    <string name="detail_title">"Ajouter des details"</string>
+
 </resources>

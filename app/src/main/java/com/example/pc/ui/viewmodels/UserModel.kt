@@ -2,19 +2,23 @@ package com.example.pc.ui.viewmodels
 
 import android.util.Log
 import android.util.Patterns
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.IdResponse
-import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.utils.getError
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 private const val TAG = "UserModel"
+private const val NO_NAME = "Entrez un nom"
+private const val TEN_NUMBERS = "Doit etre composé de 10 chiffres"
+private const val INVALID_EMAIL = "Email Invalide"
+private const val MIN_EIGHT = "Au moins 8 caracteres"
+private const val NON_IDENTICAL = "Mot de passes non identiques"
 
 class UserModel(private val repository: UserRepository) : ViewModel() {
     //add business logic
@@ -106,29 +110,29 @@ class UserModel(private val repository: UserRepository) : ViewModel() {
         val isValidRetypedPassword = retypedPassword == password
 
         if (!isValidName) {
-            nameHelperText.value = "Entrez un nom"
+            nameHelperText.value = NO_NAME
         } else nameHelperText.value = ""
 
         if (!isValidPhone) {
-            phoneHelperText.value = "Doit etre composé de 10 chiffres"
+            phoneHelperText.value = TEN_NUMBERS
         } else phoneHelperText.value = ""
 
         if (!isValidEmail) {
-            emailHelperText.value = "Email Invalide"
+            emailHelperText.value = INVALID_EMAIL
         } else emailHelperText.value = ""
 
         if (!isValidPassword) {
-            passwordHelperText.value = "Au moins 8 caracteres"
+            passwordHelperText.value = MIN_EIGHT
         } else passwordHelperText.value = ""
 
         if (!isValidRetypedPassword) {
-            retypedPasswordHelperText.value = "Mot de passes non identiques"
+            retypedPasswordHelperText.value = NON_IDENTICAL
         } else retypedPasswordHelperText.value = ""
 
         return isValidName && isValidPhone && isValidEmail && isValidPassword && isValidRetypedPassword
     }
 
-    fun signUp(userToAdd: User): MutableLiveData<String?> {
+    fun signUp(userToAdd: RequestBody): MutableLiveData<String?> {
 
         isTurning.postValue(true)
 
