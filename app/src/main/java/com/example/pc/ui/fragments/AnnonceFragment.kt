@@ -79,7 +79,18 @@ class AnnonceFragment : Fragment() {
                             getSellerById(annonce.seller!!.userId)
 
                             imagesVp.apply {
-                                adapter = ImagesAdapter(annonce.pictures)
+                                adapter = ImagesAdapter(
+                                    annonce.pictures,
+                                    object: ImagesAdapter.OnImageClicked {
+                                        override fun onLeftClicked() {
+                                            currentItem -= 1
+                                        }
+
+                                        override fun onRightClicked() {
+                                            currentItem += 1
+                                        }
+                                    }
+                                )
                             }
 
                             productTitle.text = annonce.title

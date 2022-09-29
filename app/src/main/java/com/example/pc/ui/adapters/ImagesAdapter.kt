@@ -8,11 +8,19 @@ import com.example.pc.databinding.SingleScrollableImageBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.squareup.picasso.Picasso
 
+
+
 private const val TAG = "ImagesAdapter"
 
 class ImagesAdapter(
-    private val imagesList: List<String>
+    private val imagesList: List<String>,
+    private val onImageClicked: OnImageClicked
 ) : RecyclerView.Adapter<ImagesAdapter.ImagesHolder>() {
+
+    interface OnImageClicked {
+        fun onLeftClicked()
+        fun onRightClicked()
+    }
 
     inner class ImagesHolder(private val binding: SingleScrollableImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -31,10 +39,10 @@ class ImagesAdapter(
 
                 //left and right button
                 left.setOnClickListener {
-                    Log.i(TAG, "clicked left of $position")
+                    onImageClicked.onLeftClicked()
                 }
                 right.setOnClickListener {
-                    Log.i(TAG, "clicked right of $position")
+                    onImageClicked.onRightClicked()
                 }
             }
         }
