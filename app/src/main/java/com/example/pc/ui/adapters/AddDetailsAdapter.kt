@@ -16,7 +16,13 @@ class AddDetailsAdapter(
     var detailsList: MutableList<Detail>
 ) : RecyclerView.Adapter<AddDetailsAdapter.AddDetailsHolder>() {
 
-    fun addEmptyField(): Boolean {
+    fun filterDetailsList(): Boolean {
+        return detailsList.removeAll { detail ->
+            detail.body.isBlank() && detail.title.isBlank()
+        }
+    }
+
+    private fun addEmptyField(): Boolean {
         return if (detailsList.size < MAX_SIZE) {
             val newDetail = Detail("", "")
             detailsList.add(newDetail)
@@ -29,7 +35,7 @@ class AddDetailsAdapter(
         }
     }
 
-    fun deleteElement(position: Int) {
+    private fun deleteElement(position: Int) {
 
         if (detailsList.size == 0) {
             return

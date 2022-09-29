@@ -90,9 +90,12 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                 this@AnnonceModifyActivity,
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
-                                        details = detailsAddAdapter.detailsList
+                                        detailsAddAdapter.apply {
+                                            filterDetailsList()
+                                            details = detailsList
+                                        }
+
                                         Log.i(TAG, "details : $details")
-                                        Log.i(TAG, "details from adapter : ${detailsAddAdapter.detailsList}")
                                     }
 
                                     override fun onNegativeButtonClicked() {
