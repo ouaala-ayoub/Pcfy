@@ -25,12 +25,11 @@
             android:layout_marginEnd="8dp"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/product_images"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/images_vp"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/annonce_image_height"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+                android:layout_height="wrap_content"
+                android:overScrollMode="ifContentScrolls"/>
 
             <TextView
                 android:id="@+id/product_title"
@@ -70,6 +69,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/detail_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"

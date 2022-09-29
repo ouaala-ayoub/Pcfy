@@ -19,6 +19,7 @@ import com.example.pc.databinding.FragmentAnnonceBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.adapters.DetailsAdapter
+import com.example.pc.ui.adapters.ImagesAdapter
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.BASE_AWS_S3_LINK
@@ -77,12 +78,8 @@ class AnnonceFragment : Fragment() {
                         try {
                             getSellerById(annonce.seller!!.userId)
 
-                            //images first
-                            if (annonce.pictures.isNotEmpty()) {
-                                picasso
-                                    .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
-                                    .fit()
-                                    .into(productImages)
+                            imagesVp.apply {
+                                adapter = ImagesAdapter(annonce.pictures)
                             }
 
                             productTitle.text = annonce.title
@@ -101,6 +98,9 @@ class AnnonceFragment : Fragment() {
                                     setHasFixedSize(true)
                                     layoutManager = LinearLayoutManager(requireContext())
                                 }
+                            }
+                            else {
+                                detailTv.isVisible = false
                             }
 
                             //the seller field

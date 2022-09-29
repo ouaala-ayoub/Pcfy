@@ -81,6 +81,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
                             )
 
                             detailsViewBinding.apply {
+                                detailsAddAdapter.filterDetailsList()
                                 addDetailsRv.adapter = detailsAddAdapter
                                 addDetailsRv.layoutManager =
                                     LinearLayoutManager(this@AnnonceModifyActivity)
