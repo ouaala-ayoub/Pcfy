@@ -31,6 +31,15 @@
                 android:layout_height="wrap_content"
                 android:overScrollMode="ifContentScrolls"/>
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tracking_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabMaxWidth="@dimen/tab_max_width"/>
+
             <TextView
                 android:id="@+id/product_title"
                 android:layout_width="match_parent"

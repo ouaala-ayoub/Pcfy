@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import com.example.pc.R
 import com.example.pc.data.models.local.Detail
 import com.example.pc.data.remote.RetrofitService
@@ -24,6 +26,8 @@ import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.example.pc.utils.toast
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 
 private const val TAG = "AnnonceActivity"
@@ -79,9 +83,10 @@ class AnnonceFragment : Fragment() {
                             getSellerById(annonce.seller!!.userId)
 
                             imagesVp.apply {
+
                                 adapter = ImagesAdapter(
                                     annonce.pictures,
-                                    object: ImagesAdapter.OnImageClicked {
+                                    object : ImagesAdapter.OnImageClicked {
                                         override fun onLeftClicked() {
                                             currentItem -= 1
                                         }
@@ -91,6 +96,9 @@ class AnnonceFragment : Fragment() {
                                         }
                                     }
                                 )
+                                TabLayoutMediator(trackingTab, this, true) { tab, position ->
+                                    Log.i(TAG, "just testing position $position")
+                                }.attach()
                             }
 
                             productTitle.text = annonce.title
@@ -109,8 +117,7 @@ class AnnonceFragment : Fragment() {
                                     setHasFixedSize(true)
                                     layoutManager = LinearLayoutManager(requireContext())
                                 }
-                            }
-                            else {
+                            } else {
                                 detailTv.isVisible = false
                             }
 
