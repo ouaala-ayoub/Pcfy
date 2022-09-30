@@ -71,10 +71,6 @@ class AnnonceModifyActivity : AppCompatActivity() {
                             // open the dialog
                             val detailsViewBinding = AddDetailBinding.inflate(layoutInflater)
 
-                            if (details.isNullOrEmpty()) {
-                                details = mutableListOf(Detail("", ""))
-                            }
-
                             Log.i(TAG, "details: $details")
                             val detailsAddAdapter = AddDetailsAdapter(
                                 details as MutableList<Detail>
@@ -132,6 +128,11 @@ class AnnonceModifyActivity : AppCompatActivity() {
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
                                 .observe(this@AnnonceModifyActivity) { annonceModified ->
+
+                                    isTurning.observe(this@AnnonceModifyActivity) { isTurning ->
+                                        annonceModifyProgressBar.isVisible = isTurning
+                                    }
+
                                     //on annonce modification fail
                                     if (!annonceModified) {
                                         doOnFail(ERROR_SET_ANNONCE)

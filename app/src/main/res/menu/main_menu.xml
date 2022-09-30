@@ -17,7 +17,7 @@
         android:title="@string/cr_er_une_annonce"
         android:icon="@drawable/ic_baseline_note_add_24"/>
     <item
-        android:id="@+id/userInfoFragment"
+        android:id="@+id/userInfo"
         android:title="@string/utilisateur"
         android:icon="@drawable/ic_baseline_person_24"/>
 </menu>

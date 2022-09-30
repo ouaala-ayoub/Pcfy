@@ -87,6 +87,11 @@ class UserInfoModifyActivity : AppCompatActivity() {
 
                                         updateUser(userToModifyId, newUser)
                                             .observe(this@UserInfoModifyActivity) { annonceModified ->
+
+                                                isTurning.observe(this@UserInfoModifyActivity) {
+                                                    userModifyProgressBar.isVisible = it
+                                                }
+
                                                 //on annonce modification fail
                                                 if (!annonceModified) {
                                                     doOnFail(ERROR_SET_USER)

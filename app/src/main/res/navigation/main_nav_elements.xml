@@ -30,18 +30,21 @@
         android:id="@+id/searchFragment"
         android:name="com.example.pc.ui.fragments.SearchFragment"
         android:label="SearchFragment" />
-    <fragment
-        android:id="@+id/userInfoFragment"
-        android:name="com.example.pc.ui.fragments.UserInfoFragment"
-        android:label="fragment_user_info"
-        tools:layout="@layout/fragment_user_info" >
-        <action
-            android:id="@+id/action_userInfoFragment_to_infoFragment"
-            app:destination="@id/infoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/infoFragment"
-        android:name="com.example.pc.ui.fragments.InfoFragment"
-        android:label="fragment_info"
-        tools:layout="@layout/fragment_info" />
+    <navigation android:id="@+id/userInfo"
+        app:startDestination="@id/userInfoFragment">
+        <fragment
+            android:id="@+id/userInfoFragment"
+            android:name="com.example.pc.ui.fragments.UserInfoFragment"
+            android:label="fragment_user_info"
+            tools:layout="@layout/fragment_user_info">
+            <action
+                android:id="@+id/action_userInfoFragment_to_infoFragment"
+                app:destination="@id/infoFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/infoFragment"
+            android:name="com.example.pc.ui.fragments.InfoFragment"
+            android:label="fragment_info"
+            tools:layout="@layout/fragment_info" />
+    </navigation>
 </navigation>

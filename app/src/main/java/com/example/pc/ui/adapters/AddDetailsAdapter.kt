@@ -16,9 +16,12 @@ class AddDetailsAdapter(
     var detailsList: MutableList<Detail>
 ) : RecyclerView.Adapter<AddDetailsAdapter.AddDetailsHolder>() {
 
-    fun filterDetailsList(): Boolean {
-        return detailsList.removeAll { detail ->
+    fun filterDetailsList() {
+        detailsList.removeAll { detail ->
             detail.body.isBlank() && detail.title.isBlank()
+        }
+        if (detailsList.isEmpty()){
+            detailsList = mutableListOf(Detail("", ""))
         }
     }
 

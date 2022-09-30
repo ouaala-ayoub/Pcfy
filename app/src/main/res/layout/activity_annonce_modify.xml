@@ -62,6 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/ajouter_des_details"
+                android:backgroundTint="@android:color/transparent"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
             <com.google.android.material.textfield.TextInputLayout
