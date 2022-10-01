@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "Utils"
@@ -92,9 +93,6 @@ fun getTheErrorMessage(error: Error){
         401 -> error.message = ERROR401
     }
 }
-
-
-
 
 class URIPathHelper {
 

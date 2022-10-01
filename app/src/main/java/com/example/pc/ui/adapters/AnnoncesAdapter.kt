@@ -43,6 +43,7 @@ class AnnoncesAdapter(
                             Picasso
                                 .get()
                                 .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
+                                .fit()
                                 .into(annonceImage)
                         }
                     }

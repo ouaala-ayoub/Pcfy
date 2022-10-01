@@ -1,7 +1,9 @@
 package com.example.pc.ui.activities
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +15,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import com.example.pc.R
 import com.example.pc.data.models.local.SellerType
@@ -20,10 +24,8 @@ import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.databinding.ActivityUserCreateBinding
 import com.example.pc.ui.viewmodels.UserModel
-import com.example.pc.utils.OnDialogClicked
-import com.example.pc.utils.URIPathHelper
-import com.example.pc.utils.makeDialog
-import com.example.pc.utils.toast
+import com.example.pc.utils.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -40,6 +42,7 @@ private const val IMAGE_SELECTED = "Une image selectionnée"
 
 class UserCreateActivity : AppCompatActivity() {
 
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var binding: ActivityUserCreateBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var alertDialog: AppCompatDialog? = null
@@ -50,10 +53,39 @@ class UserCreateActivity : AppCompatActivity() {
     )
     private var imageUri: Uri? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         supportActionBar?.hide()
+
+        binding = ActivityUserCreateBinding.inflate(layoutInflater)
+
+        requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+
+                Log.i(TAG, "isGranted: $isGranted")
+
+                if (isGranted) {
+                    setTheUploadImage()
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+
+                    val snackBar = makeSnackBar(
+                        binding.root,
+                        getString(R.string.permission),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                    snackBar.setAction(R.string.ok) {
+                        snackBar.dismiss()
+                    }.show()
+
+                }
+            }
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -64,7 +96,7 @@ class UserCreateActivity : AppCompatActivity() {
                     imageUri = data?.data
                 }
             }
-        binding = ActivityUserCreateBinding.inflate(layoutInflater)
+
 
         super.onCreate(savedInstanceState)
 
@@ -120,9 +152,52 @@ class UserCreateActivity : AppCompatActivity() {
                 }
             }
 
+
             imageSelection.setOnClickListener {
-                setTheUploadImage()
+
+                when {
+                    ContextCompat.checkSelfPermission(
+                        this@UserCreateActivity,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        // You can use the API that requires the permission.
+                        setTheUploadImage()
+                    }
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        this@UserCreateActivity, Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) -> {
+                        // In an educational UI, explain to the user why your app requires this
+                        // permission for a specific feature to behave as expected. In this UI,
+                        // include a "cancel" or "no thanks" button that allows the user to
+                        // continue using your app without granting the permission.
+                        Log.i(TAG, "shouldShowRequestPermissionRationale: true")
+                        showInContextUI(
+                            object : OnDialogClicked {
+                                override fun onPositiveButtonClicked() {
+                                    requestPermissionLauncher.launch(
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                    )
+                                }
+
+                                override fun onNegativeButtonClicked() {
+                                    //cancel the dialog without doing nothing
+                                }
+                            }
+                        )
+                    }
+                    else -> {
+                        // You can directly ask for the permission.
+                        // The registered ActivityResultCallback gets the result of this request.
+                        Log.i(TAG, "shouldShowRequestPermissionRationale: false")
+                        Log.i(TAG, "request Permission Launcher ")
+                        requestPermissionLauncher.launch(
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                        )
+                    }
+                }
             }
+
+
 
             signUpButton.setOnClickListener {
                 // to add a dialog ??
@@ -198,6 +273,18 @@ class UserCreateActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+    }
+
+    private fun showInContextUI(onDialogClicked: OnDialogClicked) {
+        makeDialog(
+            this@UserCreateActivity,
+            onDialogClicked,
+            getString(R.string.permission_required),
+            getString(R.string.you_cant),
+            negativeText = getString(R.string.no_thanks),
+            positiveText = getString(R.string.authorise)
+
+        ).show()
     }
 
     private fun goToHomeFragment() {
