@@ -75,5 +75,8 @@ dependencies {
     //keyboard events
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
 
+    //permissions
+    implementation 'com.github.fondesa:kpermissions:3.3.0'
+
     //support scroll
 }

@@ -23,6 +23,7 @@ import com.example.pc.ui.activities.UserAnnoncesActivity
 import com.example.pc.ui.activities.UserInfoModifyActivity
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.UserInfoModel
+import com.example.pc.utils.USERS_AWS_S3_LINK
 import com.example.pc.utils.toast
 import com.squareup.picasso.Picasso
 
@@ -102,10 +103,8 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                         )
                                     } else {
                                         //for test purposes
-                                        val url =
-                                            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
                                         picasso
-                                            .load(user.imageUrl)
+                                            .load("${USERS_AWS_S3_LINK}${user.imageUrl}")
                                             .fit()
                                             .centerCrop()
                                             .into(userImage)

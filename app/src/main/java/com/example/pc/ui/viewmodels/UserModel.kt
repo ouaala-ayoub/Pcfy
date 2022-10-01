@@ -142,12 +142,10 @@ class UserModel(private val repository: UserRepository) : ViewModel() {
 
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse: response body = ${response.body()}")
-                    userAdded.postValue(response.body()!!.objectId!!)
+                    userAdded.postValue(response.body()!!.objectId)
                 } else {
-                    Log.e(TAG, "response raw ${response.raw()}")
-                    Log.e(TAG, "response body: ${response.body()}")
-                    Log.e(TAG, "response error body = ${response.errorBody()}")
-                    Log.e(TAG, "response message = " + response.message())
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.i(TAG, "onResponse: $error")
                     userAdded.postValue(null)
                 }
                 isTurning.postValue(false)

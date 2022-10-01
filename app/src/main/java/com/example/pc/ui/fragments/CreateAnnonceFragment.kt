@@ -1,8 +1,10 @@
 package com.example.pc.ui.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -34,6 +37,7 @@ import com.example.pc.utils.OnDialogClicked
 import com.example.pc.utils.URIPathHelper
 import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
+import com.fondesa.kpermissions.extension.permissionsBuilder
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -59,9 +63,10 @@ class CreateAnnonceFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
         viewModel = CreateAnnonceModel(CreateAnnonceRepository(retrofitService))
         authModel = AuthModel(retrofitService, null)
+
+//        permissionsBuilder()
 
         super.onCreate(savedInstanceState)
     }
@@ -162,7 +167,7 @@ class CreateAnnonceFragment : Fragment() {
                                             .addFormDataPart("seller[name]", currentUser.userName)
 
                                         var i = 0
-                                        for (body in imagesPart){
+                                        for (body in imagesPart) {
                                             val imageName = body.key
                                             builder.addFormDataPart(
                                                 "pictures",
@@ -207,9 +212,7 @@ class CreateAnnonceFragment : Fragment() {
                     Log.i(TAG, "user not connected auth body $it")
                     showNoUserConnected()
                 }
-
             }
-
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -229,7 +232,6 @@ class CreateAnnonceFragment : Fragment() {
                 setTheUploadImage()
             }
         }
-
     }
 
     private fun showNoUserConnected() {
@@ -349,7 +351,7 @@ class CreateAnnonceFragment : Fragment() {
         val partsList = HashMap<String, RequestBody>()
         val uriPathHelper = URIPathHelper()
 
-        for (uri in imagesUris){
+        for (uri in imagesUris) {
             val filePath = uriPathHelper.getPath(requireContext(), uri)
             val file = File(filePath)
             Log.i(TAG, "getImagesRequestBody: file $file")

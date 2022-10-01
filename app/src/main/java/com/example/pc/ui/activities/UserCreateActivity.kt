@@ -72,7 +72,7 @@ class UserCreateActivity : AppCompatActivity() {
         setUpTheTypeEditText()
 
         binding.apply {
-            imageName.text = "Aucune image selectionnée"
+            imageName.text = IMAGE_NOT_SELECTED
             signUpButton.isEnabled = false
 
             nameEditText.doOnTextChanged { text, _, _, _ ->
@@ -237,8 +237,9 @@ class UserCreateActivity : AppCompatActivity() {
     private fun getImagesRequestBody(uri: Uri): ImageInfo {
 
         val file = File(URIPathHelper().getPath(this, uri))
+        Log.i(TAG, "file selected : ${file.name}")
         val requestFile: RequestBody =
-            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            file.asRequestBody("image/*".toMediaTypeOrNull())
 
         return ImageInfo(
             file.name,
