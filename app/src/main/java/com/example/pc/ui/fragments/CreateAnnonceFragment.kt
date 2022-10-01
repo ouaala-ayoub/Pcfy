@@ -33,11 +33,8 @@ import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.CreateAnnonceModel
-import com.example.pc.utils.OnDialogClicked
-import com.example.pc.utils.URIPathHelper
-import com.example.pc.utils.makeDialog
-import com.example.pc.utils.toast
-import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.example.pc.utils.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -51,12 +48,13 @@ private const val SUCCESS_MSG = "Annonce ajoutée avec succes"
 
 class CreateAnnonceFragment : Fragment() {
 
-    private var binding: FragmentCreateAnnonceBinding? = null
-    private lateinit var viewModel: CreateAnnonceModel
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private var binding: FragmentCreateAnnonceBinding? = null
+    private val retrofitService = RetrofitService.getInstance()
+    private lateinit var viewModel: CreateAnnonceModel
     private lateinit var authModel: AuthModel
     private lateinit var currentUser: LoggedInUser
-    private val retrofitService = RetrofitService.getInstance()
     private var imagesUris = listOf<Uri>()
 
     //add the livedata validation
@@ -66,7 +64,33 @@ class CreateAnnonceFragment : Fragment() {
         viewModel = CreateAnnonceModel(CreateAnnonceRepository(retrofitService))
         authModel = AuthModel(retrofitService, null)
 
-//        permissionsBuilder()
+        requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+
+                Log.i(TAG, "isGranted: $isGranted")
+
+                if (isGranted) {
+                    setTheUploadImage()
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+
+                    val snackBar = makeSnackBar(
+                        requireView(),
+                        getString(R.string.permission),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                    snackBar.setAction(R.string.ok) {
+                        snackBar.dismiss()
+                    }.show()
+
+                }
+            }
 
         super.onCreate(savedInstanceState)
     }
@@ -229,9 +253,60 @@ class CreateAnnonceFragment : Fragment() {
                 isActivated = true
             }
             imageSelection.setOnClickListener {
-                setTheUploadImage()
+//                setTheUploadImage()
+
+                when {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        // You can use the API that requires the permission.
+                        setTheUploadImage()
+                    }
+                    shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                        // In an educational UI, explain to the user why your app requires this
+                        // permission for a specific feature to behave as expected. In this UI,
+                        // include a "cancel" or "no thanks" button that allows the user to
+                        // continue using your app without granting the permission.
+                        Log.i(TAG, "shouldShowRequestPermissionRationale: true")
+                        showInContextUI(
+                            object: OnDialogClicked {
+                                override fun onPositiveButtonClicked() {
+                                    requestPermissionLauncher.launch(
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                    )
+                                }
+
+                                override fun onNegativeButtonClicked() {
+                                    //cancel the dialog without doing nothing
+                                }
+                            }
+                        )
+                    }
+                    else -> {
+                        // You can directly ask for the permission.
+                        // The registered ActivityResultCallback gets the result of this request.
+                        Log.i(TAG, "shouldShowRequestPermissionRationale: false")
+                        Log.i(TAG, "request Permission Launcher ")
+                        requestPermissionLauncher.launch(
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                        )
+                    }
+                }
             }
         }
+    }
+
+    private fun showInContextUI(onDialogClicked: OnDialogClicked) {
+        makeDialog(
+            requireContext(),
+            onDialogClicked,
+            getString(R.string.permission_required),
+            getString(R.string.you_cant),
+            negativeText = getString(R.string.no_thanks),
+            positiveText = getString(R.string.authorise)
+
+        ).show()
     }
 
     private fun showNoUserConnected() {

@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "Utils"
 private const val ERROR404 = "Page introuvable"
@@ -37,7 +38,10 @@ fun makeDialog(
     onDialogClicked: OnDialogClicked,
     title: String,
     message: String?,
-    view: View? = null
+    view: View? = null,
+    negativeText: String = context.resources.getString(R.string.Cancel),
+    positiveText: String = context.resources.getString(R.string.Oui)
+
 ): AlertDialog {
     val myDialog = AlertDialog
         .Builder(context)
@@ -45,11 +49,11 @@ fun makeDialog(
         .setMessage(message)
         .setView(view)
         .setCancelable(false)
-        .setPositiveButton(context.resources.getString(R.string.Oui)) { _, _ ->
+        .setPositiveButton(positiveText) { _, _ ->
             onDialogClicked.onPositiveButtonClicked()
         }
 
-        .setNegativeButton(context.resources.getString(R.string.Cancel)){ dialog, _ ->
+        .setNegativeButton(negativeText){ _, _ ->
             onDialogClicked.onNegativeButtonClicked()
         }
         .create()
@@ -59,6 +63,14 @@ fun makeDialog(
     }
 
     return myDialog
+}
+
+fun makeSnackBar(
+    view: View,
+    message: String,
+    duration: Int
+): Snackbar {
+    return Snackbar.make(view, message, duration)
 }
 
 fun getError(responseBody: ResponseBody, code: Int): Error? {

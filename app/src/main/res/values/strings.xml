@@ -27,6 +27,8 @@
     <string name="logout">Se Deconnecter</string>
     <string name="settings">Réglages</string>
     <string name="Oui">Oui</string>
+    <string name="ok">Ok</string>
+    <string name="no_thanks">Non merci</string>
     <string name="Cancel">Annuler</string>
     <string name="confirm_annonce_title">Confirmation de l\'annonce</string>
     <string name="confirm_annonce_message">lancer l\'annonce ?</string>
@@ -94,5 +96,14 @@
     <string name="detail_title">"Ajouter des details"</string>
     <string name="ajouter">Ajouter</string>
     <string name="pas_de_details">Pas de details</string>
+    <string name="permission">Votre autorisation est nécessaire pour utiliser notre service proprement</string>
+    <string name="permission_required">Permission requis</string>
+    <string name="you_cant">
+        Vous ne pouvez pas lancer une annonce car l\'application n\'as pas le droit d\'accéder a
+        votre galerie des photos
+    </string>
+    <string name="authorise">autoriser</string>
+
 
 </resources>
+
