@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.data.models.local.Detail
 import com.example.pc.databinding.SingleDetailFieldBinding
@@ -16,21 +17,20 @@ class AddDetailsAdapter(
     var detailsList: MutableList<Detail>
 ) : RecyclerView.Adapter<AddDetailsAdapter.AddDetailsHolder>() {
 
+    val isEmpty = MutableLiveData(detailsList.isEmpty())
+
     fun filterDetailsList() {
         detailsList.removeAll { detail ->
             detail.body.isBlank() && detail.title.isBlank()
         }
-        if (detailsList.isEmpty()){
-            detailsList = mutableListOf(Detail("", ""))
-        }
+        if (detailsList.isEmpty()) isEmpty.postValue(true)
     }
 
-    private fun addEmptyField(): Boolean {
+    fun addEmptyField(): Boolean {
         return if (detailsList.size < MAX_SIZE) {
-            val newDetail = Detail("", "")
-            detailsList.add(newDetail)
+            detailsList.add(Detail("", ""))
             notifyDataSetChanged()
-            Log.i(TAG, "details list : $detailsList")
+            Log.i(TAG, "addEmptyField details list : $detailsList")
             true
         } else {
             Log.i(TAG, "addEmptyField: max size exceeded")
@@ -38,21 +38,25 @@ class AddDetailsAdapter(
         }
     }
 
-    private fun deleteElement(position: Int) {
+    private fun deleteElement(position: Int){
 
-        if (detailsList.size == 0) {
-            return
-        } else {
+        if (detailsList.isNotEmpty()) {
             detailsList.removeAt(position)
+            if(detailsList.size == 0){
+                isEmpty.postValue(true)
+            }
             notifyDataSetChanged()
         }
-        Log.i(TAG, "deleteElement:${detailsList.size}")
+        else {
+            isEmpty.postValue(true)
+        }
     }
 
     inner class AddDetailsHolder(private val binding: SingleDetailFieldBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(position: Int) {
+
             val detail = detailsList[position]
             val size = detailsList.size
 
@@ -65,15 +69,14 @@ class AddDetailsAdapter(
                     detailsList[position].body = text.toString()
                 }
 
+
                 titleEditText.setText(detail.title)
                 bodyEditText.setText(detail.body)
 
                 if (position <= size - 2) {
-//                    addEmptyField.isVisible = false
                     addEmptyField.setOnClickListener(null)
                 } else {
                     addEmptyField.apply {
-                        isVisible = true
                         setOnClickListener {
                             addEmptyField()
                         }

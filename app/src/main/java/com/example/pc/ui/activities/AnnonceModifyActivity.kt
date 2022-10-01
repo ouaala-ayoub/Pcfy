@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,7 +78,17 @@ class AnnonceModifyActivity : AppCompatActivity() {
                             )
 
                             detailsViewBinding.apply {
-                                detailsAddAdapter.filterDetailsList()
+                                detailsAddAdapter.apply {
+                                    filterDetailsList()
+                                    isEmpty.observe(this@AnnonceModifyActivity) { isEmpty ->
+                                        noDetails.isVisible = isEmpty
+                                    }
+                                    addDetail.setOnClickListener {
+                                        addEmptyField()
+                                        noDetails.isVisible = false
+                                    }
+                                }
+
                                 addDetailsRv.adapter = detailsAddAdapter
                                 addDetailsRv.layoutManager =
                                     LinearLayoutManager(this@AnnonceModifyActivity)

@@ -92,5 +92,7 @@
     <string name="ajouter_des_details">Ajouter des details</string>
 
     <string name="detail_title">"Ajouter des details"</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="pas_de_details">Pas de details</string>
 
 </resources>
