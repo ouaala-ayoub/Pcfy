@@ -22,6 +22,7 @@ private const val ERROR404 = "Page introuvable"
 private const val ERROR500 = "Erreur interne du serveur"
 private const val ERROR401 = "Email ou password incorrect"
 const val BASE_AWS_S3_LINK = "https://pcfy.s3.eu-west-3.amazonaws.com/"
+const val USERS_AWS_S3_LINK = "https://pcfy-profiles.s3.eu-west-3.amazonaws.com/"
 
 interface OnDialogClicked{
     fun onPositiveButtonClicked()

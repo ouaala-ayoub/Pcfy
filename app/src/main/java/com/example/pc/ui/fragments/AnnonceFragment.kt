@@ -25,6 +25,7 @@ import com.example.pc.ui.adapters.ImagesAdapter
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.BASE_AWS_S3_LINK
+import com.example.pc.utils.USERS_AWS_S3_LINK
 import com.example.pc.utils.toast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -124,11 +125,14 @@ class AnnonceFragment : Fragment() {
                             //the seller field
                             seller.observe(viewLifecycleOwner) { seller ->
                                 sellerName.text = seller.name
-//                                picasso
-//                                    .load(seller.imageUrl)
-//                                    .fit()
-//                                    .centerCrop()
-//                                    .into(selleerImage)
+                                if (seller.imageUrl.isNullOrBlank()){
+                                    selleerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                                }
+                                picasso
+                                    .load("${USERS_AWS_S3_LINK}${seller.imageUrl}")
+                                    .fit()
+                                    .centerCrop()
+                                    .into(selleerImage)
                             }
 
                             productDescription.text = annonce.description

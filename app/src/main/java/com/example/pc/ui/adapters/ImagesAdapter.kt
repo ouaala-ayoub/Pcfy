@@ -3,11 +3,13 @@ package com.example.pc.ui.adapters
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
 import com.example.pc.databinding.SingleScrollableImageBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
+import com.example.pc.utils.USERS_AWS_S3_LINK
 import com.squareup.picasso.Picasso
-
 
 
 private const val TAG = "ImagesAdapter"
@@ -32,18 +34,44 @@ class ImagesAdapter(
 
             binding.apply {
                 //each image
+
+                if (currentImage.isBlank()) {
+                    productImages.setImageResource(
+                        R.drawable.ic_baseline_no_photography_24
+                    )
+                }
+
                 picasso
                     .load("$BASE_AWS_S3_LINK${currentImage}")
                     .fit()
                     .into(productImages)
 
                 //left and right button
-                left.setOnClickListener {
-                    onImageClicked.onLeftClicked()
+                left.apply {
+                    setOnClickListener {
+                        onImageClicked.onLeftClicked()
+                    }
+                    if (position == 0) {
+                        isVisible = false
+                        isActivated = false
+                    }
                 }
-                right.setOnClickListener {
-                    onImageClicked.onRightClicked()
+
+                right.apply {
+                    setOnClickListener {
+                        onImageClicked.onRightClicked()
+                    }
+                    if (position == imagesList.lastIndex) {
+                        isVisible = false
+                        isActivated = false
+                    }
                 }
+
+                if (imagesList.size == 1) {
+                    left.isVisible = false
+                    right.isVisible = false
+                }
+
             }
         }
     }
