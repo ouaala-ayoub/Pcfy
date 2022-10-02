@@ -8,17 +8,19 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
+import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.databinding.ActivityUserAnnoncesBinding
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.viewmodels.UserAnnoncesModel
+import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.OnDialogClicked
 import com.example.pc.utils.makeDialog
 import com.example.pc.utils.toast
 
 private const val TAG = "UserAnnoncesActivity"
-private const val ANNONCE_DELETED_SUCCESS = ""
+private const val ANNONCE_DELETED_SUCCESS = "Annonce suprimée avec succès"
 private const val ANNONCE_ERROR_MSG = "Erreur inattendue"
 
 class UserAnnoncesActivity : AppCompatActivity() {
@@ -27,12 +29,14 @@ class UserAnnoncesActivity : AppCompatActivity() {
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var userId: String
     private lateinit var userAnnoncesModel: UserAnnoncesModel
+    private lateinit var currentTokens: Tokens
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //to change with fragment ?
 
         binding = ActivityUserAnnoncesBinding.inflate(layoutInflater)
+        currentTokens = LocalStorage.getTokens(this)
         userId = intent.getStringExtra("id")!!
         userAnnoncesModel = UserAnnoncesModel(
             UserInfoRepository(
@@ -56,7 +60,7 @@ class UserAnnoncesActivity : AppCompatActivity() {
                         this@UserAnnoncesActivity,
                         object : OnDialogClicked {
                             override fun onPositiveButtonClicked() {
-                                userAnnoncesModel.deleteAnnonce(userId, annonceId)
+                                userAnnoncesModel.deleteAnnonce(userId, currentTokens, annonceId)
                                     .observe(this@UserAnnoncesActivity) { deletedWithSuccess ->
                                         if (deletedWithSuccess) {
                                             baseContext.toast(
@@ -64,7 +68,10 @@ class UserAnnoncesActivity : AppCompatActivity() {
                                                 Toast.LENGTH_SHORT
                                             )
                                         } else {
-                                            baseContext.toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
+                                            baseContext.toast(
+                                                ANNONCE_ERROR_MSG,
+                                                Toast.LENGTH_SHORT
+                                            )
                                         }
                                     }
                             }
@@ -87,7 +94,7 @@ class UserAnnoncesActivity : AppCompatActivity() {
                     returnToUserInfo()
                 }
 
-                if (annonces != null) {
+                else {
                     updateIsEmpty().observe(this@UserAnnoncesActivity) {
                         binding.isEmpty.isVisible = it
                     }
@@ -117,11 +124,6 @@ class UserAnnoncesActivity : AppCompatActivity() {
         val intent = Intent(this, AnnonceModifyActivity::class.java)
         intent.putExtra("id", annonceId)
         startActivity(intent)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(TAG, "onDestroy: activity destroyed")
     }
 
 }

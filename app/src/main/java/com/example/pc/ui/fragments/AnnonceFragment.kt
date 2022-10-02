@@ -114,9 +114,7 @@ class AnnonceFragment : Fragment() {
                                         }
                                     }
                                 )
-                                TabLayoutMediator(trackingTab, this, true) { tab, position ->
-                                    Log.i(TAG, "just testing position $position")
-                                }.attach()
+                                TabLayoutMediator(trackingTab, this, true) { _, _ -> }.attach()
                             }
 
                             productTitle.text = annonce.title

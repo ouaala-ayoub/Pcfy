@@ -1,8 +1,6 @@
 package com.example.pc.data.remote
 
 import com.example.pc.data.models.network.*
-import okhttp3.FormBody
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -12,9 +10,8 @@ import retrofit2.http.*
 interface RetrofitService {
 
     // announces
-
-    @DELETE("announces/{id}")
-    fun deleteAnnonce(@Path("id") annonceId: String): Call<Annonce>
+    @HTTP(method = "DELETE",path ="announces/{id}", hasBody = true)
+    fun deleteAnnonce(@Body tokens: Tokens, @Path("id") annonceId: String): Call<IdResponse>
 
     @GET("announces")
     fun getAllAnnonces(

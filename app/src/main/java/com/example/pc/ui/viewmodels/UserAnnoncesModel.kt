@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pc.data.models.network.Annonce
-import com.example.pc.data.models.network.Error
-import com.example.pc.data.models.network.NewAnnonceRequest
-import com.example.pc.data.models.network.User
+import com.example.pc.data.models.network.*
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.utils.getError
 import retrofit2.Call
@@ -56,16 +53,16 @@ class UserAnnoncesModel(
         return annoncesList
     }
 
-    fun deleteAnnonce(userId: String, annonceId: String): LiveData<Boolean> {
+    fun deleteAnnonce(userId: String, tokens: Tokens, annonceId: String): LiveData<Boolean> {
 
         //to add : delete the annonce id from the user object
 
 
         isTurning.postValue(true)
 
-        userInfoRepository.deleteAnnonce(annonceId).enqueue(object : Callback<Annonce> {
+        userInfoRepository.deleteAnnonce(tokens, annonceId).enqueue(object : Callback<IdResponse> {
 
-            override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
+            override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if (response.isSuccessful && response.body() != null) {
 
                     deletedAnnonce.postValue(true)
@@ -98,9 +95,7 @@ class UserAnnoncesModel(
                                 override fun onFailure(call: Call<User>, t: Throwable) {
                                     Log.e(TAG, "onFailure: ${t.message}")
                                 }
-
                             })
-
                     }
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
@@ -110,8 +105,8 @@ class UserAnnoncesModel(
                 isTurning.postValue(false)
             }
 
-            override fun onFailure(call: Call<Annonce>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
+            override fun onFailure(call: Call<IdResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure deleteAnnonce : ${t.message}")
                 deletedAnnonce.postValue(false)
                 isTurning.postValue(false)
             }
