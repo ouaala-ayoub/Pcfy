@@ -11,9 +11,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="50dp"
+        android:layout_width="@dimen/favourites_image_size"
+        android:layout_height="@dimen/favourites_image_size"
+        android:layout_margin="15dp"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,8 +23,6 @@
             android:id="@+id/favourite_image"
             android:layout_width="@dimen/favourites_image_size"
             android:layout_height="@dimen/favourites_image_size"
-            android:layout_margin="10dp"
-            android:layout_marginStart="10dp"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_launcher_background" />
     </androidx.cardview.widget.CardView>

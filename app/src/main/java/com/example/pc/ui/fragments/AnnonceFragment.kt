@@ -32,7 +32,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 
 private const val TAG = "AnnonceActivity"
-private const val ERROR_TEXT = "test erreur"
+private const val ERROR_TEXT = "Erreur inattendue"
+private const val NO_USER = "Vous etes pas connecté"
 private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
 
 class AnnonceFragment : Fragment() {
@@ -48,11 +49,20 @@ class AnnonceFragment : Fragment() {
             retrofitService
         )
     )
-
     private lateinit var authModel: AuthModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        authModel = AuthModel(
+            retrofitService,
+            null
+        )
+
+        authModel.apply {
+            auth(requireContext())
+        }
+
 
         val activity = requireActivity() as AnnonceActivity
         annonceId = activity.intent.getStringExtra("id") as String
@@ -85,8 +95,15 @@ class AnnonceFragment : Fragment() {
 
                             imagesVp.apply {
 
+                                var pictures = annonce.pictures
+                                if (pictures.isEmpty()){
+                                    Log.i(TAG, "pictures: adding")
+                                   pictures.add("")
+                                }
+
+
                                 adapter = ImagesAdapter(
-                                    annonce.pictures,
+                                    pictures,
                                     object : ImagesAdapter.OnImageClicked {
                                         override fun onLeftClicked() {
                                             currentItem -= 1
@@ -125,13 +142,12 @@ class AnnonceFragment : Fragment() {
                             //the seller field
                             seller.observe(viewLifecycleOwner) { seller ->
                                 sellerName.text = seller.name
-                                if (seller.imageUrl.isNullOrBlank()){
+                                if (seller.imageUrl.isNullOrBlank()) {
                                     selleerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                                 }
                                 picasso
                                     .load("${USERS_AWS_S3_LINK}${seller.imageUrl}")
                                     .fit()
-                                    .centerCrop()
                                     .into(selleerImage)
                             }
 
@@ -147,38 +163,69 @@ class AnnonceFragment : Fragment() {
                         goToMainActivity()
                     }
 
-                    addToFav.setOnClickListener {
-                        if (annonce != null) {
 
-                            authModel = AuthModel(
-                                retrofitService,
-                                null
-                            )
+                    addToFav.apply {
+                        authModel.apply {
+                            auth.observe(viewLifecycleOwner) {
+                                if (isAuth()) {
 
-                            authModel.auth(requireContext())
+                                    userId = getPayload()!!.id
+                                    updateIsAddedToFav(userId, annonceId)
 
-                            authModel.apply {
-                                auth.observe(viewLifecycleOwner) {
-
-                                    if (isAuth()) {
-                                        userId = getPayload()!!.id
-                                        addToFavourites(userId, annonce)
-                                        addedFavouriteToUser.observe(viewLifecycleOwner) {
-                                            if (it)
-                                                doOnSuccess()
-                                            else
-                                                doOnFail()
+                                    isAddedToFav.observe(viewLifecycleOwner) { isFavChecked ->
+                                        isChecked = isFavChecked
+                                        if (!isFavChecked) {
+                                            setOnClickListener {
+                                                addToFavourites(userId, annonce)
+                                                addedFavouriteToUser.observe(viewLifecycleOwner) {
+                                                    if (it) {
+                                                        doOnSuccess()
+                                                    } else
+                                                        doOnFail(ERROR_TEXT)
+                                                }
+                                            }
+                                        } else if (isFavChecked) {
+                                            setOnClickListener {
+                                                //add logic to delete favourite
+                                            }
                                         }
-                                    } else {
-                                        goToLoginActivity()
+
                                     }
+
+
+                                } else {
+                                    //by default isChecked is false is user not connected
+                                    isChecked = false
                                 }
                             }
-                        } else {
-                            //consider Fail
-                            doOnFail()
                         }
                     }
+
+//                    addToFav.setOnClickListener { addToFav ->
+//                        if (annonce != null) {
+//                            authModel.apply {
+//                                auth.observe(viewLifecycleOwner) {
+//
+//                                    if (isAuth()) {
+//                                        userId = getPayload()!!.id
+//
+//                                        addToFavourites(userId, annonce)
+//                                        addedFavouriteToUser.observe(viewLifecycleOwner) {
+//                                            if (it) {
+//                                                doOnSuccess()
+//                                            } else
+//                                                doOnFail(ERROR_TEXT)
+//                                        }
+//                                    } else {
+//                                        goToLoginActivity()
+//                                    }
+//                                }
+//                            }
+//                        } else {
+//                            //consider Fail
+//                            doOnFail(ERROR_TEXT)
+//                        }
+//                    }
 
                     productSeller.setOnClickListener {
                         goToSellerPage(annonce.seller!!.userId)
@@ -209,8 +256,8 @@ class AnnonceFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun doOnFail() {
-        requireContext().toast(ERROR_TEXT, Toast.LENGTH_SHORT)
+    private fun doOnFail(message: String) {
+        requireContext().toast(message, Toast.LENGTH_SHORT)
         goToMainActivity()
     }
 

@@ -8,6 +8,7 @@ import com.example.pc.data.models.network.NewFavouritesRequest
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.AnnonceRepository
+import com.example.pc.utils.getError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,10 +18,43 @@ private const val TAG = "AnnonceModel"
 class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel() {
 
     val annonceToShow = MutableLiveData<Annonce>()
+    val isAddedToFav = MutableLiveData<Boolean>()
     val seller = MutableLiveData<User>()
     val addedFavouriteToUser = MutableLiveData<Boolean>()
+    var deletedWithSuccess = MutableLiveData<Boolean>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<String>()
+
+    fun updateIsAddedToFav(userId: String, favouriteToCheckId: String){
+
+        isProgressBarTurning.postValue(true)
+
+        annonceRepository.getUserById(userId).enqueue(object: Callback<User>{
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val annonces = response.body()!!.favourites
+                    val isAddedToFavRes = favouriteToCheckId in annonces
+                    Log.i(TAG, "updateIsAddedToFav favouriteToCheckId in annonces: $isAddedToFavRes")
+                    isAddedToFav.postValue(isAddedToFavRes)
+                }
+                else {
+                    try {
+                        val error = getError(response.errorBody()!!, response.code())
+                        Log.i(TAG, "updateIsAddedToFav : $error")
+                    }catch (e: Throwable){
+                        Log.i(TAG, "getError : ${e.message}")
+                    }
+                }
+                isProgressBarTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "updateIsAddedToFav onFailure: ${t.message}" )
+                isProgressBarTurning.postValue(false)
+            }
+        })
+    }
+
 
     //add business logic
     fun getAnnonceById(annonceId: String) {

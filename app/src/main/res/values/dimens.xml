@@ -19,4 +19,6 @@
     <dimen name="annonce_image_size">80dp</dimen>
     <dimen name="arrow_size">40dp</dimen>
     <dimen name="tab_max_width">20dp</dimen>
+    <dimen name="fav_height">30dp</dimen>
+    <dimen name="fav_width">35dp</dimen>
 </resources>

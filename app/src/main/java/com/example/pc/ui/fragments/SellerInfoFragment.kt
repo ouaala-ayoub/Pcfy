@@ -19,6 +19,7 @@ import com.example.pc.databinding.FragmentSellerInfoBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.viewmodels.SellerInfoModel
+import com.example.pc.utils.USERS_AWS_S3_LINK
 import com.example.pc.utils.toast
 import com.squareup.picasso.Picasso
 
@@ -115,9 +116,8 @@ class SellerInfoFragment : Fragment() {
             } else {
                 Picasso
                     .get()
-                    .load(seller.imageUrl)
+                    .load("${USERS_AWS_S3_LINK}${seller.imageUrl}")
                     .fit()
-                    .centerCrop()
                     .into(sellerImage)
             }
 

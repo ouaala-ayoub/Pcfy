@@ -36,9 +36,12 @@ class ImagesAdapter(
                 //each image
 
                 if (currentImage.isBlank()) {
-                    productImages.setImageResource(
-                        R.drawable.ic_baseline_no_photography_24
-                    )
+                    val imageSize = binding.root.resources.getDimension(R.dimen.annonce_image_height).toInt()
+                    picasso
+                        .load(R.drawable.ic_baseline_no_photography_24)
+                        .resize(imageSize, imageSize)
+                        .centerCrop()
+                        .into(productImages)
                 }
 
                 picasso
