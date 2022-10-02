@@ -1,12 +1,12 @@
 package com.example.pc.ui.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.view.isNotEmpty
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -94,7 +94,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                     LinearLayoutManager(this@AnnonceModifyActivity)
                             }
 
-                            makeDialog(
+                            val dialog = makeDialog(
                                 this@AnnonceModifyActivity,
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
@@ -113,8 +113,13 @@ class AnnonceModifyActivity : AppCompatActivity() {
                                 getString(R.string.detail_title),
                                 null,
                                 detailsViewBinding.root
-                            ).show()
-
+                            )
+                            dialog.show()
+                            dialog.window!!.clearFlags(
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                                        or
+                                        WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                            )
                         }
 
                         titleEditText.setText(annonce.title)
