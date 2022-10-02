@@ -104,6 +104,9 @@
     </string>
     <string name="authorise">autoriser</string>
 
+    <string name="image_selected">1 Image Selectionnée</string>
+    <string name="multiple_images_selected">%1$d Image Selectionnée</string>
+
 
 </resources>
 

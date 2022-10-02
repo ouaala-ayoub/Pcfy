@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -107,14 +106,16 @@ class CreateAnnonceFragment : Fragment() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     // There are no request codes
                     val data: Intent? = result.data
-                    Log.i(TAG, "image retrieved")
-                    Log.i(TAG, "data is ${data?.data}: ")
-                    updateImageText(data?.clipData?.itemCount)
 
-                    if (data?.clipData != null) {
+                    if (data?.data != null){
+                        updateImageText(1)
+                        imagesUris = listOf(data.data!!)
+                    }
+
+                    else if (data?.clipData?.itemCount != null){
+                        val itemCount = data.clipData?.itemCount
+                        updateImageText(itemCount)
                         imagesUris = getImagesUris(data.clipData!!)
-                        Log.i(TAG, "imagesUris: $imagesUris")
-
                     }
                 }
             }
@@ -347,14 +348,15 @@ class CreateAnnonceFragment : Fragment() {
     }
 
     private fun setTheUploadImage() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         resultLauncher.launch(intent)
     }
 
     private fun updateImageText(quantity: Int?) {
-        if (quantity == 1) binding!!.imageNames.text = "1 Image Selectionnée "
-        else binding!!.imageNames.text = "$quantity Images Selectionnées "
+        if (quantity == 1) binding!!.imageNames.text = getString(R.string.image_selected)
+        else binding!!.imageNames.text = getString(R.string.multiple_images_selected, quantity)
     }
 
 
@@ -428,7 +430,7 @@ class CreateAnnonceFragment : Fragment() {
 
         for (uri in imagesUris) {
             val filePath = uriPathHelper.getPath(requireContext(), uri)
-            val file = File(filePath)
+            val file = File(filePath!!)
             Log.i(TAG, "getImagesRequestBody: file $file")
             val requestFile: RequestBody =
                 file.asRequestBody("multipart/form-data".toMediaTypeOrNull())

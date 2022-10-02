@@ -312,7 +312,8 @@ class UserCreateActivity : AppCompatActivity() {
     }
 
     private fun setTheUploadImage() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
         resultLauncher.launch(intent)
     }
 
@@ -323,7 +324,7 @@ class UserCreateActivity : AppCompatActivity() {
 
     private fun getImagesRequestBody(uri: Uri): ImageInfo {
 
-        val file = File(URIPathHelper().getPath(this, uri))
+        val file = File(URIPathHelper().getPath(this, uri)!!)
         Log.i(TAG, "file selected : ${file.name}")
         val requestFile: RequestBody =
             file.asRequestBody("image/*".toMediaTypeOrNull())
