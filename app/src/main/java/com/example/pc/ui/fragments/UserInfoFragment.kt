@@ -145,7 +145,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         when (v?.id) {
 
             R.id.user_image -> {
-                //choose image intent
+                //change user image
             }
 
             R.id.user_info -> {

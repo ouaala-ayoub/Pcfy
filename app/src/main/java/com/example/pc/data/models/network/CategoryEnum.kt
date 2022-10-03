@@ -3,10 +3,10 @@ package com.example.pc.data.models.network
 enum class CategoryEnum (val title: String){
 
     ALL("tous"),
-    LAPTOP("ordinateurs portables"),
+    LAPTOP("pc portables"),
     GAMER("pc gamer"),
     TABLET("tablettes"),
-    DESKTOP("ordinateurs de bureau"),
+    DESKTOP("pc de bureau"),
     SCREEN("écrans pc"),
     PRINTER("imprimantes"),
     CONSOLE("console et jeux vidéo"),
