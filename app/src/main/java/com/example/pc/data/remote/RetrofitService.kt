@@ -9,8 +9,8 @@ import retrofit2.http.*
 
 interface RetrofitService {
 
-    // announces
-    @HTTP(method = "DELETE",path ="announces/{id}", hasBody = true)
+    // Announces
+    @HTTP(method = "DELETE", path = "announces/{id}", hasBody = true)
     fun deleteAnnonce(@Body tokens: Tokens, @Path("id") annonceId: String): Call<IdResponse>
 
     @GET("announces")
@@ -30,22 +30,24 @@ interface RetrofitService {
     @GET("users/{id}/announces")
     fun getAnnounces(@Path("id") userId: String): Call<List<Annonce>>
 
+    @PUT("announces/{id}")
+    fun updateAnnonceInfo(@Path("id") annonceId: String, @Body newAnnonce: Annonce): Call<Annonce>
+
     //handle users admin ?
+//
+//    @GET("users")
+//    fun getUsers(): Call<List<User>>
 
-    @GET("users")
-    fun getUsers(): Call<List<User>>
-
-    // auth
+    // Auth
 
     @POST("auth/signin")
     fun login(@Body userCredentials: UserCredentials): Call<Tokens>
 
-
     @POST("auth")
     fun auth(@Body tokens: Tokens): Call<BodyX?>
 
+    // Users
 
-    //users
     @GET("users/{id}")
     fun getUserById(@Path("id") userId: String): Call<User>
 
@@ -61,8 +63,10 @@ interface RetrofitService {
         @Body annonceToAddId: NewAnnonceRequest
     ): Call<User>
 
-    //favourites
-//    ???
+    @PUT("users/{id}")
+    fun updateUserInfo(@Path("id") userId: String, @Body newUser: User): Call<User>
+
+    // Favourites
 
     @GET("users/{id}/favourites")
     fun getFavourites(@Path("id") userId: String): Call<List<Annonce>>
@@ -73,12 +77,21 @@ interface RetrofitService {
         @Body favouriteToAddId: NewFavouritesRequest
     ): Call<User>
 
-    @PUT("users/{id}")
-    fun updateUserInfo(@Path("id") userId: String, @Body newUser: User): Call<User>
+    // Orders
 
-    @PUT("announces/{id}")
-    fun updateAnnonceInfo(@Path("id") annonceId: String, @Body newAnnonce: Annonce): Call<Annonce>
+    @GET("orders")
+    fun getOrders(): Call<List<Order>>
 
+    //to change
+    @POST("orders")
+    fun addOrder(@Path("id") orderToAdd: Order): Call<Order>
+
+    @GET("orders/{id}")
+    fun getOrderById(@Path("id") orderId: String): Call<Order>
+
+    //to change
+    @DELETE("orders/{id}")
+    fun deleteOrderById(@Path("id") orderToDeleteId: String): Call<Order>
 
     companion object {
 
