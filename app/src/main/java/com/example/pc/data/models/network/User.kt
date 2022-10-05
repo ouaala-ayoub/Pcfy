@@ -15,7 +15,7 @@ data class User(
     val email: String,
 
     @SerializedName("password")
-    val password: String,
+    val password: String? = null,
 
     @SerializedName("isAdmin")
     val isAdmin: Boolean = false,

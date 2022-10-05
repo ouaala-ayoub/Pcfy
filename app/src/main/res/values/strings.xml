@@ -107,6 +107,9 @@
     <string name="image_selected">1 Image Selectionnée</string>
     <string name="multiple_images_selected">%1$d Image Selectionnée</string>
 
+    <string name="quit_signup_title"> Quitter la registration ? </string>
+    <string name="quit_signup_message"> Toutes vos informations seront perdues, Etes vous sûr ? </string>
+
 
 </resources>
 

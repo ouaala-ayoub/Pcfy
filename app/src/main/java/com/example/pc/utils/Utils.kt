@@ -37,7 +37,7 @@ fun Context.toast(message: String, length: Int) =
 fun makeDialog(
     context: Context,
     onDialogClicked: OnDialogClicked,
-    title: String,
+    title: String?,
     message: String?,
     view: View? = null,
     negativeText: String = context.resources.getString(R.string.Cancel),
