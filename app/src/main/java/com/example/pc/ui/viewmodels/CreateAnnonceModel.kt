@@ -20,7 +20,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     ViewModel() {
 
     private val errorMessage = MutableLiveData<String>()
-    private val requestSuccessful = MutableLiveData<Boolean>()
+    val requestSuccessful = MutableLiveData<Boolean>()
     val titleLiveData = MutableLiveData<String>()
     val priceLiveData = MutableLiveData<String>()
     val imagesLiveData = MutableLiveData<String>()
@@ -56,7 +56,6 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     }
 
     fun addAnnonce(
-        userId: String,
         annonce: RequestBody,
     ): LiveData<Boolean> {
 
@@ -69,99 +68,15 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                 override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                     if (response.isSuccessful && response.body()?.objectId != null) {
 
-                        //to ask about the id response
+                        Log.i(TAG, "addAnnonce response body is ${response.body()}")
+                        requestSuccessful.postValue(true)
 
-                        val annonceId = response.body()!!.objectId
-                        Log.i(TAG, "response body is ${response.body()}")
-
-                        createAnnonceRepository.getUserById(userId)
-                            .enqueue(object : Callback<User> {
-                                override fun onResponse(
-                                    call: Call<User>,
-                                    response: Response<User>
-                                ) {
-                                    if (response.isSuccessful && response.body() != null) {
-
-                                        Log.i(TAG, "user = ${response.body()} ")
-
-                                        val annonceBody = response.body()!!.annonces
-
-                                        annonceBody.add(annonceId!!)
-                                        val annonceReqBody = NewAnnonceRequest(annonceBody)
-
-                                        createAnnonceRepository.addAnnonceIdToUser(
-                                            //to change
-                                            userId,
-                                            annonceReqBody
-                                        ).enqueue(object : Callback<User> {
-                                            override fun onResponse(
-                                                call: Call<User>,
-                                                response: Response<User>
-                                            ) {
-                                                if (response.isSuccessful && response.body() != null) {
-                                                    isTurning.postValue(false)
-                                                    requestSuccessful.postValue(true)
-                                                } else {
-                                                    Log.e(
-                                                        TAG,
-                                                        "response error is addAnnonceIdToUser ${response.errorBody()} "
-                                                    )
-                                                    Log.i(
-                                                        TAG,
-                                                        "response message addAnnonceIdToUser ${response.message()} "
-                                                    )
-                                                    Log.i(
-                                                        TAG,
-                                                        "response code addAnnonceIdToUser ${response.code()} "
-                                                    )
-                                                    isTurning.postValue(false)
-                                                    requestSuccessful.postValue(false)
-                                                }
-                                            }
-
-                                            override fun onFailure(call: Call<User>, t: Throwable) {
-                                                errorMessage.postValue(t.message)
-                                                isTurning.postValue(false)
-                                                requestSuccessful.postValue(false)
-                                                Log.e(TAG, t.message!!)
-                                            }
-                                        })
-                                    } else {
-                                        val error =
-                                            getError(response.errorBody()!!, response.code())
-                                        Log.e(TAG, "onResponse getUserById: $error")
-                                        Log.e(
-                                            TAG,
-                                            "response error is getUserById ${response.errorBody()} "
-                                        )
-                                        Log.i(
-                                            TAG,
-                                            "response message getUserById ${response.message()} "
-                                        )
-                                        Log.i(TAG, "response code getUserById ${response.code()} ")
-                                        Log.i(TAG, "response raw getUserById ${response.raw()} ")
-                                        isTurning.postValue(false)
-                                        requestSuccessful.postValue(false)
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<User>, t: Throwable) {
-                                    Log.e(TAG, t.message!!)
-                                    requestSuccessful.postValue(false)
-                                    errorMessage.postValue(t.message)
-                                    isTurning.postValue(false)
-                                }
-                            })
                     } else {
                         val error = response.errorBody()?.let { getError(it, response.code()) }
                         Log.e(TAG, "onResponse addAnnonce : $error")
-                        Log.e(TAG, "response error is addAnnonce ${response.errorBody()} ")
-                        Log.i(TAG, "response message addAnnonce ${response.message()} ")
-                        Log.i(TAG, "response code addAnnonce ${response.code()} ")
-                        Log.i(TAG, "response raw addAnnonce ${response.raw()} ")
-                        isTurning.postValue(false)
                         requestSuccessful.postValue(false)
                     }
+                    isTurning.postValue(false)
                 }
 
                 override fun onFailure(call: Call<IdResponse>, t: Throwable) {

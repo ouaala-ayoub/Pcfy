@@ -107,12 +107,10 @@ class CreateAnnonceFragment : Fragment() {
                     // There are no request codes
                     val data: Intent? = result.data
 
-                    if (data?.data != null){
+                    if (data?.data != null) {
                         updateImageText(1)
                         imagesUris = listOf(data.data!!)
-                    }
-
-                    else if (data?.clipData?.itemCount != null){
+                    } else if (data?.clipData?.itemCount != null) {
                         val itemCount = data.clipData?.itemCount
                         updateImageText(itemCount)
                         imagesUris = getImagesUris(data.clipData!!)
@@ -206,10 +204,8 @@ class CreateAnnonceFragment : Fragment() {
 
                                         viewModel.apply {
                                             //to change
-                                            addAnnonce(
-                                                currentUser.userId,
-                                                annonceToAdd,
-                                            ).observe(viewLifecycleOwner) { requestSuccess ->
+                                            addAnnonce(annonceToAdd)
+                                            requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
                                                 isTurning.observe(viewLifecycleOwner) { isVisible ->
                                                     progressBar.isVisible = isVisible
                                                 }
@@ -271,7 +267,7 @@ class CreateAnnonceFragment : Fragment() {
                         // continue using your app without granting the permission.
                         Log.i(TAG, "shouldShowRequestPermissionRationale: true")
                         showInContextUI(
-                            object: OnDialogClicked {
+                            object : OnDialogClicked {
                                 override fun onPositiveButtonClicked() {
                                     requestPermissionLauncher.launch(
                                         Manifest.permission.READ_EXTERNAL_STORAGE

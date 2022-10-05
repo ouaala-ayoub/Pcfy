@@ -60,9 +60,13 @@ class UserAnnoncesActivity : AppCompatActivity() {
                         this@UserAnnoncesActivity,
                         object : OnDialogClicked {
                             override fun onPositiveButtonClicked() {
-                                userAnnoncesModel.deleteAnnonce(userId, currentTokens, annonceId)
-                                    .observe(this@UserAnnoncesActivity) { deletedWithSuccess ->
+                                userAnnoncesModel.apply {
+                                    //delete then observe the deleted Boolean
+                                    deleteAnnonce(currentTokens, annonceId)
+
+                                    deletedAnnonce.observe(this@UserAnnoncesActivity) { deletedWithSuccess ->
                                         if (deletedWithSuccess) {
+                                            getAnnoncesById(userId)
                                             baseContext.toast(
                                                 ANNONCE_DELETED_SUCCESS,
                                                 Toast.LENGTH_SHORT
@@ -74,6 +78,7 @@ class UserAnnoncesActivity : AppCompatActivity() {
                                             )
                                         }
                                     }
+                                }
                             }
 
                             override fun onNegativeButtonClicked() {}
@@ -92,9 +97,7 @@ class UserAnnoncesActivity : AppCompatActivity() {
                 if (annonces == null) {
                     this@UserAnnoncesActivity.toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
                     returnToUserInfo()
-                }
-
-                else {
+                } else {
                     updateIsEmpty().observe(this@UserAnnoncesActivity) {
                         binding.isEmpty.isVisible = it
                     }

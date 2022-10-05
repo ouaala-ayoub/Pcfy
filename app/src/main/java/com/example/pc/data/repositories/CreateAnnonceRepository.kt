@@ -24,5 +24,4 @@ class CreateAnnonceRepository(private val retrofitService: RetrofitService) {
         annonceId: NewAnnonceRequest
     ): Call<User> = retrofitService.updateAnnonces(userId, annonceId)
 
-    fun getUserById(userId: String) = retrofitService.getUserById(userId)
 }

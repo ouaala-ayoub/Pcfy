@@ -3,7 +3,8 @@
 
     <item
         android:id="@+id/settings"
-        android:title="@string/settings" />
+        android:title="@string/settings"
+        android:icon="@drawable/ic_baseline_settings_24"/>
     <item
         android:id="@+id/share"
         android:title="@string/partager" />
@@ -12,5 +13,6 @@
         android:title="@string/notre_site_web" />
     <item
         android:id="@+id/logout"
-        android:title="@string/logout" />
+        android:title="@string/logout"
+        android:icon="@drawable/ic_baseline_logout_24"/>
 </menu>

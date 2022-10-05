@@ -34,13 +34,12 @@ class UserAnnoncesModel(
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse body ${response.body()}")
                     annoncesList.postValue(response.body()!!.toMutableList())
-                    isTurning.postValue(false)
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
                     errorMessage.postValue(error)
                     Log.e(TAG, "onResponse error $error")
-                    isTurning.postValue(false)
                 }
+                isTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
@@ -53,10 +52,7 @@ class UserAnnoncesModel(
         return annoncesList
     }
 
-    fun deleteAnnonce(userId: String, tokens: Tokens, annonceId: String): LiveData<Boolean> {
-
-        //to add : delete the annonce id from the user object
-
+    fun deleteAnnonce(tokens: Tokens, annonceId: String) {
 
         isTurning.postValue(true)
 
@@ -64,39 +60,9 @@ class UserAnnoncesModel(
 
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if (response.isSuccessful && response.body() != null) {
-
+                    Log.i(TAG, "deleteAnnonce onResponse: ${response.body()}")
                     deletedAnnonce.postValue(true)
 
-                    val annonces = annoncesList.value
-                    var idsList: List<String> = listOf()
-                    val removed = annonces?.removeAll { annonce ->
-                        annonce.id == annonceId
-                    }
-                    if (!annonces.isNullOrEmpty()) {
-                        idsList = annonces.map { annonce -> annonce.id!! }
-                    }
-                    annoncesList.postValue(annonces)
-
-                    if (removed != null && removed == true) {
-
-                        userInfoRepository.updateAnnonces(userId, NewAnnonceRequest(idsList))
-                            .enqueue(object : Callback<User> {
-
-                                override fun onResponse(
-                                    call: Call<User>,
-                                    response: Response<User>
-                                ) {
-                                    Log.i(
-                                        TAG,
-                                        "onResponse: deleted from user annonces with success"
-                                    )
-                                }
-
-                                override fun onFailure(call: Call<User>, t: Throwable) {
-                                    Log.e(TAG, "onFailure: ${t.message}")
-                                }
-                            })
-                    }
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "onResponse delete annonce: ${error?.message}")
@@ -112,7 +78,7 @@ class UserAnnoncesModel(
             }
 
         })
-        return deletedAnnonce
+
     }
 
     fun updateIsEmpty(): MutableLiveData<Boolean> {

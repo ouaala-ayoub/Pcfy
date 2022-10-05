@@ -16,15 +16,19 @@
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.195" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.195" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.1" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_logout_24.xml" value="0.116" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_no_photography_24.xml" value="0.1" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_non_selected_24.xml" value="0.16" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_selected_24.xml" value="0.1" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.195" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/tab_selector.xml" value="0.1" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/drawable/top_user_info.xml" value="0.1" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/activity_annonce.xml" value="0.33" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/activity_annonce_modify.xml" value="0.3489583333333333" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/activity_create_user.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/activity_login.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/activity_main.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/activity_user_annonces.xml" value="0.3489583333333333" />
@@ -44,6 +48,8 @@
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/fragment_seller_info.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/fragment_user.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/fragment_user_info.xml" value="0.33" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/fragment_user_step_one.xml" value="0.3489583333333333" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/fragment_user_step_two.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/list_item.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/loading_screen.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/no_user_connected.xml" value="0.34791666666666665" />
@@ -54,6 +60,7 @@
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/single_detail_field.xml" value="0.33" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/single_favourite.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/single_scrollable_image.xml" value="0.3489583333333333" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout/step_one_fragment.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/menu/logged_in_options_menu.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/menu/logged_out_options_menu.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/menu/main_menu.xml" value="0.3489583333333333" />
