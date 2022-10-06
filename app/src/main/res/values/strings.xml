@@ -109,6 +109,7 @@
 
     <string name="quit_signup_title"> Quitter la registration ? </string>
     <string name="quit_signup_message"> Toutes vos informations seront perdues, Etes vous sûr ? </string>
+    <string name="bienvenue_inscrivez_vous_en_simples_tapes">Bienvenue, Inscrivez vous en simples étapes .</string>
 
 
 </resources>

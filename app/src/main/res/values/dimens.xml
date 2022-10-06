@@ -21,4 +21,5 @@
     <dimen name="tab_max_width">20dp</dimen>
     <dimen name="fav_height">30dp</dimen>
     <dimen name="fav_width">35dp</dimen>
+    <dimen name="user_image_input_size">120dp</dimen>
 </resources>

@@ -1,56 +1,35 @@
 package com.example.pc.ui.activities
 
-import android.Manifest
-import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
-import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.widget.doOnTextChanged
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.pc.R
-import com.example.pc.data.models.local.SellerType
-import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.databinding.ActivityCreateUserBinding
-import com.example.pc.databinding.ActivityUserCreateBinding
 import com.example.pc.ui.adapters.FragmentsAdapter
 import com.example.pc.ui.fragments.UserStepOne
 import com.example.pc.ui.fragments.UserStepThree
 import com.example.pc.ui.fragments.UserStepTwo
 import com.example.pc.ui.viewmodels.UserModel
 import com.example.pc.utils.*
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import com.google.android.material.tabs.TabLayoutMediator
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
-
 
 private const val TAG = "UserCreateActivity"
-private const val SGN_SUCCESS = "Compte Créé avec succès"
-private const val SGN_FAILED = "Erreur lors du creation du compte"
-private const val IMAGE_NOT_SELECTED = "Aucune image selectionnée"
-private const val IMAGE_SELECTED = "Une image selectionnée"
+private const val SGN_FAILED = "Erreur Inattendue"
+private const val SGN_SUCCESS = "Compte crée avec succès"
 
 class UserCreateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateUserBinding
     private lateinit var fragmentsList: List<Fragment>
+    private lateinit var fragmentsAdapter: FragmentsAdapter
+    private val retrofitService = RetrofitService.getInstance()
+    private lateinit var userModel: UserModel
+    val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -63,23 +42,52 @@ class UserCreateActivity : AppCompatActivity() {
             UserStepTwo(),
             UserStepThree()
         )
+        fragmentsAdapter = FragmentsAdapter(
+            this@UserCreateActivity,
+            fragmentsList
+        )
 
         super.onCreate(savedInstanceState)
 
         binding.apply {
             fragmentsViewPager.apply {
-                adapter = FragmentsAdapter(
-                    this@UserCreateActivity,
-                    fragmentsList
-                )
+
+                adapter = fragmentsAdapter
+                TabLayoutMediator(progressTabBar, this, true) { _, _ ->
+                    // to implement
+                }.attach()
                 isUserInputEnabled = false
 
                 next.setOnClickListener {
+                    fragmentsAdapter.onNextClicked(currentItem)
+
                     if (currentItem == fragmentsList.lastIndex) {
-                        // submit logic
+                        //check if the user is in the last step
+                        userModel = UserModel(UserRepository(retrofitService))
+
+                        userModel.apply {
+                            signUp(requestBody.build()).observe(this@UserCreateActivity) {
+                                if (it.isNullOrBlank()) {
+                                    //dialog ?
+                                    this@UserCreateActivity.toast(SGN_FAILED, Toast.LENGTH_LONG)
+                                    goToHomeFragment()
+                                } else {
+                                    this@UserCreateActivity.toast(
+                                        SGN_SUCCESS,
+                                        Toast.LENGTH_LONG
+                                    )
+                                    goToLoginPage()
+                                }
+                            }
+                            isTurning.observe(this@UserCreateActivity) {
+                                progressBar2.isVisible = it
+                            }
+                        }
+
                     } else {
                         currentItem++
                     }
+
                 }
                 back.setOnClickListener {
                     if (currentItem == 0) {
@@ -108,6 +116,14 @@ class UserCreateActivity : AppCompatActivity() {
 
     }
 
-    class ImageInfo(val imageName: String, val imageReqBody: RequestBody)
+    private fun goToHomeFragment() {
+        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goToLoginPage() {
+        finish()
+    }
 
 }

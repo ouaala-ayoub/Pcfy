@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/settings"
         android:title="@string/settings"
-        android:icon="@drawable/ic_baseline_settings_24"/>
-    <item
-        android:id="@+id/share"
-        android:title="@string/partager" />
-    <item
-        android:id="@+id/website"
-        android:title="@string/notre_site_web" />
+        android:icon="@drawable/ic_baseline_settings_24"
+        app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/logout"
         android:title="@string/logout"
+        app:showAsAction="always"
         android:icon="@drawable/ic_baseline_logout_24"/>
 </menu>
