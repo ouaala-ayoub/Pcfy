@@ -51,25 +51,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/back"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Retour"
+            android:text="@string/retour"
             android:textAllCaps="false"
             android:textSize="16sp"
             app:icon="@drawable/ic_baseline_keyboard_arrow_left_24"
             app:iconGravity="start" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/next"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Suivant"
+            android:text="@string/suivant"
             android:textAllCaps="false"
             android:textSize="16sp"
             app:icon="@drawable/ic_baseline_keyboard_arrow_right_24"
