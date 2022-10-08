@@ -177,7 +177,6 @@ class AnnonceFragment : Fragment() {
                                             setOnClickListener {
                                                 addToFavourites(userId, annonceId)
                                                 addedFavouriteToUser.observe(viewLifecycleOwner) {
-                                                    updateIsAddedToFav(userId, annonceId)
                                                     if (!it) {
                                                         doOnFail(ERROR_TEXT)
                                                     }
@@ -187,7 +186,6 @@ class AnnonceFragment : Fragment() {
                                             setOnClickListener {
                                                 //add logic to delete favourite
                                                 deleteFavourite(userId, annonceId)
-                                                updateIsAddedToFav(userId, annonceId)
                                                 deletedWithSuccess.observe(viewLifecycleOwner) { deleted ->
                                                     if (!deleted) {
                                                         requireContext().toast(
