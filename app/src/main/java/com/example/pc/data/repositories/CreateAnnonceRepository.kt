@@ -19,9 +19,4 @@ class CreateAnnonceRepository(private val retrofitService: RetrofitService) {
         annonce,
     )
 
-    fun addAnnonceIdToUser(
-        userId: String,
-        annonceId: NewAnnonceRequest
-    ): Call<User> = retrofitService.updateAnnonces(userId, annonceId)
-
 }
