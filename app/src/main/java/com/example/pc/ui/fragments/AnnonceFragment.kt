@@ -33,8 +33,9 @@ import com.squareup.picasso.Picasso
 
 private const val TAG = "AnnonceActivity"
 private const val ERROR_TEXT = "Erreur inattendue"
-private const val NO_USER = "Vous etes pas connecté"
+private const val NO_USER = "Vous n'êtes pas connecté"
 private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
+private const val SUCCESS_DEL_TEXT = "annonce supprimé des favories avec succes"
 
 class AnnonceFragment : Fragment() {
 
@@ -95,12 +96,12 @@ class AnnonceFragment : Fragment() {
 
                             imagesVp.apply {
 
-                                var pictures = annonce.pictures
-                                if (pictures.isEmpty()){
-                                    Log.i(TAG, "pictures: adding")
-                                   pictures.add("")
-                                }
+                                val pictures = annonce.pictures
 
+//                                if (pictures.isEmpty()) {
+//                                    Log.i(TAG, "pictures: adding")
+//                                    pictures.add("")
+//                                }
 
                                 adapter = ImagesAdapter(
                                     pictures,
@@ -174,17 +175,27 @@ class AnnonceFragment : Fragment() {
                                         isChecked = isFavChecked
                                         if (!isFavChecked) {
                                             setOnClickListener {
-                                                addToFavourites(userId, annonce)
+                                                addToFavourites(userId, annonceId)
                                                 addedFavouriteToUser.observe(viewLifecycleOwner) {
-                                                    if (it) {
-                                                        doOnSuccess()
-                                                    } else
+                                                    updateIsAddedToFav(userId, annonceId)
+                                                    if (!it) {
                                                         doOnFail(ERROR_TEXT)
+                                                    }
                                                 }
                                             }
                                         } else if (isFavChecked) {
                                             setOnClickListener {
                                                 //add logic to delete favourite
+                                                deleteFavourite(userId, annonceId)
+                                                updateIsAddedToFav(userId, annonceId)
+                                                deletedWithSuccess.observe(viewLifecycleOwner) { deleted ->
+                                                    if (!deleted) {
+                                                        requireContext().toast(
+                                                            ERROR_TEXT,
+                                                            Toast.LENGTH_SHORT
+                                                        )
+                                                    }
+                                                }
                                             }
                                         }
 
@@ -192,38 +203,15 @@ class AnnonceFragment : Fragment() {
 
 
                                 } else {
-                                    //by default isChecked is false is user not connected
+                                    //by default isChecked is false if user not connected
                                     isChecked = false
+                                    setOnClickListener {
+                                        doOnFail(NO_USER)
+                                    }
                                 }
                             }
                         }
                     }
-
-//                    addToFav.setOnClickListener { addToFav ->
-//                        if (annonce != null) {
-//                            authModel.apply {
-//                                auth.observe(viewLifecycleOwner) {
-//
-//                                    if (isAuth()) {
-//                                        userId = getPayload()!!.id
-//
-//                                        addToFavourites(userId, annonce)
-//                                        addedFavouriteToUser.observe(viewLifecycleOwner) {
-//                                            if (it) {
-//                                                doOnSuccess()
-//                                            } else
-//                                                doOnFail(ERROR_TEXT)
-//                                        }
-//                                    } else {
-//                                        goToLoginActivity()
-//                                    }
-//                                }
-//                            }
-//                        } else {
-//                            //consider Fail
-//                            doOnFail(ERROR_TEXT)
-//                        }
-//                    }
 
                     productSeller.setOnClickListener {
                         goToSellerPage(annonce.seller!!.userId)

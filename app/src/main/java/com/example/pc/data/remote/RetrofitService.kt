@@ -2,7 +2,9 @@ package com.example.pc.data.remote
 
 import com.example.pc.data.models.network.*
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -71,11 +73,17 @@ interface RetrofitService {
     @GET("users/{id}/favourites")
     fun getFavourites(@Path("id") userId: String): Call<List<Annonce>>
 
-    @PUT("users/{id}")
-    fun updateFavourites(
+    @HTTP(method = "DELETE", path = "users/{id}/favourites", hasBody = true)
+    fun deleteFavourite(
         @Path("id") userId: String,
-        @Body favouriteToAddId: NewFavouritesRequest
-    ): Call<User>
+        @Body favouriteId: NewFavouritesRequest
+    ): Call<ResponseBody>
+
+    @PATCH("users/{id}/favourites")
+    fun addFavourite(
+        @Path("id") userId: String,
+        @Body favouriteId: NewFavouritesRequest
+    ): Call<ResponseBody>
 
     // Orders
 

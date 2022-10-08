@@ -1,13 +1,12 @@
 package com.example.pc.ui.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.Annonce
-import com.example.pc.data.models.network.NewFavouritesRequest
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.FavouritesRepository
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,45 +57,29 @@ class FavouritesModel(
 
         isProgressBarTurning.postValue(true)
 
-        val favourites = favouritesListLiveData.value
-
-        val removed = favourites?.removeAll { annonce ->
-            annonce.id == favouriteIdToDelete
-        }
-        favouritesListLiveData.postValue(favourites)
-
-        var idsList: List<String> = listOf()
-        if (!favourites.isNullOrEmpty()) {
-            idsList = favourites.map { annonce -> annonce.id!! }
-        }
-
-        if (removed != null && removed == true) {
-
-            favouritesRepository.updateFavourites(
-                userId, NewFavouritesRequest(idsList)
-            ).enqueue(object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                    if (response.isSuccessful && response.body() != null) {
+        favouritesRepository.deleteFavourite(userId, favouriteIdToDelete)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.code() == 200) {
                         deletedWithSuccess.postValue(true)
+                        val favourites = favouritesListLiveData.value
+                        favourites?.removeAll { annonce ->
+                            annonce.id == favouriteIdToDelete
+                        }
+                        favouritesListLiveData.postValue(favourites)
                     } else {
-                        Log.e(TAG, "error body = ${response.errorBody()}")
-                        Log.e(TAG, "error raw = ${response.raw()}")
-                        deletedWithSuccess.postValue(false)
+//                        deletedWithSuccess.postValue(false)
                     }
                     isProgressBarTurning.postValue(false)
                 }
 
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    deletedWithSuccess.postValue(false)
-                    errorMessage.postValue(t.message)
-                    Log.e(TAG, "onFailure delete : ${t.message}")
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG, "deleteFavourite onFailure: ${t.message}")
+//                    deletedWithSuccess.postValue(false)
+                    isProgressBarTurning.postValue(false)
                 }
 
             })
-        } else {
-            isProgressBarTurning.postValue(false)
-            deletedWithSuccess.postValue(false)
-        }
         return deletedWithSuccess
     }
 

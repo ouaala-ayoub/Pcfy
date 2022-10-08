@@ -3,12 +3,11 @@ package com.example.pc.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.pc.data.models.network.NewFavouritesRequest
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.AnnonceRepository
 import com.example.pc.utils.getError
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -110,51 +109,46 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
         })
     }
 
-    fun addToFavourites(userId: String, annonceToAdd: Annonce) {
+    fun addToFavourites(userId: String, favouriteId: String) {
 
         isProgressBarTurning.postValue(true)
 
-        annonceRepository.getUserById(userId).enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                if (response.isSuccessful && response.body() != null) {
-
-                    //add the favourite to the favourites list
-                    val favouriteList = response.body()!!.favourites
-                    favouriteList.add(annonceToAdd.id!!)
-                    val requestBody = NewFavouritesRequest(
-                        favouriteList
-                    )
-
-                    annonceRepository.addToFavourites(userId, requestBody)
-                        .enqueue(object : Callback<User> {
-                            override fun onResponse(call: Call<User>, response: Response<User>) {
-                                if (response.isSuccessful && response.body() != null) {
-                                    addedFavouriteToUser.postValue(true)
-                                    isProgressBarTurning.postValue(false)
-                                } else {
-                                    Log.i(TAG, "response error body: ${response.errorBody()}")
-                                    Log.i(TAG, "response raw ${response.raw()}")
-                                    addedFavouriteToUser.postValue(false)
-                                    isProgressBarTurning.postValue(false)
-                                }
-                            }
-
-                            override fun onFailure(call: Call<User>, t: Throwable) {
-                                errorMessage.postValue(t.message)
-                                Log.e(TAG, "onFailure: ${t.message}")
-                                addedFavouriteToUser.postValue(false)
-                                isProgressBarTurning.postValue(false)
-                            }
-                        })
+        annonceRepository.addToFavourites(userId, favouriteId).enqueue(object : Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.code() == 200){
+                    addedFavouriteToUser.postValue(true)
                 }
-            }
-
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-                errorMessage.postValue(t.message)
-                addedFavouriteToUser.postValue(false)
+                else {
+//                    addedFavouriteToUser.postValue(false)
+                }
                 isProgressBarTurning.postValue(false)
             }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e(TAG, "addToFavourites onFailure: ${t.message}")
+                isProgressBarTurning.postValue(false)
+            }
+
         })
+    }
+
+    fun deleteFavourite(userId: String, favouriteId: String){
+        annonceRepository.deleteFavourite(userId, favouriteId)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.code() == 200) {
+                        deletedWithSuccess.postValue(true)
+                    } else {
+                        deletedWithSuccess.postValue(false)
+                    }
+                    isProgressBarTurning.postValue(false)
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG, "deleteFavourite onFailure: ${t.message}")
+                    deletedWithSuccess.postValue(false)
+                    isProgressBarTurning.postValue(false)
+                }
+            })
     }
 }
