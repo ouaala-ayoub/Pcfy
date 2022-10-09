@@ -4,13 +4,14 @@ import com.google.gson.annotations.SerializedName
 
 data class Order(
 
-    @SerializedName("_id")
-    val id: String,
+    @SerializedName("customerId")
+    val customerId: String,
 
-    @SerializedName("name")
-    val clientName: String,
+    @SerializedName("announceId")
+    val announceId: String,
 
-    @SerializedName("address")
-    val clientAddress : String
+    val quantity: Number = 1,
+
+    val orderStatus: String = "in progress"
 
 )

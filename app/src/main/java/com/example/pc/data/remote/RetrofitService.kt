@@ -87,12 +87,13 @@ interface RetrofitService {
 
     // Orders
 
+    //maybe i will not use it
     @GET("orders")
     fun getOrders(): Call<List<Order>>
 
-    //to change
+    //add order
     @POST("orders")
-    fun addOrder(@Path("id") orderToAdd: Order): Call<Order>
+    fun addOrder(@Body orderToAdd: Order): Call<IdResponse>
 
     @GET("orders/{id}")
     fun getOrderById(@Path("id") orderId: String): Call<Order>

@@ -2,18 +2,12 @@ package com.example.pc.ui.adapters
 
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.RequiresApi
-import androidx.core.widget.TextViewCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pc.R
 import com.example.pc.data.models.local.Category
 import com.example.pc.databinding.SingleCategoryBinding
+import com.google.android.material.chip.Chip
 
 private const val TAG = "CategoryAdapter"
 
@@ -23,11 +17,11 @@ class CategoryAdapter(
     private val onClick: OnCategoryClickedListener
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
 
+    private var currentClicked = 0
+
     interface OnCategoryClickedListener {
         fun onCategoryClicked(title: String)
     }
-
-    private var currentClicked = 0
 
     inner class CategoryHolder(private val binding: SingleCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -44,9 +38,11 @@ class CategoryAdapter(
             binding.apply {
 
                 categoryTitle.text = category.title
-                setFlags(category, categoryTitle)
+                setView(category, categoryTitle)
 
                 categoryTitle.setOnClickListener {
+
+                    onClick.onCategoryClicked(category.title)
 
                     if (category.isClicked) {
                         onClick.onCategoryClicked(category.title)
@@ -55,7 +51,7 @@ class CategoryAdapter(
                         notifyItemChanged(currentClicked)
 
                         category.reverseClicked()
-                        setFlags(category, categoryTitle)
+                        setView(category, categoryTitle)
                         currentClicked = position
 
                         onClick.onCategoryClicked(category.title)
@@ -81,13 +77,15 @@ class CategoryAdapter(
 
     override fun getItemCount() = categoriesList.size
 
-    private fun setFlags(category: Category, textView: TextView) {
+    private fun setView(category: Category, chip: Chip) {
         if (category.isClicked) {
-            textView.setTypeface(null, Typeface.BOLD)
-            textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            chip.setTypeface(null, Typeface.BOLD)
+
+            chip.isChecked = category.isClicked
         } else {
-            textView.setTypeface(null, Typeface.NORMAL)
-            textView.paintFlags = 0
+            chip.setTypeface(null, Typeface.NORMAL)
+
+            chip.isChecked = category.isClicked
         }
     }
 

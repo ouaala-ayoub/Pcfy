@@ -13,15 +13,15 @@
         <item name="colorSecondaryVariant">@color/orange_font</item>
         <item name="colorOnSecondary">@color/white_darker</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@color/even_darker_grey</item>
+        <item name="android:statusBarColor">@color/even_darker_grey</item>
 
         <!-- Customize your theme here. -->
     </style>
 
-    <style name= "AppTheme" parent= "Theme.Pc" >
-        <item name= "android:textViewStyle" > @style/AlataTextViewStyle </item>
-        <item name= "android:buttonStyle" > @style/AlataButtonStyle </item>
-        <item name="textInputStyle"> @style/MyCustomTextInputStyle </item>
+    <style name="AppTheme" parent="Theme.Pc">
+        <item name="android:textViewStyle">@style/AlataTextViewStyle</item>
+        <item name="android:buttonStyle">@style/AlataButtonStyle</item>
+        <item name="textInputStyle">@style/MyCustomTextInputStyle</item>
     </style>
 
     <style name="AppTheme.NoActionbar">
@@ -30,20 +30,30 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name= "AlataTextViewStyle" parent= "android:Widget.TextView" >
-        <item name= "android:fontFamily" > @font/alata </item>
+    <style name="AlataTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/alata</item>
         <item name="android:textColor">@color/color_on_primary</item>
     </style>
-    <style name= "AlataButtonStyle" parent= "android:Widget.Holo.Button" >
-        <item name= "android:fontFamily" > @font/alata </item>
+
+    <style name="AlataButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/alata</item>
         <item name="android:background">@color/orange_button</item>
+        <item name="android:textColor">@color/color_on_primary</item>
+        <item name="android:layout_height">@dimen/buttons_height</item>
     </style>
+
     <style name="MyCustomTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="textInputStyle">@font/alata</item>
     </style>
-    <style name="AlataTextView" parent= "android:Widget.TextView">
-        <item name="android:fontFamily" >
+
+    <style name="AlataTextView" parent="android:Widget.TextView">
+        <item name="android:fontFamily">
             @font/alata
         </item>
+    </style>
+
+    <!-- chip style-->
+    <style name="Widget.MaterialComponents.Chip.Choice.CustomShip" parent="Widget.MaterialComponents.Chip.Choice">
+
     </style>
 </resources>

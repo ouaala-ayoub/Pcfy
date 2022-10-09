@@ -7,6 +7,7 @@
     tools:context=".ui.fragments.AnnonceFragment">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -192,8 +193,17 @@
 
             </androidx.cardview.widget.CardView>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="order"
+                />
+
+
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 
     <ProgressBar
         android:id="@+id/annonce_progress_bar"

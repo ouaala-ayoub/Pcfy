@@ -124,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:elevation="0dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout

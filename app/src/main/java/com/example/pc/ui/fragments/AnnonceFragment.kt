@@ -203,8 +203,10 @@ class AnnonceFragment : Fragment() {
                                 } else {
                                     //by default isChecked is false if user not connected
                                     isChecked = false
+                                    isEnabled = false
                                     setOnClickListener {
-                                        doOnFail(NO_USER)
+                                        requireContext().toast(NO_USER, Toast.LENGTH_SHORT)
+//                                        doOnFail(NO_USER)
                                     }
                                 }
                             }
