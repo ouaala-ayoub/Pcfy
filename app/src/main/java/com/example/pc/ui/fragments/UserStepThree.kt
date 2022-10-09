@@ -57,6 +57,10 @@ class UserStepThree : Fragment(), HandleSubmitInterface {
         }
     }
 
+    override fun onBackClicked() {
+        //do Nothing no need
+    }
+
     private fun setTheTypeEditText() {
         binding.userTypeTextField.editText?.setText(SellerType.SOLO.type)
 

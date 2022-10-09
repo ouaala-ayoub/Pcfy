@@ -104,12 +104,13 @@ class UserCreateActivity : AppCompatActivity() {
                             getString(R.string.quit_signup_message)
                         ).show()
                     } else {
+                        fragmentsAdapter.onBackClicked(currentItem)
                         currentItem--
+//                        next.isActivated = true
                     }
                 }
 
             }
-
 
             setContentView(binding.root)
         }

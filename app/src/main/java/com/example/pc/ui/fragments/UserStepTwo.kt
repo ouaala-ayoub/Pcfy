@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModel
 import com.example.pc.R
 import com.example.pc.data.models.HandleSubmitInterface
 import com.example.pc.databinding.FragmentUserStepTwoBinding
@@ -43,37 +42,21 @@ class UserStepTwo : Fragment(), HandleSubmitInterface {
     private lateinit var imageResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var userCreateActivity: UserCreateActivity
+    private var lastState = false
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = UserStepTwoModel()
-        imageResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val data: Intent? = result.data
-                    Log.i(TAG, "resultLauncher: ${data?.data}")
-                    imageUri = data?.data
-                }
-            }
 
         requestPermissionLauncher =
             registerForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
-
-                Log.i(TAG, "isGranted: $isGranted")
-
                 if (isGranted) {
                     setTheUploadImage()
                 } else {
-                    // Explain to the user that the feature is unavailable because the
-                    // features requires a permission that the user has denied. At the
-                    // same time, respect the user's decision. Don't link to system
-                    // settings in an effort to convince the user to change their
-                    // decision.
-
                     val snackBar = makeSnackBar(
                         binding.root,
                         getString(R.string.permission),
@@ -105,17 +88,11 @@ class UserStepTwo : Fragment(), HandleSubmitInterface {
                 }
             }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         val nextButton = requireActivity().findViewById<Button>(R.id.next)
         nextButton.apply {
             isEnabled = false
             viewModel.isValidInput.observe(viewLifecycleOwner) {
-                nextButton.isEnabled = it
+                isEnabled = it
             }
         }
 
@@ -149,11 +126,6 @@ class UserStepTwo : Fragment(), HandleSubmitInterface {
                     ActivityCompat.shouldShowRequestPermissionRationale(
                         requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE
                     ) -> {
-                        // In an educational UI, explain to the user why your app requires this
-                        // permission for a specific feature to behave as expected. In this UI,
-                        // include a "cancel" or "no thanks" button that allows the user to
-                        // continue using your app without granting the permission.
-                        Log.i(TAG, "shouldShowRequestPermissionRationale: true")
                         showInContextUI(
                             object : OnDialogClicked {
                                 override fun onPositiveButtonClicked() {
@@ -169,10 +141,6 @@ class UserStepTwo : Fragment(), HandleSubmitInterface {
                         )
                     }
                     else -> {
-                        // You can directly ask for the permission.
-                        // The registered ActivityResultCallback gets the result of this request.
-                        Log.i(TAG, "shouldShowRequestPermissionRationale: false")
-                        Log.i(TAG, "request Permission Launcher ")
                         requestPermissionLauncher.launch(
                             Manifest.permission.READ_EXTERNAL_STORAGE
                         )
@@ -181,10 +149,28 @@ class UserStepTwo : Fragment(), HandleSubmitInterface {
             }
         }
 
+        return binding.root
     }
 
     override fun onNextClicked() {
+        lastState = viewModel.isValidInput.value!!
+        Log.i(TAG, "onNextClicked lastState Step Two : $lastState")
         submitData()
+    }
+
+    override fun onBackClicked() {
+        Log.i(TAG, "onBackClicked lastState Step Two : $lastState")
+        val lastValue = viewModel.isValidInput.value
+
+        if (lastValue != null){
+            lastState = lastValue
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val nextButton = requireActivity().findViewById<Button>(R.id.next)
+        nextButton.isEnabled = lastState
     }
 
     private fun submitData() {

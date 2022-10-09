@@ -39,6 +39,7 @@
         <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             android:noHistory="true" />
         <activity
             android:name=".ui.activities.AnnonceActivity"

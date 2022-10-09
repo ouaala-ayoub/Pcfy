@@ -21,6 +21,7 @@ class UserStepOne : Fragment(), HandleSubmitInterface {
     private lateinit var binding: FragmentUserStepOneBinding
     private lateinit var viewModel: UserStepOneModel
     private lateinit var userCreateActivity: UserCreateActivity
+    private var lastState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +36,9 @@ class UserStepOne : Fragment(), HandleSubmitInterface {
 
         binding = FragmentUserStepOneBinding.inflate(inflater, container, false)
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         val nextButton = requireActivity().findViewById<Button>(R.id.next)
         nextButton.apply {
+            Log.i(TAG, "nextButton last step: $lastState")
             isEnabled = false
             viewModel.isValidInput.observe(viewLifecycleOwner) {
                 nextButton.isEnabled = it
@@ -61,7 +57,7 @@ class UserStepOne : Fragment(), HandleSubmitInterface {
 
             passwordEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
-                    passwordLiveData.value = text.toString()
+                    passwordLiveData.value = text.toString().replace("\\s".toRegex(), "")
                     passwordHelperText.observe(viewLifecycleOwner) {
                         passwordTextField.helperText = it
                     }
@@ -70,7 +66,7 @@ class UserStepOne : Fragment(), HandleSubmitInterface {
 
             retypePasswordEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
-                    retypedPasswordLiveData.value = text.toString()
+                    retypedPasswordLiveData.value = text.toString().replace("\\s".toRegex(), "")
                     retypedPasswordHelperText.observe(viewLifecycleOwner) {
                         retypePasswordTextField.helperText = it
                     }
@@ -78,10 +74,23 @@ class UserStepOne : Fragment(), HandleSubmitInterface {
             }
         }
 
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val nextButton = requireActivity().findViewById<Button>(R.id.next)
+        nextButton.isEnabled = lastState
     }
 
     override fun onNextClicked() {
+        lastState = viewModel.isValidInput.value!!
+        Log.i(TAG, "onNextClicked lastState Step One : $lastState")
         handleUserInput()
+    }
+
+    override fun onBackClicked() {
+        // do nothing
     }
 
     private fun handleUserInput() {

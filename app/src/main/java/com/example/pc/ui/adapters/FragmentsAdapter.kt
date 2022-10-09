@@ -36,4 +36,26 @@ class FragmentsAdapter(fa: FragmentActivity, private val fragmentList: List<Frag
         }
 
     }
+
+    fun onBackClicked(position: Int) {
+
+        val current = fragmentList[position]
+        val castedFrag: Fragment
+
+        when (position) {
+            0 -> {
+                castedFrag = current as UserStepOne
+                castedFrag.onBackClicked()
+            }
+            1 -> {
+                castedFrag = current as UserStepTwo
+                castedFrag.onBackClicked()
+            }
+            2 -> {
+                castedFrag = current as UserStepThree
+                castedFrag.onBackClicked()
+            }
+        }
+
+    }
 }

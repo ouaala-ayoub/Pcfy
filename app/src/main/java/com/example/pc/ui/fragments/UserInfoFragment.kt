@@ -17,10 +17,7 @@ import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.databinding.FragmentUserInfoBinding
-import com.example.pc.ui.activities.LoginActivity
-import com.example.pc.ui.activities.MainActivity
-import com.example.pc.ui.activities.UserAnnoncesActivity
-import com.example.pc.ui.activities.UserInfoModifyActivity
+import com.example.pc.ui.activities.*
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.UserInfoModel
 import com.example.pc.utils.USERS_AWS_S3_LINK
@@ -170,6 +167,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
             R.id.logout -> {
                 authModel.logout()
+                requireContext().toast(LOGOUT_SUCCESS, Toast.LENGTH_SHORT)
                 reloadActivity()
             }
         }

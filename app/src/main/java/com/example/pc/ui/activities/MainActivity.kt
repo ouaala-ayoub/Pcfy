@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -18,9 +19,11 @@ import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityMainBinding
 import com.example.pc.ui.viewmodels.AuthModel
+import com.example.pc.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private const val TAG = "MainActivity"
+const val LOGOUT_SUCCESS = "Deconnecté avec success"
 
 class MainActivity : AppCompatActivity() {
 
@@ -113,6 +116,7 @@ class MainActivity : AppCompatActivity() {
 
             R.id.logout -> {
                 authModel.logout()
+                this.toast(LOGOUT_SUCCESS, Toast.LENGTH_SHORT)
                 reloadActivity()
                 true
             }
