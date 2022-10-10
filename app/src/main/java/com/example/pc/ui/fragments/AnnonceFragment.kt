@@ -7,27 +7,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager
 import com.example.pc.R
-import com.example.pc.data.models.local.Detail
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceRepository
 import com.example.pc.databinding.FragmentAnnonceBinding
+import com.example.pc.databinding.QuantityLayoutBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.adapters.DetailsAdapter
 import com.example.pc.ui.adapters.ImagesAdapter
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
-import com.example.pc.utils.BASE_AWS_S3_LINK
-import com.example.pc.utils.USERS_AWS_S3_LINK
-import com.example.pc.utils.toast
-import com.google.android.material.tabs.TabLayout
+import com.example.pc.utils.*
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 
@@ -35,6 +30,7 @@ private const val TAG = "AnnonceActivity"
 private const val ERROR_TEXT = "Erreur inattendue"
 private const val NO_USER = "Vous n'êtes pas connecté"
 private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
+private const val ORDER_SUCCESS = "Commande passée avec succes"
 private const val SUCCESS_DEL_TEXT = "annonce supprimé des favories avec succes"
 
 class AnnonceFragment : Fragment() {
@@ -163,15 +159,16 @@ class AnnonceFragment : Fragment() {
                     }
 
 
-                    addToFav.apply {
-                        authModel.apply {
-                            auth.observe(viewLifecycleOwner) {
-                                if (isAuth()) {
 
-                                    userId = getPayload()!!.id
-                                    updateIsAddedToFav(userId, annonceId)
+                    authModel.apply {
+                        auth.observe(viewLifecycleOwner) {
 
-                                    isAddedToFav.observe(viewLifecycleOwner) { isFavChecked ->
+                            if (isAuth()) {
+                                userId = getPayload()!!.id
+                                updateIsAddedToFav(userId, annonceId)
+
+                                isAddedToFav.observe(viewLifecycleOwner) { isFavChecked ->
+                                    addToFav.apply {
                                         isChecked = isFavChecked
                                         if (!isFavChecked) {
                                             setOnClickListener {
@@ -196,18 +193,75 @@ class AnnonceFragment : Fragment() {
                                                 }
                                             }
                                         }
+                                    }
+                                }
 
+                                orderNow.setOnClickListener {
+
+                                    val quantityView =
+                                        QuantityLayoutBinding.inflate(layoutInflater)
+                                    quantityView.apply {
+                                        minus.setOnClickListener {
+                                            quantity.text = (quantity.text.toString()
+                                                .toInt() - 1).toString()
+                                        }
+                                        plus.setOnClickListener {
+                                            quantity.text = (quantity.text.toString()
+                                                .toInt() + 1).toString()
+                                        }
                                     }
 
+                                    makeDialog(
+                                        requireContext(),
+                                        object : OnDialogClicked {
+                                            override fun onPositiveButtonClicked() {
+                                                Log.i(
+                                                    TAG, "onPositiveButtonClicked quantity is: ${
+                                                        quantityView.quantity.text.toString()
+                                                            .toInt()
+                                                    }"
+                                                )
+                                                addOrder(
+                                                    userId,
+                                                    annonceId,
+                                                    quantityView.quantity.text.toString()
+                                                        .toInt()
+                                                )
+                                                orderAdded.observe(viewLifecycleOwner) { added ->
+                                                    if (added) {
+                                                        doOnSuccess(ORDER_SUCCESS)
+                                                    } else {
+                                                        doOnFail(ERROR_TEXT)
+                                                    }
+                                                }
+                                            }
 
-                                } else {
-                                    //by default isChecked is false if user not connected
+                                            override fun onNegativeButtonClicked() {
+                                                //return to the annonce screen
+                                            }
+                                        },
+                                        getString(R.string.order_title),
+                                        getString(R.string.order_message),
+                                        quantityView.root,
+                                        getString(R.string.order_negative),
+                                        getString(R.string.order_positive)
+                                    ).show()
+                                }
+
+                            } else {
+                                addToFav.apply {
                                     isChecked = false
                                     isEnabled = false
                                     setOnClickListener {
                                         requireContext().toast(NO_USER, Toast.LENGTH_SHORT)
 //                                        doOnFail(NO_USER)
                                     }
+                                }
+                                orderNow.setOnClickListener {
+                                    requireContext().toast(
+                                        NO_USER,
+                                        Toast.LENGTH_SHORT
+                                    )
                                 }
                             }
                         }
@@ -247,8 +301,8 @@ class AnnonceFragment : Fragment() {
         goToMainActivity()
     }
 
-    private fun doOnSuccess() {
-        requireContext().toast(SUCCESS_TEXT, Toast.LENGTH_SHORT)
+    private fun doOnSuccess(message: String) {
+        requireContext().toast(message, Toast.LENGTH_SHORT)
     }
 
     private fun goToMainActivity() {

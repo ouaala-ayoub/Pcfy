@@ -112,7 +112,14 @@
     <string name="bienvenue_inscrivez_vous_en_simples_tapes">Bienvenue, Inscrivez vous en simples étapes .</string>
     <string name="retour">Retour</string>
     <string name="suivant">Suivant</string>
+    <string name="connexion">Connexion</string>
+    <string name="commander">Commander</string>
 
+    <!--order res-->
+    <string name="order_title">Confirmer</string>
+    <string name="order_message">Choisissez la quantité voulue</string>
+    <string name="order_positive">Confirmer</string>
+    <string name="order_negative">Annuler</string>
 
 </resources>
 

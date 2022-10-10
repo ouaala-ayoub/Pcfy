@@ -10,6 +10,8 @@
         style="@style/Widget.MaterialComponents.Chip.Choice.CustomShip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:gravity="center"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"

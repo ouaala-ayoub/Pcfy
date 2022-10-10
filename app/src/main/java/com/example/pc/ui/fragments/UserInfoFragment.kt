@@ -127,7 +127,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                             }
                         }
                     }
-                } else if (!isAuth()) {
+                } else {
                     //user is not authenticated do this
                     showNoUser()
                 }

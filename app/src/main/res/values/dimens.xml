@@ -23,4 +23,5 @@
     <dimen name="fav_width">35dp</dimen>
     <dimen name="user_image_input_size">120dp</dimen>
     <dimen name="buttons_height">55dp</dimen>
+    <dimen name="quantity_size">40dp</dimen>
 </resources>

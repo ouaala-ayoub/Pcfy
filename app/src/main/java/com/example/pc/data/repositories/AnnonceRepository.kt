@@ -19,6 +19,6 @@ class AnnonceRepository(private val retrofitService: RetrofitService) {
 
     fun getUserAnnonces(userId: String) = retrofitService.getAnnounces(userId)
 
-    fun addOrder(userId: String, annonceId: String) =
-        retrofitService.addOrder(Order(userId, annonceId))
+    fun addOrder(userId: String, annonceId: String, quantity: Int) =
+        retrofitService.addOrder(Order(userId, annonceId, quantity))
 }

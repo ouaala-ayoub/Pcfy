@@ -88,7 +88,7 @@
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
                     android:id="@+id/image_selection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -217,7 +217,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/no_user_connected" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/add_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

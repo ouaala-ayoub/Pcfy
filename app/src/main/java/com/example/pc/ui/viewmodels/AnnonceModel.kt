@@ -164,11 +164,11 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
             })
     }
 
-    fun addOrder(currentUserId: String, annonceId: String) {
+    fun addOrder(currentUserId: String, annonceId: String, quantity: Int) {
 
         isProgressBarTurning.postValue(true)
 
-        annonceRepository.addOrder(currentUserId, annonceId).enqueue(object : Callback<IdResponse> {
+        annonceRepository.addOrder(currentUserId, annonceId, quantity).enqueue(object : Callback<IdResponse> {
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 val orderId = response.body()?.objectId
                 if (response.isSuccessful && orderId != null) {

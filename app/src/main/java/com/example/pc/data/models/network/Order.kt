@@ -10,8 +10,10 @@ data class Order(
     @SerializedName("announceId")
     val announceId: String,
 
-    val quantity: Number = 1,
+    @SerializedName("quantity")
+    val quantity: Int = 1,
 
+    @SerializedName("status")
     val orderStatus: String = "in progress"
 
 )

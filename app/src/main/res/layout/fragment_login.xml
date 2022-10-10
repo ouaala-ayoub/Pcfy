@@ -88,7 +88,7 @@
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buttons_height"
-            android:text="Connexion" />
+            android:text="@string/connexion" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
