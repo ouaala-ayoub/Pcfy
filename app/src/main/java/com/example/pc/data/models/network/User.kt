@@ -39,7 +39,7 @@ data class User(
     val city: String? = null,
 
     @SerializedName("picture")
-    val imageUrl: String? = null,
+    val imageUrl: String,
 
 
     //required

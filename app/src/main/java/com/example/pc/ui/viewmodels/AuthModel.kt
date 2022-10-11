@@ -9,6 +9,7 @@ import com.example.pc.data.models.network.Payload
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.utils.LocalStorage
+import com.example.pc.utils.NON_AUTHENTICATED
 import com.example.pc.utils.getError
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +24,7 @@ class AuthModel(
 
     val auth = MutableLiveData<BodyX?>()
     val isTurning = MutableLiveData<Boolean>()
+    val errorMessage = MutableLiveData<String>()
 
     fun auth(context: Context) {
 
@@ -44,16 +46,17 @@ class AuthModel(
 //                    val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "non authenticated")
                     auth.postValue(null)
+                    errorMessage.postValue(NON_AUTHENTICATED)
                 }
                 isTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<BodyX?>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-                auth.postValue(null)
+                Log.e(TAG, "auth onFailure: ${t.message}")
                 isTurning.postValue(false)
+                auth.postValue(null)
+                errorMessage.postValue(com.example.pc.utils.ERROR_MSG)
             }
-
         })
 
     }
@@ -63,7 +66,8 @@ class AuthModel(
     }
 
     fun isAuth(): Boolean {
-        return auth.value != null
+        val auth = auth.value
+        return auth != null
     }
 
     fun logout() {

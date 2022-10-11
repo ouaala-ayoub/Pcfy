@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.utils.getError
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,6 +19,7 @@ class UserInfoModel(
     private val userInfoRepository: UserInfoRepository,
 ) : ViewModel() {
 
+    val updatedPicture = MutableLiveData<Boolean>()
     val userRetrieved = MutableLiveData<User>()
     val isTurning = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>()
@@ -46,5 +49,32 @@ class UserInfoModel(
         })
 
         return userRetrieved
+    }
+
+    fun updateImage(userId: String, image: RequestBody) {
+
+        isTurning.postValue(true)
+
+        userInfoRepository.updateUserImage(userId, image).enqueue(object : Callback<IdResponse> {
+            override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    Log.i(TAG, "updateImage onResponse: ${response.body()}")
+                    getUserById(response.body()!!.objectId!!)
+                    updatedPicture.postValue(true)
+                } else {
+                    Log.i(TAG, "updateImage response is no Successful: ${response.code()}")
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.i(TAG, "updateImage error : $error")
+                    updatedPicture.postValue(false)
+                }
+                isTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<IdResponse>, t: Throwable) {
+                Log.e(TAG, "updateImage onFailure: ${t.message}")
+                updatedPicture.postValue(false)
+                isTurning.postValue(false)
+            }
+        })
     }
 }

@@ -25,6 +25,8 @@ private const val ERROR500 = "Erreur interne du serveur"
 private const val ERROR401 = "Email ou password incorrect"
 const val BASE_AWS_S3_LINK = "https://pcfy.s3.eu-west-3.amazonaws.com/"
 const val USERS_AWS_S3_LINK = "https://pcfy-profiles.s3.eu-west-3.amazonaws.com/"
+const val ERROR_MSG = "Erreur inattendue"
+const val NON_AUTHENTICATED = "Utilisateur non authentifié"
 
 interface OnDialogClicked{
     fun onPositiveButtonClicked()

@@ -102,6 +102,8 @@
         Vous ne pouvez pas lancer une annonce car l\'application n\'as pas le droit d\'accéder a
         votre galerie des photos
     </string>
+    <string name="you_cant_user">Vous ne pouvez pas modifier votre profile car l\'application n\'as pas le droit d\'accéder a
+        votre galerie des photos</string>
     <string name="authorise">autoriser</string>
 
     <string name="image_selected">1 Image Selectionnée</string>

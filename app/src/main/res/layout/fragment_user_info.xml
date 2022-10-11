@@ -10,6 +10,14 @@
     app:layout_constraintStart_toStartOf="parent"
     tools:context=".ui.fragments.UserInfoFragment">
 
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        android:layout_gravity="center"/>
+
     <LinearLayout
         android:id="@+id/disconnected"
         android:layout_width="wrap_content"
@@ -24,7 +32,6 @@
             android:layout_height="wrap_content"
             android:text="@string/pas_d_utilisateur_connect"
             android:textSize="20sp"
-
             android:layout_gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/login_from_user_info"
@@ -124,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:elevation="0dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout

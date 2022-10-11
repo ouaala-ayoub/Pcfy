@@ -23,9 +23,6 @@ import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.viewmodels.SearchModel
 import com.example.pc.utils.toast
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
-
 
 private const val NUM_ROWS = 2
 private const val TAG = "SearchFragment"

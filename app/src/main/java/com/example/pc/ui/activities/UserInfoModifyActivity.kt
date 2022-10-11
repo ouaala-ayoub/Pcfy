@@ -82,7 +82,8 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                             city = cityEditText.text.toString(),
                                             userType = userTypeEditText.text.toString(),
                                             brand = organisationNameEditText.text.toString(),
-                                            password = oldUser.password
+                                            password = oldUser.password,
+                                            imageUrl = oldUser.imageUrl
                                         )
 
                                         updateUser(userToModifyId, newUser)

@@ -32,7 +32,7 @@ interface RetrofitService {
     @GET("users/{id}/announces")
     fun getAnnounces(@Path("id") userId: String): Call<List<Annonce>>
 
-    @PUT("announces/{id}")
+    @PUT("announces/{id}/update")
     fun updateAnnonceInfo(@Path("id") annonceId: String, @Body newAnnonce: Annonce): Call<Annonce>
 
     //handle users admin ?
@@ -59,14 +59,15 @@ interface RetrofitService {
     @DELETE("users/{id}")
     fun deleteUser(@Path("id") userId: String): Call<IdResponse>
 
-    @PUT("users/{id}") //????
-    fun updateAnnonces(
-        @Path("id") userId: String,
-        @Body annonceToAddId: NewAnnonceRequest
-    ): Call<User>
-
     @PUT("users/{id}")
     fun updateUserInfo(@Path("id") userId: String, @Body newUser: User): Call<User>
+
+    //update user profile picture
+    @PATCH("users/{id}/profile")
+    fun updateProfilePicture(
+        @Path("id") userId: String,
+        @Body newUserPicture: RequestBody
+    ): Call<IdResponse>
 
     // Favourites
 

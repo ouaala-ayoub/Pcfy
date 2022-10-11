@@ -72,9 +72,6 @@ dependencies {
     //kt core
     implementation("io.arrow-kt:arrow-core")
 
-    //keyboard events
-    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
-
     //shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 

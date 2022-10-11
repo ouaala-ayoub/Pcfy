@@ -181,6 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/buttons_height"
                 android:layout_gravity="bottom"
+                android:lineSpacingMultiplier="0.7"
                 android:text="@string/confirmer_les_changements" />
 
         </LinearLayout>

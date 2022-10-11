@@ -203,6 +203,11 @@ class CreateAnnonceFragment : Fragment() {
 
 
                                         viewModel.apply {
+
+                                            isTurning.observe(viewLifecycleOwner) { turning ->
+                                                binding!!.progressBar.isVisible = turning
+                                            }
+
                                             //to change
                                             addAnnonce(annonceToAdd)
                                             requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
@@ -250,7 +255,6 @@ class CreateAnnonceFragment : Fragment() {
                 isActivated = true
             }
             imageSelection.setOnClickListener {
-//                setTheUploadImage()
 
                 when {
                     ContextCompat.checkSelfPermission(
@@ -429,7 +433,7 @@ class CreateAnnonceFragment : Fragment() {
             val file = File(filePath!!)
             Log.i(TAG, "getImagesRequestBody: file $file")
             val requestFile: RequestBody =
-                file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                file.asRequestBody("image/*".toMediaTypeOrNull())
 
             partsList[file.name] = requestFile
         }
