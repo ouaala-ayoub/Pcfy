@@ -19,6 +19,7 @@
     <color name="darker_grey">#403D39</color>
     <color name="even_darker_grey">#252422</color>
     <color name="red">#8b0000</color>
+    <color name="red_cool">#FF0000</color>
     <color name="color_on_primary">@color/even_darker_grey</color>
     <color name="background_color">@color/white_darker</color>
     <color name="blue_shade">#0000FF</color>

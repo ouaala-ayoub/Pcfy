@@ -32,8 +32,17 @@ interface RetrofitService {
     @GET("users/{id}/announces")
     fun getAnnounces(@Path("id") userId: String): Call<List<Annonce>>
 
-    @PUT("announces/{id}/update")
-    fun updateAnnonceInfo(@Path("id") annonceId: String, @Body newAnnonce: Annonce): Call<Annonce>
+    @PUT("announces/{id}")
+    fun updateAnnonceInfo(
+        @Path("id") annonceId: String,
+        @Body newAnnonce: Annonce
+    ): Call<ResponseBody>
+
+    @HTTP(method = "DELETE", path = "announces/{id}/pictures", hasBody = true)
+    fun deleteAnnonceImage(
+        @Path("id") annonceId: String,
+        @Body imageIndex: RequestBody
+    ): Call<ResponseBody>
 
     //handle users admin ?
 //

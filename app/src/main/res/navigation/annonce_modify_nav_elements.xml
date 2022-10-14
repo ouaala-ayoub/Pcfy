@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/annonce_modify_nav_elements"
+    app:startDestination="@id/annonceModifyFragment">
+
+    <fragment
+        android:id="@+id/imageModifyFragment"
+        android:name="com.example.pc.ImageModifyFragment"
+        android:label="fragment_image_modify"
+        tools:layout="@layout/fragment_image_modify" >
+        <argument
+            android:name="index"
+            app:argType="integer" />
+        <argument
+            android:name="imagesArray"
+            app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/annonceModifyFragment"
+        android:name="com.example.pc.AnnonceModifyFragment"
+        android:label="fragment_annonce_modify"
+        tools:layout="@layout/fragment_annonce_modify" >
+        <action
+            android:id="@+id/action_annonceModifyFragment_to_imageModifyFragment"
+            app:destination="@id/imageModifyFragment" />
+    </fragment>
+</navigation>

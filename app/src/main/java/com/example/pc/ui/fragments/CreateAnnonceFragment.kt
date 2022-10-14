@@ -195,7 +195,7 @@ class CreateAnnonceFragment : Fragment() {
                                             builder.addFormDataPart(
                                                 "pictures",
                                                 imageName,
-                                                imagesPart[imageName]!!
+                                                body.value
                                             )
                                             i++
                                         }

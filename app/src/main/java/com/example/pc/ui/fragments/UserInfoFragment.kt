@@ -186,7 +186,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                             .networkPolicy(NetworkPolicy.NO_CACHE)
                                             .memoryPolicy(MemoryPolicy.NO_CACHE)
                                             .fit()
-                                            .centerCrop()
                                             .into(userImage)
                                     }
 

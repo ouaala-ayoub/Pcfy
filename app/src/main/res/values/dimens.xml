@@ -24,4 +24,5 @@
     <dimen name="user_image_input_size">120dp</dimen>
     <dimen name="buttons_height">55dp</dimen>
     <dimen name="quantity_size">40dp</dimen>
+    <dimen name="image_modify_size">400dp</dimen>
 </resources>

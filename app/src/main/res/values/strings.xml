@@ -122,6 +122,14 @@
     <string name="order_message">Choisissez la quantité voulue</string>
     <string name="order_positive">Confirmer</string>
     <string name="order_negative">Annuler</string>
+    <string name="image_de_l_annonce">Image de l\'annonce</string>
+    <string name="supprimer_l_image">Supprimer l\'image</string>
+    <string name="changer_les_informations_de_votre_annonce">Changer les informations de votre annonce :</string>
+    <string name="modifier">Modifier</string>
+    <string name="supprimer_caps">Supprimer</string>
+
+    <string name="image_instructions_title">Confirmation</string>
+    <string name="image_instructions_message">Vous êtes sur de supprimer l\'image de votre annonce ?</string>
 
 </resources>
 

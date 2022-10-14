@@ -11,12 +11,16 @@ import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.example.pc.utils.USERS_AWS_S3_LINK
 import com.squareup.picasso.Picasso
 
-
+//enum class Goal(private val goal: String){
+//    View("view"),
+//    Modify("modify")
+//}
 private const val TAG = "ImagesAdapter"
 
 class ImagesAdapter(
     private val imagesList: List<String>,
-    private val onImageClicked: OnImageClicked
+    private val onImageClicked: OnImageClicked,
+//    private val goal: Goal
 ) : RecyclerView.Adapter<ImagesAdapter.ImagesHolder>() {
 
     interface OnImageClicked {
@@ -68,6 +72,10 @@ class ImagesAdapter(
                         isVisible = false
                         isActivated = false
                     }
+                }
+
+                productImages.setOnClickListener {
+                    //zoom in the image
                 }
 
                 if (imagesList.size == 1) {

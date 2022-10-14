@@ -1,5 +1,7 @@
 package com.example.pc.ui.viewmodels
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -7,10 +9,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.repositories.AnnonceModifyRepository
+import com.example.pc.utils.URIPathHelper
 import com.example.pc.utils.getError
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 private const val TAG = "AnnonceModifyModel"
 
@@ -20,6 +29,7 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
     //    private val errorMessage = MutableLiveData<String>()
     private val oldAnnonce = MutableLiveData<Annonce>()
     private val updatedAnnonce = MutableLiveData<Boolean>()
+    val deletedImage = MutableLiveData<Boolean>()
     val titleLiveData = MutableLiveData<String>()
     val priceLiveData = MutableLiveData<String>()
     val isTurning = MutableLiveData<Boolean>()
@@ -74,9 +84,12 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
         isTurning.postValue(true)
 
         annonceModifyRepository.updateAnnonce(annonceId, newAnnonce)
-            .enqueue(object : Callback<Annonce> {
+            .enqueue(object : Callback<ResponseBody> {
 
-                override fun onResponse(call: Call<Annonce>, response: Response<Annonce>) {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
                     if (response.isSuccessful && response.body() != null) {
                         Log.i(TAG, "onResponse: ${response.body()}")
                         updatedAnnonce.postValue(true)
@@ -87,7 +100,7 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
                     isTurning.postValue(false)
                 }
 
-                override fun onFailure(call: Call<Annonce>, t: Throwable) {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG, "onFailure updateAnnonceInfo: ${t.message}")
                     isTurning.postValue(false)
                 }
@@ -95,4 +108,36 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
             })
         return updatedAnnonce
     }
+
+    fun deleteImage(annonceId: String, imageIndex: RequestBody) {
+
+        isTurning.postValue(true)
+
+        annonceModifyRepository.deleteImage(annonceId, imageIndex)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response.isSuccessful && response.body() != null){
+                        Log.i(TAG, "deleteImage onResponse: ${response.code()}")
+                        getAnnonce(annonceId)
+                        deletedImage.postValue(true)
+                    }
+                    else {
+                        val error = getError(response.errorBody()!!, response.code())
+                        Log.i(TAG, "deleteImage onResponse: error $error")
+                        deletedImage.postValue(false)
+                    }
+                    isTurning.postValue(false)
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    deletedImage.postValue(false)
+                    Log.e(TAG, "deleteImage onFailure: ${t.message}")
+                }
+
+            })
+    }
+
 }
