@@ -9,6 +9,8 @@ import com.example.pc.R
 import com.example.pc.databinding.SingleScrollableImageBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.example.pc.utils.USERS_AWS_S3_LINK
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
 //enum class Goal(private val goal: String){
@@ -50,6 +52,8 @@ class ImagesAdapter(
 
                 picasso
                     .load("$BASE_AWS_S3_LINK${currentImage}")
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .fit()
                     .into(productImages)
 

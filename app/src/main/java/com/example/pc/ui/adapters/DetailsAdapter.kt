@@ -3,6 +3,7 @@ package com.example.pc.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
 import com.example.pc.data.models.local.Detail
 import com.example.pc.databinding.SingleDetailBinding
 
@@ -17,7 +18,8 @@ class DetailsAdapter(
             val detail = detailsList[position]
 
             binding.apply {
-                detailTitle.text = detail.title
+                detailTitle.text =
+                    binding.root.resources.getString(R.string.details_title, detail.title)
                 detailBody.text = detail.body
             }
         }

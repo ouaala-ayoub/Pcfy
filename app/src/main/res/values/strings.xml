@@ -117,6 +117,8 @@
     <string name="connexion">Connexion</string>
     <string name="commander">Commander</string>
 
+    <string name="details_title"> %1$s : </string>
+
     <!--order res-->
     <string name="order_title">Confirmer</string>
     <string name="order_message">Choisissez la quantité voulue</string>

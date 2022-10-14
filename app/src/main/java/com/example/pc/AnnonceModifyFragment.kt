@@ -144,7 +144,14 @@ class AnnonceModifyFragment : Fragment() {
                                         imageIndex: Int,
                                         imagesList: List<String>
                                     ) {
-                                        goToImageModifyFragment(imageIndex, imagesList.toTypedArray())
+                                        goToImageModifyFragment(
+                                            imageIndex,
+                                            imagesList.toTypedArray()
+                                        )
+                                    }
+
+                                    override fun onAddClicked() {
+                                        //call the gallery choosing intent
                                     }
                                 }
                             )

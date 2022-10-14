@@ -1,5 +1,8 @@
 package com.example.pc
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,24 +10,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.pc.data.remote.RetrofitService
-import com.example.pc.data.repositories.AnnonceModifyRepository
 import com.example.pc.databinding.FragmentImageModifyBinding
 import com.example.pc.ui.activities.AnnonceModifyActivity
 import com.example.pc.ui.adapters.ImagesAdapter
 import com.example.pc.ui.viewmodels.AnnonceModifyModel
 import com.example.pc.utils.*
-import com.squareup.picasso.Picasso
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 private const val TAG = "ImageModifyFragment"
 private const val DELETED_IMAGE = "Image supprimée avec succes"
+private const val ADDED_IMAGE = "Images ajoutée avec succes"
 
 class ImageModifyFragment : Fragment() {
 
+    private lateinit var imageResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var binding: FragmentImageModifyBinding
     private lateinit var viewModel: AnnonceModifyModel
     private lateinit var annonceId: String
@@ -56,6 +65,34 @@ class ImageModifyFragment : Fragment() {
     ): View? {
 
         binding = FragmentImageModifyBinding.inflate(inflater, container, false)
+        imageResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
+                    viewModel.apply {
+
+                        if (data?.data != null) {
+                            val requestBody =
+                                getRequestBody(binding.imagesPager.currentItem, data.data!!)
+
+                            viewModel.apply {
+                                changePicture(annonceId, requestBody)
+                                updatedImage.observe(viewLifecycleOwner) { updated ->
+                                    Log.i(TAG, "updated: $updated")
+                                    if (updated) {
+                                        getAnnonce(annonceId)
+                                        requireContext().toast(ADDED_IMAGE, Toast.LENGTH_SHORT)
+                                        findNavController().popBackStack()
+                                    } else {
+                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
+                                        (requireActivity() as AnnonceModifyActivity).finish()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
         binding.apply {
 
@@ -92,16 +129,15 @@ class ImageModifyFragment : Fragment() {
 
                     makeDialog(
                         requireContext(),
-                        object: OnDialogClicked {
+                        object : OnDialogClicked {
                             override fun onPositiveButtonClicked() {
                                 deleteImage(annonceId, builder)
                                 deletedImage.observe(viewLifecycleOwner) { deleted ->
                                     // go back to the previous screen if deleted successfully
-                                    if(deleted){
+                                    if (deleted) {
                                         requireContext().toast(DELETED_IMAGE, Toast.LENGTH_SHORT)
                                         findNavController().popBackStack()
-                                    }
-                                    else {
+                                    } else {
                                         requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
                                         (requireActivity() as AnnonceModifyActivity).finish()
                                     }
@@ -118,11 +154,40 @@ class ImageModifyFragment : Fragment() {
                     ).show()
                 }
 
-                modify.setOnClickListener { }
+                modify.setOnClickListener {
+                    setTheUploadImage()
+                }
             }
         }
 
         return binding.root
+    }
+
+    private fun setTheUploadImage() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        imageResultLauncher.launch(intent)
+    }
+
+    private fun getRequestBody(index: Int, imageUri: Uri): RequestBody {
+
+        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+
+        val filePath = URIPathHelper().getPath(requireContext(), imageUri)
+
+        val file = File(filePath!!)
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        builder.apply {
+            addFormDataPart("index", index.toString())
+            addFormDataPart(
+                "picture",
+                file.name,
+                requestFile
+            )
+        }
+
+        return builder.build()
     }
 
 }

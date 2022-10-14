@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.databinding.SingleImageModifyBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlin.reflect.typeOf
 
@@ -17,6 +19,7 @@ class ImagesModifyAdapter(
 
     interface OnImageModifyClicked {
         fun onImageClicked(imageIndex: Int, imagesList: List<String>)
+        fun onAddClicked()
     }
 
     inner class ImagesModifyHolder(private val binding: SingleImageModifyBinding) :
@@ -25,10 +28,17 @@ class ImagesModifyAdapter(
             binding.apply {
                 productImage.apply {
                     setOnClickListener {
-                        onImageClicked.onImageClicked(position, imagesList)
+//                        if(position == imagesList.lastIndex){
+//                            onImageClicked.onAddClicked()
+//                        }
+//                        else {
+                            onImageClicked.onImageClicked(position, imagesList)
+//                        }
                     }
                     picasso
                         .load("$BASE_AWS_S3_LINK${imagesList[position]}")
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .fit()
                         .into(this)
                 }

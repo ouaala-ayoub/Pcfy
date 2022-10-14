@@ -44,6 +44,12 @@ interface RetrofitService {
         @Body imageIndex: RequestBody
     ): Call<ResponseBody>
 
+    @PATCH("announces/{id}/pictures")
+    fun changePicture(
+        @Path("id") annonceId: String,
+        @Body imageToChange: RequestBody
+    ): Call<ResponseBody>
+
     //handle users admin ?
 //
 //    @GET("users")

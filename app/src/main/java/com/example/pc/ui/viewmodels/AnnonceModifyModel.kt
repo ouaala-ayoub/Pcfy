@@ -20,19 +20,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import kotlin.math.log
 
 private const val TAG = "AnnonceModifyModel"
 
 class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepository) :
     ViewModel() {
 
-    //    private val errorMessage = MutableLiveData<String>()
     private val oldAnnonce = MutableLiveData<Annonce>()
-    private val updatedAnnonce = MutableLiveData<Boolean>()
+    val updatedAnnonce = MutableLiveData<Boolean>()
+    val addedImages = MutableLiveData<Boolean>()
+    val updatedImage = MutableLiveData<Boolean>()
     val deletedImage = MutableLiveData<Boolean>()
+
+    val isTurning = MutableLiveData<Boolean>()
+
     val titleLiveData = MutableLiveData<String>()
     val priceLiveData = MutableLiveData<String>()
-    val isTurning = MutableLiveData<Boolean>()
     val isValidInput = MediatorLiveData<Boolean>().apply {
 
         addSource(titleLiveData) { title ->
@@ -138,6 +142,36 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
                 }
 
             })
+    }
+
+    fun changePicture(annonceId: String, imagesToPut: RequestBody){
+        isTurning.postValue(true)
+        annonceModifyRepository.changePicture(annonceId, imagesToPut).enqueue(object: Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+
+                if (response.isSuccessful && response.body() != null){
+                    Log.i(TAG, "putPictures onResponse: ${response.body()}")
+                    addedImages.postValue(true)
+                }else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.i(TAG, "putPictures onResponse error : $error")
+                    addedImages.postValue(false)
+                }
+
+                isTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e(TAG, "putPictures onFailure: ${t.message}")
+                addedImages.postValue(false)
+                isTurning.postValue(false)
+            }
+
+        })
+    }
+
+    fun updatePicture(){
+
     }
 
 }
