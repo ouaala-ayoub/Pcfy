@@ -123,12 +123,11 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    if(response.isSuccessful && response.body() != null){
+                    if (response.isSuccessful && response.body() != null) {
                         Log.i(TAG, "deleteImage onResponse: ${response.code()}")
                         getAnnonce(annonceId)
                         deletedImage.postValue(true)
-                    }
-                    else {
+                    } else {
                         val error = getError(response.errorBody()!!, response.code())
                         Log.i(TAG, "deleteImage onResponse: error $error")
                         deletedImage.postValue(false)
@@ -144,34 +143,63 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
             })
     }
 
-    fun changePicture(annonceId: String, imagesToPut: RequestBody){
+    fun changePicture(annonceId: String, imagesToPut: RequestBody) {
         isTurning.postValue(true)
-        annonceModifyRepository.changePicture(annonceId, imagesToPut).enqueue(object: Callback<ResponseBody>{
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        annonceModifyRepository.changePicture(annonceId, imagesToPut)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
 
-                if (response.isSuccessful && response.body() != null){
-                    Log.i(TAG, "putPictures onResponse: ${response.body()}")
-                    addedImages.postValue(true)
-                }else {
-                    val error = getError(response.errorBody()!!, response.code())
-                    Log.i(TAG, "putPictures onResponse error : $error")
-                    addedImages.postValue(false)
+                    if (response.isSuccessful && response.body() != null) {
+                        Log.i(TAG, "putPictures onResponse: ${response.body()}")
+                        updatedImage.postValue(true)
+                    } else {
+                        val error = getError(response.errorBody()!!, response.code())
+                        Log.i(TAG, "putPictures onResponse error : $error")
+                        updatedImage.postValue(false)
+                    }
+
+                    isTurning.postValue(false)
                 }
 
-                isTurning.postValue(false)
-            }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG, "putPictures onFailure: ${t.message}")
+                    updatedImage.postValue(false)
+                    isTurning.postValue(false)
+                }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e(TAG, "putPictures onFailure: ${t.message}")
-                addedImages.postValue(false)
-                isTurning.postValue(false)
-            }
-
-        })
+            })
     }
 
-    fun updatePicture(){
+    fun addPictures(annonceId: String, imagesToPut: RequestBody) {
 
+        isTurning.postValue(true)
+
+        annonceModifyRepository.addPictures(annonceId, imagesToPut)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        addedImages.postValue(true)
+                    } else {
+                        val error = getError(response.errorBody()!!, response.code())
+                        Log.i(TAG, "addImages onResponse error: $error")
+                        addedImages.postValue(false)
+                    }
+                    isTurning.postValue(false)
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
+                    addedImages.postValue(false)
+                    isTurning.postValue(false)
+                }
+
+            })
     }
 
 }

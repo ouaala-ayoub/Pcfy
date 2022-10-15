@@ -29,7 +29,7 @@ import java.io.File
 
 private const val TAG = "ImageModifyFragment"
 private const val DELETED_IMAGE = "Image supprimée avec succes"
-private const val ADDED_IMAGE = "Images ajoutée avec succes"
+private const val UPDATED_IMAGE = "Image changée avec succes"
 
 class ImageModifyFragment : Fragment() {
 
@@ -80,8 +80,8 @@ class ImageModifyFragment : Fragment() {
                                 updatedImage.observe(viewLifecycleOwner) { updated ->
                                     Log.i(TAG, "updated: $updated")
                                     if (updated) {
-                                        getAnnonce(annonceId)
-                                        requireContext().toast(ADDED_IMAGE, Toast.LENGTH_SHORT)
+                                        Log.i(TAG, "updated: $updated")
+                                        requireContext().toast(UPDATED_IMAGE, Toast.LENGTH_SHORT)
                                         findNavController().popBackStack()
                                     } else {
                                         requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)

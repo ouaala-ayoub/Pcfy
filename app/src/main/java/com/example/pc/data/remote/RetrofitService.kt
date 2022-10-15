@@ -50,6 +50,12 @@ interface RetrofitService {
         @Body imageToChange: RequestBody
     ): Call<ResponseBody>
 
+    @PUT("announces/{id}/pictures")
+    fun putPictures(
+        @Path("id") annonceId: String,
+        @Body imagesToPut: RequestBody
+    ): Call<ResponseBody>
+
     //handle users admin ?
 //
 //    @GET("users")

@@ -1,7 +1,8 @@
 package com.example.pc
 
+import android.app.Activity
+import android.content.ClipData
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,9 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
@@ -19,8 +23,6 @@ import com.example.pc.data.models.local.Detail
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
-import com.example.pc.data.remote.RetrofitService
-import com.example.pc.data.repositories.AnnonceModifyRepository
 import com.example.pc.databinding.AddDetailBinding
 import com.example.pc.databinding.FragmentAnnonceModifyBinding
 import com.example.pc.ui.activities.AnnonceModifyActivity
@@ -28,22 +30,25 @@ import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.adapters.AddDetailsAdapter
 import com.example.pc.ui.adapters.ImagesModifyAdapter
 import com.example.pc.ui.viewmodels.AnnonceModifyModel
-import com.example.pc.utils.OnDialogClicked
-import com.example.pc.utils.makeDialog
-import com.example.pc.utils.toast
+import com.example.pc.utils.*
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 private const val TAG = "AnnonceModifyActivity"
+private const val ADDED_IMAGES = "Images Ajoutée avec succes"
 private const val ERROR_GET_ANNONCE = "Erreur innatendue"
 private const val ERROR_SET_ANNONCE = "Erreur de La modification de l'annonce"
-private const val SUCCESS_SET_ANNONCE = "Annonce modifié avec success"
+private const val SUCCESS_SET_ANNONCE = "Annonce modifié avec succes"
 
 class AnnonceModifyFragment : Fragment() {
 
     private lateinit var binding: FragmentAnnonceModifyBinding
     private lateinit var viewModel: AnnonceModifyModel
     private lateinit var annonceToModifyId: String
-    private lateinit var imagesUri: List<Uri>
+    private lateinit var imageResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -60,6 +65,34 @@ class AnnonceModifyFragment : Fragment() {
     ): View? {
 
         binding = FragmentAnnonceModifyBinding.inflate(inflater, container, false)
+
+        imageResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
+                    viewModel.apply {
+
+                        if (data?.clipData != null) {
+                            val requestBody =
+                                getRequestBody(data.clipData!!)
+
+                            viewModel.apply {
+                                addPictures(annonceToModifyId, requestBody)
+                                addedImages.observe(viewLifecycleOwner) { added ->
+                                    Log.i(TAG, "addedImages: $added")
+                                    if (added) {
+                                        requireContext().toast(ADDED_IMAGES, Toast.LENGTH_SHORT)
+                                        getAnnonce(annonceToModifyId)
+                                    } else {
+                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
+                                        requireActivity().finish()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
         binding.apply {
             viewModel.apply {
@@ -151,7 +184,7 @@ class AnnonceModifyFragment : Fragment() {
                                     }
 
                                     override fun onAddClicked() {
-                                        //call the gallery choosing intent
+                                        openGallery()
                                     }
                                 }
                             )
@@ -198,6 +231,37 @@ class AnnonceModifyFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun openGallery(){
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        imageResultLauncher.launch(intent)
+    }
+
+    private fun getRequestBody(clipData: ClipData): MultipartBody {
+        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+        val pathHelper = URIPathHelper()
+
+        for (i in 0 until clipData.itemCount){
+            val currentItemUri = clipData.getItemAt(i).uri
+            val filePath = pathHelper.getPath(requireContext(), currentItemUri)
+
+            val file = File(filePath!!)
+            Log.i(TAG, "file $i: $file")
+            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+            builder.apply {
+                addFormDataPart(
+                    "pictures",
+                    file.name,
+                    requestFile
+                )
+            }
+        }
+
+        return builder.build()
     }
 
     private fun goToImageModifyFragment(imageIndex: Int, imagesList: Array<String>) {

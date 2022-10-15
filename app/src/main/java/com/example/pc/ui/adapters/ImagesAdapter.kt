@@ -52,8 +52,8 @@ class ImagesAdapter(
 
                 picasso
                     .load("$BASE_AWS_S3_LINK${currentImage}")
-                    .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                    .networkPolicy(NetworkPolicy.NO_CACHE)
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .fit()
                     .into(productImages)
 

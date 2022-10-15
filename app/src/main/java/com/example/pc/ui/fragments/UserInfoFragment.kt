@@ -183,8 +183,8 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                         //for test purposes
                                         picasso
                                             .load("${USERS_AWS_S3_LINK}${user.imageUrl}")
-                                            .networkPolicy(NetworkPolicy.NO_CACHE)
-                                            .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                                            .networkPolicy(NetworkPolicy.NO_CACHE)
+//                                            .memoryPolicy(MemoryPolicy.NO_CACHE)
                                             .fit()
                                             .into(userImage)
                                     }

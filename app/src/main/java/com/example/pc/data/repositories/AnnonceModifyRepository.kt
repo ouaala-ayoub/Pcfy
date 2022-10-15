@@ -12,6 +12,9 @@ class AnnonceModifyRepository(private val retrofitService: RetrofitService) {
     fun changePicture(annonceId: String, imagesToPut: RequestBody) =
         retrofitService.changePicture(annonceId, imagesToPut)
 
+    fun addPictures(annonceId: String, imagesToAdd: RequestBody)=
+        retrofitService.putPictures(annonceId, imagesToAdd)
+
     fun updateAnnonce(annonceId: String, newAnnonce: Annonce) =
         retrofitService.updateAnnonceInfo(annonceId, newAnnonce)
 
