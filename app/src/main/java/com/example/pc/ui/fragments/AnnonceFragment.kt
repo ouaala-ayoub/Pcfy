@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.pc.R
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceRepository
@@ -32,6 +33,7 @@ private const val NO_USER = "Vous n'êtes pas connecté"
 private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
 private const val ORDER_SUCCESS = "Commande passée avec succes"
 private const val SUCCESS_DEL_TEXT = "annonce supprimé des favories avec succes"
+
 
 class AnnonceFragment : Fragment() {
 
@@ -98,7 +100,7 @@ class AnnonceFragment : Fragment() {
 //                                    Log.i(TAG, "pictures: adding")
 //                                    pictures.add("")
 //                                }
-
+                                offscreenPageLimit = pictures.size
                                 adapter = ImagesAdapter(
                                     pictures,
                                     object : ImagesAdapter.OnImageClicked {

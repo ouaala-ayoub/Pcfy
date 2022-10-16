@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso
 private const val TAG = "ImagesAdapter"
 
 class ImagesAdapter(
-    private val imagesList: MutableList<String>,
+    imagesList: List<String>,
     private val onImageClicked: OnImageClicked,
 ) : RecyclerView.Adapter<ImagesAdapter.ImagesHolder>() {
 
@@ -28,15 +28,17 @@ class ImagesAdapter(
         fun onLeftClicked()
         fun onRightClicked()
     }
+    private val newList = imagesList.toMutableList()
 
     private fun clearList() {
-        imagesList.removeAll { element -> element == IMAGE_ADD }
+        newList.removeAll { element -> element == IMAGE_ADD }
     }
 
     init {
-        if (IMAGE_ADD in imagesList) {
+        Log.i(TAG, "images List : $newList")
+        if (IMAGE_ADD in newList) {
             clearList()
-            Log.i(TAG, "images List : $imagesList")
+            Log.i(TAG, "images List : $newList")
         }
     }
 
@@ -46,14 +48,14 @@ class ImagesAdapter(
         private val picasso: Picasso = Picasso.get()
         fun bind(position: Int) {
 
-            val currentImage = imagesList[position]
+            val currentImage = newList[position]
 
             binding.apply {
                 //each image
 
                 Log.i(TAG, "bind: $position")
                 Log.i(TAG, "bind: $currentImage")
-                
+
                 if (currentImage.isBlank()) {
                     val imageSize =
                         binding.root.resources.getDimension(R.dimen.annonce_image_height).toInt()
@@ -71,24 +73,29 @@ class ImagesAdapter(
                     .fit()
                     .into(productImages)
 
-                //left and right button
-                left.apply {
-                    setOnClickListener {
-                        onImageClicked.onLeftClicked()
-                    }
-                    if (position == 0) {
-                        isVisible = false
-                        isActivated = false
-                    }
-                }
 
-                right.apply {
-                    setOnClickListener {
-                        onImageClicked.onRightClicked()
+                if (newList.size == 1) {
+                    left.isVisible = false
+                    right.isVisible = false
+                    return
+                } else {
+                    left.apply {
+                        setOnClickListener {
+                            onImageClicked.onLeftClicked()
+                        }
+                        if (position == 0) {
+                            Log.i(TAG, "left false : $position")
+                            isVisible = false
+                        }
                     }
-                    if (position == imagesList.lastIndex) {
-                        isVisible = false
-                        isActivated = false
+                    right.apply {
+                        setOnClickListener {
+                            onImageClicked.onRightClicked()
+                        }
+                        if (position == newList.size - 1) {
+                            Log.i(TAG, "left false : $position")
+                            isVisible = false
+                        }
                     }
                 }
 
@@ -96,10 +103,6 @@ class ImagesAdapter(
                     //zoom in the image
                 }
 
-                if (imagesList.size == 1) {
-                    left.isVisible = false
-                    right.isVisible = false
-                }
 
             }
         }
@@ -118,5 +121,5 @@ class ImagesAdapter(
         holder.bind(position)
     }
 
-    override fun getItemCount() = imagesList.size
+    override fun getItemCount() = newList.size
 }

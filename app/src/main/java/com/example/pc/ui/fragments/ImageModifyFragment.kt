@@ -98,6 +98,7 @@ class ImageModifyFragment : Fragment() {
         binding.apply {
 
             imagesPager.apply {
+                offscreenPageLimit = imagesList.size
                 imagesAdapter = ImagesAdapter(
                     imagesList.toMutableList(),
                     object : ImagesAdapter.OnImageClicked {
@@ -109,6 +110,7 @@ class ImageModifyFragment : Fragment() {
                             currentItem += 1
                         }
                     })
+
                 adapter = imagesAdapter
                 currentItem = imageIndex
             }

@@ -31,6 +31,7 @@
             android:layout_width="@dimen/arrow_size"
             android:layout_height="@dimen/arrow_size"
             android:layout_gravity="center|right"
+            android:visibility="visible"
             app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
         <ImageView
