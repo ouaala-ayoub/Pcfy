@@ -1,4 +1,4 @@
-package com.example.pc
+package com.example.pc.ui.fragments
 
 import android.app.Activity
 import android.content.ClipData
@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.pc.R
 import com.example.pc.data.models.local.Detail
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
@@ -72,9 +73,9 @@ class AnnonceModifyFragment : Fragment() {
                     val data: Intent? = result.data
                     viewModel.apply {
 
-                        if (data?.clipData != null) {
+                        if (data != null) {
                             val requestBody =
-                                getRequestBody(data.clipData!!)
+                                getRequestBody(data)
 
                             viewModel.apply {
                                 addPictures(annonceToModifyId, requestBody)
@@ -171,7 +172,7 @@ class AnnonceModifyFragment : Fragment() {
                         imagesRv.apply {
 
                             adapter = ImagesModifyAdapter(
-                                annonce.pictures,
+                                annonce.pictures.toMutableList(),
                                 object : ImagesModifyAdapter.OnImageModifyClicked {
                                     override fun onImageClicked(
                                         imageIndex: Int,
@@ -241,16 +242,17 @@ class AnnonceModifyFragment : Fragment() {
         imageResultLauncher.launch(intent)
     }
 
-    private fun getRequestBody(clipData: ClipData): MultipartBody {
+    private fun getRequestBody(data: Intent): MultipartBody {
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
         val pathHelper = URIPathHelper()
 
-        for (i in 0 until clipData.itemCount){
-            val currentItemUri = clipData.getItemAt(i).uri
-            val filePath = pathHelper.getPath(requireContext(), currentItemUri)
+
+        if (data.clipData == null){
+            val currentItemUri = data.data
+            val filePath = pathHelper.getPath(requireContext(), currentItemUri!!)
 
             val file = File(filePath!!)
-            Log.i(TAG, "file $i: $file")
+            Log.i(TAG, "getRequestBody file: $file")
             val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
 
             builder.apply {
@@ -259,6 +261,25 @@ class AnnonceModifyFragment : Fragment() {
                     file.name,
                     requestFile
                 )
+            }
+        }
+        else {
+            val clipData = data.clipData
+            for (i in 0 until clipData!!.itemCount){
+                val currentItemUri = clipData.getItemAt(i).uri
+                val filePath = pathHelper.getPath(requireContext(), currentItemUri)
+
+                val file = File(filePath!!)
+                Log.i(TAG, "file $i: $file")
+                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+                builder.apply {
+                    addFormDataPart(
+                        "pictures",
+                        file.name,
+                        requestFile
+                    )
+                }
             }
         }
 

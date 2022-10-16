@@ -1,4 +1,4 @@
-package com.example.pc
+package com.example.pc.ui.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.pc.R
 import com.example.pc.databinding.FragmentImageModifyBinding
 import com.example.pc.ui.activities.AnnonceModifyActivity
 import com.example.pc.ui.adapters.ImagesAdapter

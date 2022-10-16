@@ -36,6 +36,7 @@ class ImagesAdapter(
     init {
         if (IMAGE_ADD in imagesList) {
             clearList()
+            Log.i(TAG, "images List : $imagesList")
         }
     }
 
@@ -50,6 +51,9 @@ class ImagesAdapter(
             binding.apply {
                 //each image
 
+                Log.i(TAG, "bind: $position")
+                Log.i(TAG, "bind: $currentImage")
+                
                 if (currentImage.isBlank()) {
                     val imageSize =
                         binding.root.resources.getDimension(R.dimen.annonce_image_height).toInt()

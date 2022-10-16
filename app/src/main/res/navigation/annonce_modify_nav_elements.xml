@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/imageModifyFragment"
-        android:name="com.example.pc.ImageModifyFragment"
+        android:name="com.example.pc.ui.fragments.ImageModifyFragment"
         android:label="fragment_image_modify"
         tools:layout="@layout/fragment_image_modify" >
         <argument
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/annonceModifyFragment"
-        android:name="com.example.pc.AnnonceModifyFragment"
+        android:name="com.example.pc.ui.fragments.AnnonceModifyFragment"
         android:label="fragment_annonce_modify"
         tools:layout="@layout/fragment_annonce_modify" >
         <action
