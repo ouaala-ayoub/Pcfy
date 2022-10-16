@@ -213,6 +213,7 @@ class AnnonceModifyFragment : Fragment() {
                                 mark = markEditText.text.toString(),
                                 description = descriptionEditText.text.toString(),
                                 details = details,
+                                pictures = annonce.pictures
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
                                 .observe(viewLifecycleOwner) { annonceModified ->

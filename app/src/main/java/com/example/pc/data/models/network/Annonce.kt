@@ -21,7 +21,7 @@ data class Annonce(
     val status: String ,
 
     @SerializedName("pictures")
-    val pictures: MutableList<String> = mutableListOf(),
+    val pictures: MutableList<String> ,
 
     //just for testing
     @SerializedName("seller")

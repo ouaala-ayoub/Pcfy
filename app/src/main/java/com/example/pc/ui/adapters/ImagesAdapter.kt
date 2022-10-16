@@ -20,14 +20,23 @@ import com.squareup.picasso.Picasso
 private const val TAG = "ImagesAdapter"
 
 class ImagesAdapter(
-    private val imagesList: List<String>,
+    private val imagesList: MutableList<String>,
     private val onImageClicked: OnImageClicked,
-//    private val goal: Goal
 ) : RecyclerView.Adapter<ImagesAdapter.ImagesHolder>() {
 
     interface OnImageClicked {
         fun onLeftClicked()
         fun onRightClicked()
+    }
+
+    private fun clearList() {
+        imagesList.removeAll { element -> element == IMAGE_ADD }
+    }
+
+    init {
+        if (IMAGE_ADD in imagesList) {
+            clearList()
+        }
     }
 
     inner class ImagesHolder(private val binding: SingleScrollableImageBinding) :
@@ -42,7 +51,8 @@ class ImagesAdapter(
                 //each image
 
                 if (currentImage.isBlank()) {
-                    val imageSize = binding.root.resources.getDimension(R.dimen.annonce_image_height).toInt()
+                    val imageSize =
+                        binding.root.resources.getDimension(R.dimen.annonce_image_height).toInt()
                     picasso
                         .load(R.drawable.ic_baseline_no_photography_24)
                         .resize(imageSize, imageSize)

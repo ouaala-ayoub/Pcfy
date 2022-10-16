@@ -98,7 +98,7 @@ class ImageModifyFragment : Fragment() {
 
             imagesPager.apply {
                 imagesAdapter = ImagesAdapter(
-                    imagesList,
+                    imagesList.toMutableList(),
                     object : ImagesAdapter.OnImageClicked {
                         override fun onLeftClicked() {
                             currentItem -= 1

@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import kotlin.reflect.typeOf
 
 private const val TAG = "ImagesModifyAdapter"
-private const val IMAGE_ADD = "add images button"
+const val IMAGE_ADD = "add images button"
 private const val MAX_SIZE = 10
 
 class ImagesModifyAdapter(
