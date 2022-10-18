@@ -33,6 +33,7 @@ import com.example.pc.ui.adapters.ImagesModifyAdapter
 import com.example.pc.ui.viewmodels.AnnonceModifyModel
 import com.example.pc.utils.*
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -50,11 +51,13 @@ class AnnonceModifyFragment : Fragment() {
     private lateinit var viewModel: AnnonceModifyModel
     private lateinit var annonceToModifyId: String
     private lateinit var imageResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var picasso: Picasso
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val annonceActivity = (requireActivity() as AnnonceModifyActivity)
         viewModel = annonceActivity.viewModel
+        picasso = annonceActivity.picasso
         annonceToModifyId = annonceActivity.intent.getStringExtra("id")!!
 
         super.onCreate(savedInstanceState)
@@ -187,7 +190,8 @@ class AnnonceModifyFragment : Fragment() {
                                     override fun onAddClicked() {
                                         openGallery()
                                     }
-                                }
+                                },
+                                picasso
                             )
 
                             layoutManager = LinearLayoutManager(

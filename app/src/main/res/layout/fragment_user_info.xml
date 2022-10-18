@@ -129,7 +129,6 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:elevation="0dp"
         android:visibility="invisible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -137,20 +136,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:elevation="0dp"
             android:orientation="vertical">
 
 
             <Button
                 android:id="@+id/user_info"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/mes_informations"
                 android:textAllCaps="false"
                 android:textAppearance="@style/AlataTextView"
@@ -163,12 +160,10 @@
 
             <Button
                 android:id="@+id/user_announces"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/mes_annonces"
                 android:textAlignment="viewStart"
                 android:textAllCaps="false"
@@ -182,12 +177,10 @@
 
             <Button
                 android:id="@+id/share"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/partager"
                 android:textAllCaps="false"
                 android:textAppearance="@style/AlataTextView"
@@ -200,12 +193,10 @@
 
             <Button
                 android:id="@+id/website"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/notre_site_web"
                 android:textAllCaps="false"
                 android:textAppearance="@style/AlataTextView"
@@ -218,12 +209,10 @@
 
             <Button
                 android:id="@+id/about"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/propos"
                 android:textAllCaps="false"
                 android:textAppearance="@style/AlataTextView"
@@ -236,12 +225,11 @@
 
             <Button
                 android:id="@+id/rate"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/ratez_notre_application"
                 android:textAllCaps="false"
                 android:textAppearance="@style/AlataTextView"
@@ -254,12 +242,10 @@
 
             <Button
                 android:id="@+id/contact"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/contactez_nous"
                 android:textAllCaps="false"
                 android:textAppearance="@style/AlataTextView"
@@ -272,12 +258,10 @@
 
             <Button
                 android:id="@+id/logout"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
-                android:lines="2"
                 android:text="@string/logout"
                 android:textAllCaps="false"
                 android:textAppearance="@style/AlataTextView"

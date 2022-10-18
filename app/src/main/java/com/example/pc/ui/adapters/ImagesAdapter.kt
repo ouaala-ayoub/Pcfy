@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
+import com.example.pc.data.models.local.ImageLoader
+import com.example.pc.data.models.local.LoadPolicy
 import com.example.pc.databinding.SingleScrollableImageBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.example.pc.utils.USERS_AWS_S3_LINK
@@ -13,67 +15,95 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
-//enum class Goal(private val goal: String){
-//    View("view"),
-//    Modify("modify")
-//}
 private const val TAG = "ImagesAdapter"
 
 class ImagesAdapter(
-    imagesList: List<String>,
+    imagesList: List<ImageLoader>,
     private val onImageClicked: OnImageClicked,
+    private val picasso: Picasso
 ) : RecyclerView.Adapter<ImagesAdapter.ImagesHolder>() {
 
     interface OnImageClicked {
         fun onLeftClicked()
         fun onRightClicked()
     }
+
     private val newList = imagesList.toMutableList()
 
     private fun clearList() {
-        newList.removeAll { element -> element == IMAGE_ADD }
+        newList.removeAll { element -> element.imageUrl == IMAGE_ADD }
     }
 
     init {
-        Log.i(TAG, "images List : $newList")
-        if (IMAGE_ADD in newList) {
-            clearList()
-            Log.i(TAG, "images List : $newList")
-        }
+        clearList()
     }
 
     inner class ImagesHolder(private val binding: SingleScrollableImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private val picasso: Picasso = Picasso.get()
         fun bind(position: Int) {
+            Log.i(TAG, "bind: $position")
+            val currentImage = newList[position]
+            if (currentImage.imageUrl.isBlank()) {
+                val imageSize =
+                    binding.root.resources.getDimension(R.dimen.annonce_image_height).toInt()
+                picasso
+                    .load(R.drawable.ic_baseline_no_photography_24)
+                    .resize(imageSize, imageSize)
+                    .centerCrop()
+                    .into(binding.productImages)
+            } else {
+                if (currentImage.loadingPolicy == LoadPolicy.Cache) {
+                    Log.i(TAG, "loading : $position using cache")
+                    loadFromCache(position)
+                } else if (currentImage.loadingPolicy == LoadPolicy.Reload) {
+                    Log.i(TAG, "loading : $position using no cache")
+                    loadWithNoCache(position)
+                }
+            }
+        }
+
+        private fun loadFromCache(position: Int) {
 
             val currentImage = newList[position]
+            Log.i(TAG, "bind: $currentImage")
 
             binding.apply {
                 //each image
-
-                Log.i(TAG, "bind: $position")
-                Log.i(TAG, "bind: $currentImage")
-
-                if (currentImage.isBlank()) {
-                    val imageSize =
-                        binding.root.resources.getDimension(R.dimen.annonce_image_height).toInt()
-                    picasso
-                        .load(R.drawable.ic_baseline_no_photography_24)
-                        .resize(imageSize, imageSize)
-                        .centerCrop()
-                        .into(productImages)
-                }
-
+                val imageUrl = "$BASE_AWS_S3_LINK${currentImage.imageUrl}"
                 picasso
-                    .load("$BASE_AWS_S3_LINK${currentImage}")
-//                    .networkPolicy(NetworkPolicy.NO_CACHE)
-//                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .load(imageUrl)
                     .fit()
                     .into(productImages)
 
+                productImages.setOnClickListener {
+                    //zoom in the image
+                }
+            }
+        }
 
+        private fun loadWithNoCache(position: Int) {
+            val currentImage = newList[position]
+            Log.i(TAG, "bind: $currentImage")
+            binding.apply {
+                //each image
+                val imageUrl = "$BASE_AWS_S3_LINK${currentImage.imageUrl}"
+                picasso
+                    .load(imageUrl)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .fit()
+                    .into(productImages)
+
+                productImages.setOnClickListener {
+                    //zoom in the image
+                }
+                currentImage.loadingPolicy = LoadPolicy.Cache
+            }
+        }
+
+        private fun handleRightAndLeft(position: Int) {
+            binding.apply {
                 if (newList.size == 1) {
                     left.isVisible = false
                     right.isVisible = false
@@ -98,12 +128,6 @@ class ImagesAdapter(
                         }
                     }
                 }
-
-                productImages.setOnClickListener {
-                    //zoom in the image
-                }
-
-
             }
         }
     }
@@ -122,4 +146,8 @@ class ImagesAdapter(
     }
 
     override fun getItemCount() = newList.size
+    fun reloadImageAt(indexToChange: Int) {
+        newList[indexToChange].loadingPolicy = LoadPolicy.Reload
+        notifyItemChanged(indexToChange)
+    }
 }

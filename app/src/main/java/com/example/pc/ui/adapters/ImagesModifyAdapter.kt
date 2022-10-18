@@ -1,9 +1,11 @@
 package com.example.pc.ui.adapters
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pc.R
 import com.example.pc.databinding.SingleImageModifyBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
@@ -18,10 +20,9 @@ private const val MAX_SIZE = 10
 
 class ImagesModifyAdapter(
     private val imagesList: MutableList<String>,
-    private val onImageClicked: OnImageModifyClicked
+    private val onImageClicked: OnImageModifyClicked,
+    private val picasso: Picasso
 ) : RecyclerView.Adapter<ImagesModifyAdapter.ImagesModifyHolder>() {
-
-    private val picasso = Picasso.get()
 
     interface OnImageModifyClicked {
         fun onImageClicked(imageIndex: Int, imagesList: List<String>)
@@ -43,40 +44,12 @@ class ImagesModifyAdapter(
 
             binding.apply {
                 productImage.apply {
-//                    if (imagesList.size < MAX_SIZE) {
-//                        if (position == imagesList.lastIndex) {
-//                            setImageResource(R.drawable.ic_baseline_add_24)
-//                            setOnClickListener {
-//                                onImageClicked.onAddClicked()
-//                            }
-//                        } else {
-//                            picasso
-//                                .load("$BASE_AWS_S3_LINK${imagesList[position]}")
-////                              .networkPolicy(NetworkPolicy.NO_CACHE)
-////                              .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                                .fit()
-//                                .into(this)
-//                            setOnClickListener {
-//                                onImageClicked.onImageClicked(position, imagesList)
-//                            }
-//                        }
-//                    } else {
-//                        picasso
-//                            .load("$BASE_AWS_S3_LINK${imagesList[position]}")
-////                              .networkPolicy(NetworkPolicy.NO_CACHE)
-////                              .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                            .fit()
-//                            .into(this)
-//                        setOnClickListener {
-//                            onImageClicked.onImageClicked(position, imagesList)
-//                        }
-//                    }
-
                     if (currentImage != IMAGE_ADD) {
+                        val imageUrl = "$BASE_AWS_S3_LINK${imagesList[position]}"
+                        picasso.invalidate(imageUrl)
                         picasso
-                            .load("$BASE_AWS_S3_LINK${imagesList[position]}")
-//                              .networkPolicy(NetworkPolicy.NO_CACHE)
-//                              .memoryPolicy(MemoryPolicy.NO_CACHE)
+                            .load(imageUrl)
+                            .stableKey(imageUrl)
                             .fit()
                             .into(this)
                         setOnClickListener {
@@ -87,14 +60,10 @@ class ImagesModifyAdapter(
                         setOnClickListener {
                             onImageClicked.onAddClicked()
                         }
-
                     }
-
                 }
-
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesModifyHolder {

@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pc.R
+import com.example.pc.data.models.local.ImageLoader
+import com.example.pc.data.models.local.LoadPolicy
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.AnnonceRepository
 import com.example.pc.databinding.FragmentAnnonceBinding
@@ -42,7 +44,7 @@ class AnnonceFragment : Fragment() {
     private lateinit var userId: String
     private lateinit var detailsAdapter: DetailsAdapter
     private val retrofitService = RetrofitService.getInstance()
-    private val picasso = Picasso.get()
+    private lateinit var picasso: Picasso
     private val viewModel = AnnonceModel(
         AnnonceRepository(
             retrofitService
@@ -65,6 +67,7 @@ class AnnonceFragment : Fragment() {
 
         val activity = requireActivity() as AnnonceActivity
         annonceId = activity.intent.getStringExtra("id") as String
+        picasso = activity.picasso
 
     }
 
@@ -95,14 +98,12 @@ class AnnonceFragment : Fragment() {
                             imagesVp.apply {
 
                                 val pictures = annonce.pictures
+                                val imageLoader =
+                                    pictures.map { url -> ImageLoader(url, LoadPolicy.Cache) }
 
-//                                if (pictures.isEmpty()) {
-//                                    Log.i(TAG, "pictures: adding")
-//                                    pictures.add("")
-//                                }
                                 offscreenPageLimit = pictures.size
                                 adapter = ImagesAdapter(
-                                    pictures,
+                                    imageLoader,
                                     object : ImagesAdapter.OnImageClicked {
                                         override fun onLeftClicked() {
                                             currentItem -= 1
@@ -111,7 +112,8 @@ class AnnonceFragment : Fragment() {
                                         override fun onRightClicked() {
                                             currentItem += 1
                                         }
-                                    }
+                                    },
+                                    picasso
                                 )
                                 TabLayoutMediator(trackingTab, this, true) { _, _ -> }.attach()
                             }
