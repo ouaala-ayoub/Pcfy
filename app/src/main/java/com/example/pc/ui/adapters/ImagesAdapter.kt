@@ -60,6 +60,7 @@ class ImagesAdapter(
                     Log.i(TAG, "loading : $position using no cache")
                     loadWithNoCache(position)
                 }
+                handleRightAndLeft(position)
             }
         }
 
