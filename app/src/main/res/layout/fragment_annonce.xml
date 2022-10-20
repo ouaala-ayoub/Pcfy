@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.AnnonceFragment">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/order_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/commander_maintenant"
+        android:src="@drawable/ic_baseline_shopping_cart_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
@@ -192,13 +203,6 @@
                     app:strokeColor="@color/color_on_primary" />
 
             </androidx.cardview.widget.CardView>
-
-            <Button
-                android:id="@+id/order_now"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/buttons_height"
-                android:text="@string/commander"
-                android:textAllCaps="false" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

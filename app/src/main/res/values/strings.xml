@@ -132,6 +132,10 @@
 
     <string name="image_instructions_title">Confirmation</string>
     <string name="image_instructions_message">Vous êtes sur de supprimer l\'image de votre annonce ?</string>
+    <string name="votre_commande">Votre Commande :</string>
+    <string name="commander_maintenant">Commander maintenant</string>
+    <string name="prix_du_produit">Prix du produit</string>
+    <string name="frais_de_livraison">Frais de livraison</string>
 
 </resources>
 

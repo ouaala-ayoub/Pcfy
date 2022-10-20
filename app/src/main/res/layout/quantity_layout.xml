@@ -24,7 +24,7 @@
             app:icon="@drawable/ic_baseline_horizontal_rule_24" />
 
         <TextView
-            android:id="@+id/quantity"
+            android:id="@+id/quantity_tv"
             android:layout_width="@dimen/quantity_size"
             android:layout_height="@dimen/quantity_size"
             android:layout_weight="1"

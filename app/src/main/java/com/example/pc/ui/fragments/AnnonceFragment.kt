@@ -11,12 +11,9 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.example.pc.R
 import com.example.pc.data.models.local.ImageLoader
 import com.example.pc.data.models.local.LoadPolicy
-import com.example.pc.data.remote.RetrofitService
-import com.example.pc.data.repositories.AnnonceRepository
 import com.example.pc.databinding.FragmentAnnonceBinding
 import com.example.pc.databinding.QuantityLayoutBinding
 import com.example.pc.ui.activities.AnnonceActivity
@@ -32,10 +29,6 @@ import com.squareup.picasso.Picasso
 private const val TAG = "AnnonceActivity"
 private const val ERROR_TEXT = "Erreur inattendue"
 private const val NO_USER = "Vous n'êtes pas connecté"
-private const val SUCCESS_TEXT = "annonce ajoutée au favories avec succes"
-private const val ORDER_SUCCESS = "Commande passée avec succes"
-private const val SUCCESS_DEL_TEXT = "annonce supprimé des favories avec succes"
-
 
 class AnnonceFragment : Fragment() {
 
@@ -43,31 +36,18 @@ class AnnonceFragment : Fragment() {
     private lateinit var annonceId: String
     private lateinit var userId: String
     private lateinit var detailsAdapter: DetailsAdapter
-    private val retrofitService = RetrofitService.getInstance()
     private lateinit var picasso: Picasso
-    private val viewModel = AnnonceModel(
-        AnnonceRepository(
-            retrofitService
-        )
-    )
+    private lateinit var viewModel: AnnonceModel
     private lateinit var authModel: AuthModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        authModel = AuthModel(
-            retrofitService,
-            null
-        )
-
-        authModel.apply {
-            auth(requireContext())
-        }
-
-
         val activity = requireActivity() as AnnonceActivity
+
         annonceId = activity.intent.getStringExtra("id") as String
         picasso = activity.picasso
+        viewModel = activity.viewModel
+        authModel = activity.authModel
 
     }
 
@@ -89,7 +69,7 @@ class AnnonceFragment : Fragment() {
 
                 annonceToShow.observe(viewLifecycleOwner) { annonce ->
 
-                    if (annonceToShow.value != null) {
+                    if (annonce != null) {
                         //bind the data to the views
 
                         try {
@@ -152,9 +132,17 @@ class AnnonceFragment : Fragment() {
 
                             productDescription.text = annonce.description
 
+                            productSeller.setOnClickListener {
+                                goToSellerPage(annonce.seller.userId)
+                            }
+                            sellerInfo.setOnClickListener {
+                                goToSellerPage(annonce.seller.userId)
+                            }
+
                         } catch (e: Throwable) {
                             Log.e(TAG, "binding error : ${e.message}")
                         }
+
                         //get the sellers name
                     } else {
                         requireContext().toast(ERROR_TEXT, Toast.LENGTH_SHORT)
@@ -201,55 +189,7 @@ class AnnonceFragment : Fragment() {
                                 }
 
                                 orderNow.setOnClickListener {
-
-                                    val quantityView =
-                                        QuantityLayoutBinding.inflate(layoutInflater)
-                                    quantityView.apply {
-                                        minus.setOnClickListener {
-                                            quantity.text = (quantity.text.toString()
-                                                .toInt() - 1).toString()
-                                        }
-                                        plus.setOnClickListener {
-                                            quantity.text = (quantity.text.toString()
-                                                .toInt() + 1).toString()
-                                        }
-                                    }
-
-                                    makeDialog(
-                                        requireContext(),
-                                        object : OnDialogClicked {
-                                            override fun onPositiveButtonClicked() {
-                                                Log.i(
-                                                    TAG, "onPositiveButtonClicked quantity is: ${
-                                                        quantityView.quantity.text.toString()
-                                                            .toInt()
-                                                    }"
-                                                )
-                                                addOrder(
-                                                    userId,
-                                                    annonceId,
-                                                    quantityView.quantity.text.toString()
-                                                        .toInt()
-                                                )
-                                                orderAdded.observe(viewLifecycleOwner) { added ->
-                                                    if (added) {
-                                                        doOnSuccess(ORDER_SUCCESS)
-                                                    } else {
-                                                        doOnFail(ERROR_TEXT)
-                                                    }
-                                                }
-                                            }
-
-                                            override fun onNegativeButtonClicked() {
-                                                //return to the annonce screen
-                                            }
-                                        },
-                                        getString(R.string.order_title),
-                                        getString(R.string.order_message),
-                                        quantityView.root,
-                                        getString(R.string.order_negative),
-                                        getString(R.string.order_positive)
-                                    ).show()
+                                    goToOrderFragment()
                                 }
 
                             } else {
@@ -262,21 +202,17 @@ class AnnonceFragment : Fragment() {
                                     }
                                 }
                                 orderNow.setOnClickListener {
-                                    requireContext().toast(
-                                        NO_USER,
-                                        Toast.LENGTH_SHORT
-                                    )
+//                                    requireContext().toast(
+//                                        NO_USER,
+//                                        Toast.LENGTH_SHORT
+//                                    )
+                                    goToLoginActivity()
                                 }
                             }
                         }
                     }
 
-                    productSeller.setOnClickListener {
-                        goToSellerPage(annonce.seller!!.userId)
-                    }
-                    sellerInfo.setOnClickListener {
-                        goToSellerPage(annonce.seller!!.userId)
-                    }
+
 
                 }
 
@@ -288,6 +224,11 @@ class AnnonceFragment : Fragment() {
         }
 
         return binding?.root
+    }
+
+    private fun goToOrderFragment() {
+        val action = AnnonceFragmentDirections.actionAnnonceFragmentToOrderFragment()
+        findNavController().navigate(action)
     }
 
     private fun goToSellerPage(sellerId: String) {

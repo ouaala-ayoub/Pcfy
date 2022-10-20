@@ -18,7 +18,7 @@ private const val TAG = "AnnonceModel"
 
 class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel() {
 
-    val annonceToShow = MutableLiveData<Annonce>()
+    val annonceToShow = MutableLiveData<Annonce?>()
     val isAddedToFav = MutableLiveData<Boolean>()
     val seller = MutableLiveData<User>()
     val addedFavouriteToUser = MutableLiveData<Boolean>()
@@ -77,6 +77,7 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
                     } else {
                         Log.i(TAG, "response error body: ${response.errorBody()}")
                         Log.i(TAG, "response raw ${response.raw()}")
+                        annonceToShow.postValue(null)
                         isProgressBarTurning.postValue(false)
                     }
                 }
@@ -84,6 +85,7 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
                 override fun onFailure(call: Call<Annonce>, t: Throwable) {
                     errorMessage.postValue(t.message)
                     Log.e(TAG, "onFailure: ${t.message}")
+                    annonceToShow.postValue(null)
                     isProgressBarTurning.postValue(false)
                 }
             }
