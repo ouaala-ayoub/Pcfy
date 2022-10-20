@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import com.example.pc.R
 import com.example.pc.databinding.FragmentOrderSuccessBinding
 
@@ -14,6 +15,14 @@ class OrderSuccessFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    //do nothing
+                    //cant go back
+                }
+            })
     }
 
     override fun onCreateView(

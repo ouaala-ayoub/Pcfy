@@ -103,14 +103,15 @@
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="@dimen/quantity_size"
                     android:layout_height="@dimen/quantity_size"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:gravity="center"
                     app:icon="@drawable/ic_baseline_horizontal_rule_24" />
 
                 <TextView
                     android:id="@+id/quantity_tv"
                     android:layout_width="@dimen/quantity_size"
                     android:layout_height="@dimen/quantity_size"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="1" />
@@ -120,6 +121,7 @@
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="@dimen/quantity_size"
                     android:layout_height="@dimen/quantity_size"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     app:icon="@drawable/ic_baseline_add_24"
                     app:iconGravity="end" />
@@ -134,7 +136,7 @@
         android:layout_height="0dp"
         android:padding="10dp"
         android:text="To do !!!!!"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -165,7 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Commander"
+            android:text="@string/commander"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold" />
