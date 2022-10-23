@@ -40,11 +40,26 @@
             <action
                 android:id="@+id/action_userInfoFragment_to_infoFragment"
                 app:destination="@id/infoFragment" />
+            <action
+                android:id="@+id/action_userInfoFragment_to_userImageModifyFragment"
+                app:destination="@id/userImageModifyFragment" />
         </fragment>
         <fragment
             android:id="@+id/infoFragment"
             android:name="com.example.pc.ui.fragments.InfoFragment"
             android:label="fragment_info"
             tools:layout="@layout/fragment_info" />
+
+        <fragment android:id="@+id/userImageModifyFragment"
+            android:name="com.example.pc.ui.fragments.UserImageModifyFragment"
+            android:label="fragment_info"
+            tools:layout="@layout/fragment_info" >
+            <argument
+                android:name="userId"
+                app:argType="string" />
+            <argument
+                android:name="imageName"
+                app:argType="string" />
+        </fragment>
     </navigation>
 </navigation>

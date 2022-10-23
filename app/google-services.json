@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "822319724359",
+    "project_id": "testtoast-ffc0c",
+    "storage_bucket": "testtoast-ffc0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822319724359:android:3d71ec23cbd652ac3d7e62",
+        "android_client_info": {
+          "package_name": "com.example.pc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822319724359-djlkk779rl5gskvq6j03fm021et5g6ge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMCYR6gMBjBeRRId7QZ1wTuaHUES5QtmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822319724359-djlkk779rl5gskvq6j03fm021et5g6ge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

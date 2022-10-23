@@ -15,26 +15,33 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.example.pc.R
+import com.example.pc.data.models.local.ImageLoader
+import com.example.pc.data.models.local.LoadPolicy
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityMainBinding
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.squareup.picasso.Picasso
 
 private const val TAG = "MainActivity"
 const val LOGOUT_SUCCESS = "Deconnecté avec success"
+var imageLoader: ImageLoader? = ImageLoader("no yet", LoadPolicy.Cache)
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
     private val retrofitService = RetrofitService.getInstance()
+    var imageLoader: ImageLoader? = null
+    lateinit var picasso: Picasso
     private lateinit var authModel: AuthModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        picasso = Picasso.get()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

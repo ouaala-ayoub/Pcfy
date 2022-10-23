@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id("androidx.navigation.safeargs.kotlin")
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -47,6 +48,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.0'
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:31.0.1')
+    implementation 'com.google.firebase:firebase-messaging:23.1.0'
 
     //test
     testImplementation 'junit:junit:4.13.2'

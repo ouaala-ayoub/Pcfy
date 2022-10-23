@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
+import com.example.pc.data.models.local.ImageLoader
+import com.example.pc.data.models.local.LoadPolicy
 import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
@@ -45,46 +48,22 @@ private const val TAG = "UserInfoFragment"
 
 class UserInfoFragment : Fragment(), View.OnClickListener {
 
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private var binding: FragmentUserInfoBinding? = null
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var userInfoModel: UserInfoModel
     private lateinit var authModel: AuthModel
-    private var binding: FragmentUserInfoBinding? = null
     private lateinit var loggedInUser: LoggedInUser
-    private val picasso = Picasso.get()
-    private var imageUri: Uri? = null
-    var times = 0
+    private lateinit var picasso: Picasso
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        picasso = (requireActivity() as MainActivity).picasso
         userInfoModel = UserInfoModel(
             UserInfoRepository(retrofitService),
+            picasso
         )
 
         authModel = AuthModel(retrofitService, LoginRepository(retrofitService, requireContext()))
-
-        requestPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-
-                Log.i(TAG, "isGranted: $isGranted")
-
-                if (isGranted) {
-                    setTheUploadImage()
-                } else {
-                    val snackBar = makeSnackBar(
-                        requireView(),
-                        getString(R.string.permission),
-                        Snackbar.LENGTH_INDEFINITE
-                    )
-                    snackBar.setAction(R.string.ok) {
-                        snackBar.dismiss()
-                    }.show()
-                }
-            }
-
 
         super.onCreate(savedInstanceState)
     }
@@ -99,46 +78,13 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
         binding = FragmentUserInfoBinding.inflate(inflater, container, false)
 
-        resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    // There are no request codes
-                    val data: Intent? = result.data
-                    if (data?.data != null) {
-                        imageUri = data.data!!
-
-                        val path = URIPathHelper().getPath(requireContext(), imageUri!!)
-                        Log.i(TAG, "onClick: $path")
-                        val file = File(path)
-                        val requestFile: RequestBody =
-                            file.asRequestBody("image/*".toMediaTypeOrNull())
-
-                        val requestBody = MultipartBody.Builder()
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("picture", file.name, requestFile)
-                            .build()
-
-                        userInfoModel.apply {
-                            updateImage(loggedInUser.userId, requestBody)
-                            updatedPicture.observe(viewLifecycleOwner) { updated ->
-                                if (updated) {
-                                    Log.i(TAG, "userId: ${loggedInUser.userId}")
-
-
-                                } else {
-                                    requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
-                                    reloadActivity()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         authModel.apply {
             auth(requireContext())
@@ -154,6 +100,8 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
                     showForm()
 
+
+
                     userInfoModel.apply {
                         binding!!.apply {
 
@@ -163,6 +111,8 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
                             getUserById(loggedInUser.userId)
                             userRetrieved.observe(viewLifecycleOwner) { user ->
+
+                                Log.i(TAG, "imageLoader: $imageLoader")
                                 if (user != null) {
                                     userName.text = user.name
                                     if (!user.userType.isNullOrBlank()) {
@@ -172,6 +122,11 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                         )
                                     }
 
+                                    val imageName = user.imageUrl
+                                    if (imageName != null) {
+                                        imageLoader?.imageUrl = imageName
+                                    }
+
                                     Log.i(TAG, "image : ${user.imageUrl}")
 
                                     if (user.imageUrl.isNullOrBlank()) {
@@ -179,18 +134,42 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                         userImage.setImageResource(
                                             R.drawable.ic_baseline_no_photography_24
                                         )
+                                        userImage.setOnClickListener {
+                                            goToUserImageModify(
+                                                loggedInUser.userId,
+                                                "undefined"
+                                            )
+                                        }
                                     } else {
                                         //for test purposes
-                                        picasso
-                                            .load("${USERS_AWS_S3_LINK}${user.imageUrl}")
-//                                            .networkPolicy(NetworkPolicy.NO_CACHE)
-//                                            .memoryPolicy(MemoryPolicy.NO_CACHE)
-                                            .fit()
-                                            .into(userImage)
+                                        val url = "${USERS_AWS_S3_LINK}${user.imageUrl}"
+                                        Log.i(TAG, "user image url: $url")
+                                        //to fix the cache logic
+
+                                        if (imageLoader?.loadingPolicy == LoadPolicy.Cache) {
+                                            Log.i(TAG, "loading image with cache")
+                                            loadUserImageFromCache(
+                                                imageLoader!!.imageUrl,
+                                                userImage
+                                            )
+                                        } else if (imageLoader?.loadingPolicy == LoadPolicy.Reload) {
+                                            Log.i(TAG, "loading image with no cache")
+                                            loadUserImageNoCache(
+                                                imageLoader!!.imageUrl,
+                                                userImage
+                                            )
+                                            imageLoader?.loadingPolicy = LoadPolicy.Cache
+                                        }
+
+                                        userImage.setOnClickListener {
+                                            goToUserImageModify(
+                                                loggedInUser.userId,
+                                                user.imageUrl
+                                            )
+                                        }
                                     }
 
                                     this@UserInfoFragment.apply {
-                                        userImage.setOnClickListener(this)
                                         userInfo.setOnClickListener(this)
                                         userAnnounces.setOnClickListener(this)
                                         website.setOnClickListener(this)
@@ -226,39 +205,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
         when (v?.id) {
 
-            R.id.user_image -> {
-
-                when {
-                    ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED -> {
-                        setTheUploadImage()
-
-                    }
-                    shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-                        showInContextUI(
-                            object : OnDialogClicked {
-                                override fun onPositiveButtonClicked() {
-                                    requestPermissionLauncher.launch(
-                                        Manifest.permission.READ_EXTERNAL_STORAGE
-                                    )
-                                }
-
-                                override fun onNegativeButtonClicked() {
-                                    //cancel the dialog without doing nothing
-                                }
-                            }
-                        )
-                    }
-                    else -> {
-                        requestPermissionLauncher.launch(
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                        )
-                    }
-                }
-            }
-
             R.id.user_info -> {
                 goToUserInfoModify(loggedInUser.userId)
             }
@@ -287,23 +233,14 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun showInContextUI(onDialogClicked: OnDialogClicked) {
-        makeDialog(
-            requireContext(),
-            onDialogClicked,
-            getString(R.string.permission_required),
-            getString(R.string.you_cant_user),
-            negativeText = getString(R.string.no_thanks),
-            positiveText = getString(R.string.authorise)
-
-        ).show()
+    private fun goToUserImageModify(userId: String, imageName: String) {
+        val action = UserInfoFragmentDirections.actionUserInfoFragmentToUserImageModifyFragment(
+            userId = userId,
+            imageName = imageName
+        )
+        findNavController().navigate(action)
     }
 
-    private fun setTheUploadImage() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        resultLauncher.launch(intent)
-    }
 
     private fun showForm() {
         binding!!.apply {
@@ -355,13 +292,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         startActivity(intent)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        val activity = requireActivity() as MainActivity
-        activity.supportActionBar?.show()
-        binding = null
-    }
-
     private fun goToLoginActivity() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
@@ -380,6 +310,13 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         val openURL = Intent(Intent.ACTION_VIEW)
         openURL.data = Uri.parse(getString(R.string.pcfy_website))
         startActivity(openURL)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val activity = requireActivity() as MainActivity
+        activity.supportActionBar?.show()
+        binding = null
     }
 
 }

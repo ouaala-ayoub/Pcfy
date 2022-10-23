@@ -1,13 +1,18 @@
 package com.example.pc.ui.viewmodels
 
 import android.util.Log
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.UserInfoRepository
+import com.example.pc.utils.USERS_AWS_S3_LINK
 import com.example.pc.utils.getError
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,6 +22,7 @@ private const val TAG = "UserInfoModel"
 
 class UserInfoModel(
     private val userInfoRepository: UserInfoRepository,
+    private val picasso: Picasso? = null
 ) : ViewModel() {
 
     val updatedPicture = MutableLiveData<Boolean>()
@@ -76,5 +82,19 @@ class UserInfoModel(
                 isTurning.postValue(false)
             }
         })
+    }
+    fun loadUserImageNoCache(imageName: String, imageView: ImageView){
+        picasso
+            ?.load("$USERS_AWS_S3_LINK$imageName")
+            ?.fit()
+            ?.networkPolicy(NetworkPolicy.NO_CACHE)
+            ?.memoryPolicy(MemoryPolicy.NO_CACHE)
+            ?.into(imageView)
+    }
+    fun loadUserImageFromCache(imageName: String, imageView: ImageView){
+        picasso
+            ?.load("$USERS_AWS_S3_LINK$imageName")
+            ?.fit()
+            ?.into(imageView)
     }
 }
