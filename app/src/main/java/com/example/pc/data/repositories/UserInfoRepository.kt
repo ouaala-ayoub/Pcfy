@@ -20,4 +20,8 @@ class UserInfoRepository(private val retrofitService: RetrofitService) {
 
     fun updateUserImage(userId: String, image: RequestBody) =
         retrofitService.updateProfilePicture(userId, image)
+
+    fun deleteUserImage(userId: String, tokens: RequestBody) =
+        retrofitService.deleteProfilePicture(userId, tokens)
+
 }

@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavArgs
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pc.R
 import com.example.pc.data.models.local.LoadPolicy
@@ -38,6 +39,8 @@ import java.io.File
 
 private const val TAG = "UserImageModifyFragment"
 private const val IMAGE_MODIFY_SUCCESS = "Image Modifiée avec success"
+private const val IMAGE_DELETED_SUCCESS = "Image supprimée avec success"
+private const val IMAGE_DELETED_ERROR = "erreur inattendue pendant la suppression de l'image"
 
 class UserImageModifyFragment : Fragment() {
 
@@ -57,11 +60,10 @@ class UserImageModifyFragment : Fragment() {
 
         userId = navArgs.userId
         imageUrl = navArgs.imageName
-        Log.i(TAG, "userId: $userId and imageName: $imageUrl")
-
         picasso = (requireActivity() as MainActivity).picasso
-
         viewModel = UserInfoModel(UserInfoRepository(RetrofitService.getInstance()), picasso)
+
+        Log.i(TAG, "userId: $userId and imageName: $imageUrl")
 
         requestPermissionLauncher =
             registerForActivityResult(
@@ -153,13 +155,48 @@ class UserImageModifyFragment : Fragment() {
                 userImage.setImageResource(
                     R.drawable.ic_baseline_no_photography_24
                 )
+                delete.isEnabled = false
             } else {
                 viewModel.loadUserImageFromCache(imageUrl, userImage)
             }
 
 
             delete.setOnClickListener {
+                makeDialog(
+                    requireContext(),
+                    object : OnDialogClicked {
+                        override fun onPositiveButtonClicked() {
+                            viewModel.apply {
+                                val tokens = LocalStorage.getTokens(requireContext())
+                                val requestBody = getRequestBody(tokens)
+                                if (requestBody != null) {
+                                    deleteProfilePicture(userId, requestBody)
+                                    deletedPicture.observe(viewLifecycleOwner) { deleted ->
+                                        if (deleted) {
+                                            requireContext().toast(
+                                                IMAGE_DELETED_SUCCESS,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            getUserById(userId)
+                                        } else {
+                                            doOnFail(IMAGE_DELETED_ERROR)
+                                        }
+                                    }
 
+                                } else {
+                                    doOnFail(ERROR_MSG)
+                                }
+                            }
+                        }
+
+                        override fun onNegativeButtonClicked() {
+                            //cancel == null
+                        }
+
+                    },
+                    getString(R.string.user_image_delete_title),
+                    getString(R.string.user_image_delete_message),
+                )
             }
             modify.setOnClickListener {
                 when {
@@ -212,6 +249,11 @@ class UserImageModifyFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         resultLauncher.launch(intent)
+    }
+
+    fun doOnFail(message: String) {
+        requireContext().toast(message, Toast.LENGTH_SHORT)
+        findNavController().popBackStack()
     }
 
     private fun reloadActivity() {

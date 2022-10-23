@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.IdResponse
+import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.utils.USERS_AWS_S3_LINK
@@ -13,7 +14,9 @@ import com.example.pc.utils.getError
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +29,7 @@ class UserInfoModel(
 ) : ViewModel() {
 
     val updatedPicture = MutableLiveData<Boolean>()
+    val deletedPicture = MutableLiveData<Boolean>()
     val userRetrieved = MutableLiveData<User>()
     val isTurning = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>()
@@ -39,12 +43,12 @@ class UserInfoModel(
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful && response.body() != null) {
                     userRetrieved.postValue(response.body())
-                    isTurning.postValue(false)
+
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "error body : $error")
-                    isTurning.postValue(false)
                 }
+                isTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
@@ -83,7 +87,46 @@ class UserInfoModel(
             }
         })
     }
-    fun loadUserImageNoCache(imageName: String, imageView: ImageView){
+
+    fun deleteProfilePicture(userId: String, tokens: RequestBody) {
+
+        isTurning.postValue(true)
+
+        userInfoRepository.deleteUserImage(userId, tokens).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful && response.body() != null) {
+                    deletedPicture.postValue(true)
+                } else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.i(TAG, "onResponse error: $error")
+                    deletedPicture.postValue(false)
+                }
+                isTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e(TAG, "deleteProfilePicture onFailure: ${t.message}")
+                deletedPicture.postValue(false)
+                isTurning.postValue(false)
+            }
+        })
+    }
+
+    fun getRequestBody(tokens: Tokens?): RequestBody? {
+        return if (tokens?.accessToken == null || tokens.refreshToken == null) {
+            null
+        }else {
+            val builder = MultipartBody
+                .Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("accessToken", tokens.accessToken)
+                .addFormDataPart("refreshToken", tokens.refreshToken)
+
+            builder.build()
+        }
+    }
+
+    fun loadUserImageNoCache(imageName: String, imageView: ImageView) {
         picasso
             ?.load("$USERS_AWS_S3_LINK$imageName")
             ?.fit()
@@ -91,7 +134,8 @@ class UserInfoModel(
             ?.memoryPolicy(MemoryPolicy.NO_CACHE)
             ?.into(imageView)
     }
-    fun loadUserImageFromCache(imageName: String, imageView: ImageView){
+
+    fun loadUserImageFromCache(imageName: String, imageView: ImageView) {
         picasso
             ?.load("$USERS_AWS_S3_LINK$imageName")
             ?.fit()

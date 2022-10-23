@@ -90,6 +90,12 @@ interface RetrofitService {
         @Body newUserPicture: RequestBody
     ): Call<IdResponse>
 
+    @HTTP(method = "DELETE", path = "users/{id}/profile", hasBody = true)
+    fun deleteProfilePicture(
+        @Path("id") userId: String,
+        @Body tokens: RequestBody
+    ): Call<ResponseBody>
+
     // Favourites
 
     @GET("users/{id}/favourites")

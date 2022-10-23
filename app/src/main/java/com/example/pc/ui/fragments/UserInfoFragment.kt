@@ -1,10 +1,6 @@
 package com.example.pc.ui.fragments
 
-import android.Manifest
-import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,17 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
-import com.example.pc.data.models.local.ImageLoader
 import com.example.pc.data.models.local.LoadPolicy
 import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.remote.RetrofitService
@@ -33,16 +22,7 @@ import com.example.pc.ui.activities.*
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.UserInfoModel
 import com.example.pc.utils.*
-import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import okhttp3.FormBody
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 
 private const val TAG = "UserInfoFragment"
 
@@ -84,8 +64,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         authModel.apply {
             auth(requireContext())
             auth.observe(viewLifecycleOwner) {
@@ -99,8 +77,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                     Log.i(TAG, " auth from auth true : ${isAuth()}")
 
                     showForm()
-
-
 
                     userInfoModel.apply {
                         binding!!.apply {

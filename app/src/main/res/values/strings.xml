@@ -137,5 +137,8 @@
     <string name="prix_du_produit">Prix du produit</string>
     <string name="frais_de_livraison">Frais de livraison</string>
 
+    <string name="user_image_delete_title"> Attention </string>
+    <string name="user_image_delete_message"> Vous êtes sur le point de supprimer votre image de profile !!. Êtes vous sûre ? </string>
+
 </resources>
 

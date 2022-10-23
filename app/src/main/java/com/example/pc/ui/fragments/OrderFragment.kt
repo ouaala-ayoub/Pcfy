@@ -86,7 +86,8 @@ class OrderFragment : Fragment() {
                                         plus.setOnClickListener { quantityAdd() }
 
                                         price.observe(viewLifecycleOwner) { price ->
-                                            //hardcoded the shipping price to change
+                                            //hardcoded the shipping price
+                                            // to change
                                             val priceWithShipping = price + 50
                                             orderPrice.text = priceWithShipping.toString()
                                         }
