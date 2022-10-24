@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.descendants
 import androidx.core.view.isVisible
 import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
@@ -160,6 +161,13 @@ class UserImageModifyFragment : Fragment() {
                 viewModel.loadUserImageFromCache(imageUrl, userImage)
             }
 
+            viewModel.isTurning.observe(viewLifecycleOwner) { loading ->
+                Log.i(TAG, "isTurning: $loading")
+                userImageLoading.isVisible = loading
+
+                changeUiEnabling(loading)
+
+            }
 
             delete.setOnClickListener {
                 makeDialog(
@@ -167,6 +175,7 @@ class UserImageModifyFragment : Fragment() {
                     object : OnDialogClicked {
                         override fun onPositiveButtonClicked() {
                             viewModel.apply {
+
                                 val tokens = LocalStorage.getTokens(requireContext())
                                 val requestBody = getRequestBody(tokens)
                                 if (requestBody != null) {
@@ -196,7 +205,7 @@ class UserImageModifyFragment : Fragment() {
                     },
                     getString(R.string.user_image_delete_title),
                     getString(R.string.user_image_delete_message),
-                )
+                ).show()
             }
             modify.setOnClickListener {
                 when {
@@ -231,6 +240,13 @@ class UserImageModifyFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun changeUiEnabling(loading: Boolean) {
+        binding.apply {
+            delete.isEnabled = !loading
+            modify.isEnabled = !loading
+        }
     }
 
     private fun showInContextUI(onDialogClicked: OnDialogClicked) {

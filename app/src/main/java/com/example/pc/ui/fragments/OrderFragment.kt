@@ -58,8 +58,9 @@ class OrderFragment : Fragment() {
 
                         viewModel.apply {
 
-                            isTurning.observe(viewLifecycleOwner) {
-                                progressBar3.isVisible = it
+                            isTurning.observe(viewLifecycleOwner) { loading ->
+                                progressBar3.isVisible = loading
+                                disableUi()
                             }
 
                             getAnnonceById(annonceId)
@@ -121,6 +122,14 @@ class OrderFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun disableUi() {
+        binding.apply {
+            order.isEnabled = false
+            plus.isEnabled = false
+            minus.isEnabled = false
+        }
     }
 
     private fun doOnFail(message: String) {

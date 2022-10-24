@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
@@ -68,8 +69,9 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
             auth(requireContext())
             auth.observe(viewLifecycleOwner) {
 
-                isTurning.observe(viewLifecycleOwner) {
-                    binding!!.userInfoProgressbar.isVisible = it
+                isTurning.observe(viewLifecycleOwner) { loading ->
+                    binding!!.userInfoProgressbar.isVisible = loading
+                    changeUiEnabling(loading)
                 }
 
                 if (isAuth()) {
@@ -173,6 +175,15 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun changeUiEnabling(loading: Boolean) {
+        binding?.apply {
+            userInfo.isEnabled = !loading
+            for (v in linearLayout.children){
+                v.isEnabled = !loading
             }
         }
     }

@@ -102,8 +102,9 @@ class AnnonceModifyFragment : Fragment() {
             viewModel.apply {
                 getAnnonce(annonceToModifyId).observe(viewLifecycleOwner) { annonce ->
 
-                    isTurning.observe(viewLifecycleOwner) {
-                        annonceModifyProgressBar.isVisible = it
+                    isTurning.observe(viewLifecycleOwner) { loading ->
+                        annonceModifyProgressBar.isVisible = loading
+                        changeUiEnabling(loading)
                     }
 
                     // on annonce retrieved fail
@@ -237,6 +238,14 @@ class AnnonceModifyFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun changeUiEnabling(loading: Boolean) {
+        binding.apply {
+            scrollView.isEnabled = !loading
+            submitChanges.isEnabled = !loading
+            imagesRv.isEnabled = !loading
+        }
     }
 
     private fun openGallery(){

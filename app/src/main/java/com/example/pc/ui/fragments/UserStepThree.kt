@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.view.children
 import com.example.pc.R
 import com.example.pc.data.models.HandleSubmitInterface
 import com.example.pc.data.models.local.SellerType
@@ -52,6 +53,9 @@ class UserStepThree : Fragment(), HandleSubmitInterface {
                 }
                 if (organization.isNotBlank()) {
                     addFormDataPart("brand", organization)
+                }
+                for (v in linearLayout4.children){
+                    v.isEnabled = false
                 }
             }
         }

@@ -79,8 +79,9 @@ class UserCreateActivity : AppCompatActivity() {
                                     goToLoginPage()
                                 }
                             }
-                            isTurning.observe(this@UserCreateActivity) {
-                                progressBar2.isVisible = it
+                            isTurning.observe(this@UserCreateActivity) { loading ->
+                                progressBar2.isVisible = loading
+                                changeUiEnabling(loading)
                             }
                         }
 
@@ -115,6 +116,13 @@ class UserCreateActivity : AppCompatActivity() {
             setContentView(binding.root)
         }
 
+    }
+
+    private fun changeUiEnabling(loading: Boolean) {
+        binding.apply {
+            next.isEnabled = !loading
+            back.isEnabled = !loading
+        }
     }
 
     private fun goToHomeFragment() {

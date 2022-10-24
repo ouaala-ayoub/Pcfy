@@ -16,7 +16,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "Utils"
@@ -28,7 +27,7 @@ const val USERS_AWS_S3_LINK = "https://pcfy-profiles.s3.eu-west-3.amazonaws.com/
 const val ERROR_MSG = "Erreur inattendue"
 const val NON_AUTHENTICATED = "Utilisateur non authentifié"
 
-interface OnDialogClicked{
+interface OnDialogClicked {
     fun onPositiveButtonClicked()
     fun onNegativeButtonClicked()
 }
@@ -56,7 +55,7 @@ fun makeDialog(
             onDialogClicked.onPositiveButtonClicked()
         }
 
-        .setNegativeButton(negativeText){ _, _ ->
+        .setNegativeButton(negativeText) { _, _ ->
             onDialogClicked.onNegativeButtonClicked()
         }
         .create()
@@ -77,19 +76,18 @@ fun makeSnackBar(
 }
 
 fun getError(responseBody: ResponseBody, code: Int): Error? {
-    return try{
+    return try {
         val jsonObj = JSONObject(responseBody.charStream().readText())
         Error(jsonObj.getString("error"), code)
-    }
-    catch (e: Exception){
+    } catch (e: Exception) {
         val error = e.message?.let { Error(it, code) }
         Log.i(TAG, "getError: $error")
         return error
     }
 }
 
-fun getTheErrorMessage(error: Error){
-    when(error.code){
+fun getTheErrorMessage(error: Error) {
+    when (error.code) {
         404 -> error.message = ERROR404
         500 -> error.message = ERROR500
         401 -> error.message = ERROR401
@@ -114,7 +112,10 @@ class URIPathHelper {
 
             } else if (isDownloadsDocument(uri)) {
                 val id = DocumentsContract.getDocumentId(uri)
-                val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+                val contentUri = ContentUris.withAppendedId(
+                    Uri.parse("content://downloads/public_downloads"),
+                    java.lang.Long.valueOf(id)
+                )
                 return getDataColumn(context, contentUri, null, null)
             } else if (isMediaDocument(uri)) {
                 val docId = DocumentsContract.getDocumentId(uri)
@@ -140,12 +141,25 @@ class URIPathHelper {
         return null
     }
 
-    private fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
+    private fun getDataColumn(
+        context: Context,
+        uri: Uri?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
         var cursor: Cursor? = null
         val column = "_data"
         val projection = arrayOf(column)
         try {
-            cursor = uri?.let { context.contentResolver.query(it, projection, selection, selectionArgs,null) }
+            cursor = uri?.let {
+                context.contentResolver.query(
+                    it,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null
+                )
+            }
             if (cursor != null && cursor.moveToFirst()) {
                 val column_index: Int = cursor.getColumnIndexOrThrow(column)
                 return cursor.getString(column_index)

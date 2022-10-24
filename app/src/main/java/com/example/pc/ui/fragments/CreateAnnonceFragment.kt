@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -204,8 +205,9 @@ class CreateAnnonceFragment : Fragment() {
 
                                         viewModel.apply {
 
-                                            isTurning.observe(viewLifecycleOwner) { turning ->
-                                                binding!!.progressBar.isVisible = turning
+                                            isTurning.observe(viewLifecycleOwner) { loading ->
+                                                binding!!.progressBar.isVisible = loading
+                                                changeUiEnabling(loading)
                                             }
 
                                             //to change
@@ -241,6 +243,16 @@ class CreateAnnonceFragment : Fragment() {
             }
         }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun changeUiEnabling(loading: Boolean) {
+        binding?.apply {
+
+            for(i in linearLayout.children){
+                i.isEnabled = !loading
+            }
+            addButton.isEnabled = !loading
+        }
     }
 
     private fun showForm() {

@@ -57,7 +57,6 @@ class ImageModifyFragment : Fragment() {
         viewModel = annonceActivity.viewModel
         picasso = annonceActivity.picasso
 
-
         Log.i(TAG, "imageIndex: $imageIndex")
         Log.i(TAG, "imagesList: $imagesList")
 
@@ -128,8 +127,9 @@ class ImageModifyFragment : Fragment() {
 
             viewModel.apply {
 
-                isTurning.observe(viewLifecycleOwner) {
-                    imagesModifyProgresBar.isVisible = it
+                isTurning.observe(viewLifecycleOwner) { loading ->
+                    imagesModifyProgresBar.isVisible = loading
+                    changeUiEnabling(loading)
                 }
 
                 delete.setOnClickListener {
@@ -175,6 +175,14 @@ class ImageModifyFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun changeUiEnabling(loading: Boolean) {
+        binding.apply {
+            modify.isEnabled = !loading
+            delete.isEnabled = !loading
+            imagesPager.isUserInputEnabled = !loading
+        }
     }
 
     private fun setTheUploadImage() {

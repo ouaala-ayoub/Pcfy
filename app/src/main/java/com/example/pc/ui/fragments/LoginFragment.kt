@@ -97,8 +97,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         binding!!.problemMessage.text = error
                     }
 
-                    isTurning.observe(viewLifecycleOwner) {
-                        binding!!.loginProgressBar.isVisible = it
+                    isTurning.observe(viewLifecycleOwner) { loading ->
+                        binding!!.loginProgressBar.isVisible = loading
+                        changeUiEnabling(loading)
                     }
                 }
 
@@ -107,6 +108,15 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 //sign up fragment
                 goToUserFragment()
             }
+        }
+    }
+
+    private fun changeUiEnabling(loading: Boolean) {
+        binding?.apply {
+            login.isEnabled = !loading
+            signUp.isEnabled = !loading
+            passwordInput.isEnabled = !loading
+            usernameInput.isEnabled = !loading
         }
     }
 
