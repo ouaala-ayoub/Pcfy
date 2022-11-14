@@ -41,6 +41,8 @@ data class User(
     @SerializedName("picture")
     val imageUrl: String?,
 
+    @SerializedName("token")
+    var fireBaseToken: String,
 
     //required
     @SerializedName("loginAttempts")

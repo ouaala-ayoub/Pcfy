@@ -71,8 +71,6 @@
             android:elevation="0dp"
             android:orientation="vertical">
 
-
-
             <Button
                 android:id="@+id/addDetails"
                 android:textAllCaps="false"

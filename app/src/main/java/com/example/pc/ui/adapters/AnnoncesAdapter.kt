@@ -32,6 +32,7 @@ class AnnoncesAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val annonce = annoncesList[position]
+            Log.i(TAG, "bind: annonce $annonce")
             binding.apply {
 
                 try {
@@ -49,11 +50,12 @@ class AnnoncesAdapter(
                     }
 
                     annonceTitle.text = annonce.title
-
-                    val sellerName = annonce.seller?.userName
-                    if (sellerName != null) {
-                        annonceSeller.text = sellerName
-                    }
+//
+//                    val sellerName = annonce.seller?.userName
+//                    Log.i(TAG, "seller name : $sellerName")
+//                    if (sellerName != null) {
+//                        annonceSeller.text = sellerName
+//                    }
 
                     annoncePrice.text = binding.root.resources.getString(
                         R.string.price,
@@ -67,7 +69,6 @@ class AnnoncesAdapter(
                     Log.e(TAG, "bind: $annonce error ${e.message}")
                 }
 
-                //add favourite button
             }
         }
     }

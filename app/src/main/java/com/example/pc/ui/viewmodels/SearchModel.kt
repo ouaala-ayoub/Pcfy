@@ -15,13 +15,14 @@ private const val TAG = "SearchModel"
 private const val EMPTY_MSG = "Pas de resultats trouvés"
 private const val ERROR_MSG = "Erreur inattendue"
 
-class SearchModel(private val searchRepository: SearchRepository) : ViewModel() {
+class SearchModel(private val searchRepository: SearchRepository, private val maxPrice: Int) : ViewModel() {
 
+    val currentMax = MutableLiveData<Float>()
     val searchResult = MutableLiveData<List<Annonce>?>()
     val searchMessage = MutableLiveData<String>()
     val isTurning = MutableLiveData<Boolean>()
 
-    fun search(searchKey: String?) {
+    fun search(searchKey: String?, price: Number? = null, status: String? = null) {
 
         if (searchKey.isNullOrBlank()) {
             searchResult.postValue(listOf())
@@ -30,23 +31,27 @@ class SearchModel(private val searchRepository: SearchRepository) : ViewModel() 
 
         isTurning.postValue(true)
 
-        searchRepository.getSearchResult(searchKey).enqueue(object : Callback<List<Annonce>> {
+        searchRepository.getSearchResult(searchKey, price, status)
+            .enqueue(object : Callback<List<Annonce>> {
 
-            override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    searchResult.postValue(response.body())
-                } else {
-                    searchResult.postValue(null)
+                override fun onResponse(
+                    call: Call<List<Annonce>>,
+                    response: Response<List<Annonce>>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        searchResult.postValue(response.body())
+                    } else {
+                        searchResult.postValue(null)
+                    }
+                    isTurning.postValue(false)
                 }
-                isTurning.postValue(false)
-            }
 
-            override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-                isTurning.postValue(false)
-            }
+                override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
+                    isTurning.postValue(false)
+                }
 
-        })
+            })
     }
 
     fun updateSearchMessage() {
@@ -59,6 +64,13 @@ class SearchModel(private val searchRepository: SearchRepository) : ViewModel() 
             searchMessage.postValue("")
         }
 
+    }
+
+    fun getMaxPrice(percentage : Float): Float {
+        val max = percentage * maxPrice
+        currentMax.postValue(max)
+        Log.i(TAG, "calculateThePrice max = $max ")
+        return max
     }
 
 }

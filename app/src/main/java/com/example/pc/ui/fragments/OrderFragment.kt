@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
+import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.databinding.FragmentOrderBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.viewmodels.AnnonceModel
@@ -17,8 +17,8 @@ import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.OrderModel
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.example.pc.utils.ERROR_MSG
-import com.example.pc.utils.USERS_AWS_S3_LINK
 import com.example.pc.utils.toast
+import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 
 private const val ERROR_AUTH = "Erreur d'authentification"
@@ -60,7 +60,7 @@ class OrderFragment : Fragment() {
 
                             isTurning.observe(viewLifecycleOwner) { loading ->
                                 progressBar3.isVisible = loading
-                                disableUi()
+                                disableUi(loading)
                             }
 
                             getAnnonceById(annonceId)
@@ -106,6 +106,7 @@ class OrderFragment : Fragment() {
                                         orderAdded.observe(viewLifecycleOwner) { added ->
                                             if (added) {
                                                 doOnSuccess(ORDER_SUCCESS)
+                                                sendFireBaseNotification(annonce.seller?.fireBaseToken)
                                             } else {
                                                 doOnFail(ERROR_MSG)
                                             }
@@ -124,11 +125,15 @@ class OrderFragment : Fragment() {
         return binding.root
     }
 
-    private fun disableUi() {
+    private fun sendFireBaseNotification(sellerToken: String?) {
+
+    }
+
+    private fun disableUi(loading: Boolean) {
         binding.apply {
-            order.isEnabled = false
-            plus.isEnabled = false
-            minus.isEnabled = false
+            order.isEnabled = !loading
+            plus.isEnabled = !loading
+            minus.isEnabled = !loading
         }
     }
 

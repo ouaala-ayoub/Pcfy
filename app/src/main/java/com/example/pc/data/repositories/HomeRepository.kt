@@ -6,7 +6,8 @@ import retrofit2.Call
 
 class HomeRepository(private val retrofitService: RetrofitService) {
     fun getAnnonces(category: String?, searchKey: String?): Call<List<Annonce>> =
-        retrofitService.getAllAnnonces(category, searchKey)
+        retrofitService.getAllAnnonces(category, searchKey, null, null)
 
-    fun getAnnoncesByCategory(category: String) = retrofitService.getAllAnnonces(category, null)
+    fun getAnnoncesByCategory(category: String) =
+        retrofitService.getAllAnnonces(category, null, null, null)
 }

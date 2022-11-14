@@ -59,12 +59,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
         binding = FragmentUserInfoBinding.inflate(inflater, container, false)
 
-        return binding!!.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         authModel.apply {
             auth(requireContext())
             auth.observe(viewLifecycleOwner) {
@@ -177,7 +171,15 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
+
+        return binding!!.root
     }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//
+//    }
 
     private fun changeUiEnabling(loading: Boolean) {
         binding?.apply {

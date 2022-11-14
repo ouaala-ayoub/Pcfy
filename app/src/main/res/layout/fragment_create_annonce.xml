@@ -212,7 +212,7 @@
         android:minHeight="48dp"
         android:text="@string/se_connecter"
         android:visibility="invisible"
-        android:textColor="@color/orange_button"
+        android:textColor="@color/beautiful_blue"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

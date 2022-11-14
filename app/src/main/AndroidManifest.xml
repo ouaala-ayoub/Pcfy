@@ -56,7 +56,7 @@
         </activity>
 
 
-
+        <service android:name=".data.remote.PushNotificationService" />
     </application>
 
 

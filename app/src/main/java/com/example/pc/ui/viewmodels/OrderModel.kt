@@ -28,7 +28,6 @@ class OrderModel(private val individualPrice: Float) : ViewModel() {
 
     private fun updatePrice(quantityVal: Int) {
         val updatedPrice = individualPrice * quantityVal
-        Log.i(TAG, "updatePrice: $updatedPrice")
         price.postValue(updatedPrice)
     }
 }

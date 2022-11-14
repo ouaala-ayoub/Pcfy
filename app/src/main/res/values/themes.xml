@@ -2,14 +2,14 @@
     <!-- Base application theme. -->
     <style name="Theme.Pc" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/orange_button</item>
+        <item name="colorPrimary">@color/beautiful_blue</item>
         <item name="colorPrimaryVariant">@color/white_darker</item>
         <item name="colorOnPrimary">@color/color_on_primary</item>
         <item name="colorOnSurface">@color/even_darker_grey</item>
         <item name="colorSurface">@color/white_darker</item>
         <item name="android:colorBackground">@color/background_color</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/orange_button</item>
+        <item name="colorSecondary">@color/beautiful_blue</item>
         <item name="colorSecondaryVariant">@color/orange_font</item>
         <item name="colorOnSecondary">@color/white_darker</item>
         <!-- Status bar color. -->
@@ -37,7 +37,7 @@
 
     <style name="AlataButtonStyle" parent="Widget.Material3.Button">
         <item name="android:fontFamily">@font/alata</item>
-        <item name="android:background">@color/orange_button</item>
+        <item name="android:background">@color/beautiful_blue</item>
         <item name="android:textColor">@color/color_on_primary</item>
         <item name="android:layout_height">@dimen/buttons_height</item>
     </style>

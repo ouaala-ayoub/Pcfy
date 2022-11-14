@@ -98,7 +98,7 @@
                     android:layout_weight="1"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:textColor="@color/orange_button"
+                    android:textColor="@color/beautiful_blue"
                     android:textSize="18sp"
                     tools:text="3500dh" />
 
@@ -150,7 +150,7 @@
                 android:paddingEnd="10dp"
                 tools:text="description" />
 
-            <androidx.cardview.widget.CardView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/product_seller"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/store_height"
@@ -159,12 +159,16 @@
                 app:cardElevation="5dp">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|start"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    app:cardCornerRadius="25dp">
+                    android:layout_margin="5dp"
+                    app:cardCornerRadius="25dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/selleer_image"
@@ -174,35 +178,47 @@
                         tools:src="@tools:sample/avatars" />
                 </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/seller_name"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/linearLayout8"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|top"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:textSize="16sp"
-                    tools:text="product seller" />
+                    android:layout_gravity="center|end"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cardView2"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <Button
-                    android:id="@+id/seller_info"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="@string/visiter"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/AlataTextView"
-                    android:textColor="@color/color_on_primary"
-                    android:textSize="15sp"
-                    app:cardCornerRadius="25dp"
-                    app:strokeColor="@color/color_on_primary" />
+                    <TextView
+                        android:id="@+id/seller_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textSize="16sp"
+                        tools:text="product seller" />
 
-            </androidx.cardview.widget.CardView>
+                    <Button
+                        android:id="@+id/seller_info"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="@string/visiter"
+                        android:textAllCaps="false"
+                        android:textAppearance="@style/AlataTextView"
+                        android:textColor="@color/color_on_primary"
+                        android:textSize="15sp"
+                        app:cardCornerRadius="25dp"
+                        app:strokeColor="@color/color_on_primary" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

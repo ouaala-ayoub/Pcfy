@@ -17,13 +17,26 @@ import androidx.preference.PreferenceManager
 import com.example.pc.R
 import com.example.pc.data.models.local.ImageLoader
 import com.example.pc.data.models.local.LoadPolicy
+import com.example.pc.data.models.network.Message
+import com.example.pc.data.models.network.MessageX
+import com.example.pc.data.models.network.Notification
+import com.example.pc.data.remote.Name
+import com.example.pc.data.remote.RetrofitNotificationService
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityMainBinding
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.toast
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.installations.remote.TokenResult.builder
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private const val TAG = "MainActivity"
 const val LOGOUT_SUCCESS = "Deconnecté avec success"
@@ -62,6 +75,29 @@ class MainActivity : AppCompatActivity() {
         val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
 
         Log.i(TAG, "current theme: $isNightTheme")
+
+        var token: String = ""
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(object: OnCompleteListener<String>{
+            override fun onComplete(task: Task<String>) {
+                if(!task.isSuccessful) return
+
+                token = task.result
+                Log.i(TAG, "onComplete task: $token")
+                val message = Message(
+                    MessageX(
+                        Notification(
+                            "test",
+                            "test message"
+                        ),
+                        token
+                    )
+                )
+
+                handleMessage(message)
+            }
+        })
+
+
 
         when (isNightTheme) {
             false -> {
@@ -152,6 +188,22 @@ class MainActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
         startActivity(intent)
         overridePendingTransition(0, 0)
+    }
+
+    private fun handleMessage(message: Message) {
+
+        Log.i(TAG, "handleMessage: $message")
+        
+        RetrofitNotificationService.getInstance().sendMessage(message).enqueue(object: Callback<Name>{
+            override fun onResponse(call: Call<Name>, response: Response<Name>) {
+                Log.i(TAG, "sendMessage onResponse: ${response.body()?.name}")
+            }
+
+            override fun onFailure(call: Call<Name>, t: Throwable) {
+                Log.i(TAG, "sendMessage onFailure: ${t.message}")
+            }
+
+        })
     }
 
 }

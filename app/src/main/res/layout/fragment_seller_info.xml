@@ -62,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:textColor="@color/orange_button"
+                        android:textColor="@color/beautiful_blue"
                         android:textSize="18sp"
                         tools:text="Pcfy" />
 
@@ -87,7 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:textColor="@color/orange_button"
+                        android:textColor="@color/beautiful_blue"
                         android:textSize="18sp"
                         tools:text="www.pcfy.vercel.app" />
 

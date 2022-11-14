@@ -50,7 +50,7 @@
             android:minHeight="48dp"
             android:text="@string/se_connecter"
             android:layout_gravity="center"
-            android:textColor="@color/orange_button"
+            android:textColor="@color/beautiful_blue"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -156,7 +156,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_person_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
             <Button
@@ -173,7 +173,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_note_add_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
             <Button
@@ -189,7 +189,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_share_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
             <Button
@@ -205,7 +205,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_web_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
             <Button
@@ -221,7 +221,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_info_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
             <Button
@@ -238,7 +238,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_rate_review_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
             <Button
@@ -254,7 +254,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_contact_support_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
             <Button
@@ -270,7 +270,7 @@
                 android:textSize="17sp"
                 app:icon="@drawable/ic_baseline_logout_24"
                 app:iconPadding="10dp"
-                app:iconTint="@color/orange_button"
+                app:iconTint="@color/beautiful_blue"
                 app:strokeColor="@color/color_on_primary" />
 
         </LinearLayout>
