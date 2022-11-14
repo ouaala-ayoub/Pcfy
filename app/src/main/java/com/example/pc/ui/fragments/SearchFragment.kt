@@ -31,7 +31,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 private const val NUM_ROWS = 2
 private const val TAG = "SearchFragment"
 private const val SEARCH_ERROR = "Erreur inattendue"
-private const val MAX_SEARCH_PRICE = 50000
+private const val MAX_SEARCH_PRICE = 20000
 private const val WHATEVER = "-"
 
 class SearchFragment : Fragment() {

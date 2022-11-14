@@ -34,7 +34,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="Message de confirmation bla bla bla" />
+            android:text="@string/confirmation_message"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/back_to_home"

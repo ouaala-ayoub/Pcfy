@@ -139,6 +139,7 @@
 
     <string name="user_image_delete_title"> Attention </string>
     <string name="user_image_delete_message"> Vous êtes sur le point de supprimer votre image de profile !!. Êtes vous sûre ? </string>
+    <string name="confirmation_message">Le vendeur a été notifié de votre commande , vous serez contacté dès qu\'il sera disponible.</string>
 
 </resources>
 
