@@ -14,6 +14,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuItemCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pc.R
@@ -101,8 +102,13 @@ class SearchFragment : Fragment() {
                 }
 
                 priceRange.addOnChangeListener { slider, value, fromUser ->
-                    Log.i(TAG, "onCreateView: $value")
+                    Log.i(TAG, "getMaxPrice slider: $value")
                     getMaxPrice(value)
+
+                    Log.i(
+                        TAG,
+                        "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
+                    )
                 }
 
                 searchMessage.observe(viewLifecycleOwner) { msg ->
@@ -115,6 +121,11 @@ class SearchFragment : Fragment() {
                     val price = max.toInt()
                     priceQuery = price
                     maxPrice.text = price.toString()
+                    search(searchView.query.toString(), priceQuery, statusQuery)
+                    Log.i(
+                        TAG,
+                        "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
+                    )
                 }
             }
         }
@@ -128,11 +139,19 @@ class SearchFragment : Fragment() {
 
         val values = Status.values().map { status ->
             status.status
-        } as MutableList<String>
-        values.add(WHATEVER)
+        }.toMutableList().apply { add(WHATEVER) }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
         (binding.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+
+        binding.statusEditText.doOnTextChanged { text, _, _, _ ->
+            statusQuery = getStatusQuery()
+            viewModel.search(binding.searchView.query.toString(), priceQuery, statusQuery)
+            Log.i(
+                TAG,
+                "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
+            )
+        }
     }
 
     fun getStatusQuery(): String? {
