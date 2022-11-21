@@ -1,14 +1,16 @@
 package com.example.pc.ui.adapters
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
+import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Annonce
+import com.example.pc.data.models.network.Order
 import com.example.pc.databinding.SingleFavouriteBinding
-import com.example.pc.ui.viewmodels.FavouritesModel
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.squareup.picasso.Picasso
 
@@ -16,11 +18,18 @@ private const val TAG = "FavouritesAdapter"
 
 class FavouritesAdapter(
     private val onFavouriteClickListener: OnFavouriteClickListener,
-) : RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
+    private val onCommandsClickListener: OnCommandsClicked? = null,
+    private val onOrderClicked: OrdersShortAdapter.OnOrderClicked? = null,
+
+    ) : RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
 
     interface OnFavouriteClickListener {
         fun onFavouriteClicked(annonceId: String)
         fun onDeleteClickListener(annonceId: String)
+    }
+
+    interface OnCommandsClicked {
+        fun onCommandClicked(annonceId: String, adapter: OrdersShortAdapter)
     }
 
     private var favouritesList = mutableListOf<Annonce>()
@@ -44,9 +53,10 @@ class FavouritesAdapter(
             binding.apply {
                 favouriteTitle.text = favourite.title
 
-                val sellerName = favourite.seller!!.userName
-
-                favouriteSeller.text = sellerName
+                // to discuss
+//                val sellerName = favourite.seller!!.userName
+//
+//                favouriteSeller.text = sellerName
 
 
                 favouritePrice.text = binding.root.resources.getString(
@@ -73,6 +83,32 @@ class FavouritesAdapter(
                     onFavouriteClickListener.onDeleteClickListener(favourite.id!!)
                 }
 
+
+                if (onCommandsClickListener != null && onOrderClicked != null) {
+                    val adapter = OrdersShortAdapter(
+                        onOrderClicked
+                    )
+                    linearLayout9.visibility = View.VISIBLE
+                    commandes.apply {
+                        visibility = View.VISIBLE
+                        setOnClickListener {
+                            ordersRv.apply {
+                                val isVisible = visibility
+                                if (isVisible == View.VISIBLE) {
+                                    visibility = View.GONE
+                                } else {
+                                    visibility = View.VISIBLE
+
+                                    this.adapter = adapter
+                                    layoutManager = LinearLayoutManager(context)
+
+                                    onCommandsClickListener.onCommandClicked(favourite.id!!, adapter)
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -93,3 +129,5 @@ class FavouritesAdapter(
 
     override fun getItemCount() = favouritesList.size
 }
+
+class FullItem(private val annonce: Annonce, private val order: List<Order>)

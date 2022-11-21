@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +19,12 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.RequestsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.FullOrdersActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.UserInfoModifyActivity"
             android:exported="false" />
         <activity
@@ -30,8 +36,8 @@
             android:theme="@style/AppTheme.NoActionbar" />
         <activity
             android:name=".ui.activities.UserCreateActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:exported="false"
@@ -40,8 +46,8 @@
         <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.AnnonceActivity"
             android:exported="false" />
@@ -55,9 +61,7 @@
             </intent-filter>
         </activity>
 
-
         <service android:name=".data.remote.PushNotificationService" />
     </application>
-
 
 </manifest>

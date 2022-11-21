@@ -41,9 +41,6 @@ data class User(
     @SerializedName("picture")
     val imageUrl: String?,
 
-    @SerializedName("token")
-    var fireBaseToken: String,
-
     //required
     @SerializedName("loginAttempts")
     val loginAttempts: Int = 0,
@@ -52,13 +49,12 @@ data class User(
     @SerializedName("lockUntil")
     val lockUntil: Number? = null,
 
-    @SerializedName("announces")
-    val annonces: MutableList<String> = mutableListOf(),
 
     @SerializedName("favourites")
     val favourites: MutableList<String> = mutableListOf(),
     // locally keep the favourites ?
 
-    @SerializedName("__v")
-    val version: Int? = null
+    @SerializedName("shipping address")
+    val address: String? = null
+
 )

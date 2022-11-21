@@ -73,7 +73,7 @@ class AnnonceFragment : Fragment() {
                         //bind the data to the views
 
                         try {
-                            getSellerById(annonce.seller!!.userId)
+                            getSellerById(annonce.sellerId!!)
 
                             imagesVp.apply {
 
@@ -133,10 +133,10 @@ class AnnonceFragment : Fragment() {
                             productDescription.text = annonce.description
 
                             productSeller.setOnClickListener {
-                                goToSellerPage(annonce.seller.userId)
+                                goToSellerPage(annonce.sellerId)
                             }
                             sellerInfo.setOnClickListener {
-                                goToSellerPage(annonce.seller.userId)
+                                goToSellerPage(annonce.sellerId)
                             }
 
                         } catch (e: Throwable) {

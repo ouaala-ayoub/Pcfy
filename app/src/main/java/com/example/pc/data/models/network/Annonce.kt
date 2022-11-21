@@ -9,27 +9,25 @@ data class Annonce(
     //required = true
 
     @SerializedName("title")
-    val title: String ,
+    val title: String,
 
     @SerializedName("price")
-    val price: Number ,
+    val price: Number,
 
     @SerializedName("category")
-    val category: String ,
+    val category: String,
 
     @SerializedName("status")
-    val status: String ,
+    val status: String,
 
     @SerializedName("pictures")
-    val pictures: List<String> ,
+    val pictures: List<String>,
 
     //just for testing
     @SerializedName("seller")
-    val seller: LoggedInUser? = null,
+    val sellerId: String? = null,
 
     //non required
-
-
 
     @SerializedName("details")
     val details: List<Detail>? = null,
@@ -52,7 +50,7 @@ data class Annonce(
 
     @SerializedName("__v")
     val v: Int? = null,
-){
+) {
 
 
 }

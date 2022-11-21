@@ -10,6 +10,4 @@ data class LoggedInUser(
     @SerializedName("name")
     val userName: String,
 
-    @SerializedName("token")
-    val fireBaseToken: String? = null
 )

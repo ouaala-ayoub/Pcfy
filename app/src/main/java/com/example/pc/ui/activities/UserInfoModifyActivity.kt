@@ -84,7 +84,6 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                             brand = organisationNameEditText.text.toString(),
                                             password = oldUser.password,
                                             imageUrl = oldUser.imageUrl,
-                                            fireBaseToken = ""
                                         )
 
                                         updateUser(userToModifyId, newUser)

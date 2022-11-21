@@ -37,6 +37,12 @@ class AnnoncesAdapter(
 
                 try {
 
+                    annonceTitle.text = annonce.title
+                    annoncePrice.text = binding.root.resources.getString(
+                        R.string.price,
+                        annonce.price.toString()
+                    )
+
                     if (annonce.pictures.isEmpty()) {
                         annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                     } else {
@@ -48,8 +54,6 @@ class AnnoncesAdapter(
                                 .into(annonceImage)
                         }
                     }
-
-                    annonceTitle.text = annonce.title
 //
 //                    val sellerName = annonce.seller?.userName
 //                    Log.i(TAG, "seller name : $sellerName")
@@ -57,11 +61,7 @@ class AnnoncesAdapter(
 //                        annonceSeller.text = sellerName
 //                    }
 
-                    annoncePrice.text = binding.root.resources.getString(
-                        R.string.price,
-                        annonce.price.toString()
-                    )
-
+                    
                     binding.annonce.setOnClickListener {
                         annonceClickListener.onAnnonceClick(annonce.id!!)
                     }

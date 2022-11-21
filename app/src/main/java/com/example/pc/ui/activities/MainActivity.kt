@@ -48,13 +48,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val retrofitService = RetrofitService.getInstance()
     var imageLoader: ImageLoader? = null
-    lateinit var picasso: Picasso
+    var picasso: Picasso = Picasso.get()
     private lateinit var authModel: AuthModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        picasso = Picasso.get()
+//        picasso = Picasso.get()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -76,26 +76,26 @@ class MainActivity : AppCompatActivity() {
 
         Log.i(TAG, "current theme: $isNightTheme")
 
-        var token: String = ""
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(object: OnCompleteListener<String>{
-            override fun onComplete(task: Task<String>) {
-                if(!task.isSuccessful) return
-
-                token = task.result
-                Log.i(TAG, "onComplete task: $token")
-                val message = Message(
-                    MessageX(
-                        Notification(
-                            "test",
-                            "test message"
-                        ),
-                        token
-                    )
-                )
-
-                handleMessage(message)
-            }
-        })
+//        var token: String = ""
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(object: OnCompleteListener<String>{
+//            override fun onComplete(task: Task<String>) {
+//                if(!task.isSuccessful) return
+//
+//                token = task.result
+//                Log.i(TAG, "onComplete task: $token")
+//                val message = Message(
+//                    MessageX(
+//                        Notification(
+//                            "test",
+//                            "test message"
+//                        ),
+//                        token
+//                    )
+//                )
+//
+//                handleMessage(message)
+//            }
+//        })
 
 
 

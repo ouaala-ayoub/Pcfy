@@ -135,4 +135,7 @@ class UserCreateActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 }

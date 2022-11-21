@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.IdResponse
+import com.example.pc.data.models.network.Order
 import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.AnnonceRepository
 import com.example.pc.utils.getError
@@ -166,11 +167,11 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
             })
     }
 
-    fun addOrder(currentUserId: String, annonceId: String, quantity: Int) {
+    fun addOrder(orderToAdd: Order) {
 
         isProgressBarTurning.postValue(true)
 
-        annonceRepository.addOrder(currentUserId, annonceId, quantity).enqueue(object : Callback<IdResponse> {
+        annonceRepository.addOrder(orderToAdd).enqueue(object : Callback<IdResponse> {
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 val orderId = response.body()?.objectId
                 if (response.isSuccessful && orderId != null) {

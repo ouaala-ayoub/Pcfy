@@ -142,8 +142,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                     }
 
                                     this@UserInfoFragment.apply {
-                                        userInfo.setOnClickListener(this)
-                                        userAnnounces.setOnClickListener(this)
+                                        personalSpace.setOnClickListener(this)
                                         website.setOnClickListener(this)
                                         about.setOnClickListener(this)
                                         share.setOnClickListener(this)
@@ -183,8 +182,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
     private fun changeUiEnabling(loading: Boolean) {
         binding?.apply {
-            userInfo.isEnabled = !loading
-            for (v in linearLayout.children){
+            for (v in linearLayout.children) {
                 v.isEnabled = !loading
             }
         }
@@ -194,8 +192,8 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
         when (v?.id) {
 
-            R.id.user_info -> {
-                goToUserInfoModify(loggedInUser.userId)
+            R.id.personal_space -> {
+                goToUserControllerFragment(loggedInUser.userId)
             }
 
             R.id.about -> {
@@ -204,10 +202,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
             R.id.share -> {
                 // share the app play store link
-            }
-
-            R.id.user_announces -> {
-                goToUserAnnonces(loggedInUser.userId)
             }
 
             R.id.website -> {
@@ -220,6 +214,12 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                 reloadActivity()
             }
         }
+    }
+
+    private fun goToUserControllerFragment(userId: String) {
+        val action =
+            UserInfoFragmentDirections.actionUserInfoFragmentToUserControlerFragment(userId)
+        findNavController().navigate(action)
     }
 
     private fun goToUserImageModify(userId: String, imageName: String) {
@@ -269,17 +269,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         findNavController().navigate(action)
     }
 
-    private fun goToUserInfoModify(userId: String) {
-        val intent = Intent(requireContext(), UserInfoModifyActivity::class.java)
-        intent.putExtra("id", userId)
-        startActivity(intent)
-    }
 
-    private fun goToUserAnnonces(userId: String) {
-        val intent = Intent(requireContext(), UserAnnoncesActivity::class.java)
-        intent.putExtra("id", userId)
-        startActivity(intent)
-    }
 
     private fun goToLoginActivity() {
         val intent = Intent(requireContext(), LoginActivity::class.java)

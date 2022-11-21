@@ -54,7 +54,7 @@ class CreateAnnonceFragment : Fragment() {
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var viewModel: CreateAnnonceModel
     private lateinit var authModel: AuthModel
-    private lateinit var currentUser: LoggedInUser
+    private lateinit var userId: String
     private var imagesUris = listOf<Uri>()
 
     //add the livedata validation
@@ -141,9 +141,8 @@ class CreateAnnonceFragment : Fragment() {
                 if (isAuth()) {
 
                     Log.i(TAG, "isAuth: $it")
-                    val payload = getPayload()!!
-                    currentUser = LoggedInUser(payload.id, payload.name)
-                    Log.i(TAG, "user : $currentUser")
+                    userId = getPayload()!!.id
+
 
                     showForm()
                     setTheStatueEditTextView()
@@ -187,8 +186,7 @@ class CreateAnnonceFragment : Fragment() {
                                                 "description",
                                                 binding!!.descriptionEditText.text.toString()
                                             )
-                                            .addFormDataPart("seller[id]", currentUser.userId)
-                                            .addFormDataPart("seller[name]", currentUser.userName)
+                                            .addFormDataPart("sellerId", userId)
 
                                         var i = 0
                                         for (body in imagesPart) {

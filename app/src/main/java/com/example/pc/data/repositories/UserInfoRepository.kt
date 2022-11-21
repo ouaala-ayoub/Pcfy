@@ -12,6 +12,8 @@ class UserInfoRepository(private val retrofitService: RetrofitService) {
 
     fun getAnnonces(userId: String) = retrofitService.getAnnounces(userId)
 
+    fun getAnnonceOrders(annonceId: String) = retrofitService.getAnnonceOrders(annonceId)
+
     fun deleteAnnonce(tokens: Tokens, annonceId: String) =
         retrofitService.deleteAnnonce(tokens, annonceId)
 

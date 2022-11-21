@@ -1,0 +1,41 @@
+package com.example.pc.ui.viewmodels
+
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.example.pc.data.models.network.Order
+import com.example.pc.data.repositories.OrdersRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+private const val TAG = "RequestsModel"
+
+class RequestsModel(private val ordersRepository: OrdersRepository) {
+
+    val userRequests = MutableLiveData<List<Order>?>()
+    val isTurning = MutableLiveData<Boolean>()
+
+    fun getUserRequests(usersId: String) {
+
+        isTurning.postValue(true)
+
+        ordersRepository.getUserRequests(usersId).enqueue(object : Callback<List<Order>> {
+            override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    userRequests.postValue(response.body())
+                } else {
+                    userRequests.postValue(null)
+                }
+                isTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<List<Order>>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message}")
+                userRequests.postValue(null)
+                isTurning.postValue(false)
+            }
+
+        })
+    }
+
+}

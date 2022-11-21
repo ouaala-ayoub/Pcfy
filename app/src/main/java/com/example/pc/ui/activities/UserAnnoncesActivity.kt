@@ -8,11 +8,15 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
+import com.example.pc.data.models.local.OrderStatus
+import com.example.pc.data.models.network.Annonce
+import com.example.pc.data.models.network.Order
 import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.databinding.ActivityUserAnnoncesBinding
 import com.example.pc.ui.adapters.FavouritesAdapter
+import com.example.pc.ui.adapters.OrdersShortAdapter
 import com.example.pc.ui.viewmodels.UserAnnoncesModel
 import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.OnDialogClicked
@@ -87,6 +91,49 @@ class UserAnnoncesActivity : AppCompatActivity() {
                         getString(R.string.annonce_delete_dialog_message)
                     ).show()
                 }
+            },
+            object : FavouritesAdapter.OnCommandsClicked {
+                override fun onCommandClicked(annonceId: String, adapter: OrdersShortAdapter) {
+                    //send the request
+                    Log.i(TAG, "onCommandClicked: $annonceId")
+                    userAnnoncesModel.apply {
+                        getAnnonceOrders(annonceId)
+                        ordersList.observe(this@UserAnnoncesActivity) { orders ->
+                            Log.i(TAG, "onCommandClicked orders: $orders")
+                            if (orders != null) {
+                                adapter.setOrdersList(orders)
+                            } else {
+//                                val order = Order(
+//                                    "test Id",
+//                                    "seller Id",
+//                                    "customer Id",
+//                                    "annonce Id",
+//                                    "shipping adress test",
+//                                    orderStatus = OrderStatus.CANCELED.status
+//                                )
+//                                val test = listOf(
+//                                    order,
+//                                    order,
+//                                    order,
+//                                    order
+//                                )
+//                                Log.i(TAG, "onCommandClicked orders : $test")
+//                                adapter.setOrdersList(test)
+                                this@UserAnnoncesActivity.toast(
+                                    "Erreur de chargement des commandes",
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
+                    }
+                }
+            },
+            object : OrdersShortAdapter.OnOrderClicked {
+                override fun onOrderClicked(orderId: String) {
+                    // go to order page
+                    Log.i(TAG, "onOrderClicked: $orderId")
+                    goToOrderPage(orderId)
+                }
             }
         )
 
@@ -101,7 +148,16 @@ class UserAnnoncesActivity : AppCompatActivity() {
                     updateIsEmpty().observe(this@UserAnnoncesActivity) {
                         binding.isEmpty.isVisible = it
                     }
-                    Log.i(TAG, "favourites : $annonces")
+                    Log.i(TAG, "annonces : $annonces")
+//                    val annonce = Annonce(
+//                        "test",
+//                        1200,
+//                        "neuf",
+//                        "test status",
+//                        listOf("https://pcfy.s3.eu-west-3.amazonaws.com/1668785810605.fc6fcff777f2.jpg"),
+//                        id = "test"
+//                    )
+//                    val test = listOf(annonce)
                     adapter.setList(annonces)
                 }
             }
@@ -127,6 +183,10 @@ class UserAnnoncesActivity : AppCompatActivity() {
         val intent = Intent(this, AnnonceModifyActivity::class.java)
         intent.putExtra("id", annonceId)
         startActivity(intent)
+    }
+
+    private fun goToOrderPage(orderId: String) {
+
     }
 
 }

@@ -19,6 +19,7 @@ class UserAnnoncesModel(
 ) : ViewModel() {
 
     private val annoncesList = MutableLiveData<MutableList<Annonce>?>()
+    val ordersList = MutableLiveData<List<Order>?>()
     private val isEmpty = MutableLiveData<Boolean>()
     val isTurning = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<Error?>()
@@ -79,6 +80,28 @@ class UserAnnoncesModel(
 
         })
 
+    }
+
+    fun getAnnonceOrders(annonceId: String) {
+
+        isTurning.postValue(true)
+
+        userInfoRepository.getAnnonceOrders(annonceId).enqueue(object : Callback<List<Order>> {
+            override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    ordersList.postValue(response.body())
+                } else {
+                    ordersList.postValue(null)
+                }
+                isTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<List<Order>>, t: Throwable) {
+                Log.e(TAG, "getAnnonceOrders onFailure: ${t.message}")
+                ordersList.postValue(null)
+                isTurning.postValue(false)
+            }
+        })
     }
 
     fun updateIsEmpty(): MutableLiveData<Boolean> {

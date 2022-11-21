@@ -116,9 +116,18 @@ interface RetrofitService {
 
     // Orders
 
+    @GET("users/{id}/orders")
+    fun getSellerOrders(@Path("id") userId: String): Call<List<Order>>
+
+    @GET("users/{id}/requests")
+    fun getUserRequests(@Path("id") userId: String): Call<List<Order>>
+
     //maybe i will not use it
     @GET("orders")
     fun getOrders(): Call<List<Order>>
+
+    @GET("announces/{id}/orders")
+    fun getAnnonceOrders(@Path("id") annonceId: String): Call<List<Order>>
 
     //add order
     @POST("orders")

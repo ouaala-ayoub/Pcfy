@@ -43,6 +43,9 @@
             <action
                 android:id="@+id/action_userInfoFragment_to_userImageModifyFragment"
                 app:destination="@id/userImageModifyFragment" />
+            <action
+                android:id="@+id/action_userInfoFragment_to_userControlerFragment"
+                app:destination="@id/userControlerFragment" />
         </fragment>
         <fragment
             android:id="@+id/infoFragment"
@@ -59,6 +62,15 @@
                 app:argType="string" />
             <argument
                 android:name="imageName"
+                app:argType="string" />
+        </fragment>
+        <fragment
+            android:id="@+id/userControlerFragment"
+            android:name="com.example.pc.ui.fragments.UserControlerFragment"
+            android:label="fragment_user_controler"
+            tools:layout="@layout/fragment_user_controler" >
+            <argument
+                android:name="userId"
                 app:argType="string" />
         </fragment>
     </navigation>

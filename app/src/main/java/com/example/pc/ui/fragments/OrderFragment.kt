@@ -7,17 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.models.local.LoggedInUser
+import com.example.pc.data.models.network.Customer
+import com.example.pc.data.models.network.Order
+import com.example.pc.data.models.network.Product
 import com.example.pc.databinding.FragmentOrderBinding
+import com.example.pc.databinding.OrderDialogViewBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.OrderModel
-import com.example.pc.utils.BASE_AWS_S3_LINK
-import com.example.pc.utils.ERROR_MSG
-import com.example.pc.utils.toast
+import com.example.pc.utils.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 
@@ -73,7 +76,7 @@ class OrderFragment : Fragment() {
                                         .into(annonceImage)
 
                                     annonceTitle.text = annonce.title
-                                    annonceSeller.text = annonce.seller?.userName ?: "Non Available"
+//                                    annonceSeller.text = annonce.seller?.userName ?: "Non Available"
                                     announcePrice.text = getString(R.string.price, annonce.price)
 
                                     //frais de livraison !!!!
@@ -98,19 +101,84 @@ class OrderFragment : Fragment() {
                                     }
 
                                     order.setOnClickListener {
-                                        addOrder(
-                                            userId,
-                                            annonceId,
-                                            quantityTv.text.toString().toInt()
-                                        )
-                                        orderAdded.observe(viewLifecycleOwner) { added ->
-                                            if (added) {
-                                                doOnSuccess(ORDER_SUCCESS)
-                                                sendFireBaseNotification(annonce.seller?.fireBaseToken)
+                                        val binding = OrderDialogViewBinding.inflate(layoutInflater)
+                                        getSellerById(userId)
+                                        seller.observe(viewLifecycleOwner) { user ->
+                                            if (user != null) {
+                                                binding.apply {
+
+                                                    nameEditText.setText(user.name)
+                                                    phoneEditText.setText(user.phoneNumber)
+                                                    if (user.address != null) {
+                                                        addressEditText.setText(user.address)
+                                                    }
+
+                                                    orderModel.apply {
+
+                                                        name.postValue(user.name)
+                                                        phoneNumber.postValue(user.phoneNumber)
+                                                        address.postValue(user.address)
+
+                                                        nameEditText.doOnTextChanged { text, _, _, _ ->
+                                                            name.value = text.toString()
+                                                        }
+                                                        phoneEditText.doOnTextChanged { text, _, _, _ ->
+                                                            phoneNumber.value = text.toString()
+                                                        }
+                                                        addressEditText.doOnTextChanged { text, _, _, _ ->
+                                                            address.value = text.toString()
+                                                        }
+                                                    }
+                                                }
                                             } else {
                                                 doOnFail(ERROR_MSG)
                                             }
                                         }
+                                        makeDialog(
+                                            requireContext(),
+                                            object : OnDialogClicked {
+                                                override fun onPositiveButtonClicked() {
+                                                    if (orderModel.isValidData.value == true) {
+                                                        orderModel.apply {
+                                                            addOrder(
+                                                                Order(
+                                                                    quantity = quantity.value!!,
+                                                                    customer = Customer(
+                                                                        userId,
+                                                                        name.value.toString(),
+                                                                        address.value.toString(),
+                                                                        phoneNumber.value.toString()
+                                                                    ),
+                                                                    annonce = Product(
+                                                                        annonceId,
+                                                                        annonce.title,
+                                                                        annonce.pictures[0],
+                                                                        annonce.price
+                                                                    )
+                                                                )
+                                                            )
+                                                        }
+
+                                                        orderAdded.observe(viewLifecycleOwner) { added ->
+                                                            if (added) {
+                                                                doOnSuccess(ORDER_SUCCESS)
+                                                            } else {
+                                                                doOnFail(ERROR_MSG)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                override fun onNegativeButtonClicked() {
+                                                    //do nothing
+                                                }
+
+                                            },
+                                            "test order",
+                                            "test order",
+                                            view = binding.root
+                                        )
+
                                     }
                                 }
                             }
