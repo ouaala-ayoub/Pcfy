@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
     private val retrofitService = RetrofitService.getInstance()
-    var imageLoader: ImageLoader? = null
     var picasso: Picasso = Picasso.get()
     private lateinit var authModel: AuthModel
 

@@ -7,6 +7,7 @@ import com.example.pc.R
 import com.example.pc.data.models.network.Order
 import com.example.pc.databinding.SingleOrderFullBinding
 import com.example.pc.databinding.SingleRequestBinding
+import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.squareup.picasso.Picasso
 
 class RequestsAdapter(
@@ -21,8 +22,9 @@ class RequestsAdapter(
             val order = ordersList[position]
             binding.apply {
 
+                val imageUrl = "$BASE_AWS_S3_LINK${order.annonce.picture}"
                 picasso
-                    .load(order.annonce.picture)
+                    .load(imageUrl)
                     .fit()
                     .centerCrop()
                     .into(announceImage)

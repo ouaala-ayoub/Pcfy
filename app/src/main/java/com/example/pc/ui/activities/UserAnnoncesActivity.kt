@@ -149,15 +149,6 @@ class UserAnnoncesActivity : AppCompatActivity() {
                         binding.isEmpty.isVisible = it
                     }
                     Log.i(TAG, "annonces : $annonces")
-//                    val annonce = Annonce(
-//                        "test",
-//                        1200,
-//                        "neuf",
-//                        "test status",
-//                        listOf("https://pcfy.s3.eu-west-3.amazonaws.com/1668785810605.fc6fcff777f2.jpg"),
-//                        id = "test"
-//                    )
-//                    val test = listOf(annonce)
                     adapter.setList(annonces)
                 }
             }
