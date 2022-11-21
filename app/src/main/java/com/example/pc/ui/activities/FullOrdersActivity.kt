@@ -1,8 +1,10 @@
 package com.example.pc.ui.activities
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pc.R
@@ -38,7 +40,7 @@ class FullOrdersActivity : AppCompatActivity() {
                     binding.ordersRv.apply {
                         adapter = OrdersFullAdapter(orders, object: OrdersShortAdapter.OnOrderClicked {
                             override fun onOrderClicked(orderId: String) {
-                                goToOrderPage(orderId)
+                                goToOrderPage(this@FullOrdersActivity, orderId)
                             }
                         })
                         layoutManager = LinearLayoutManager(this@FullOrdersActivity)
@@ -49,11 +51,14 @@ class FullOrdersActivity : AppCompatActivity() {
                 binding.ordersProgressBar.isVisible = isTurning
             }
         }
-
         setContentView(binding.root)
     }
 
-    private fun goToOrderPage(orderId: String) {
-        Log.i(TAG, "onOrderClicked orderId: $orderId")
-    }
+
+
+}
+fun goToOrderPage(context: Context, orderId: String) {
+    Log.i(TAG, "onOrderClicked orderId: $orderId")
+    val dialog = AlertDialog.Builder(context)
+
 }

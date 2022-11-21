@@ -51,23 +51,6 @@
             app:strokeColor="@color/color_on_primary" />
 
         <Button
-            android:id="@+id/buys"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|start"
-            android:text="@string/mes_achats"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textAppearance="@style/AlataTextView"
-            android:textColor="@color/color_on_primary"
-            android:textSize="17sp"
-            app:icon="@drawable/ic_baseline_shopping_bag_24"
-            app:iconPadding="10dp"
-            app:iconTint="@color/beautiful_blue"
-            app:strokeColor="@color/color_on_primary" />
-
-        <Button
             android:id="@+id/orders"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
@@ -80,6 +63,23 @@
             android:textColor="@color/color_on_primary"
             android:textSize="17sp"
             app:icon="@drawable/ic_baseline_shopping_cart_24"
+            app:iconPadding="10dp"
+            app:iconTint="@color/beautiful_blue"
+            app:strokeColor="@color/color_on_primary" />
+
+        <Button
+            android:id="@+id/buys"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="@string/mes_achats"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textAppearance="@style/AlataTextView"
+            android:textColor="@color/color_on_primary"
+            android:textSize="17sp"
+            app:icon="@drawable/ic_baseline_shopping_bag_24"
             app:iconPadding="10dp"
             app:iconTint="@color/beautiful_blue"
             app:strokeColor="@color/color_on_primary" />

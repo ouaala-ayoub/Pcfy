@@ -44,7 +44,7 @@ class UserControlerFragment : Fragment() {
                 goToFullOrdersPage(userId)
             }
             buys.setOnClickListener {
-
+                goToUserRequests(userId)
             }
             passwordChange.setOnClickListener {
 

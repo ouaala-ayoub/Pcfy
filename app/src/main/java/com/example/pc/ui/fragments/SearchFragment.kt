@@ -121,7 +121,10 @@ class SearchFragment : Fragment() {
                     val price = max.toInt()
                     priceQuery = price
                     maxPrice.text = price.toString()
-                    search(searchView.query.toString(), priceQuery, statusQuery)
+                    val searchQuery = searchView.query.toString()
+                    if (searchQuery.isNotBlank()) {
+                        search(searchQuery, priceQuery, statusQuery)
+                    }
                     Log.i(
                         TAG,
                         "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
@@ -146,7 +149,10 @@ class SearchFragment : Fragment() {
 
         binding.statusEditText.doOnTextChanged { text, _, _, _ ->
             statusQuery = getStatusQuery()
-            viewModel.search(binding.searchView.query.toString(), priceQuery, statusQuery)
+            val searchQuery = binding.searchView.query.toString()
+            if (searchQuery.isNotBlank()){
+                viewModel.search(searchQuery, priceQuery, statusQuery)
+            }
             Log.i(
                 TAG,
                 "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"

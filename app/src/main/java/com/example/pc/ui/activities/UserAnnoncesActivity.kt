@@ -132,7 +132,7 @@ class UserAnnoncesActivity : AppCompatActivity() {
                 override fun onOrderClicked(orderId: String) {
                     // go to order page
                     Log.i(TAG, "onOrderClicked: $orderId")
-                    goToOrderPage(orderId)
+                    goToOrderPage(this@UserAnnoncesActivity, orderId)
                 }
             }
         )
@@ -174,10 +174,6 @@ class UserAnnoncesActivity : AppCompatActivity() {
         val intent = Intent(this, AnnonceModifyActivity::class.java)
         intent.putExtra("id", annonceId)
         startActivity(intent)
-    }
-
-    private fun goToOrderPage(orderId: String) {
-
     }
 
 }
