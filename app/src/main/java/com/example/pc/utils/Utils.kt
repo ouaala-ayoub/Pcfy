@@ -10,12 +10,15 @@ import com.example.pc.data.models.network.Error
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import android.content.ContentUris
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.core.content.ContextCompat.startActivity
+import com.example.pc.ui.activities.MainActivity
 import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "Utils"

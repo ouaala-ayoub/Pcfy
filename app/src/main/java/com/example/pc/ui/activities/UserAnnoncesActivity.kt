@@ -71,12 +71,12 @@ class UserAnnoncesActivity : AppCompatActivity() {
                                     deletedAnnonce.observe(this@UserAnnoncesActivity) { deletedWithSuccess ->
                                         if (deletedWithSuccess) {
                                             getAnnoncesById(userId)
-                                            baseContext.toast(
+                                            this@UserAnnoncesActivity.toast(
                                                 ANNONCE_DELETED_SUCCESS,
                                                 Toast.LENGTH_SHORT
                                             )
                                         } else {
-                                            baseContext.toast(
+                                            this@UserAnnoncesActivity.toast(
                                                 ANNONCE_ERROR_MSG,
                                                 Toast.LENGTH_SHORT
                                             )
@@ -103,22 +103,6 @@ class UserAnnoncesActivity : AppCompatActivity() {
                             if (orders != null) {
                                 adapter.setOrdersList(orders)
                             } else {
-//                                val order = Order(
-//                                    "test Id",
-//                                    "seller Id",
-//                                    "customer Id",
-//                                    "annonce Id",
-//                                    "shipping adress test",
-//                                    orderStatus = OrderStatus.CANCELED.status
-//                                )
-//                                val test = listOf(
-//                                    order,
-//                                    order,
-//                                    order,
-//                                    order
-//                                )
-//                                Log.i(TAG, "onCommandClicked orders : $test")
-//                                adapter.setOrdersList(test)
                                 this@UserAnnoncesActivity.toast(
                                     "Erreur de chargement des commandes",
                                     Toast.LENGTH_SHORT
@@ -131,8 +115,8 @@ class UserAnnoncesActivity : AppCompatActivity() {
             object : OrdersShortAdapter.OnOrderClicked {
                 override fun onOrderClicked(orderId: String) {
                     // go to order page
-                    Log.i(TAG, "onOrderClicked: $orderId")
-                    goToOrderPage(this@UserAnnoncesActivity, orderId)
+
+//                    goToOrderPage( orderId)
                 }
             }
         )

@@ -153,6 +153,7 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun reloadActivity() {
+        val test = requireActivity()
         val i = Intent(requireActivity(), MainActivity::class.java)
         requireActivity().finish()
         requireActivity().overridePendingTransition(0, 0)
