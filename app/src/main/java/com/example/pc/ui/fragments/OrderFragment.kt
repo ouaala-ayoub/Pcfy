@@ -71,8 +71,11 @@ class OrderFragment : Fragment() {
 
 
                             isTurning.observe(viewLifecycleOwner) { loading ->
-                                progressBar3.isVisible = loading
-                                disableUi(loading)
+                                isProgressBarTurning.observe(viewLifecycleOwner) { annonceLoading ->
+                                    val isLoading = loading || annonceLoading
+                                    progressBar3.isVisible = isLoading
+                                    disableUi(isLoading)
+                                }
                             }
 
                             getAnnonceById(annonceId)
@@ -184,10 +187,10 @@ class OrderFragment : Fragment() {
                                                     }
 
                                                     orderModel.apply {
+                                                        val userAddress = user.address
 
                                                         name.value = user.name
                                                         phoneNumber.value = user.phoneNumber
-                                                        val userAddress = user.address
                                                         if (userAddress != null) {
                                                             address.value = userAddress
                                                         } else {
