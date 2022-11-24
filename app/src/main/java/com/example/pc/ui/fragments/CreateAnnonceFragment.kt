@@ -142,7 +142,6 @@ class CreateAnnonceFragment : Fragment() {
 
                     Log.i(TAG, "isAuth: $it")
                     userId = getPayload()!!.id
-                    val userName = getPayload()!!.name
 
 
                     showForm()
@@ -159,71 +158,88 @@ class CreateAnnonceFragment : Fragment() {
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
 
-                                        val imagesPart = getImagesRequestBody()
+                                        getUserById(userId)
+                                        user.observe(viewLifecycleOwner) { user ->
+                                            if (user != null) {
+                                                val imagesPart = getImagesRequestBody()
 
-                                        val builder = MultipartBody.Builder()
-                                            .setType(MultipartBody.FORM)
-                                            .addFormDataPart(
-                                                "title",
-                                                viewModel.titleLiveData.value!!
-                                            )
-                                            .addFormDataPart(
-                                                "price",
-                                                binding!!.priceEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "category",
-                                                binding!!.categoryEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "status",
-                                                binding!!.statusEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "mark",
-                                                binding!!.markEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "description",
-                                                binding!!.descriptionEditText.text.toString()
-                                            )
-                                            .addFormDataPart("seller[id]", userId)
-                                            .addFormDataPart("seller[name]", userName)
+                                                val builder = MultipartBody.Builder()
+                                                    .setType(MultipartBody.FORM)
+                                                    .addFormDataPart(
+                                                        "title",
+                                                        viewModel.titleLiveData.value!!
+                                                    )
+                                                    .addFormDataPart(
+                                                        "price",
+                                                        binding!!.priceEditText.text.toString()
+                                                    )
+                                                    .addFormDataPart(
+                                                        "category",
+                                                        binding!!.categoryEditText.text.toString()
+                                                    )
+                                                    .addFormDataPart(
+                                                        "status",
+                                                        binding!!.statusEditText.text.toString()
+                                                    )
+                                                    .addFormDataPart(
+                                                        "mark",
+                                                        binding!!.markEditText.text.toString()
+                                                    )
+                                                    .addFormDataPart(
+                                                        "description",
+                                                        binding!!.descriptionEditText.text.toString()
+                                                    )
+                                                    .addFormDataPart("seller[id]", userId)
+                                                    .addFormDataPart("seller[name]", user.name)
 
-                                        var i = 0
-                                        for (body in imagesPart) {
-                                            val imageName = body.key
-                                            builder.addFormDataPart(
-                                                "pictures",
-                                                imageName,
-                                                body.value
-                                            )
-                                            i++
-                                        }
-                                        val annonceToAdd = builder.build()
-
-
-                                        viewModel.apply {
-
-                                            isTurning.observe(viewLifecycleOwner) { loading ->
-                                                binding!!.progressBar.isVisible = loading
-                                                changeUiEnabling(loading)
-                                            }
-
-                                            //to change
-                                            addAnnonce(annonceToAdd)
-                                            requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
-                                                isTurning.observe(viewLifecycleOwner) { isVisible ->
-                                                    progressBar.isVisible = isVisible
+                                                if (user.imageUrl != null) {
+                                                    builder.addFormDataPart(
+                                                        "seller[picture]",
+                                                        user.imageUrl
+                                                    )
                                                 }
-                                                Log.i(
-                                                    TAG,
-                                                    "response succes from fragment $requestSuccess"
-                                                )
-                                                if (requestSuccess) doOnSuccess()
-                                                else doOnFail()
+
+
+                                                var i = 0
+                                                for (body in imagesPart) {
+                                                    val imageName = body.key
+                                                    builder.addFormDataPart(
+                                                        "pictures",
+                                                        imageName,
+                                                        body.value
+                                                    )
+                                                    i++
+                                                }
+                                                val annonceToAdd = builder.build()
+
+
+                                                viewModel.apply {
+
+                                                    isTurning.observe(viewLifecycleOwner) { loading ->
+                                                        binding!!.progressBar.isVisible = loading
+                                                        changeUiEnabling(loading)
+                                                    }
+
+                                                    //to change
+                                                    addAnnonce(annonceToAdd)
+                                                    requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
+                                                        isTurning.observe(viewLifecycleOwner) { isVisible ->
+                                                            progressBar.isVisible = isVisible
+                                                        }
+                                                        Log.i(
+                                                            TAG,
+                                                            "response succes from fragment $requestSuccess"
+                                                        )
+                                                        if (requestSuccess) doOnSuccess()
+                                                        else doOnFail()
+                                                    }
+                                                }
+                                            } else {
+                                                doOnFail()
                                             }
+
                                         }
+
                                     }
 
                                     override fun onNegativeButtonClicked() {
@@ -248,7 +264,7 @@ class CreateAnnonceFragment : Fragment() {
     private fun changeUiEnabling(loading: Boolean) {
         binding?.apply {
 
-            for(i in linearLayout.children){
+            for (i in linearLayout.children) {
                 i.isEnabled = !loading
             }
             imageSelection.isEnabled = !loading

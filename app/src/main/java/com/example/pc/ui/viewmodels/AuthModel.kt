@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.BodyX
 import com.example.pc.data.models.network.Payload
+import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.utils.LocalStorage
@@ -22,9 +23,28 @@ class AuthModel(
     private val loginRepository: LoginRepository?
 ) : ViewModel() {
 
+    val user = MutableLiveData<User?>()
     val auth = MutableLiveData<BodyX?>()
     val isTurning = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<String>()
+
+    fun getUserById(userId: String){
+        retrofitService.getUserById(userId).enqueue(object: Callback<User>{
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if(response.isSuccessful && response.body() != null){
+                    user.postValue(response.body())
+                } else {
+                    user.postValue(null)
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "onFailure : ${t.message}")
+                user.postValue(null)
+            }
+
+        })
+    }
 
     fun auth(context: Context) {
 

@@ -33,7 +33,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var userInfoModel: UserInfoModel
     private lateinit var authModel: AuthModel
-    private lateinit var loggedInUser: LoggedInUser
+    private lateinit var loggedInUser: String
     private lateinit var picasso: Picasso
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,10 +78,10 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                         binding!!.apply {
 
                             val payload = getPayload()!!
-                            loggedInUser = LoggedInUser(payload.id, payload.name)
+                            loggedInUser = payload.id
                             Log.i(TAG, "current user: $loggedInUser")
 
-                            getUserById(loggedInUser.userId)
+                            getUserById(loggedInUser)
                             userRetrieved.observe(viewLifecycleOwner) { user ->
 
                                 Log.i(TAG, "imageLoader: $imageLoader")
@@ -108,7 +108,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                         )
                                         userImage.setOnClickListener {
                                             goToUserImageModify(
-                                                loggedInUser.userId,
+                                                loggedInUser,
                                                 "undefined"
                                             )
                                         }
@@ -135,7 +135,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
                                         userImage.setOnClickListener {
                                             goToUserImageModify(
-                                                loggedInUser.userId,
+                                                loggedInUser,
                                                 user.imageUrl
                                             )
                                         }
@@ -174,11 +174,6 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         return binding!!.root
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//
-//    }
 
     private fun changeUiEnabling(loading: Boolean) {
         binding?.apply {
@@ -193,7 +188,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
         when (v?.id) {
 
             R.id.personal_space -> {
-                goToUserControllerFragment(loggedInUser.userId)
+                goToUserControllerFragment(loggedInUser)
             }
 
             R.id.about -> {

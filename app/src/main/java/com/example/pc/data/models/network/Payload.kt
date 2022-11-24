@@ -10,6 +10,6 @@ data class Payload(
     val iat: Int,
     @SerializedName("id")
     val id: String,
-    @SerializedName("name")
-    val name: String
+//    @SerializedName("name")
+//    val name: String
 )
