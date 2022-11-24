@@ -140,8 +140,8 @@ class OrderFragment : Fragment() {
                                             }
 
                                         },
-                                        "test order",
-                                        "test order",
+                                        "Informations de livraison",
+                                        "Confirmations des informations :",
                                         view = binding.root
                                     )
 

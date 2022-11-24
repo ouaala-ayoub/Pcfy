@@ -22,6 +22,7 @@ class RequestsModel(private val ordersRepository: OrdersRepository) {
         ordersRepository.getUserRequests(usersId).enqueue(object : Callback<List<Order>> {
             override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
                 if (response.isSuccessful && response.body() != null) {
+                    Log.i(TAG, "getUserRequests onResponse: ${response.headers()}")
                     userRequests.postValue(response.body())
                 } else {
                     userRequests.postValue(null)
