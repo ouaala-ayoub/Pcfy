@@ -199,12 +199,21 @@ class OrderFragment : Fragment() {
 
                                                         nameEditText.doOnTextChanged { text, _, _, _ ->
                                                             name.value = text.toString()
+                                                            Log.i(TAG, "name.value: ${name.value}")
                                                         }
                                                         phoneEditText.doOnTextChanged { text, _, _, _ ->
                                                             phoneNumber.value = text.toString()
+                                                            Log.i(
+                                                                TAG,
+                                                                "phoneNumber.value: ${phoneNumber.value}"
+                                                            )
                                                         }
                                                         addressEditText.doOnTextChanged { text, _, _, _ ->
                                                             address.value = text.toString()
+                                                            Log.i(
+                                                                TAG,
+                                                                "address.value: ${address.value}"
+                                                            )
                                                         }
 
                                                         dialog.show()

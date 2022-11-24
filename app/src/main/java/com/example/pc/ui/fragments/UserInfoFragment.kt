@@ -87,12 +87,12 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                 Log.i(TAG, "imageLoader: $imageLoader")
                                 if (user != null) {
                                     userName.text = user.name
-                                    if (!user.userType.isNullOrBlank()) {
-                                        userType.text = requireContext().getString(
-                                            R.string.user_type,
-                                            user.userType
-                                        )
-                                    }
+//                                    if (!user.userType.isNullOrBlank()) {
+//                                        userType.text = requireContext().getString(
+//                                            R.string.user_type,
+//                                            user.userType
+//                                        )
+//                                    }
 
                                     val imageName = user.imageUrl
                                     if (imageName != null) {

@@ -44,10 +44,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:lines="2"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:text="order_id" />
+                android:text="order_id"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/order_product_name"
@@ -55,7 +55,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:lines="2"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="order_product_name"
@@ -68,7 +67,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:lines="2"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="order_product_price"

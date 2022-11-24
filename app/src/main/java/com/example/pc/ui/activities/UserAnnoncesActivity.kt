@@ -26,6 +26,7 @@ import com.example.pc.utils.toast
 private const val TAG = "UserAnnoncesActivity"
 private const val ANNONCE_DELETED_SUCCESS = "Annonce suprimée avec succès"
 private const val ANNONCE_ERROR_MSG = "Erreur inattendue"
+private const val ORDERS_ERROR = "Erreur de chargement des commandes"
 
 class UserAnnoncesActivity : AppCompatActivity() {
 
@@ -98,15 +99,17 @@ class UserAnnoncesActivity : AppCompatActivity() {
                     Log.i(TAG, "onCommandClicked: $annonceId")
                     userAnnoncesModel.apply {
                         getAnnonceOrders(annonceId)
-                        ordersList.observe(this@UserAnnoncesActivity) { orders ->
+                        ordersMap.observe(this@UserAnnoncesActivity) { orders ->
                             Log.i(TAG, "onCommandClicked orders: $orders")
-                            if (orders != null) {
-                                adapter.setOrdersList(orders)
-                            } else {
-                                this@UserAnnoncesActivity.toast(
-                                    "Erreur de chargement des commandes",
-                                    Toast.LENGTH_SHORT
-                                )
+                            if (orders[annonceId] != null) {
+                                adapter.setOrdersList(orders[annonceId]!!)
+                                return@observe
+                            } else if (orders[annonceId] == null) {
+                                Log.i(TAG, "onCommandClicked error : ")
+//                                this@UserAnnoncesActivity.toast(
+//                                    ORDERS_ERROR,
+//                                    Toast.LENGTH_SHORT
+//                                )
                             }
                         }
                     }

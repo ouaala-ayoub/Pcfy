@@ -46,7 +46,8 @@
                 android:gravity="center|start"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:text="order_id" />
+                android:text="order_id"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/order_product_name"
