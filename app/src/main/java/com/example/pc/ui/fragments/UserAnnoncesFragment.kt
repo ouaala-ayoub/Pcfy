@@ -133,7 +133,21 @@ class UserAnnoncesFragment : Fragment() {
             }
         )
 
+        userAnnoncesModel.apply {
+            getAnnoncesById(userId).observe(viewLifecycleOwner) { annonces ->
 
+                if (annonces == null) {
+                    requireContext().toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
+                    returnToUserInfo()
+                } else {
+                    updateIsEmpty().observe(viewLifecycleOwner) {
+                        binding.isEmpty.isVisible = it
+                    }
+                    Log.i(TAG, "annonces : $annonces")
+                    adapter.setList(annonces)
+                }
+            }
+        }
 
         binding.apply {
             annoncesRv.adapter = adapter

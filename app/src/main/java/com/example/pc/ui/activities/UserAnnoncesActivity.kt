@@ -26,17 +26,16 @@ import com.example.pc.utils.toast
 
 class UserAnnoncesActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityUserAnnoncesBinding
     lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //to change with fragment ?
         userId = intent.getStringExtra("id")!!
-        binding = ActivityUserAnnoncesBinding.inflate(layoutInflater)
+
 
         super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
+        setContentView(R.layout.activity_user_annonces)
     }
 
 
