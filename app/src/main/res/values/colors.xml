@@ -23,4 +23,5 @@
     <color name="color_on_primary">@color/even_darker_grey</color>
     <color name="background_color">@color/white_darker</color>
     <color name="blue_shade">#0000FF</color>
+    <color name="orange_old">#EB5E28</color>
 </resources>

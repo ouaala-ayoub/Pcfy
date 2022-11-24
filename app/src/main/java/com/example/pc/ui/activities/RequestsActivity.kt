@@ -32,6 +32,7 @@ class RequestsActivity : AppCompatActivity() {
 
             getUserRequests(userId)
             userRequests.observe(this@RequestsActivity) { requests ->
+                Log.i(TAG, "requests are $requests")
                 if(requests == null){
                     Log.i(TAG, "requests are $requests")
                 } else {

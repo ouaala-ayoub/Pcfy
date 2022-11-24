@@ -80,7 +80,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                 }
 
                 override fun onFailure(call: Call<IdResponse>, t: Throwable) {
-                    Log.e(TAG, "onFailure addAnnonce${t.message!!}")
+                    Log.e(TAG, "onFailure addAnnonce ${t.message!!}")
                     errorMessage.postValue(t.message)
                     requestSuccessful.postValue(false)
                     isTurning.postValue(false)

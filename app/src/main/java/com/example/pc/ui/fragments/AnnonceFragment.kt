@@ -73,7 +73,7 @@ class AnnonceFragment : Fragment() {
                         //bind the data to the views
 
                         try {
-                            getSellerById(annonce.sellerId!!)
+//                            getSellerById(annonce.sellerId!!)
 
                             imagesVp.apply {
 
@@ -119,24 +119,27 @@ class AnnonceFragment : Fragment() {
                             }
 
                             //the seller field
-                            seller.observe(viewLifecycleOwner) { seller ->
-                                sellerName.text = seller.name
-                                if (seller.imageUrl.isNullOrBlank()) {
+                            annonce.seller.apply {
+                                sellerName.text = this.name
+                                if (this.picture.isNullOrBlank()) {
                                     selleerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                                 }
                                 picasso
-                                    .load("${USERS_AWS_S3_LINK}${seller.imageUrl}")
+                                    .load("${USERS_AWS_S3_LINK}${this.picture}")
                                     .fit()
                                     .into(selleerImage)
                             }
 
+
+
+
                             productDescription.text = annonce.description
 
                             productSeller.setOnClickListener {
-                                goToSellerPage(annonce.sellerId)
+                                goToSellerPage(annonce.seller.id)
                             }
                             sellerInfo.setOnClickListener {
-                                goToSellerPage(annonce.sellerId)
+                                goToSellerPage(annonce.seller.id)
                             }
 
                         } catch (e: Throwable) {

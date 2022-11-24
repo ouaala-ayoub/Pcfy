@@ -25,7 +25,7 @@ data class Annonce(
 
     //just for testing
     @SerializedName("seller")
-    val sellerId: String? = null,
+    val seller: Seller,
 
     //non required
 
@@ -50,7 +50,15 @@ data class Annonce(
 
     @SerializedName("__v")
     val v: Int? = null,
-) {
+)
 
+data class Seller(
+    @SerializedName("id")
+    val id: String,
 
-}
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("picture")
+    val picture: String?
+)

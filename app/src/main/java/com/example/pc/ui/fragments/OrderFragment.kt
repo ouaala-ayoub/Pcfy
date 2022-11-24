@@ -1,6 +1,10 @@
 package com.example.pc.ui.fragments
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Customer
+import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.Order
 import com.example.pc.data.models.network.Product
 import com.example.pc.databinding.FragmentOrderBinding
@@ -26,6 +31,7 @@ import com.squareup.picasso.Picasso
 
 private const val ERROR_AUTH = "Erreur d'authentification"
 private const val ORDER_SUCCESS = "Commande passée avec succes"
+private const val TAG = "OrderFragment"
 
 class OrderFragment : Fragment() {
 
@@ -42,6 +48,7 @@ class OrderFragment : Fragment() {
         annonceId = activity.intent.getStringExtra("id") as String
         authModel = activity.authModel
         viewModel = activity.viewModel
+
     }
 
     override fun onCreateView(
@@ -61,6 +68,7 @@ class OrderFragment : Fragment() {
 
                         viewModel.apply {
 
+
                             isTurning.observe(viewLifecycleOwner) { loading ->
                                 progressBar3.isVisible = loading
                                 disableUi(loading)
@@ -69,6 +77,68 @@ class OrderFragment : Fragment() {
                             getAnnonceById(annonceId)
                             annonceToShow.observe(viewLifecycleOwner) { annonce ->
                                 if (annonce != null) {
+
+                                    val binding = OrderDialogViewBinding.inflate(
+                                        layoutInflater
+                                    )
+                                    val dialog = makeDialog(
+                                        requireContext(),
+                                        object : OnDialogClicked {
+                                            override fun onPositiveButtonClicked() {
+                                                orderModel.apply {
+                                                    val orderToAdd = Order(
+                                                        seller = IdResponse(
+                                                            userId
+                                                        ),
+                                                        quantity = quantity.value!!,
+                                                        customer = Customer(
+                                                            userId,
+                                                            name.value.toString(),
+                                                            address.value.toString(),
+                                                            phoneNumber.value.toString()
+                                                        ),
+                                                        annonce = Product(
+                                                            annonceId,
+                                                            annonce.title,
+                                                            annonce.pictures[0],
+                                                            annonce.price
+                                                        )
+                                                    )
+                                                    Log.i(
+                                                        TAG,
+                                                        "onPositiveButtonClicked: order To Add $orderToAdd"
+                                                    )
+                                                    addOrder(
+                                                        orderToAdd
+                                                    )
+
+                                                    orderAdded.observe(
+                                                        viewLifecycleOwner
+                                                    ) { added ->
+                                                        Log.i(
+                                                            TAG,
+                                                            "onPositiveButtonClicked: order added = $added"
+                                                        )
+                                                        if (added) {
+                                                            doOnSuccess(
+                                                                ORDER_SUCCESS
+                                                            )
+                                                        } else {
+                                                            doOnFail(ERROR_MSG)
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            override fun onNegativeButtonClicked() {
+
+                                            }
+
+                                        },
+                                        "test order",
+                                        "test order",
+                                        view = binding.root
+                                    )
 
                                     Picasso.get()
                                         .load("${BASE_AWS_S3_LINK}${annonce.pictures[0]}")
@@ -83,7 +153,6 @@ class OrderFragment : Fragment() {
 
                                     orderModel = OrderModel(annonce.price.toFloat())
 
-                                    val orderModel = OrderModel(annonce.price.toFloat())
                                     orderModel.apply {
 
                                         minus.setOnClickListener { quantitySub() }
@@ -101,7 +170,7 @@ class OrderFragment : Fragment() {
                                     }
 
                                     order.setOnClickListener {
-                                        val binding = OrderDialogViewBinding.inflate(layoutInflater)
+
                                         getSellerById(userId)
                                         seller.observe(viewLifecycleOwner) { user ->
                                             if (user != null) {
@@ -117,7 +186,14 @@ class OrderFragment : Fragment() {
 
                                                         name.postValue(user.name)
                                                         phoneNumber.postValue(user.phoneNumber)
-                                                        address.postValue(user.address)
+                                                        val userAddress = user.address
+                                                        if (userAddress != null) {
+                                                            address.postValue(userAddress)
+                                                        } else {
+                                                            address.postValue("")
+                                                        }
+
+
 
                                                         nameEditText.doOnTextChanged { text, _, _, _ ->
                                                             name.value = text.toString()
@@ -128,56 +204,21 @@ class OrderFragment : Fragment() {
                                                         addressEditText.doOnTextChanged { text, _, _, _ ->
                                                             address.value = text.toString()
                                                         }
+
+                                                        isValidData.observe(viewLifecycleOwner) { isValid ->
+                                                            Log.i(TAG, "isValidData: $isValid")
+//                                                            dialog
+//                                                                .getButton(AlertDialog.BUTTON_POSITIVE)
+//                                                                .isEnabled = isValid
+                                                        }
+
+                                                        dialog.show()
                                                     }
                                                 }
                                             } else {
                                                 doOnFail(ERROR_MSG)
                                             }
                                         }
-                                        makeDialog(
-                                            requireContext(),
-                                            object : OnDialogClicked {
-                                                override fun onPositiveButtonClicked() {
-                                                    if (orderModel.isValidData.value == true) {
-                                                        orderModel.apply {
-                                                            addOrder(
-                                                                Order(
-                                                                    quantity = quantity.value!!,
-                                                                    customer = Customer(
-                                                                        userId,
-                                                                        name.value.toString(),
-                                                                        address.value.toString(),
-                                                                        phoneNumber.value.toString()
-                                                                    ),
-                                                                    annonce = Product(
-                                                                        annonceId,
-                                                                        annonce.title,
-                                                                        annonce.pictures[0],
-                                                                        annonce.price
-                                                                    )
-                                                                )
-                                                            )
-                                                        }
-
-                                                        orderAdded.observe(viewLifecycleOwner) { added ->
-                                                            if (added) {
-                                                                doOnSuccess(ORDER_SUCCESS)
-                                                            } else {
-                                                                doOnFail(ERROR_MSG)
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                override fun onNegativeButtonClicked() {
-                                                    //do nothing
-                                                }
-
-                                            },
-                                            "test order",
-                                            "test order",
-                                            view = binding.root
-                                        )
 
                                     }
                                 }

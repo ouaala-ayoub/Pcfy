@@ -7,6 +7,9 @@ data class Order(
     @SerializedName("_id")
     val orderId: String? = null,
 
+    @SerializedName("seller")
+    val seller: IdResponse,
+
     @SerializedName("customer")
     val customer: Customer,
 
@@ -23,21 +26,21 @@ data class Order(
 
 
 data class Customer(
-    @SerializedName("customerId")
+    @SerializedName("id")
     val id: String,
 
-    @SerializedName("customerName")
+    @SerializedName("name")
     val name: String,
 
     @SerializedName("shippingAddress")
     val address: String,
 
-    @SerializedName("number")
+    @SerializedName("phone")
     val number: String
 )
 
 data class Product(
-    @SerializedName("announceId")
+    @SerializedName("id")
     val id: String,
 
     @SerializedName("title")

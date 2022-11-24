@@ -142,6 +142,7 @@ class CreateAnnonceFragment : Fragment() {
 
                     Log.i(TAG, "isAuth: $it")
                     userId = getPayload()!!.id
+                    val userName = getPayload()!!.name
 
 
                     showForm()
@@ -186,7 +187,8 @@ class CreateAnnonceFragment : Fragment() {
                                                 "description",
                                                 binding!!.descriptionEditText.text.toString()
                                             )
-                                            .addFormDataPart("sellerId", userId)
+                                            .addFormDataPart("seller[id]", userId)
+                                            .addFormDataPart("seller[name]", userName)
 
                                         var i = 0
                                         for (body in imagesPart) {
@@ -249,6 +251,7 @@ class CreateAnnonceFragment : Fragment() {
             for(i in linearLayout.children){
                 i.isEnabled = !loading
             }
+            imageSelection.isEnabled = !loading
             addButton.isEnabled = !loading
         }
     }

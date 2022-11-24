@@ -23,6 +23,7 @@ import com.example.pc.R
 import com.example.pc.data.models.local.Detail
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
+import com.example.pc.data.models.network.Seller
 import com.example.pc.data.models.network.Status
 import com.example.pc.databinding.AddDetailBinding
 import com.example.pc.databinding.FragmentAnnonceModifyBinding
@@ -219,7 +220,8 @@ class AnnonceModifyFragment : Fragment() {
                                 mark = markEditText.text.toString(),
                                 description = descriptionEditText.text.toString(),
                                 details = details,
-                                pictures = annonce.pictures
+                                pictures = annonce.pictures,
+                                seller = annonce.seller
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
                                 .observe(viewLifecycleOwner) { annonceModified ->
