@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.models.local.LoggedInUser
@@ -77,7 +78,7 @@ class OrderFragment : Fragment() {
                             getAnnonceById(annonceId)
                             annonceToShow.observe(viewLifecycleOwner) { annonce ->
                                 if (annonce != null) {
-
+                                    orderModel = OrderModel(annonce.price.toFloat())
                                     val binding = OrderDialogViewBinding.inflate(
                                         layoutInflater
                                     )
@@ -119,6 +120,7 @@ class OrderFragment : Fragment() {
                                                             TAG,
                                                             "onPositiveButtonClicked: order added = $added"
                                                         )
+
                                                         if (added) {
                                                             doOnSuccess(
                                                                 ORDER_SUCCESS
@@ -151,7 +153,6 @@ class OrderFragment : Fragment() {
 
                                     //frais de livraison !!!!
 
-                                    orderModel = OrderModel(annonce.price.toFloat())
 
                                     orderModel.apply {
 
@@ -184,16 +185,14 @@ class OrderFragment : Fragment() {
 
                                                     orderModel.apply {
 
-                                                        name.postValue(user.name)
-                                                        phoneNumber.postValue(user.phoneNumber)
+                                                        name.value = user.name
+                                                        phoneNumber.value = user.phoneNumber
                                                         val userAddress = user.address
                                                         if (userAddress != null) {
-                                                            address.postValue(userAddress)
+                                                            address.value = userAddress
                                                         } else {
-                                                            address.postValue("")
+                                                            address.value = ""
                                                         }
-
-
 
                                                         nameEditText.doOnTextChanged { text, _, _, _ ->
                                                             name.value = text.toString()
@@ -205,14 +204,12 @@ class OrderFragment : Fragment() {
                                                             address.value = text.toString()
                                                         }
 
-                                                        isValidData.observe(viewLifecycleOwner) { isValid ->
-                                                            Log.i(TAG, "isValidData: $isValid")
-//                                                            dialog
-//                                                                .getButton(AlertDialog.BUTTON_POSITIVE)
-//                                                                .isEnabled = isValid
-                                                        }
-
                                                         dialog.show()
+                                                        isValidData.observe(viewLifecycleOwner) { isValid ->
+                                                            dialog
+                                                                .getButton(AlertDialog.BUTTON_POSITIVE)
+                                                                .isEnabled = isValid
+                                                        }
                                                     }
                                                 }
                                             } else {
@@ -234,9 +231,6 @@ class OrderFragment : Fragment() {
         return binding.root
     }
 
-    private fun sendFireBaseNotification(sellerToken: String?) {
-
-    }
 
     private fun disableUi(loading: Boolean) {
         binding.apply {

@@ -3,6 +3,7 @@ package com.example.pc.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
 import com.example.pc.data.models.network.Order
 import com.example.pc.databinding.SingleOrderFullBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
@@ -30,7 +31,7 @@ class OrdersFullAdapter(
                     .centerCrop()
                     .into(announceImage)
 
-                orderId.text = order.orderId
+                orderId.text = binding.root.resources.getString(R.string.id_res, order.orderId)
                 orderProductName.text = order.annonce.name
                 costumerName.text = order.customer.name
                 costumerNumber.text = order.customer.number

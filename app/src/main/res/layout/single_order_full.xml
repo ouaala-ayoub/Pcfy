@@ -41,10 +41,9 @@
             <TextView
                 android:id="@+id/order_id"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:lines="2"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="order_id" />
@@ -52,10 +51,9 @@
             <TextView
                 android:id="@+id/order_product_name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:lines="2"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="order_product_name"
@@ -65,10 +63,9 @@
             <TextView
                 android:id="@+id/costumer_name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:lines="2"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="costumer_name"
@@ -77,10 +74,9 @@
             <TextView
                 android:id="@+id/costumer_number"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:lines="2"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="costumer_number"

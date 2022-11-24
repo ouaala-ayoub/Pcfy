@@ -29,7 +29,7 @@ class RequestsAdapter(
                     .centerCrop()
                     .into(announceImage)
 
-                orderId.text = order.orderId
+                orderId.text = binding.root.resources.getString(R.string.id_res, order.orderId)
                 orderProductName.text = order.annonce.name
                 orderProductPrice.text =
                     binding.root.resources.getString(R.string.price, order.annonce.price.toString())

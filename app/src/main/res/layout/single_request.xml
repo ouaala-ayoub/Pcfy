@@ -41,7 +41,7 @@
             <TextView
                 android:id="@+id/order_id"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:lines="2"
@@ -52,7 +52,7 @@
             <TextView
                 android:id="@+id/order_product_name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:lines="2"
@@ -65,7 +65,7 @@
             <TextView
                 android:id="@+id/order_product_price"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:lines="2"

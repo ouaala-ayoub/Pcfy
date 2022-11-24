@@ -54,7 +54,19 @@ data class User(
     val favourites: MutableList<String> = mutableListOf(),
     // locally keep the favourites ?
 
-    @SerializedName("shipping address")
+    @SerializedName("shippingAddress")
     val address: String? = null
 
+)
+
+data class UserShippingInfos(
+
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("phone")
+    val phoneNumber: String,
+
+    @SerializedName("shippingAddress")
+    val address: String? = null,
 )

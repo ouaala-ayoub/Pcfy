@@ -31,7 +31,7 @@ class OrdersShortAdapter(
 
             binding.apply {
 
-                orderId.text = order.orderId
+                orderId.text = binding.root.resources.getString(R.string.id_res, order.orderId)
                 quantity.text = order.quantity.toString()
                 orderStatus.setImageResource(getImageResource(order.orderStatus))
 

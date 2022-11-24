@@ -3,10 +3,7 @@ package com.example.pc.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pc.data.models.network.Annonce
-import com.example.pc.data.models.network.IdResponse
-import com.example.pc.data.models.network.Order
-import com.example.pc.data.models.network.User
+import com.example.pc.data.models.network.*
 import com.example.pc.data.repositories.AnnonceRepository
 import com.example.pc.utils.getError
 import okhttp3.ResponseBody
@@ -24,6 +21,7 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
     val seller = MutableLiveData<User>()
     val addedFavouriteToUser = MutableLiveData<Boolean>()
     var deletedWithSuccess = MutableLiveData<Boolean>()
+    val userModified = MutableLiveData<Boolean>()
     val orderAdded = MutableLiveData<Boolean>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<String>()
@@ -167,6 +165,32 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
             })
     }
 
+    fun updateUserInfo(userId: String, userInfo: UserShippingInfos) {
+
+        isProgressBarTurning.postValue(true)
+
+        annonceRepository.changeUserInfos(
+            userId,
+            userInfo
+        ).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful && response.body() != null) {
+                    userModified.postValue(true)
+                } else {
+                    userModified.postValue(false)
+                }
+                isProgressBarTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "onFailure updateUserInfo ${t.message}")
+                isProgressBarTurning.postValue(false)
+                userModified.postValue(false)
+            }
+
+        })
+    }
+
     fun addOrder(orderToAdd: Order) {
 
         isProgressBarTurning.postValue(true)
@@ -176,6 +200,14 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
                 val orderId = response.body()?.objectId
                 if (response.isSuccessful && orderId != null) {
                     Log.i(TAG, "addOrder onResponse: $orderId")
+                    orderToAdd.apply {
+                        updateUserInfo(customer.id, UserShippingInfos(
+                            customer.name,
+                            customer.number,
+                            customer.address
+                        ))
+                    }
+
                     orderAdded.postValue(true)
                 } else {
                     val error = response.errorBody()?.let { getError(it, response.code()) }

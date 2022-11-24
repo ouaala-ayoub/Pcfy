@@ -78,6 +78,12 @@ interface RetrofitService {
     @POST("users")
     fun addUser(@Body user: RequestBody): Call<IdResponse>
 
+    @PUT("users/{id}")
+    fun changeUserShippingInfos(
+        @Path("id") userId: String,
+        @Body userShippingInfos: UserShippingInfos
+    ): Call<User>
+
     @DELETE("users/{id}")
     fun deleteUser(@Path("id") userId: String): Call<IdResponse>
 

@@ -4,10 +4,20 @@ import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pc.data.models.network.IdResponse
+import com.example.pc.data.models.network.User
+import com.example.pc.data.models.network.UserShippingInfos
+import com.example.pc.data.repositories.OrdersRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 private const val TAG = "OrderModel"
 
-class OrderModel(private val individualPrice: Float) : ViewModel() {
+class OrderModel(
+    private val individualPrice: Float,
+
+) : ViewModel() {
     val quantity = MutableLiveData(1)
     val price = MutableLiveData(1 * individualPrice)
 
@@ -16,22 +26,22 @@ class OrderModel(private val individualPrice: Float) : ViewModel() {
     val address = MutableLiveData<String>()
 
     val isValidData = MediatorLiveData<Boolean>().apply {
-        addSource(name){ name ->
-            validateTheData(
+        addSource(name) { name ->
+            this.value = validateTheData(
                 name,
                 phoneNumber.value.toString(),
                 address.value.toString()
             )
         }
         addSource(phoneNumber) { phoneNumber ->
-            validateTheData(
+            this.value = validateTheData(
                 name.value.toString(),
                 phoneNumber,
                 address.value.toString()
             )
         }
         addSource(address) { address ->
-            validateTheData(
+            this.value = validateTheData(
                 name.value.toString(),
                 phoneNumber.value.toString(),
                 address
@@ -40,7 +50,7 @@ class OrderModel(private val individualPrice: Float) : ViewModel() {
     }
 
 
-    private fun validateTheData(name: String, phoneNumber: String, address: String): Boolean{
+    private fun validateTheData(name: String, phoneNumber: String, address: String): Boolean {
         val validPhone = phoneNumber.length == 10 && phoneNumber.matches(".*[0-9].*".toRegex())
         return name.isNotBlank() && validPhone && address.isNotBlank()
     }

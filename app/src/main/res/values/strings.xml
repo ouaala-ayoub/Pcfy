@@ -145,5 +145,6 @@
     <string name="mes_achats">Mes achats</string>
     <string name="gerer_vos_commandes">Gerer vos commandes</string>
 
+    <string name="id_res">id: %1$s</string>
 </resources>
 
