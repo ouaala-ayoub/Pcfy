@@ -10,7 +10,10 @@ import com.example.pc.R
 import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.Order
+import com.example.pc.data.remote.RetrofitService
+import com.example.pc.data.repositories.UserInfoRepository
 import com.example.pc.databinding.SingleFavouriteBinding
+import com.example.pc.ui.viewmodels.SingleAnnounceCommandModel
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.squareup.picasso.Picasso
 
@@ -29,7 +32,11 @@ class FavouritesAdapter(
     }
 
     interface OnCommandsClicked {
-        fun onCommandClicked(annonceId: String, adapter: OrdersShortAdapter)
+        fun onCommandClicked(
+            annonceId: String,
+            adapter: OrdersShortAdapter,
+            singleCommandModel: SingleAnnounceCommandModel
+        )
     }
 
     private var favouritesList = mutableListOf<Annonce>()
@@ -101,8 +108,14 @@ class FavouritesAdapter(
 
                                     this.adapter = adapter
                                     layoutManager = LinearLayoutManager(context)
-
-                                    onCommandsClickListener.onCommandClicked(favourite.id!!, adapter)
+                                    val singleCommandModel = SingleAnnounceCommandModel(
+                                        UserInfoRepository(RetrofitService.getInstance())
+                                    )
+                                    onCommandsClickListener.onCommandClicked(
+                                        favourite.id!!,
+                                        adapter,
+                                        singleCommandModel
+                                    )
                                 }
                             }
                         }

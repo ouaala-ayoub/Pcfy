@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class BodyX(
 
     @SerializedName("accessToken")
-    val accessToken: String,
+    val accessToken: String? = null,
 
     @SerializedName("payload")
     val payload: Payload

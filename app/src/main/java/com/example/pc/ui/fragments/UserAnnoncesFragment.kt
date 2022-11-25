@@ -21,6 +21,7 @@ import com.example.pc.ui.activities.MainActivity
 import com.example.pc.ui.activities.UserAnnoncesActivity
 import com.example.pc.ui.adapters.FavouritesAdapter
 import com.example.pc.ui.adapters.OrdersShortAdapter
+import com.example.pc.ui.viewmodels.SingleAnnounceCommandModel
 import com.example.pc.ui.viewmodels.UserAnnoncesModel
 import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.OnDialogClicked
@@ -103,24 +104,27 @@ class UserAnnoncesFragment : Fragment() {
                 }
             },
             object : FavouritesAdapter.OnCommandsClicked {
-                override fun onCommandClicked(annonceId: String, adapter: OrdersShortAdapter) {
+                override fun onCommandClicked(
+                    annonceId: String,
+                    adapter: OrdersShortAdapter,
+                    singleCommandModel: SingleAnnounceCommandModel
+                ) {
                     //send the request
                     Log.i(TAG, "onCommandClicked: $annonceId")
-                    userAnnoncesModel.apply {
+                    singleCommandModel.apply {
                         getAnnonceOrders(annonceId)
-                        ordersMap.observe(viewLifecycleOwner) { orders ->
-                            Log.i(TAG, "onCommandClicked orders: $orders")
-                            if (orders[annonceId] == null) {
+                        ordersList.observe(viewLifecycleOwner) { orders ->
+                            if (orders != null) {
+                                adapter.setOrdersList(orders)
+                            } else {
                                 requireContext().toast(
                                     ORDERS_ERROR,
                                     Toast.LENGTH_SHORT
                                 )
-                            } else if (orders[annonceId] != null) {
-                                Log.i(TAG, "onCommandClicked error : ")
-
-                                adapter.setOrdersList(orders[annonceId]!!)
-                                return@observe
                             }
+                        }
+                        isTurning.observe(viewLifecycleOwner) { isLoading ->
+                            binding.userAnnoncesProgressbar.isVisible = isLoading
                         }
                     }
                 }
@@ -155,6 +159,7 @@ class UserAnnoncesFragment : Fragment() {
 
             swiperefresh.setOnRefreshListener {
                 userAnnoncesModel.getAnnoncesById(userId)
+                swiperefresh.isRefreshing = false
             }
 
             userAnnoncesModel.isTurning.observe(requireActivity()) {

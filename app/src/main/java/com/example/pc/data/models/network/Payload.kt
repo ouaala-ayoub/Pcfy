@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Payload(
     @SerializedName("exp")
-    val exp: Int,
+    val exp: Int?,
     @SerializedName("iat")
-    val iat: Int,
+    val iat: Int?,
     @SerializedName("id")
     val id: String,
 //    @SerializedName("name")

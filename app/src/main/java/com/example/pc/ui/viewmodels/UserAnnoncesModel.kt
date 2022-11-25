@@ -19,8 +19,8 @@ class UserAnnoncesModel(
 ) : ViewModel() {
 
     private val annoncesList = MutableLiveData<MutableList<Annonce>?>()
-    val ordersMap = MutableLiveData(HashMap<String, List<Order>?>())
-//    val ordersList = MutableLiveData<List<Order>?>()
+    val ordersMap = HashMap<String, List<Order>>()
+    val ordersList = MutableLiveData<List<Order>>()
     private val isEmpty = MutableLiveData<Boolean>()
     val isTurning = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<Error?>()
@@ -83,30 +83,6 @@ class UserAnnoncesModel(
 
     }
 
-    fun getAnnonceOrders(annonceId: String) {
-
-        isTurning.postValue(true)
-
-        userInfoRepository.getAnnonceOrders(annonceId).enqueue(object : Callback<List<Order>> {
-            override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val map = ordersMap.value
-                    map?.set(annonceId, response.body())
-                    ordersMap.value = map
-                } else {
-                    ordersMap.postValue(null)
-                }
-                isTurning.postValue(false)
-            }
-
-            override fun onFailure(call: Call<List<Order>>, t: Throwable) {
-                Log.e(TAG, "getAnnonceOrders onFailure: ${t.message}")
-                ordersMap.postValue(null)
-                isTurning.postValue(false)
-            }
-        })
-    }
-
     fun updateIsEmpty(): MutableLiveData<Boolean> {
         if (annoncesList.value.isNullOrEmpty()) {
             isEmpty.postValue(true)
@@ -115,6 +91,7 @@ class UserAnnoncesModel(
     }
 
 }
-class AnnounceOrdersModel(): ViewModel(){
+
+class AnnounceOrdersModel() : ViewModel() {
 
 }

@@ -28,10 +28,10 @@ class AuthModel(
     val isTurning = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<String>()
 
-    fun getUserById(userId: String){
-        retrofitService.getUserById(userId).enqueue(object: Callback<User>{
+    fun getUserById(userId: String) {
+        retrofitService.getUserById(userId).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if(response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     user.postValue(response.body())
                 } else {
                     user.postValue(null)
@@ -59,11 +59,14 @@ class AuthModel(
                     Log.i(TAG, "auth ${response.body()}")
                     auth.postValue(response.body())
                     if (isAuth()) {
-                        val newAccessToken = response.body()!!.accessToken
-                        LocalStorage.storeAccessToken(context, newAccessToken)
+                        val newAccessToken = response.body()?.accessToken
+                        if (newAccessToken != null) {
+                            LocalStorage.storeAccessToken(context, newAccessToken)
+                        }
                     }
                 } else {
 //                    val error = getError(response.errorBody()!!, response.code())
+//                    Log.e(TAG, "onResponse auth $error" )
                     Log.e(TAG, "non authenticated")
                     auth.postValue(null)
                     errorMessage.postValue(NON_AUTHENTICATED)
