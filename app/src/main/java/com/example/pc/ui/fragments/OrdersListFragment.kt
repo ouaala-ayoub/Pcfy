@@ -38,7 +38,7 @@ class OrdersListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentOrdersListBinding.inflate(inflater, container, false)
 
@@ -62,7 +62,15 @@ class OrdersListFragment : Fragment() {
             isTurning.observe(viewLifecycleOwner) { isTurning ->
                 binding.ordersProgressBar.isVisible = isTurning
             }
+            binding.apply {
+                swiperefresh.setOnRefreshListener {
+                    getSellerOrders(userId)
+                    swiperefresh.isRefreshing = false
+                }
+            }
         }
+
+
 
         return binding.root
     }

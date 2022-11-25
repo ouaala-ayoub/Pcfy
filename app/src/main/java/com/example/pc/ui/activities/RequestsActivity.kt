@@ -26,6 +26,8 @@ class RequestsActivity : AppCompatActivity() {
         requestsModel = RequestsModel(OrdersRepository(RetrofitService.getInstance()))
         userId = intent.getStringExtra("id") as String
 
+        supportActionBar?.hide()
+
         super.onCreate(savedInstanceState)
 
         requestsModel.apply {
@@ -44,6 +46,13 @@ class RequestsActivity : AppCompatActivity() {
             }
             isTurning.observe(this@RequestsActivity) { isTurning ->
                 binding.requestProgressBar.isVisible = isTurning
+            }
+
+            binding.apply {
+                swiperefresh.setOnRefreshListener {
+                    getUserRequests(userId)
+                    swiperefresh.isRefreshing = false
+                }
             }
 
         }

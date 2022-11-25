@@ -115,6 +115,10 @@ class FavouritesFragment : Fragment() {
                             isProgressBarTurning.observe(viewLifecycleOwner) { isVisible ->
                                 favouritesProgressBar.isVisible = isVisible
                             }
+                            swiperefresh.setOnRefreshListener {
+                                getFavourites(userId)
+                                swiperefresh.isRefreshing = false
+                            }
                         }
                     }
 
@@ -153,7 +157,6 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun reloadActivity() {
-        val test = requireActivity()
         val i = Intent(requireActivity(), MainActivity::class.java)
         requireActivity().finish()
         requireActivity().overridePendingTransition(0, 0)

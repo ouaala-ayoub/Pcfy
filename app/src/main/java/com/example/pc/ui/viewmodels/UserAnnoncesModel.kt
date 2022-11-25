@@ -19,8 +19,6 @@ class UserAnnoncesModel(
 ) : ViewModel() {
 
     private val annoncesList = MutableLiveData<MutableList<Annonce>?>()
-    val ordersMap = HashMap<String, List<Order>>()
-    val ordersList = MutableLiveData<List<Order>>()
     private val isEmpty = MutableLiveData<Boolean>()
     val isTurning = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<Error?>()
@@ -89,9 +87,5 @@ class UserAnnoncesModel(
         } else isEmpty.postValue(false)
         return isEmpty
     }
-
-}
-
-class AnnounceOrdersModel() : ViewModel() {
 
 }
