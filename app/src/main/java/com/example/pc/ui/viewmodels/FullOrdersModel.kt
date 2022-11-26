@@ -13,6 +13,7 @@ private const val TAG = "FullOrdersModel"
 
 class FullOrdersModel(private val ordersRepository: OrdersRepository) : ViewModel() {
 
+    val isEmpty = MutableLiveData<Boolean>()
     val sellerOrders = MutableLiveData<List<Order>?>()
     val isTurning = MutableLiveData<Boolean>()
 
@@ -24,6 +25,7 @@ class FullOrdersModel(private val ordersRepository: OrdersRepository) : ViewMode
             override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
                 if (response.isSuccessful && response.body() != null) {
                     sellerOrders.postValue(response.body())
+                    updateIsEmpty(response.body()!!)
                 } else {
                     sellerOrders.postValue(null)
                 }
@@ -37,5 +39,9 @@ class FullOrdersModel(private val ordersRepository: OrdersRepository) : ViewMode
             }
 
         })
+    }
+
+    private fun updateIsEmpty(list: List<Order>) {
+        isEmpty.postValue(list.isEmpty())
     }
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.example.pc.ui.activities.FullOrdersActivity
 import com.example.pc.ui.adapters.OrdersFullAdapter
 import com.example.pc.ui.adapters.OrdersShortAdapter
 import com.example.pc.ui.viewmodels.FullOrdersModel
+import com.example.pc.utils.toast
 
 private const val TAG = "OrdersListFragment"
 
@@ -47,6 +49,7 @@ class OrdersListFragment : Fragment() {
             sellerOrders.observe(viewLifecycleOwner) { orders ->
                 if (orders == null) {
                     Log.i(TAG, "orders are $orders")
+                    doOnFail()
                 } else {
                     binding.ordersRv.apply {
                         adapter =
@@ -59,6 +62,11 @@ class OrdersListFragment : Fragment() {
                     }
                 }
             }
+
+            isEmpty.observe(viewLifecycleOwner) {
+                binding.isOrdersEmpty.isVisible = it
+            }
+
             isTurning.observe(viewLifecycleOwner) { isTurning ->
                 binding.ordersProgressBar.isVisible = isTurning
             }
@@ -73,6 +81,12 @@ class OrdersListFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun doOnFail() {
+        requireContext().toast(com.example.pc.utils.ERROR_MSG, Toast.LENGTH_SHORT)
+        val activity = requireActivity() as FullOrdersActivity
+        activity.finish()
     }
 
     fun goToOrderPage(orderId: String) {

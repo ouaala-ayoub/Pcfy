@@ -12,6 +12,7 @@ private const val TAG = "RequestsModel"
 
 class RequestsModel(private val ordersRepository: OrdersRepository) {
 
+    val isEmpty = MutableLiveData<Boolean>()
     val userRequests = MutableLiveData<List<Order>?>()
     val isTurning = MutableLiveData<Boolean>()
 
@@ -24,6 +25,7 @@ class RequestsModel(private val ordersRepository: OrdersRepository) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "getUserRequests onResponse: ${response.headers()}")
                     userRequests.postValue(response.body())
+                    updateIsEmpty(response.body()!!)
                 } else {
                     userRequests.postValue(null)
                 }
@@ -37,6 +39,10 @@ class RequestsModel(private val ordersRepository: OrdersRepository) {
             }
 
         })
+    }
+
+    private fun updateIsEmpty(list: List<Order>) {
+        isEmpty.postValue(list.isEmpty())
     }
 
 }
