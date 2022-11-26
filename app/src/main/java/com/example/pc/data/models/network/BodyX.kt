@@ -8,6 +8,9 @@ data class BodyX(
     @SerializedName("accessToken")
     val accessToken: String? = null,
 
-    @SerializedName("payload")
-    val payload: Payload
+    @SerializedName("id")
+    val id: String,
+
+//    @SerializedName("payload")
+//    val payload: Payload
 )

@@ -14,7 +14,6 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
 import com.example.pc.data.models.local.LoadPolicy
-import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.data.repositories.UserInfoRepository
@@ -77,8 +76,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                     userInfoModel.apply {
                         binding!!.apply {
 
-                            val payload = getPayload()!!
-                            loggedInUser = payload.id
+                            loggedInUser = getUserId()!!
                             Log.i(TAG, "current user: $loggedInUser")
 
                             getUserById(loggedInUser)

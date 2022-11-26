@@ -62,7 +62,7 @@ class FavouritesFragment : Fragment() {
                 if (isAuth()) {
                     Log.i(TAG, "isAuth: $it")
 
-                    userId = getPayload()!!.id
+                    userId = getUserId()!!
                     Log.i(TAG, "user id: $userId")
 
                     adapter =

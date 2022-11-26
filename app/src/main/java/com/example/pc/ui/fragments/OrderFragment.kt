@@ -1,8 +1,6 @@
 package com.example.pc.ui.fragments
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,10 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
-import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Customer
 import com.example.pc.data.models.network.IdResponse
 import com.example.pc.data.models.network.Order
@@ -27,7 +23,6 @@ import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.OrderModel
 import com.example.pc.utils.*
-import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 
 private const val ERROR_AUTH = "Erreur d'authentification"
@@ -63,7 +58,7 @@ class OrderFragment : Fragment() {
             auth.observe(viewLifecycleOwner) {
 
                 if (isAuth()) {
-                    val userId = getPayload()!!.id
+                    val userId = getUserId()!!
 
                     binding.apply {
 

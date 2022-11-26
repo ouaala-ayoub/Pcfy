@@ -23,7 +23,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
-import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.CategoryEnum
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
@@ -141,7 +140,7 @@ class CreateAnnonceFragment : Fragment() {
                 if (isAuth()) {
 
                     Log.i(TAG, "isAuth: $it")
-                    userId = getPayload()!!.id
+                    userId = getUserId()!!
 
 
                     showForm()

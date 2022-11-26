@@ -15,7 +15,6 @@ import com.example.pc.R
 import com.example.pc.data.models.local.ImageLoader
 import com.example.pc.data.models.local.LoadPolicy
 import com.example.pc.databinding.FragmentAnnonceBinding
-import com.example.pc.databinding.QuantityLayoutBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.adapters.DetailsAdapter
@@ -159,7 +158,7 @@ class AnnonceFragment : Fragment() {
                         auth.observe(viewLifecycleOwner) {
 
                             if (isAuth()) {
-                                userId = getPayload()!!.id
+                                userId = getUserId()!!
                                 updateIsAddedToFav(userId, annonceId)
 
                                 isAddedToFav.observe(viewLifecycleOwner) { isFavChecked ->

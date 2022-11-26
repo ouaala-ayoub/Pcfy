@@ -84,8 +84,8 @@ class AuthModel(
 
     }
 
-    fun getPayload(): Payload? {
-        return auth.value?.payload ?: return null
+    fun getUserId(): String? {
+        return auth.value?.id ?: return null
     }
 
     fun isAuth(): Boolean {
