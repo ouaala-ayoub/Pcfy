@@ -84,6 +84,12 @@ interface RetrofitService {
         @Body userShippingInfos: UserShippingInfos
     ): Call<User>
 
+    @PATCH("users/{id}/password")
+    fun changePassword(
+        @Path("id") userId: String,
+        @Body passwords: PasswordRequest
+    ): Call<ResponseBody>
+
     @DELETE("users/{id}")
     fun deleteUser(@Path("id") userId: String): Call<IdResponse>
 
