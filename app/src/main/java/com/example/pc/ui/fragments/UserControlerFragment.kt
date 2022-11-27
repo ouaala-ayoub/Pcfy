@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavArgs
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pc.R
 import com.example.pc.databinding.FragmentUserControlerBinding
@@ -47,11 +48,19 @@ class UserControlerFragment : Fragment() {
                 goToUserRequests(userId)
             }
             passwordChange.setOnClickListener {
-
+                goToPasswordChange(userId)
             }
         }
 
         return binding.root
+    }
+
+    private fun goToPasswordChange(userId: String) {
+        val action =
+            UserControlerFragmentDirections.actionUserControlerFragmentToPasswordChangeFragment(
+                userId
+            )
+        findNavController().navigate(action)
     }
 
     private fun goToFullOrdersPage(userId: String) {

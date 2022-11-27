@@ -201,10 +201,9 @@ class CreateAnnonceFragment : Fragment() {
 
                                                 var i = 0
                                                 for (body in imagesPart) {
-                                                    val imageName = body.key
                                                     builder.addFormDataPart(
                                                         "pictures",
-                                                        imageName,
+                                                        body.key,
                                                         body.value
                                                     )
                                                     i++

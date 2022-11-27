@@ -247,10 +247,11 @@ class AnnonceModifyFragment : Fragment() {
             scrollView.isEnabled = !loading
             submitChanges.isEnabled = !loading
             imagesRv.isEnabled = !loading
+            addDetails.isEnabled = !loading
         }
     }
 
-    private fun openGallery(){
+    private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -262,7 +263,7 @@ class AnnonceModifyFragment : Fragment() {
         val pathHelper = URIPathHelper()
 
 
-        if (data.clipData == null){
+        if (data.clipData == null) {
             val currentItemUri = data.data
             val filePath = pathHelper.getPath(requireContext(), currentItemUri!!)
 
@@ -277,10 +278,9 @@ class AnnonceModifyFragment : Fragment() {
                     requestFile
                 )
             }
-        }
-        else {
+        } else {
             val clipData = data.clipData
-            for (i in 0 until clipData!!.itemCount){
+            for (i in 0 until clipData!!.itemCount) {
                 val currentItemUri = clipData.getItemAt(i).uri
                 val filePath = pathHelper.getPath(requireContext(), currentItemUri)
 

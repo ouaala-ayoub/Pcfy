@@ -72,6 +72,18 @@
             <argument
                 android:name="userId"
                 app:argType="string" />
+            <action
+                android:id="@+id/action_userControlerFragment_to_passwordChangeFragment"
+                app:destination="@id/passwordChangeFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/passwordChangeFragment"
+            android:name="com.example.pc.ui.fragments.PasswordChangeFragment"
+            android:label="fragment_password_change"
+            tools:layout="@layout/fragment_password_change" >
+            <argument
+                android:name="userId"
+                app:argType="string" />
         </fragment>
     </navigation>
 </navigation>

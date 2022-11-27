@@ -240,7 +240,7 @@
         android:fontFamily="@font/alata"
         android:gravity="center"
         android:text="@string/ajouter_une_annonce"
-        android:textColor="@color/even_darker_grey"
+        android:textColor="@color/orange_old"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

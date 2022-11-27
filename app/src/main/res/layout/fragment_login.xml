@@ -25,6 +25,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:text="Connectez Vous"
+            android:textColor="@color/orange_old"
             android:textSize="30sp"
             android:textStyle="bold" />
 

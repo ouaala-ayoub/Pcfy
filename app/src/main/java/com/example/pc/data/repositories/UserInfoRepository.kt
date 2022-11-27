@@ -1,6 +1,6 @@
 package com.example.pc.data.repositories
 
-import com.example.pc.data.models.network.NewAnnonceRequest
+import com.example.pc.data.models.network.PasswordRequest
 import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.models.network.User
 import com.example.pc.data.remote.RetrofitService
@@ -25,5 +25,8 @@ class UserInfoRepository(private val retrofitService: RetrofitService) {
 
     fun deleteUserImage(userId: String, tokens: RequestBody) =
         retrofitService.deleteProfilePicture(userId, tokens)
+
+    fun changePassword(userId: String, passwords: PasswordRequest) =
+        retrofitService.changePassword(userId, passwords)
 
 }

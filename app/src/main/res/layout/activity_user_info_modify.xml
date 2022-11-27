@@ -24,10 +24,11 @@
 
             <TextView
                 android:id="@+id/info_change"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="@string/changer_les_informations_de_votre_compte"
+                android:textColor="@color/orange_old"
                 android:textSize="16sp" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
