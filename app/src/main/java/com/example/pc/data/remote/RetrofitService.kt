@@ -1,5 +1,6 @@
 package com.example.pc.data.remote
 
+import com.example.pc.data.models.local.OrderStatusRequest
 import com.example.pc.data.models.network.*
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -148,6 +149,12 @@ interface RetrofitService {
     @GET("orders/{id}")
     fun getOrderById(@Path("id") orderId: String): Call<Order>
 
+    @PUT("orders/{id}")
+    fun changeOrderStatus(
+        @Path("id") orderId: String,
+        @Body orderStatus: OrderStatusRequest
+    ): Call<IdResponse>
+
     //to change
     @DELETE("orders/{id}")
     fun deleteOrderById(@Path("id") orderToDeleteId: String): Call<Order>
@@ -155,7 +162,7 @@ interface RetrofitService {
     companion object {
 
         //to learn
-        private const val BASE_URL = "https://pcfy.vercel.app/api/"
+        private const val BASE_URL = "https://spcfy.netlify.app/api/"
         private var retrofitService: RetrofitService? = null
 
         fun getInstance(): RetrofitService {

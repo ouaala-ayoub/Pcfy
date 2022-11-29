@@ -31,13 +31,13 @@ class OrdersFullAdapter(
                     .centerCrop()
                     .into(announceImage)
 
-                orderId.text = binding.root.resources.getString(R.string.id_res, order.orderId)
+                orderId.text = binding.root.resources.getString(R.string.id_res, order.id)
                 orderProductName.text = order.annonce.name
                 costumerName.text = order.customer.name
                 costumerNumber.text = order.customer.number
 
                 orderWhole.setOnClickListener {
-                    onOrderClicked.onOrderClicked(order.orderId!!)
+                    onOrderClicked.onOrderClicked(order.id!!)
                 }
             }
         }

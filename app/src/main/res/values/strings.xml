@@ -146,5 +146,6 @@
     <string name="gerer_vos_commandes">Gerer vos commandes</string>
 
     <string name="id_res">id: %1$s</string>
+    <string name="order_id_res">Order #%1$s</string>
 </resources>
 

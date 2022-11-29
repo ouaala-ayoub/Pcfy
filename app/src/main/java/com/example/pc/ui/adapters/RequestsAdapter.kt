@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
 import com.example.pc.data.models.network.Order
-import com.example.pc.databinding.SingleOrderFullBinding
 import com.example.pc.databinding.SingleRequestBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK
 import com.squareup.picasso.Picasso
@@ -29,7 +28,7 @@ class RequestsAdapter(
                     .centerCrop()
                     .into(announceImage)
 
-                orderId.text = binding.root.resources.getString(R.string.id_res, order.orderId)
+                orderId.text = binding.root.resources.getString(R.string.id_res, order.id)
                 orderProductName.text = order.annonce.name
                 orderProductPrice.text =
                     binding.root.resources.getString(R.string.price, order.annonce.price.toString())

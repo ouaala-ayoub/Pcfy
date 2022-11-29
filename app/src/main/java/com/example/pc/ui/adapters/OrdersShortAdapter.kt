@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
 import com.example.pc.data.models.local.OrderStatus
 import com.example.pc.data.models.network.Order
-import com.example.pc.data.models.network.Status
 import com.example.pc.databinding.SingleOrderShortBinding
 
 class OrdersShortAdapter(
@@ -31,12 +30,12 @@ class OrdersShortAdapter(
 
             binding.apply {
 
-                orderId.text = binding.root.resources.getString(R.string.id_res, order.orderId)
+                orderId.text = binding.root.resources.getString(R.string.id_res, order.id)
                 quantity.text = order.quantity.toString()
                 orderStatus.setImageResource(getImageResource(order.orderStatus))
 
                 orderShortWhole.setOnClickListener {
-                    onOrderClicked.onOrderClicked(order.orderId!!)
+                    onOrderClicked.onOrderClicked(order.id!!)
                 }
             }
         }
