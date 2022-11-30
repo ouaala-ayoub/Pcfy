@@ -4,10 +4,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
-import com.example.pc.data.models.local.LoggedInUser
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.Order
 import com.example.pc.data.remote.RetrofitService
@@ -21,8 +21,8 @@ private const val TAG = "FavouritesAdapter"
 
 class FavouritesAdapter(
     private val onFavouriteClickListener: OnFavouriteClickListener,
-    private val onCommandsClickListener: OnCommandsClicked? = null,
     private val onOrderClicked: OrdersShortAdapter.OnOrderClicked? = null,
+    private val onCommandsClickListener: OnCommandsClicked? = null,
 
     ) : RecyclerView.Adapter<FavouritesAdapter.FavouriteHolder>() {
 
@@ -34,8 +34,9 @@ class FavouritesAdapter(
     interface OnCommandsClicked {
         fun onCommandClicked(
             annonceId: String,
-            adapter: OrdersShortAdapter,
-            singleCommandModel: SingleAnnounceCommandModel
+            empty: TextView,
+            orderRv: RecyclerView,
+            onOrderClicked: OrdersShortAdapter.OnOrderClicked?
         )
     }
 
@@ -82,6 +83,10 @@ class FavouritesAdapter(
                         .into(favouriteImage)
                 }
 
+//                Log.i(TAG, "onFavouriteClickListener : $onFavouriteClickListener")
+//                Log.i(TAG, "onCommandsClickListener : $onCommandsClickListener")
+//                Log.i(TAG, "onOrderClicked : $onOrderClicked")
+
                 favouriteWhole.setOnClickListener {
                     onFavouriteClickListener.onFavouriteClicked(favourite.id!!)
                 }
@@ -90,36 +95,46 @@ class FavouritesAdapter(
                     onFavouriteClickListener.onDeleteClickListener(favourite.id!!)
                 }
 
-
                 if (onCommandsClickListener != null && onOrderClicked != null) {
-                    val adapter = OrdersShortAdapter(
-                        onOrderClicked
-                    )
-                    linearLayout9.visibility = View.VISIBLE
+//                    linearLayout9.visibility = View.VISIBLE
                     commandes.apply {
                         visibility = View.VISIBLE
                         setOnClickListener {
-                            ordersRv.apply {
-                                val isVisible = visibility
-                                if (isVisible == View.VISIBLE) {
-                                    visibility = View.GONE
-                                } else {
-                                    visibility = View.VISIBLE
-
-                                    this.adapter = adapter
-                                    layoutManager = LinearLayoutManager(context)
-                                    val singleCommandModel = SingleAnnounceCommandModel(
-                                        UserInfoRepository(RetrofitService.getInstance())
-                                    )
-                                    onCommandsClickListener.onCommandClicked(
-                                        favourite.id!!,
-                                        adapter,
-                                        singleCommandModel
-                                    )
-                                }
-                            }
+                            onCommandsClickListener.onCommandClicked(
+                                favourite.id!!, binding.empty, ordersRv, onOrderClicked
+                            )
                         }
                     }
+
+
+//                    val adapter = OrdersShortAdapter(
+//                        onOrderClicked
+//                    )
+//                    linearLayout9.visibility = View.VISIBLE
+//                    commandes.apply {
+//                        visibility = View.VISIBLE
+//                        setOnClickListener {
+//                            ordersRv.apply {
+//                                val isVisible = visibility
+//                                if (isVisible == View.VISIBLE) {
+//                                    visibility = View.GONE
+//                                } else {
+//                                    visibility = View.VISIBLE
+//
+//                                    this.adapter = adapter
+//                                    layoutManager = LinearLayoutManager(context)
+//                                    val singleCommandModel = SingleAnnounceCommandModel(
+//                                        UserInfoRepository(RetrofitService.getInstance())
+//                                    )
+//                                    onCommandsClickListener.onCommandClicked(
+//                                        favourite.id!!,
+//                                        adapter,
+//                                        singleCommandModel
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
                 }
 
             }

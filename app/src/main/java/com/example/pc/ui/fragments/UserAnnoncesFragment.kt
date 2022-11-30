@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pc.R
 import com.example.pc.data.models.network.Tokens
 import com.example.pc.data.remote.RetrofitService
@@ -103,39 +105,64 @@ class UserAnnoncesFragment : Fragment() {
                     ).show()
                 }
             },
-            object : FavouritesAdapter.OnCommandsClicked {
-                override fun onCommandClicked(
-                    annonceId: String,
-                    adapter: OrdersShortAdapter,
-                    singleCommandModel: SingleAnnounceCommandModel
-                ) {
-                    //send the request
-                    Log.i(TAG, "onCommandClicked: $annonceId")
-                    singleCommandModel.apply {
-                        getAnnonceOrders(annonceId)
-                        ordersList.observe(viewLifecycleOwner) { orders ->
-                            if (orders != null) {
-                                adapter.setOrdersList(orders)
-                            } else {
-                                requireContext().toast(
-                                    ORDERS_ERROR,
-                                    Toast.LENGTH_SHORT
-                                )
-                            }
-                        }
-                        isTurning.observe(viewLifecycleOwner) { isLoading ->
-                            binding.userAnnoncesProgressbar.isVisible = isLoading
-                        }
-                    }
-                }
-            },
             object : OrdersShortAdapter.OnOrderClicked {
                 override fun onOrderClicked(orderId: String) {
                     // go to order page
                     goToOrderPage(orderId)
                 }
-            }
-        )
+            },
+            object : FavouritesAdapter.OnCommandsClicked {
+                override fun onCommandClicked(
+                    annonceId: String,
+                    empty: TextView,
+                    orderRv: RecyclerView,
+                    onOrderClicked: OrdersShortAdapter.OnOrderClicked?
+                ) {
+                    val singleCommandModel =
+                        SingleAnnounceCommandModel(UserInfoRepository(retrofitService))
+
+                    val adapter = OrdersShortAdapter(onOrderClicked!!)
+
+                    if (empty.visibility == View.GONE && orderRv.visibility == View.GONE) {
+                        singleCommandModel.apply {
+                            getAnnonceOrders(annonceId)
+                            ordersList.observe(viewLifecycleOwner) { orders ->
+                                if (orders != null) {
+                                    if (orders.isEmpty()) {
+                                        empty.visibility = View.VISIBLE
+                                    } else {
+                                        orderRv.apply {
+                                            this.adapter = adapter
+                                            layoutManager = LinearLayoutManager(requireContext())
+                                            adapter.setOrdersList(orders)
+                                            visibility = View.VISIBLE
+                                        }
+                                    }
+                                } else {
+                                    requireContext().toast(
+                                        ORDERS_ERROR,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                }
+                            }
+                        }
+                    } else {
+                        if (empty.visibility == View.VISIBLE) {
+                            empty.visibility = View.GONE
+                        } else if (orderRv.visibility == View.VISIBLE) {
+                            orderRv.visibility = View.GONE
+                        }
+                    }
+
+
+                    singleCommandModel.isTurning.observe(viewLifecycleOwner) { isLoading ->
+                        binding.userAnnoncesProgressbar.isVisible = isLoading
+                    }
+
+                }
+            },
+
+            )
 
         userAnnoncesModel.apply {
             getAnnoncesById(userId).observe(viewLifecycleOwner) { annonces ->
