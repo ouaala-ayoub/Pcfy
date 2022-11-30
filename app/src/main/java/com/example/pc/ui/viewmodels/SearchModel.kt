@@ -48,6 +48,7 @@ class SearchModel(private val searchRepository: SearchRepository, private val ma
 
                 override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
                     Log.e(TAG, "onFailure: ${t.message}")
+                    searchResult.postValue(null)
                     isTurning.postValue(false)
                 }
 

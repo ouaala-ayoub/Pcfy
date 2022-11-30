@@ -56,7 +56,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
@@ -96,7 +96,8 @@ class SearchFragment : Fragment() {
                     if (searchResult != null) {
                         rvAdapter.setAnnoncesList(searchResult)
                     } else {
-                        doOnFail(SEARCH_ERROR)
+//                        doOnFail(SEARCH_ERROR)
+                        Log.e(TAG, "searchResult fail" )
                     }
                     updateSearchMessage()
                 }

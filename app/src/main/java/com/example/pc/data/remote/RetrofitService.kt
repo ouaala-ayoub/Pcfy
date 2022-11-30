@@ -162,7 +162,7 @@ interface RetrofitService {
     companion object {
 
         //to learn
-        private const val BASE_URL = "https://spcfy.netlify.app/api/"
+        private const val BASE_URL = "https://pcfy.vercel.app/api/"
         private var retrofitService: RetrofitService? = null
 
         fun getInstance(): RetrofitService {
