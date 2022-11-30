@@ -103,6 +103,13 @@ class HomeFragment : Fragment() {
 
             }
 
+            binding!!.apply {
+                swiperefresh.setOnRefreshListener {
+                    getAnnoncesByCategory(categoryAdapter.getCurrentCategory())
+                    swiperefresh.isRefreshing = false
+                }
+            }
+
             isProgressBarTurning.observe(viewLifecycleOwner) {
                 binding!!.homeProgressBar.isVisible = it
             }

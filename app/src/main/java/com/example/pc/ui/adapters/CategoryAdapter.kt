@@ -42,7 +42,7 @@ class CategoryAdapter(
 
                 categoryTitle.setOnClickListener {
 
-                    onClick.onCategoryClicked(category.title)
+//                    onClick.onCategoryClicked(category.title)
 
                     if (category.isClicked) {
                         onClick.onCategoryClicked(category.title)
@@ -76,6 +76,8 @@ class CategoryAdapter(
     }
 
     override fun getItemCount() = categoriesList.size
+
+    fun getCurrentCategory() = categoriesList[currentClicked].title
 
     private fun setView(category: Category, chip: Chip) {
         if (category.isClicked) {
