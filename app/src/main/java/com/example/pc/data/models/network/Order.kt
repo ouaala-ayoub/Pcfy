@@ -22,6 +22,9 @@ data class Order(
     @SerializedName("status")
     var orderStatus: String = "in progress",
 
+    @SerializedName("createdAt")
+    var createdAt: String? = null,
+
     )
 
 

@@ -54,14 +54,8 @@ class AnnoncesAdapter(
                                 .into(annonceImage)
                         }
                     }
-//
-//                    val sellerName = annonce.seller?.userName
-//                    Log.i(TAG, "seller name : $sellerName")
-//                    if (sellerName != null) {
-//                        annonceSeller.text = sellerName
-//                    }
+//                    annonceSeller.text = annonce.seller.name
 
-                    
                     binding.annonce.setOnClickListener {
                         annonceClickListener.onAnnonceClick(annonce.id!!)
                     }

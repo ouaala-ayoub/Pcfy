@@ -16,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.pc.R
 import com.example.pc.data.models.local.OrderStatus
 import com.example.pc.data.models.local.OrderStatusRequest
+import com.example.pc.data.models.local.getDate
 import com.example.pc.data.models.network.Status
 import com.example.pc.data.remote.RetrofitService
 import com.example.pc.data.repositories.OrdersRepository
@@ -27,6 +28,7 @@ import com.example.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 private const val TAG = "OrderPageFragment"
+private const val DATE_NOT_FOUND = "Date non available"
 
 class OrderPageFragment : Fragment() {
 
@@ -53,13 +55,20 @@ class OrderPageFragment : Fragment() {
         orderPageModel.apply {
             binding.apply {
 
+                swiperefresh.setOnRefreshListener {
+                    getOrderById(this@OrderPageFragment.orderId)
+                    swiperefresh.isRefreshing = false
+                }
+
                 getOrderById(this@OrderPageFragment.orderId)
                 order.observe(viewLifecycleOwner) { order ->
                     if (order != null) {
                         order.apply {
+
                             //order
                             orderId.text = getString(R.string.order_id_res, id)
                             orderQuantity.text = quantity.toString()
+                            creationDate.text = getCreationDate(createdAt)
 
                             //costumer
                             costumerName.text = customer.name
@@ -84,7 +93,6 @@ class OrderPageFragment : Fragment() {
                                     }
                                 }
                             }
-
                         }
 
                     } else {
@@ -99,6 +107,13 @@ class OrderPageFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun getCreationDate(createdAt: String?): String {
+        return if (createdAt.isNullOrBlank()) DATE_NOT_FOUND
+        else {
+            getDate(createdAt).toString()
+        }
     }
 
     private fun setTheStatusEditText(currentStatus: String) {
