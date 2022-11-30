@@ -71,7 +71,12 @@ class OrderPageFragment : Fragment() {
                             creationDate.text = getCreationDate(createdAt)
 
                             //costumer
-                            costumerName.text = customer.name
+                            costumerName.apply {
+                                text = customer.name
+                                setOnClickListener {
+                                    goToUserPage(customer.id)
+                                }
+                            }
                             costumerPhoneNumber.text = customer.number
                             costumerAddress.text = customer.address
 
@@ -107,6 +112,11 @@ class OrderPageFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun goToUserPage(id: String) {
+        val action = OrderPageFragmentDirections.actionOrderPageFragmentToSellerInfoFragment2(id)
+        findNavController().navigate(action)
     }
 
     private fun getCreationDate(createdAt: String?): String {

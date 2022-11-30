@@ -98,6 +98,12 @@ fun getTheErrorMessage(error: Error) {
     }
 }
 
+private fun <T> goToActivityWithUserId(userId: String, context: Context, activity: Class<T>) {
+    val intent = Intent(context, activity)
+    intent.putExtra("id", userId)
+    context.startActivity(intent)
+}
+
 class URIPathHelper {
 
     fun getPath(context: Context, uri: Uri): String? {

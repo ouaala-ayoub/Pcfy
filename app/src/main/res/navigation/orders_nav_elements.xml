@@ -13,6 +13,9 @@
         <argument
             android:name="orderId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_orderPageFragment_to_sellerInfoFragment2"
+            app:destination="@id/sellerInfoFragment2" />
     </fragment>
     <fragment
         android:id="@+id/ordersListFragment"
@@ -22,5 +25,14 @@
         <action
             android:id="@+id/action_ordersListFragment_to_orderPageFragment"
             app:destination="@id/orderPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sellerInfoFragment2"
+        android:name="com.example.pc.ui.fragments.SellerInfoFragment"
+        android:label="fragment_seller_info"
+        tools:layout="@layout/fragment_seller_info" >
+        <argument
+            android:name="id"
+            app:argType="string" />
     </fragment>
 </navigation>
