@@ -105,7 +105,12 @@ class HomeFragment : Fragment() {
 
             binding!!.apply {
                 swiperefresh.setOnRefreshListener {
-                    getAnnoncesByCategory(categoryAdapter.getCurrentCategory())
+                    val current = categoryAdapter.getCurrentCategory()
+                    if (current == CategoryEnum.ALL.title) {
+                        getAnnoncesListAll()
+                    } else {
+                        getAnnoncesByCategory(current)
+                    }
                     swiperefresh.isRefreshing = false
                 }
             }
