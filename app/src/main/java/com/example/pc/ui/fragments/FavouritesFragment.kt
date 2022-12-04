@@ -76,19 +76,6 @@ class FavouritesFragment : Fragment() {
 
                                     deleteFavourite(userId, annonceId)
 
-                                    deletedWithSuccess.observe(viewLifecycleOwner) { deletedWithSuccess ->
-                                        if (deletedWithSuccess) {
-                                            requireContext().toast(
-                                                FAVOURITE_DELETED_SUCCESS,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                        } else {
-                                            requireContext().toast(
-                                                FAVOURITE_ERROR_MSG,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                        }
-                                    }
                                 }
                             }
                         })
@@ -112,6 +99,21 @@ class FavouritesFragment : Fragment() {
                                     }
                                 }
                             }
+
+                            deletedWithSuccess.observe(viewLifecycleOwner) { deletedWithSuccess ->
+                                if (deletedWithSuccess) {
+                                    requireContext().toast(
+                                        FAVOURITE_DELETED_SUCCESS,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                } else {
+                                    requireContext().toast(
+                                        FAVOURITE_ERROR_MSG,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                }
+                            }
+
                             isProgressBarTurning.observe(viewLifecycleOwner) { isVisible ->
                                 favouritesProgressBar.isVisible = isVisible
                             }

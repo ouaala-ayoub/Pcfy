@@ -81,20 +81,7 @@ class UserAnnoncesFragment : Fragment() {
                                     //delete then observe the deleted Boolean
                                     deleteAnnonce(currentTokens, annonceId)
 
-                                    deletedAnnonce.observe(viewLifecycleOwner) { deletedWithSuccess ->
-                                        if (deletedWithSuccess) {
-                                            getAnnoncesById(userId)
-                                            requireContext().toast(
-                                                ANNONCE_DELETED_SUCCESS,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                        } else {
-                                            requireContext().toast(
-                                                ANNONCE_ERROR_MSG,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                        }
-                                    }
+
                                 }
                             }
 
@@ -163,6 +150,23 @@ class UserAnnoncesFragment : Fragment() {
             },
 
             )
+
+        userAnnoncesModel.apply {
+            deletedAnnonce.observe(viewLifecycleOwner) { deletedWithSuccess ->
+            if (deletedWithSuccess) {
+                getAnnoncesById(userId)
+                requireContext().toast(
+                    ANNONCE_DELETED_SUCCESS,
+                    Toast.LENGTH_SHORT
+                )
+            } else {
+                requireContext().toast(
+                    ANNONCE_ERROR_MSG,
+                    Toast.LENGTH_SHORT
+                )
+            }
+        }
+        }
 
         userAnnoncesModel.apply {
             getAnnoncesById(userId).observe(viewLifecycleOwner) { annonces ->

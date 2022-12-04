@@ -17,15 +17,12 @@ data class User(
     @SerializedName("password")
     val password: String? = null,
 
-    @SerializedName("isAdmin")
-    val isAdmin: Boolean = false,
-
     //non required
 
     @SerializedName("_id")
     val userId: String? = null,
 
-    @SerializedName("type")
+    @SerializedName("role")
     val userType: String? = null,
 
     @SerializedName("createdAt")

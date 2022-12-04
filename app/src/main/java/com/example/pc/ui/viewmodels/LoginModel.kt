@@ -70,7 +70,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
             override fun onFailure(call: Call<Tokens>, t: Throwable) {
                 Log.e(TAG, "onFailure login : ${t.message}")
-                errorMessage.postValue(t.message)
+                errorMessage.postValue(com.example.pc.utils.ERROR_MSG)
                 retrievedTokens.postValue(false)
                 isTurning.postValue(false)
             }

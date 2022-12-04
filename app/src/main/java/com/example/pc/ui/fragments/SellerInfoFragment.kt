@@ -48,7 +48,7 @@ class SellerInfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentSellerInfoBinding.inflate(inflater, container, false)
 
@@ -70,7 +70,6 @@ class SellerInfoFragment : Fragment() {
                         } else {
                             Log.i(TAG, "annonces retrieved : $annonces")
 
-                            setTheSellerInfo(seller)
                             isTurning.observe(viewLifecycleOwner) {
                                 binding.sellerProgresBar.isVisible = it
                             }
@@ -108,7 +107,7 @@ class SellerInfoFragment : Fragment() {
     private fun setTheSellerInfo(seller: User) {
         binding.apply {
 
-            val sellName = seller.name
+            val userName = seller.name
 
 //            sellerImage to add
             if (seller.imageUrl.isNullOrBlank()) {
@@ -121,11 +120,16 @@ class SellerInfoFragment : Fragment() {
                     .into(sellerImage)
             }
 
-            sellerContect.text = seller.phoneNumber
-            sellerName.text = sellName
+            sellerContact.text = seller.phoneNumber
+            sellerName.text = userName
             sellerType.text = seller.userType
             sellerCity.text = seller.city
-            annonceOf.text = getString(R.string.annonce_of, sellName)
+            annonceOf.text = getString(R.string.annonce_of, userName)
+
+            swiperefresh.setOnRefreshListener {
+                viewModel.getSellerAnnonces(sellerId)
+                swiperefresh.isRefreshing = false
+            }
 
 //            sellerWebsite.text
 //            sellerWebsite.setOnClickListener {
