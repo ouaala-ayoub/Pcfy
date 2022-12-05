@@ -49,12 +49,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata"
                 android:gravity="center|start"
-                android:lines="2"
-                android:maxLines="2"
+                android:lines="1"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"
                 tools:text="product name" />
 
             <com.google.android.material.textview.MaterialTextView

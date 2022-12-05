@@ -19,6 +19,7 @@ class AnnoncesAdapter(
 
     interface OnAnnonceClickListener {
         fun onAnnonceClick(annonceId: String)
+        fun onAnnonceLoadFail()
     }
 
     private var annoncesList = listOf<Annonce>()
@@ -38,6 +39,7 @@ class AnnoncesAdapter(
                 try {
 
                     annonceTitle.text = annonce.title
+
                     annoncePrice.text = binding.root.resources.getString(
                         R.string.price,
                         annonce.price.toString()
@@ -61,6 +63,7 @@ class AnnoncesAdapter(
                     }
                 } catch (e: Throwable) {
                     Log.e(TAG, "bind: $annonce error ${e.message}")
+                    annonceClickListener.onAnnonceLoadFail()
                 }
 
             }

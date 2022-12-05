@@ -16,6 +16,7 @@ import androidx.core.view.MenuItemCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.pc.R
 import com.example.pc.data.models.local.SellerType
@@ -47,6 +48,10 @@ class SearchFragment : Fragment() {
         rvAdapter = AnnoncesAdapter(object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
                 goToAnnonceActivity(annonceId)
+            }
+
+            override fun onAnnonceLoadFail() {
+                findNavController().popBackStack()
             }
         })
         viewModel = SearchModel(SearchRepository(RetrofitService.getInstance()), MAX_SEARCH_PRICE)

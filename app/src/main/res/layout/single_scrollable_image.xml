@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/annonce_image_height"
+        android:layout_height="@dimen/annonce_image_height"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

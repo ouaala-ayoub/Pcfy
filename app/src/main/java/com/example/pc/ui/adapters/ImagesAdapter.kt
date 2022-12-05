@@ -75,7 +75,7 @@ class ImagesAdapter(
                 picasso
                     .load(imageUrl)
                     .fit()
-                    .centerCrop()
+//                    .centerCrop()
                     .into(productImages)
 
                 productImages.setOnClickListener {
@@ -95,7 +95,7 @@ class ImagesAdapter(
                     .networkPolicy(NetworkPolicy.NO_CACHE)
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .fit()
-                    .centerCrop()
+//                    .centerCrop()
                     .into(productImages)
 
                 productImages.setOnClickListener {
