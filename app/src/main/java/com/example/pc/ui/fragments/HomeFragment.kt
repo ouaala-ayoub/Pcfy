@@ -73,10 +73,12 @@ class HomeFragment : Fragment() {
                     if (title == CategoryEnum.ALL.title) {
                         viewModel.apply {
                             getAnnoncesListAll()
+                            annoncesToShow = mutableListOf()
                         }
                     } else {
                         viewModel.apply {
                             getAnnoncesByCategory(title)
+                            annoncesToShow = mutableListOf()
                         }
                     }
                 }
@@ -101,10 +103,10 @@ class HomeFragment : Fragment() {
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
                 if (annonces != null)
-                    for (annonce in annonces){
+                    for (annonce in annonces) {
                         annoncesToShow.add(annonce)
                     }
-                    annoncesAdapter.setAnnoncesList(annoncesToShow)
+                annoncesAdapter.setAnnoncesList(annoncesToShow)
 
                 updateIsEmpty()
                 emptyMsg.observe(viewLifecycleOwner) { msg ->
@@ -129,7 +131,10 @@ class HomeFragment : Fragment() {
                 annoncesRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
-                        if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        if (!recyclerView.canScrollVertically(1) &&
+                            newState == RecyclerView.SCROLL_STATE_IDLE &&
+                            annoncesToShow.isNotEmpty()
+                        ) {
                             Log.i(TAG, "end")
                             val current = categoryAdapter.getCurrentCategory()
                             if (current == CategoryEnum.ALL.title) {
