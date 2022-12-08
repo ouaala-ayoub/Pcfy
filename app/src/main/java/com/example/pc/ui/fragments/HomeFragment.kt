@@ -23,6 +23,7 @@ import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.adapters.CategoryAdapter
 import com.example.pc.ui.adapters.PopularsAdapter
 import com.example.pc.ui.viewmodels.HomeModel
+import com.google.android.material.appbar.AppBarLayout
 
 private const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"
@@ -91,6 +92,10 @@ class HomeFragment : Fragment() {
 
         binding!!.apply {
 
+            vAppBar.addOnOffsetChangedListener { _, verticalOffset ->
+                swiperefresh.isEnabled = verticalOffset == 0
+            }
+
             //setting the categories list
             categoryRv.apply {
                 layoutManager = LinearLayoutManager(
@@ -135,7 +140,18 @@ class HomeFragment : Fragment() {
                 updateIsEmpty()
                 emptyMsg.observe(viewLifecycleOwner) { msg ->
                     Log.i(TAG, "updateIsEmpty: $msg")
-                    binding!!.noAnnonce.text = msg
+                    if(msg.isEmpty()){
+                        binding!!.noAnnonce.visibility = View.GONE
+                    } else {
+                        if (msg == com.example.pc.utils.ERROR_MSG){
+                            binding!!.apply {
+                                popularTv.visibility = View.GONE
+                                foruTv.visibility = View.GONE
+                            }
+                        }
+                        binding!!.noAnnonce.visibility = View.VISIBLE
+                        binding!!.noAnnonce.text = msg
+                    }
                 }
 
             }
@@ -154,9 +170,11 @@ class HomeFragment : Fragment() {
                 swiperefresh.setOnRefreshListener {
                     val current = categoryAdapter.getCurrentCategory()
                     annoncesToShow = if (current == CategoryEnum.ALL.title) {
+                        getPopularAnnonces()
                         getAnnoncesListAll()
                         mutableListOf()
                     } else {
+                        getPopularAnnonces()
                         getAnnoncesByCategory(current)
                         mutableListOf()
                     }
