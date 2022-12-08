@@ -21,6 +21,7 @@ import com.example.pc.databinding.FragmentHomeBinding
 import com.example.pc.ui.activities.AnnonceActivity
 import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.adapters.CategoryAdapter
+import com.example.pc.ui.adapters.PopularsAdapter
 import com.example.pc.ui.viewmodels.HomeModel
 
 private const val NUM_ROWS = 2
@@ -30,8 +31,8 @@ class HomeFragment : Fragment() {
 
     private var annoncesToShow = mutableListOf<Annonce>()
     private lateinit var annoncesAdapter: AnnoncesAdapter
+    private lateinit var popularsAdapter: PopularsAdapter
     private lateinit var viewModel: HomeModel
-    private lateinit var annoncesRv: RecyclerView
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentHomeBinding? = null
     private lateinit var categoriesList: List<Category>
@@ -48,15 +49,18 @@ class HomeFragment : Fragment() {
 
         viewModel = HomeModel(HomeRepository(retrofitService))
 
-        annoncesAdapter = AnnoncesAdapter(object : AnnoncesAdapter.OnAnnonceClickListener {
+        val onClickListener = object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
                 goToAnnonceActivity(annonceId)
             }
 
             override fun onAnnonceLoadFail() {
-                findNavController().popBackStack()
+//                findNavController().popBackStack()
+                Log.e(TAG, "onAnnonceLoadFail : something went wrong with loading the annonce")
             }
-        })
+        }
+        annoncesAdapter = AnnoncesAdapter(onClickListener)
+        popularsAdapter = PopularsAdapter(onClickListener)
     }
 
     override fun onCreateView(
@@ -85,28 +89,48 @@ class HomeFragment : Fragment() {
             }
         )
 
-        binding!!.categoryRv.layoutManager = LinearLayoutManager(
-            this.context,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        binding!!.categoryRv.adapter = categoryAdapter
+        binding!!.apply {
 
-        annoncesRv = binding!!.annonceRv
-        annoncesRv.apply {
-            layoutManager = GridLayoutManager(this.context, NUM_ROWS)
-            this.adapter = annoncesAdapter
+            //setting the categories list
+            categoryRv.apply {
+                layoutManager = LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
+                adapter = categoryAdapter
+            }
+
+            //setting the annonces list
+            annonceRv.apply {
+                layoutManager = GridLayoutManager(requireContext(), NUM_ROWS)
+                adapter = annoncesAdapter
+            }
+
+            //setting the popular annonces list
+            popularsRv.apply {
+                layoutManager = LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
+                adapter = popularsAdapter
+            }
         }
 
         viewModel.apply {
+            getPopularAnnonces()
             getAnnoncesListAll()
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
-                if (annonces != null)
+                if (annonces != null) {
                     for (annonce in annonces) {
                         annoncesToShow.add(annonce)
                     }
-                annoncesAdapter.setAnnoncesList(annoncesToShow)
+                    annoncesAdapter.setAnnoncesList(annoncesToShow)
+                } else {
+                    Log.e(TAG, "annoncesList is $annonces")
+                }
 
                 updateIsEmpty()
                 emptyMsg.observe(viewLifecycleOwner) { msg ->
@@ -114,6 +138,16 @@ class HomeFragment : Fragment() {
                     binding!!.noAnnonce.text = msg
                 }
 
+            }
+
+            popularsList.observe(viewLifecycleOwner) { populars ->
+                if (populars != null) {
+                    val popularsList = populars.map { popular -> popular.title }
+                    Log.d(TAG, "popularsList: $popularsList")
+                    popularsAdapter.setPopularsList(populars)
+                } else {
+                    Log.e(TAG, "popularsList is : $populars")
+                }
             }
 
             binding!!.apply {
@@ -128,7 +162,7 @@ class HomeFragment : Fragment() {
                     }
                     swiperefresh.isRefreshing = false
                 }
-                annoncesRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                annonceRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
                         if (!recyclerView.canScrollVertically(1) &&

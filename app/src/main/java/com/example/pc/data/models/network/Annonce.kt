@@ -28,6 +28,9 @@ data class Annonce(
     val seller: Seller,
 
     //non required
+//    not needed ?
+    @SerializedName("visited")
+    val visited: Int? = null,
 
     @SerializedName("details")
     val details: List<Detail>? = null,

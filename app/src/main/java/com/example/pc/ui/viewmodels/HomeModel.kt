@@ -20,6 +20,7 @@ private const val ERROR_MSG = "Erreur inattendue"
 class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
     val annoncesList = MutableLiveData<List<Annonce>?>()
+    val popularsList = MutableLiveData<List<Annonce>?>()
     val emptyMsg = MutableLiveData<String>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<Error?>()
@@ -85,6 +86,34 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
         })
 
 
+    }
+
+    fun getPopularAnnonces() {
+
+        isProgressBarTurning.postValue(true)
+
+        homeRepository.getPopularAnnonces().enqueue(object : Callback<List<Annonce>> {
+
+            override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val test = response.body()
+                    Log.i(TAG, "onResponse popular announces : ${test?.get(0)}")
+                    popularsList.postValue(response.body())
+                } else {
+                    val error = response.errorBody()?.let { getError(it, response.code()) }
+                    Log.e(TAG, "getPopularAnnonces error : ${error?.message}")
+                    popularsList.postValue(null)
+                }
+                isProgressBarTurning.postValue(false)
+            }
+
+            override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
+                Log.e(TAG, "onFailure getPopularAnnonces: ${t.message}")
+                popularsList.postValue(null)
+                isProgressBarTurning.postValue(false)
+            }
+
+        })
     }
 
     fun updateIsEmpty() {

@@ -67,7 +67,7 @@ class AnnonceModifyFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentAnnonceModifyBinding.inflate(inflater, container, false)
 
@@ -221,7 +221,8 @@ class AnnonceModifyFragment : Fragment() {
                                 description = descriptionEditText.text.toString(),
                                 details = details,
                                 pictures = annonce.pictures,
-                                seller = annonce.seller
+                                seller = annonce.seller,
+                                visited = annonce.visited
                             )
                             updateAnnonceInfo(annonceToModifyId, newAnnonce)
                                 .observe(viewLifecycleOwner) { annonceModified ->

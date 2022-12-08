@@ -147,5 +147,8 @@
 
     <string name="id_res">id: %1$s</string>
     <string name="order_id_res">Order #%1$s</string>
+
+    <string name="annonce_image_url">  </string>
+    <string name="profile_image_url">  </string>
 </resources>
 

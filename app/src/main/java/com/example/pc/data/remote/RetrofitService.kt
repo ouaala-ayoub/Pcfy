@@ -17,10 +17,13 @@ interface RetrofitService {
 
     @GET("announces")
     fun getAllAnnonces(
-        @Query("c") category: String?,
-        @Query("s") searchBody: String?,
-        @Query("p") price: Number?,
-        @Query("st") status: String?,
+        @Query("c") category: String? = null,
+        @Query("s") searchBody: String? = null,
+        @Query("p") price: Number? = null,
+        @Query("st") status: String? = null,
+        @Query("l") limit: Number? = null,
+        @Query("n") filterByDate: String? = null,
+        @Query("v") visited: String? = null
     ): Call<List<Annonce>>
 
     @GET("announces/{id}")
