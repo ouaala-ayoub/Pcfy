@@ -20,7 +20,7 @@ private const val TAG = "AuthModel"
 
 class AuthModel(
     private val retrofitService: RetrofitService,
-    private val loginRepository: LoginRepository?
+    private val loginRepository: LoginRepository? = null
 ) : ViewModel() {
 
     val user = MutableLiveData<User?>()

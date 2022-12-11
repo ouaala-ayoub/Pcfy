@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pc.data.models.network.IdResponse
+import com.example.pc.data.models.network.User
 import com.example.pc.data.repositories.UserRepository
 import com.example.pc.utils.getError
 import okhttp3.RequestBody
@@ -19,6 +20,28 @@ class UserModel(private val repository: UserRepository) : ViewModel() {
 
     private val userAdded = MutableLiveData<String?>()
     val isTurning = MutableLiveData<Boolean>()
+
+    fun registerToken(userId: String, token: String) {
+        repository.registerToken(userId, token).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful && response.body() != null) {
+                    Log.i(TAG, "putFireBaseToken isSuccessful")
+                } else {
+                    try {
+                        val error =
+                            getError(response.errorBody()!!, response.code())
+                        Log.e(TAG, "putFireBaseToken : ${error?.message}")
+                    } catch (e: Throwable) {
+                        Log.e(TAG, "getError : ${e.message}")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "putFireBaseToken : ${t.message}")
+            }
+        })
+    }
 
     fun signUp(userToAdd: RequestBody): MutableLiveData<String?> {
 

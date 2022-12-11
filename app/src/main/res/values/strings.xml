@@ -150,5 +150,11 @@
 
     <string name="annonce_image_url">  </string>
     <string name="profile_image_url">  </string>
+
+    <string name="channel_name"> Orders Channel</string>
+    <string name="channel_description"> this channel handle orders notifications</string>
+
+    <string name="new_order">Nouvelle commande</string>
+    <string name="notification_body">Voir une nouvelle commande pour l\'annonce %1$s</string>
 </resources>
 

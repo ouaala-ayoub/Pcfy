@@ -52,6 +52,7 @@ dependencies {
     //firebase
     implementation platform('com.google.firebase:firebase-bom:31.0.1')
     implementation 'com.google.firebase:firebase-messaging:23.1.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
 
     //test
     testImplementation 'junit:junit:4.13.2'

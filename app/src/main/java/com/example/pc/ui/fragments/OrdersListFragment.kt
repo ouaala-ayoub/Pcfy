@@ -26,6 +26,7 @@ class OrdersListFragment : Fragment() {
 
     private lateinit var binding: FragmentOrdersListBinding
     private lateinit var userId: String
+    private var orderId: String? = null
     private lateinit var fullOrdersModel: FullOrdersModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class OrdersListFragment : Fragment() {
 
         fullOrdersModel = FullOrdersModel(OrdersRepository(RetrofitService.getInstance()))
         userId = activity.userId
+        orderId = activity.orderId
 
         super.onCreate(savedInstanceState)
     }
@@ -43,6 +45,8 @@ class OrdersListFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentOrdersListBinding.inflate(inflater, container, false)
+
+        orderId?.let { goToOrderPage(it) }
 
         fullOrdersModel.apply {
             getSellerOrders(userId)

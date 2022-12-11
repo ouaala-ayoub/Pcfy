@@ -1,6 +1,7 @@
 package com.example.pc.data.remote
 
 import com.example.pc.data.models.local.OrderStatusRequest
+import com.example.pc.data.models.local.TokenRequest
 import com.example.pc.data.models.network.*
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -106,6 +107,9 @@ interface RetrofitService {
         @Path("id") userId: String,
         @Body newUserPicture: RequestBody
     ): Call<IdResponse>
+
+    @PUT("users/{id}")
+    fun putFireBaseToken(@Path("id") userId: String, @Body token: TokenRequest): Call<User>
 
     @HTTP(method = "DELETE", path = "users/{id}/profile", hasBody = true)
     fun deleteProfilePicture(

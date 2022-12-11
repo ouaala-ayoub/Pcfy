@@ -1,6 +1,7 @@
 package com.example.pc.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import com.example.pc.data.models.local.SellerType
 import com.example.pc.databinding.FragmentUserStepThreeBinding
 import com.example.pc.ui.activities.UserCreateActivity
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 
 private const val TAG = "UserStepThree"
 
@@ -28,7 +31,7 @@ class UserStepThree : Fragment(), HandleSubmitInterface {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentUserStepThreeBinding.inflate(inflater, container, false)
         setTheTypeEditText()

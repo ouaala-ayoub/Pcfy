@@ -62,6 +62,9 @@ data class Seller(
     @SerializedName("name")
     val name: String,
 
+//    @SerializedName("token")
+//    val token: String,
+
     @SerializedName("picture")
     val picture: String?
 )

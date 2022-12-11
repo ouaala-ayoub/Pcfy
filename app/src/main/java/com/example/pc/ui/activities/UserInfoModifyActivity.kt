@@ -84,6 +84,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                             brand = organisationNameEditText.text.toString(),
                                             password = oldUser.password,
                                             imageUrl = oldUser.imageUrl,
+                                            token = oldUser.token
                                         )
 
                                         updateUser(userToModifyId, newUser)

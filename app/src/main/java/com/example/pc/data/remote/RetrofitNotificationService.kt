@@ -1,7 +1,8 @@
 package com.example.pc.data.remote
 
+import com.example.pc.data.models.local.MessageResponse
 import com.example.pc.data.models.network.Message
-import com.example.pc.utils.TEST_KEY
+import com.example.pc.utils.SERVER_KEY
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -13,11 +14,11 @@ import retrofit2.http.POST
 interface RetrofitNotificationService {
 
     @Headers(
-        "Content-Type: application/json",
-        "Authorization: Bearer $TEST_KEY"
+        "Content-Type:application/json",
+        "Authorization:key=$SERVER_KEY"
     )
     @POST("send")
-    fun sendMessage(@Body message: Message): Call<Name>
+    fun sendMessage(@Body message: Message): Call<MessageResponse>
 
     companion object {
 
@@ -37,8 +38,3 @@ interface RetrofitNotificationService {
         }
     }
 }
-
-data class Name(
-    @SerializedName("name")
-    val name: String
-)

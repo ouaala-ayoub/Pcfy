@@ -14,25 +14,25 @@
         android:id="@+id/error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:textSize="20sp"
-        android:visibility="invisible"
-        android:layout_gravity="center"/>
+        android:visibility="invisible" />
 
     <LinearLayout
         android:id="@+id/disconnected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical"
-        android:visibility="invisible"
-        android:layout_gravity="center">
+        android:visibility="invisible">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/no_user_connected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/pas_d_utilisateur_connect"
             android:textSize="20sp"
-            android:layout_gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/login_from_user_info"
             app:layout_constraintHorizontal_bias="0.503"
@@ -44,12 +44,12 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:clickable="true"
             android:focusable="true"
             android:minHeight="48dp"
             android:text="@string/se_connecter"
-            android:layout_gravity="center"
             android:textColor="@color/beautiful_blue"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,6 +77,7 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -255,6 +256,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

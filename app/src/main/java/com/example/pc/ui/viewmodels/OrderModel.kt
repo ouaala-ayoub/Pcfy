@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pc.data.models.local.MessageResponse
 import com.example.pc.data.models.network.IdResponse
+import com.example.pc.data.models.network.Message
 import com.example.pc.data.models.network.User
 import com.example.pc.data.models.network.UserShippingInfos
+import com.example.pc.data.remote.RetrofitNotificationService
 import com.example.pc.data.repositories.OrdersRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,7 +20,7 @@ private const val TAG = "OrderModel"
 class OrderModel(
     private val individualPrice: Float,
 
-) : ViewModel() {
+    ) : ViewModel() {
     val quantity = MutableLiveData(1)
     val price = MutableLiveData(1 * individualPrice)
 
@@ -49,6 +52,22 @@ class OrderModel(
         }
     }
 
+    fun notifySeller(message: Message) {
+        RetrofitNotificationService.getInstance().sendMessage(message)
+            .enqueue(object : Callback<MessageResponse> {
+                override fun onResponse(
+                    call: Call<MessageResponse>,
+                    response: Response<MessageResponse>
+                ) {
+                    Log.d(TAG, "onResponse : ${response.body()}")
+                }
+
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
+                }
+
+            })
+    }
 
     private fun validateTheData(name: String, phoneNumber: String, address: String): Boolean {
         val validPhone = phoneNumber.length == 10 && phoneNumber.matches(".*[0-9].*".toRegex())

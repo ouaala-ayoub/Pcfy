@@ -19,10 +19,11 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
     val annonceToShow = MutableLiveData<Annonce?>()
     val isAddedToFav = MutableLiveData<Boolean>()
     val seller = MutableLiveData<User>()
+    val user = MutableLiveData<User>()
     val addedFavouriteToUser = MutableLiveData<Boolean>()
     var deletedWithSuccess = MutableLiveData<Boolean>()
     val userModified = MutableLiveData<Boolean>()
-    val orderAdded = MutableLiveData<Boolean>()
+    val orderAdded = MutableLiveData<String?>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<String>()
 
@@ -91,7 +92,7 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
         )
     }
 
-    fun getSellerById(userId: String) {
+    fun getSellerById(userId: String, target: String) {
 
         isProgressBarTurning.postValue(true)
 
@@ -100,7 +101,12 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "response body: ${response.body()}")
                     isProgressBarTurning.postValue(false)
-                    seller.postValue(response.body())
+                    if(target == "user"){
+                        user.postValue(response.body())
+                    } else if (target == "seller"){
+                        seller.postValue(response.body())
+                    }
+
                 } else {
                     isProgressBarTurning.postValue(false)
                     Log.i(TAG, "response error body: ${response.errorBody()}")
@@ -208,18 +214,18 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
                         ))
                     }
 
-                    orderAdded.postValue(true)
+                    orderAdded.postValue(orderId)
                 } else {
                     val error = response.errorBody()?.let { getError(it, response.code()) }
                     Log.e(TAG, "addOrder onResponse: $error")
-                    orderAdded.postValue(false)
+                    orderAdded.postValue(null)
                 }
                 isProgressBarTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<IdResponse>, t: Throwable) {
                 Log.e(TAG, "addOrder onFailure: ${t.message}")
-                orderAdded.postValue(false)
+                orderAdded.postValue(null)
                 isProgressBarTurning.postValue(false)
             }
 

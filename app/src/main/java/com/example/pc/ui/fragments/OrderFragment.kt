@@ -12,10 +12,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.pc.R
-import com.example.pc.data.models.network.Customer
-import com.example.pc.data.models.network.IdResponse
-import com.example.pc.data.models.network.Order
-import com.example.pc.data.models.network.Product
+import com.example.pc.data.models.network.*
 import com.example.pc.databinding.FragmentOrderBinding
 import com.example.pc.databinding.OrderDialogViewBinding
 import com.example.pc.ui.activities.AnnonceActivity
@@ -50,7 +47,7 @@ class OrderFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentOrderBinding.inflate(inflater, container, false)
 
@@ -87,7 +84,7 @@ class OrderFragment : Fragment() {
                                                 orderModel.apply {
                                                     val orderToAdd = Order(
                                                         seller = IdResponse(
-                                                            userId
+                                                            annonce.seller.id
                                                         ),
                                                         quantity = quantity.value!!,
                                                         customer = Customer(
@@ -113,16 +110,43 @@ class OrderFragment : Fragment() {
 
                                                     orderAdded.observe(
                                                         viewLifecycleOwner
-                                                    ) { added ->
+                                                    ) { addedId ->
                                                         Log.i(
                                                             TAG,
-                                                            "onPositiveButtonClicked: order added = $added"
+                                                            "onPositiveButtonClicked: order added = $addedId"
                                                         )
 
-                                                        if (added) {
-                                                            doOnSuccess(
-                                                                ORDER_SUCCESS
+                                                        if (addedId != null) {
+//
+                                                            getSellerById(
+                                                                annonce.seller.id,
+                                                                "seller"
                                                             )
+                                                            seller.observe(viewLifecycleOwner) {
+                                                                if (it != null) {
+                                                                    val sellerToken = it.token
+                                                                    Log.i(
+                                                                        TAG,
+                                                                        "sellerToken: $sellerToken"
+                                                                    )
+                                                                    if (sellerToken != null) {
+                                                                        val message = Message(
+                                                                            Data(
+                                                                                annonce.title,
+                                                                                it.userId!!,
+                                                                                addedId
+                                                                            ),
+                                                                            it.token
+                                                                        )
+                                                                        notifySeller(message)
+                                                                        doOnSuccess(
+                                                                            ORDER_SUCCESS
+                                                                        )
+                                                                    }
+
+                                                                }
+                                                            }
+
                                                         } else {
                                                             doOnFail(ERROR_MSG)
                                                         }
@@ -170,8 +194,8 @@ class OrderFragment : Fragment() {
 
                                     order.setOnClickListener {
 
-                                        getSellerById(userId)
-                                        seller.observe(viewLifecycleOwner) { user ->
+                                        getSellerById(userId, "user")
+                                        user.observe(viewLifecycleOwner) { user ->
                                             if (user != null) {
                                                 binding.apply {
 

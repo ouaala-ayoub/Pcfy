@@ -3,6 +3,7 @@ package com.example.pc.ui.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,6 +18,8 @@ import com.example.pc.ui.fragments.UserStepTwo
 import com.example.pc.ui.viewmodels.UserModel
 import com.example.pc.utils.*
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import okhttp3.MultipartBody
 
 private const val TAG = "UserCreateActivity"
@@ -66,19 +69,26 @@ class UserCreateActivity : AppCompatActivity() {
                         userModel = UserModel(UserRepository(retrofitService))
 
                         userModel.apply {
-                            signUp(requestBody.build()).observe(this@UserCreateActivity) {
-                                if (it.isNullOrBlank()) {
-                                    //dialog ?
-                                    this@UserCreateActivity.toast(SGN_FAILED, Toast.LENGTH_LONG)
-                                    goToHomeFragment()
-                                } else {
-                                    this@UserCreateActivity.toast(
-                                        SGN_SUCCESS,
-                                        Toast.LENGTH_LONG
-                                    )
-                                    goToLoginPage()
+                            Firebase.messaging.token.addOnCompleteListener { task ->
+                                val token = task.result
+
+                                signUp(requestBody.build()).observe(this@UserCreateActivity) { userId ->
+                                    if (userId.isNullOrBlank()) {
+                                        //dialog ?
+                                        this@UserCreateActivity.toast(SGN_FAILED, Toast.LENGTH_LONG)
+                                        goToHomeFragment()
+                                    } else {
+                                        registerToken(userId, token)
+                                        this@UserCreateActivity.toast(
+                                            SGN_SUCCESS,
+                                            Toast.LENGTH_LONG
+                                        )
+                                        goToLoginPage()
+                                    }
                                 }
+
                             }
+
                             isTurning.observe(this@UserCreateActivity) { loading ->
                                 progressBar2.isVisible = loading
                                 changeUiEnabling(loading)

@@ -28,6 +28,9 @@ data class User(
     @SerializedName("createdAt")
     val createdAt: String? = null,
 
+    @SerializedName("token")
+    val token: String? = null,
+
     // ?????????
     @SerializedName("brand")
     val brand: String? = null,
