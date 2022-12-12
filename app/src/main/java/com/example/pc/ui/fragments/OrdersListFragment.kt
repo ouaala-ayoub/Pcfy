@@ -36,6 +36,8 @@ class OrdersListFragment : Fragment() {
         userId = activity.userId
         orderId = activity.orderId
 
+        Log.d(TAG, "userId : $userId , orderId: $orderId")
+
         super.onCreate(savedInstanceState)
     }
 
@@ -49,8 +51,10 @@ class OrdersListFragment : Fragment() {
         orderId?.let { goToOrderPage(it) }
 
         fullOrdersModel.apply {
+            Log.d(TAG, "onCreateView userId: $userId")
             getSellerOrders(userId)
-            sellerOrders.observe(viewLifecycleOwner) { orders ->
+            sellerOrders.observe(requireActivity()) { orders ->
+                Log.i(TAG, "orders are $orders")
                 if (orders == null) {
                     Log.i(TAG, "orders are $orders")
                     doOnFail()
@@ -67,7 +71,7 @@ class OrdersListFragment : Fragment() {
                 }
             }
 
-            isEmpty.observe(viewLifecycleOwner) {
+            isEmpty.observe(requireActivity()) {
                 binding.isOrdersEmpty.isVisible = it
             }
 

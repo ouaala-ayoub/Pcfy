@@ -3,6 +3,7 @@ package com.example.pc.data.remote
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -15,6 +16,7 @@ import com.example.pc.R
 import com.example.pc.data.models.local.TokenRequest
 import com.example.pc.data.models.network.BodyX
 import com.example.pc.data.models.network.User
+import com.example.pc.ui.activities.FullOrdersActivity
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.LocalStorage
 import com.example.pc.utils.getError
@@ -45,12 +47,14 @@ class PushNotificationService : FirebaseMessagingService() {
         val orderId = message.data["orderId"].toString()
         val sellerId = message.data["sellerId"].toString()
 
+        Log.i(TAG, "onMessageReceived sellerId: $sellerId and orderId: $orderId")
+
         createNotificationChannel()
         sendNotification(
             notificationTitle,
             notificationBody,
-            orderId,
-            sellerId
+            sellerId,
+            orderId
         )
 
     }
@@ -62,13 +66,19 @@ class PushNotificationService : FirebaseMessagingService() {
         orderId: String
     ) {
 
-        val intent = Intent().apply {
+        val ordersIntent = Intent(baseContext, FullOrdersActivity::class.java).apply {
             putExtra("id", sellerId)
             putExtra("orderId", orderId)
         }
 
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent? =
+            TaskStackBuilder.create(applicationContext).run {
+                addNextIntentWithParentStack(ordersIntent)
+                getPendingIntent(
+                    0,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            }
 
         val builder = NotificationCompat.Builder(baseContext, CHANNEL_ID)
             //to change with app icon
@@ -77,7 +87,7 @@ class PushNotificationService : FirebaseMessagingService() {
             .setContentText(textContent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+//            .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(baseContext)) {
             val notificationId = System.currentTimeMillis().toInt()

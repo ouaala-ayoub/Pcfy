@@ -29,8 +29,8 @@ class OrderPageModel(private val ordersRepository: OrdersRepository) : ViewModel
                 if (response.isSuccessful && response.body() != null) {
                     order.postValue(response.body())
                 } else {
-                    val error = getError(response.errorBody()!!, response.code())
-                    Log.i(TAG, "onResponse error : $error")
+//                    val error = getError(response.errorBody()!!, response.code())
+//                    Log.i(TAG, "onResponse error : ${error?.message}")
                     order.postValue(null)
                 }
                 isTurning.postValue(false)

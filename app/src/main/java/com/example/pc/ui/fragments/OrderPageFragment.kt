@@ -55,6 +55,8 @@ class OrderPageFragment : Fragment() {
         orderPageModel.apply {
             binding.apply {
 
+                Log.d(TAG, "onCreateView orderId: ${this@OrderPageFragment.orderId}")
+
                 swiperefresh.setOnRefreshListener {
                     getOrderById(this@OrderPageFragment.orderId)
                     swiperefresh.isRefreshing = false

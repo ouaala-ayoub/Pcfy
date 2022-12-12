@@ -23,6 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.FullOrdersActivity"
+            android:parentActivityName=".ui.activities.MainActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.UserInfoModifyActivity"

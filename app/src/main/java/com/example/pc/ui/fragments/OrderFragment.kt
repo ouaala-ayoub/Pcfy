@@ -129,6 +129,10 @@ class OrderFragment : Fragment() {
                                                                         TAG,
                                                                         "sellerToken: $sellerToken"
                                                                     )
+                                                                    Log.d(
+                                                                        TAG,
+                                                                        "seller : ${it.userId}"
+                                                                    )
                                                                     if (sellerToken != null) {
                                                                         val message = Message(
                                                                             Data(
