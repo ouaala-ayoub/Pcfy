@@ -98,16 +98,26 @@ class HomeFragment : Fragment() {
             val orientation = resources.configuration.orientation
             val isTablet = resources.getBoolean(R.bool.isTablet)
 
-            if (isTablet){
+            if (isTablet) {
                 multiplier *= 2
             }
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 multiplier *= 2
             }
 
             vAppBar.addOnOffsetChangedListener { _, verticalOffset ->
-                swiperefresh.isEnabled = verticalOffset == 0
+                val isScreenOnTop = verticalOffset == 0
+                Log.d(TAG, "addOnOffsetChangedListener isScreenOnTop : $isScreenOnTop")
+                swiperefresh.isEnabled = isScreenOnTop
             }
+            popularsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    val isRvDragging = newState == RecyclerView.SCROLL_STATE_DRAGGING
+                    swiperefresh.isEnabled = !isRvDragging
+                    Log.d(TAG, "onScrollStateChanged isRvDragging : $isRvDragging")
+                }
+            })
 
             //setting the categories list
             categoryRv.apply {
@@ -153,10 +163,10 @@ class HomeFragment : Fragment() {
                 updateIsEmpty()
                 emptyMsg.observe(viewLifecycleOwner) { msg ->
                     Log.i(TAG, "updateIsEmpty: $msg")
-                    if(msg.isEmpty()){
+                    if (msg.isEmpty()) {
                         binding!!.noAnnonce.visibility = View.GONE
                     } else {
-                        if (msg == com.example.pc.utils.ERROR_MSG){
+                        if (msg == com.example.pc.utils.ERROR_MSG) {
                             binding!!.apply {
                                 popularTv.visibility = View.GONE
                                 foruTv.visibility = View.GONE
