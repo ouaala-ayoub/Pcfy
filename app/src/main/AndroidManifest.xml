@@ -20,41 +20,51 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.activities.RequestsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.FullOrdersActivity"
             android:parentActivityName=".ui.activities.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.UserInfoModifyActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.AnnonceModifyActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.UserAnnoncesActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.NoActionbar" />
+            android:theme="@style/AppTheme.NoActionbar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.UserCreateActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
             android:parentActivityName=".ui.activities.MainActivity" />
         <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="false"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.AnnonceActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -19,7 +19,7 @@ class FullOrdersActivity : AppCompatActivity() {
 
 //        binding = ActivityFullOrdersBinding.inflate(layoutInflater)
         userId = intent.getStringExtra("id") as String
-        orderId = intent.getStringExtra("orderId") as String
+        orderId = intent.getSerializableExtra("orderId") as String?
 
         Log.d(TAG, "userId : $userId , orderId: $orderId")
 

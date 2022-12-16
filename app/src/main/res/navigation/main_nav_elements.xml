@@ -66,7 +66,7 @@
         </fragment>
         <fragment
             android:id="@+id/userControlerFragment"
-            android:name="com.example.pc.ui.fragments.UserControlerFragment"
+            android:name="com.example.pc.ui.fragments.UserControllerFragment"
             android:label="fragment_user_controler"
             tools:layout="@layout/fragment_user_controler" >
             <argument

@@ -1,3 +1,6 @@
 <resources>
     <dimen name="activity_horizontal_margin">48dp</dimen>
+    <dimen name="annonce_image_height">350dp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="single_image_modify">150dp</dimen>
 </resources>

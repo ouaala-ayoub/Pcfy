@@ -28,4 +28,7 @@
     <dimen name="check_mark_size">120dp</dimen>
     <dimen name="popular_height">180dp</dimen>
     <dimen name="popular_width">150dp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="single_image_modify">150dp</dimen>
+    <bool name="isTablet">false</bool>
 </resources>

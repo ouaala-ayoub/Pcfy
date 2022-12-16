@@ -23,9 +23,6 @@ import com.example.pc.databinding.ActivityMainBinding
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.ktx.messaging
 import com.squareup.picasso.Picasso
 
 private const val TAG = "MainActivity"
@@ -37,8 +34,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
     private val retrofitService = RetrofitService.getInstance()
-    var picasso: Picasso = Picasso.get()
     private lateinit var authModel: AuthModel
+    var picasso: Picasso = Picasso.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +47,7 @@ class MainActivity : AppCompatActivity() {
         authModel = AuthModel(
             retrofitService,
             LoginRepository(retrofitService, this)
-        )
-        authModel.auth(this@MainActivity)
+        ).apply { auth(this@MainActivity) }
 
         bottomNav = findViewById(R.id.bottom_nav)
         val navHost =
@@ -61,33 +57,40 @@ class MainActivity : AppCompatActivity() {
         bottomNav.setupWithNavController(navController)
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val isNightTheme = prefs.getBoolean(getString(R.string.dark_mode), false)
-
-        Log.i(TAG, "current theme: $isNightTheme")
-
-
-        when (isNightTheme) {
-            false -> {
-                supportActionBar?.setBackgroundDrawable(
+        //
+//        Log.i(TAG, "current theme: $isNightTheme")
+//
+//
+        supportActionBar?.setBackgroundDrawable(
                     ColorDrawable(
                         (ContextCompat.getColor(
                             this,
-                            R.color.white_darker
+                            R.color.main_theme
                         ))
                     )
                 )
+        when (prefs.getBoolean(getString(R.string.dark_mode), false)) {
+            false -> {
+//                supportActionBar?.setBackgroundDrawable(
+//                    ColorDrawable(
+//                        (ContextCompat.getColor(
+//                            this,
+//                            R.color.white_darker
+//                        ))
+//                    )
+//                )
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
 
             true -> {
-                supportActionBar?.setBackgroundDrawable(
-                    ColorDrawable(
-                        (ContextCompat.getColor(
-                            this,
-                            R.color.even_darker_grey
-                        ))
-                    )
-                )
+//                supportActionBar?.setBackgroundDrawable(
+//                    ColorDrawable(
+//                        (ContextCompat.getColor(
+//                            this,
+//                            R.color.even_darker_grey
+//                        ))
+//                    )
+//                )
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
@@ -109,8 +112,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -156,6 +157,5 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         overridePendingTransition(0, 0)
     }
-
 
 }

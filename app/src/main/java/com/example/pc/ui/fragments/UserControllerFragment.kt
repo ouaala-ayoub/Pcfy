@@ -11,17 +11,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pc.R
 import com.example.pc.databinding.FragmentUserControlerBinding
-import com.example.pc.ui.activities.FullOrdersActivity
-import com.example.pc.ui.activities.RequestsActivity
-import com.example.pc.ui.activities.UserAnnoncesActivity
-import com.example.pc.ui.activities.UserInfoModifyActivity
+import com.example.pc.ui.activities.*
 
-class UserControlerFragment : Fragment() {
+class UserControllerFragment : Fragment() {
 
     private lateinit var binding: FragmentUserControlerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val activity = requireActivity() as MainActivity
+        activity.supportActionBar?.hide()
     }
 
     override fun onCreateView(
@@ -31,7 +31,7 @@ class UserControlerFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentUserControlerBinding.inflate(inflater, container, false)
 
-        val args: UserControlerFragmentArgs by navArgs()
+        val args: UserControllerFragmentArgs by navArgs()
         val userId = args.userId
 
         binding.apply {
@@ -57,7 +57,7 @@ class UserControlerFragment : Fragment() {
 
     private fun goToPasswordChange(userId: String) {
         val action =
-            UserControlerFragmentDirections.actionUserControlerFragmentToPasswordChangeFragment(
+            UserControllerFragmentDirections.actionUserControlerFragmentToPasswordChangeFragment(
                 userId
             )
         findNavController().navigate(action)

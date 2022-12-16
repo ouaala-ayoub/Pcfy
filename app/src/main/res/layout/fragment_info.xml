@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:text="A propos de nous :"
+                android:textColor="@color/some_texts_color"
                 android:textSize="17sp" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

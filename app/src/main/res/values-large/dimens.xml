@@ -1,0 +1,34 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="scrol_hide">300dp</dimen>
+    <dimen name="image_size">170dp</dimen>
+    <dimen name="annonces_rv_margin">10dp</dimen>
+    <dimen name="favourites_image_size">150dp</dimen>
+    <dimen name="annonce_modify_bar_size">200dp</dimen>
+    <dimen name="category_margin">25dp</dimen>
+    <dimen name="category_card_height">80dp</dimen>
+    <dimen name="category_card_width">60dp</dimen>
+    <dimen name="category_image_size">40dp</dimen>
+    <dimen name="seller_image_size">120dp</dimen>
+    <dimen name="store_image_size">80dp</dimen>
+    <dimen name="store_height">120dp</dimen>
+    <dimen name="annonce_image_height">470dp</dimen>
+    <dimen name="annonce_size">100dp</dimen>
+    <dimen name="annonce_image_size">80dp</dimen>
+    <dimen name="arrow_size">40dp</dimen>
+    <dimen name="tab_max_width">20dp</dimen>
+    <dimen name="fav_height">30dp</dimen>
+    <dimen name="fav_width">35dp</dimen>
+    <dimen name="user_image_input_size">120dp</dimen>
+    <dimen name="buttons_height">60dp</dimen>
+    <dimen name="quantity_size">30dp</dimen>
+    <dimen name="image_modify_size">400dp</dimen>
+    <dimen name="check_mark_size">120dp</dimen>
+    <dimen name="popular_height">180dp</dimen>
+    <dimen name="popular_width">150dp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="single_image_modify">150dp</dimen>
+    <bool name="isTablet">false</bool>
+</resources>

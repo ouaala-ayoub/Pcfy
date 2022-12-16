@@ -164,7 +164,7 @@ interface RetrofitService {
 
     //to change
     @DELETE("orders/{id}")
-    fun deleteOrderById(@Path("id") orderToDeleteId: String): Call<Order>
+    fun deleteOrderById(@Path("id") orderToDeleteId: String): Call<IdResponse>
 
     companion object {
 

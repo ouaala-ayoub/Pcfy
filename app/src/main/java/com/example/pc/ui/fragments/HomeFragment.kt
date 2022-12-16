@@ -1,6 +1,7 @@
 package com.example.pc.ui.fragments
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pc.R
 import com.example.pc.data.models.local.Category
 import com.example.pc.data.models.network.Annonce
 import com.example.pc.data.models.network.CategoryEnum
@@ -92,6 +94,17 @@ class HomeFragment : Fragment() {
 
         binding!!.apply {
 
+            var multiplier = 1
+            val orientation = resources.configuration.orientation
+            val isTablet = resources.getBoolean(R.bool.isTablet)
+
+            if (isTablet){
+                multiplier *= 2
+            }
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+                multiplier *= 2
+            }
+
             vAppBar.addOnOffsetChangedListener { _, verticalOffset ->
                 swiperefresh.isEnabled = verticalOffset == 0
             }
@@ -108,7 +121,7 @@ class HomeFragment : Fragment() {
 
             //setting the annonces list
             annonceRv.apply {
-                layoutManager = GridLayoutManager(requireContext(), NUM_ROWS)
+                layoutManager = GridLayoutManager(requireContext(), NUM_ROWS * multiplier)
                 adapter = annoncesAdapter
             }
 

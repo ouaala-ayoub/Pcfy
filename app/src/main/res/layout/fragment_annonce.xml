@@ -98,7 +98,7 @@
                     android:layout_weight="1"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:textColor="@color/beautiful_blue"
+                    android:textColor="@color/main_theme"
                     android:textSize="18sp"
                     tools:text="3500dh" />
 
@@ -121,7 +121,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="Details"
-                android:textColor="@color/orange_old"
+                android:textColor="@color/some_texts_color"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -129,6 +129,7 @@
                 android:id="@+id/details_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                tools:listitem="@layout/single_detail"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp" />
 
@@ -139,7 +140,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="@string/description"
-                android:textColor="@color/orange_old"
+                android:textColor="@color/some_texts_color"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
