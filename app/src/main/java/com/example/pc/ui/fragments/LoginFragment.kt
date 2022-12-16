@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -59,8 +60,19 @@ class LoginFragment : Fragment(), View.OnClickListener {
         binding!!.passwordInput.doOnTextChanged { text, _, _, _ ->
             viewModel.passwordLiveData.value = text.toString()
         }
+
         viewModel.isValidLiveData.observe(viewLifecycleOwner) { isActive ->
             binding!!.login.isEnabled = isActive
+            if (isActive){
+                binding!!.passwordInput.setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE){
+                        performLoginAction()
+                    }
+                    true
+                }
+            } else {
+                binding!!.passwordInput.setOnEditorActionListener(null)
+            }
         }
         binding!!.login.setOnClickListener(this)
         binding!!.signUp.setOnClickListener(this)
@@ -70,43 +82,45 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         when (v?.id) {
             R.id.login -> {
-
-                viewModel.apply {
-
-                    val userName = binding!!.usernameInput.text.toString()
-                    val password = binding!!.passwordInput.text.toString()
-
-                    login(
-                        userName,
-                        password,
-                        requireActivity()
-                    ).observe(viewLifecycleOwner) {
-
-                        retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
-                            if (retrievedTokens) {
-                                requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
-                                goToMainActivity()
-                            } else {
-                                requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
-                                goToMainActivity()
-                            }
-                        }
-                    }
-
-                    getErrorMessage().observe(viewLifecycleOwner) { error ->
-                        binding!!.problemMessage.text = error
-                    }
-
-                    isTurning.observe(viewLifecycleOwner) { loading ->
-                        binding!!.loginProgressBar.isVisible = loading
-                        changeUiEnabling(loading)
-                    }
-                }
-
+                performLoginAction()
             }
             R.id.sign_up -> {
                 //sign up fragment
                 goToUserFragment()
+            }
+        }
+    }
+
+    private fun performLoginAction() {
+        viewModel.apply {
+
+            val userName = binding!!.usernameInput.text.toString()
+            val password = binding!!.passwordInput.text.toString()
+
+            login(
+                userName,
+                password,
+                requireActivity()
+            ).observe(viewLifecycleOwner) {
+
+                retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
+                    if (retrievedTokens) {
+                        requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
+                        goToMainActivity()
+                    } else {
+                        requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
+                        goToMainActivity()
+                    }
+                }
+            }
+
+            getErrorMessage().observe(viewLifecycleOwner) { error ->
+                binding!!.problemMessage.text = error
+            }
+
+            isTurning.observe(viewLifecycleOwner) { loading ->
+                binding!!.loginProgressBar.isVisible = loading
+                changeUiEnabling(loading)
             }
         }
     }
