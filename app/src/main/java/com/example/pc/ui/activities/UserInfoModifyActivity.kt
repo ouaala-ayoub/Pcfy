@@ -64,7 +64,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
                         phoneEditText.setText(oldUser.phoneNumber)
                         emailEditText.setText(oldUser.email)
                         cityEditText.setText(oldUser.city)
-                        setUpTheTypeEditText(oldUser.userType)
+                        setUpTheTypeEditText(getType(oldUser.userType.toString()))
                         organisationNameEditText.setText(oldUser.brand)
 
                         validateTheData()
@@ -80,7 +80,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                             phoneNumber = phoneEditText.text.toString(),
                                             email = emailEditText.text.toString(),
                                             city = cityEditText.text.toString(),
-                                            userType = userTypeEditText.text.toString(),
+                                            userType = getTypeRequestBody(userTypeEditText.text.toString()),
                                             brand = organisationNameEditText.text.toString(),
                                             password = oldUser.password,
                                             imageUrl = oldUser.imageUrl,
@@ -149,11 +149,33 @@ class UserInfoModifyActivity : AppCompatActivity() {
         //to change !!!!!!!!!!!!??
         //set the adapter
         val values = SellerType.values().map { sellerType ->
-            sellerType.type
+            getType(sellerType.type)
         }
 
         val adapter = ArrayAdapter(this, R.layout.list_item, values)
         (binding.userTypeTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+    }
+
+    private fun getType(valueInEnglish: String): String {
+        //to change with translation functionality
+        return when (valueInEnglish) {
+            SellerType.SOLO.type -> "Utilisteur normal"
+            SellerType.PRO.type -> "Utilisteur professionnel"
+            else -> {
+                "erreur"
+            }
+        }
+    }
+
+    private fun getTypeRequestBody(valueTranslated: String): String {
+        //to change with translation functionality
+        return when (valueTranslated) {
+            "Utilisteur normal" -> SellerType.SOLO.type
+            "Utilisteur professionnel" -> SellerType.PRO.type
+            else -> {
+                SellerType.SOLO.type
+            }
+        }
     }
 
     private fun validateTheData() {

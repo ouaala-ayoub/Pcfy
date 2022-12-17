@@ -117,6 +117,7 @@ class SellerInfoFragment : Fragment() {
 //            sellerImage to add
             if (seller.imageUrl.isNullOrBlank()) {
                 sellerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+
             } else {
                 Picasso
                     .get()

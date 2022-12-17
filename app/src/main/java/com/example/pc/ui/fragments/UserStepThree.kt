@@ -52,12 +52,12 @@ class UserStepThree : Fragment(), HandleSubmitInterface {
                     addFormDataPart("city", cityField)
                 }
                 if (typeField.isNotBlank()) {
-                    addFormDataPart("type", typeField)
+                    addFormDataPart("type", getTypeRequestBody(typeField))
                 }
                 if (organization.isNotBlank()) {
                     addFormDataPart("brand", organization)
                 }
-                for (v in linearLayout4.children){
+                for (v in linearLayout4.children) {
                     v.isEnabled = false
                 }
             }
@@ -72,10 +72,32 @@ class UserStepThree : Fragment(), HandleSubmitInterface {
         binding.userTypeTextField.editText?.setText(SellerType.SOLO.type)
 
         val values = SellerType.values().map { sellerType ->
-            sellerType.type
+            getType(sellerType.type)
         }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
         (binding.userTypeTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+    }
+
+    private fun getType(valueInEnglish: String): String {
+        //to change with translation functionality
+        return when (valueInEnglish) {
+            SellerType.SOLO.type -> "Utilisteur normal"
+            SellerType.PRO.type -> "Utilisteur professionnel"
+            else -> {
+                "erreur"
+            }
+        }
+    }
+
+    private fun getTypeRequestBody(valueTranslated: String): String {
+        //to change with translation functionality
+        return when (valueTranslated) {
+            "Utilisteur normal" -> SellerType.SOLO.type
+            "Utilisteur professionnel" -> SellerType.PRO.type
+            else -> {
+                SellerType.SOLO.type
+            }
+        }
     }
 }

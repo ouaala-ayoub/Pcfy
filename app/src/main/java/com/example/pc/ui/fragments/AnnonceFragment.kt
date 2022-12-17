@@ -120,17 +120,17 @@ class AnnonceFragment : Fragment() {
                             //the seller field
                             annonce.seller.apply {
                                 sellerName.text = this.name
+                                Log.d(TAG, "annonce.seller : $this")
                                 if (this.picture.isNullOrBlank()) {
-                                    selleerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                                    Log.d(TAG, "picture : ${this.picture}")
+                                    selleerImage
+                                        .setImageResource(R.drawable.ic_baseline_no_photography_24)
                                 }
                                 picasso
                                     .load("${USERS_AWS_S3_LINK}${this.picture}")
                                     .fit()
                                     .into(selleerImage)
                             }
-
-
-
 
                             productDescription.text = annonce.description
 
@@ -213,7 +213,6 @@ class AnnonceFragment : Fragment() {
                             }
                         }
                     }
-
 
 
                 }
