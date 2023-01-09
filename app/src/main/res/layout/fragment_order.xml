@@ -138,7 +138,6 @@
         app:layout_constraintTop_toBottomOf="@+id/materialCardView">
 
         <TextView
-            android:id="@+id/warning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -146,12 +145,32 @@
             android:textColor="@color/some_texts_color"
             android:textSize="20sp" />
         <TextView
+            android:id="@+id/warning1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:drawableStartCompat="@drawable/ic_baseline_info_24"
+            android:drawablePadding="5dp"
+            android:text="@string/warning_1"
+            android:textSize="15sp" />
+        <TextView
             android:id="@+id/warning2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="To do !!!!!"
-            android:textSize="20sp" />
+            app:drawableStartCompat="@drawable/ic_baseline_info_24"
+            android:drawablePadding="5dp"
+            android:text="@string/warning_2"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/warning3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:drawableStartCompat="@drawable/ic_baseline_info_24"
+            android:drawablePadding="5dp"
+            android:text="@string/warning_3"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout

@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_darker">#fbfbfb</color>
-    <color name="main_theme">#76b900</color>
+    <color name="main_theme">@color/some_texts_color</color>
     <color name="black_font">#211304</color>
     <color name="blacker_font">#211304</color>
     <color name="orange_font">#f7a179</color>
@@ -24,5 +24,6 @@
     <color name="background_color">@color/white_darker</color>
     <color name="blue_shade">#0000FF</color>
     <color name="nvidia_green">#76b900</color>
-    <color name="some_texts_color">#E53D37</color>
+    <color name="some_texts_color">#3052EC</color>
+    <color name="purple_primary">#8A12FA</color>
 </resources>

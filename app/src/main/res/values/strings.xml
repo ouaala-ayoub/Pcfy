@@ -156,5 +156,8 @@
 
     <string name="new_order">Nouvelle commande</string>
     <string name="notification_body">Voir une nouvelle commande pour l\'annonce %1$s</string>
+    <string name="warning_1">Rencontrer le vendeur dans un lieu public</string>
+    <string name="warning_2">Vérifiez l\'article avant de l\'acheter</string>
+    <string name="warning_3">Payez seulement après avoir récupéré l\'article</string>
 </resources>
 

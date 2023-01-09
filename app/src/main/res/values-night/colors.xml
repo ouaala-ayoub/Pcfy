@@ -4,7 +4,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_darker">#FFFCF2</color>
-    <color name="main_theme">#E53D37</color>
+    <color name="main_theme">@color/some_texts_color</color>
     <color name="grey_background">#fffcf2</color>
     <color name="grey_navigation">#cccccc</color>
     <color name="grey_primary">#35363d</color>
@@ -13,5 +13,5 @@
     <color name="even_darker_grey">#262626</color>
     <color name="color_on_primary">@color/white_darker</color>
     <color name="background_color">@color/even_darker_grey</color>
-    <color name="some_texts_color">#76b900</color>
+    <color name="some_texts_color">#3052EC</color>
 </resources>

@@ -87,7 +87,7 @@ class PushNotificationService : FirebaseMessagingService() {
             .setContentText(textContent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
-//            .setAutoCancel(true)
+            .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(baseContext)) {
             val notificationId = System.currentTimeMillis().toInt()
