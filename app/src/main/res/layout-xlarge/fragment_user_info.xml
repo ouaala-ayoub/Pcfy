@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    tools:context=".ui.fragments.UserInfoFragment">
+
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/disconnected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/no_user_connected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/pas_d_utilisateur_connect"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/login_from_user_info"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="@+id/login_from_user_info"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/login_from_user_info"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:text="@string/se_connecter"
+            android:textColor="@color/main_theme"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/no_user_connected" />
+
+    </LinearLayout>
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/user_info_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/background_color"
+        android:visibility="invisible">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarSize="0dp"
+            app:contentScrim="@color/background_color"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/image_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="80dp">
+
+                    <ImageView
+                        android:id="@+id/user_image"
+                        android:layout_width="@dimen/image_size"
+                        android:layout_height="@dimen/image_size"
+                        android:layout_gravity="top"
+                        android:contentDescription="@string/user_image"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/avatars" />
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    tools:text="ayoub ouaala" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:visibility="invisible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:elevation="0dp"
+            android:orientation="vertical">
+
+
+            <Button
+                android:id="@+id/personal_space"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:text="Espace personnel"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_person_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/main_theme"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/share"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:text="@string/partager"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_share_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/main_theme"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/website"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:text="@string/notre_site_web"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_web_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/main_theme"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/about"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:text="@string/propos"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_info_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/main_theme"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/rate"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center|start"
+                android:text="@string/ratez_notre_application"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_rate_review_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/main_theme"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/contact"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:text="@string/contactez_nous"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_contact_support_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/main_theme"
+                app:strokeColor="@color/color_on_primary" />
+
+            <Button
+                android:id="@+id/logout"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:text="@string/logout"
+                android:textAllCaps="false"
+                android:textAppearance="@style/AlataTextView"
+                android:textColor="@color/color_on_primary"
+                android:textSize="17sp"
+                app:icon="@drawable/ic_baseline_logout_24"
+                app:iconPadding="10dp"
+                app:iconTint="@color/main_theme"
+                app:strokeColor="@color/color_on_primary" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/user_info_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

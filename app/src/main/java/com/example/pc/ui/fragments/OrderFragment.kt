@@ -146,8 +146,16 @@ class OrderFragment : Fragment() {
                                                                         doOnSuccess(
                                                                             ORDER_SUCCESS
                                                                         )
+                                                                    } else {
+                                                                        doOnSuccess(
+                                                                            ORDER_SUCCESS
+                                                                        )
                                                                     }
 
+                                                                } else {
+                                                                    doOnSuccess(
+                                                                        ORDER_SUCCESS
+                                                                    )
                                                                 }
                                                             }
 

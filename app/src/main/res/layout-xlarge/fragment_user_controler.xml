@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.UserControllerFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/user_info"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="@string/mes_informations"
+            android:textAllCaps="false"
+            android:textAppearance="@style/AlataTextView"
+            android:textColor="@color/color_on_primary"
+            android:textSize="17sp"
+            app:icon="@drawable/ic_baseline_person_24"
+            app:iconPadding="10dp"
+            app:iconTint="@color/main_theme"
+            app:strokeColor="@color/color_on_primary" />
+
+        <Button
+            android:id="@+id/user_announces"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="@string/mes_annonces"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textAppearance="@style/AlataTextView"
+            android:textColor="@color/color_on_primary"
+            android:textSize="17sp"
+            app:icon="@drawable/ic_baseline_note_add_24"
+            app:iconPadding="10dp"
+            app:iconTint="@color/main_theme"
+            app:strokeColor="@color/color_on_primary" />
+
+        <Button
+            android:id="@+id/orders"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="@string/gerer_vos_commandes"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textAppearance="@style/AlataTextView"
+            android:textColor="@color/color_on_primary"
+            android:textSize="17sp"
+            app:icon="@drawable/ic_baseline_shopping_cart_24"
+            app:iconPadding="10dp"
+            app:iconTint="@color/main_theme"
+            app:strokeColor="@color/color_on_primary" />
+
+        <Button
+            android:id="@+id/buys"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="@string/mes_achats"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textAppearance="@style/AlataTextView"
+            android:textColor="@color/color_on_primary"
+            android:textSize="17sp"
+            app:icon="@drawable/ic_baseline_shopping_bag_24"
+            app:iconPadding="10dp"
+            app:iconTint="@color/main_theme"
+            app:strokeColor="@color/color_on_primary" />
+
+        <Button
+            android:id="@+id/password_change"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="@string/changer_votre_mot_de_passe"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textAppearance="@style/AlataTextView"
+            android:textColor="@color/color_on_primary"
+            android:textSize="17sp"
+            app:icon="@drawable/ic_baseline_lock_24"
+            app:iconPadding="10dp"
+            app:iconTint="@color/main_theme"
+            app:strokeColor="@color/color_on_primary" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
