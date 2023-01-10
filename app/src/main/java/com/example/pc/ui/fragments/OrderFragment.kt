@@ -197,6 +197,7 @@ class OrderFragment : Fragment() {
                                             //hardcoded the shipping price
                                             // to change
                                             val priceWithShipping = price + 50
+                                            Log.d(TAG, "priceWithShipping: $priceWithShipping")
                                             orderPrice.text = priceWithShipping.toString()
                                         }
                                         quantity.observe(viewLifecycleOwner) { quantity ->

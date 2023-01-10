@@ -175,7 +175,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
     private fun changeUiEnabling(loading: Boolean) {
         binding?.apply {
-            for (v in linearLayout.children) {
+            for (v in linearLayoutForm.children) {
                 v.isEnabled = !loading
             }
         }
@@ -226,11 +226,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
     private fun showForm() {
         binding!!.apply {
-            userInfoAppBar.apply {
-                isVisible = true
-                isActivated = true
-            }
-            scrollView.apply {
+            linearLayoutForm?.apply {
                 isActivated = true
                 isVisible = true
             }
