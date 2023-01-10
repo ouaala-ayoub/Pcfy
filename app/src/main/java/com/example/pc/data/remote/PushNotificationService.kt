@@ -17,8 +17,10 @@ import com.example.pc.data.models.local.TokenRequest
 import com.example.pc.data.models.network.BodyX
 import com.example.pc.data.models.network.User
 import com.example.pc.ui.activities.FullOrdersActivity
+import com.example.pc.ui.activities.LoginActivity
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.LocalStorage
+import com.example.pc.utils.NON_AUTHENTICATED
 import com.example.pc.utils.getError
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -49,13 +51,36 @@ class PushNotificationService : FirebaseMessagingService() {
 
         Log.i(TAG, "onMessageReceived sellerId: $sellerId and orderId: $orderId")
 
-        createNotificationChannel()
-        sendNotification(
-            notificationTitle,
-            notificationBody,
-            sellerId,
-            orderId
-        )
+
+
+        val tokens = LocalStorage.getTokens(baseContext)
+        RetrofitService.getInstance().auth(tokens).enqueue(object : Callback<BodyX?> {
+
+            override fun onResponse(call: Call<BodyX?>, response: Response<BodyX?>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val auth = response.body()
+                    createNotificationChannel()
+                    sendNotification(
+                        notificationTitle,
+                        notificationBody,
+                        sellerId,
+                        orderId
+                    )
+                    if (auth != null) {
+                        val newAccessToken = auth.accessToken
+                        if (newAccessToken != null) {
+                            LocalStorage.storeAccessToken(baseContext, newAccessToken)
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "non authenticated")
+                }
+            }
+
+            override fun onFailure(call: Call<BodyX?>, t: Throwable) {
+                Log.e(TAG, "auth onFailure: ${t.message}")
+            }
+        })
 
     }
 
@@ -71,7 +96,7 @@ class PushNotificationService : FirebaseMessagingService() {
             putExtra("orderId", orderId)
         }
 
-        val pendingIntent: PendingIntent? =
+        val pendingOrderIntent: PendingIntent? =
             TaskStackBuilder.create(applicationContext).run {
                 addNextIntentWithParentStack(ordersIntent)
                 getPendingIntent(
@@ -86,16 +111,19 @@ class PushNotificationService : FirebaseMessagingService() {
             .setContentTitle(textTitle)
             .setContentText(textContent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(pendingOrderIntent)
             .setAutoCancel(true)
 
-        with(NotificationManagerCompat.from(baseContext)) {
-            val notificationId = System.currentTimeMillis().toInt()
-            Log.i(TAG, "notificationId : $notificationId")
-            // notificationId is a unique int for each notification that you must define
-            notify(notificationId, builder.build())
-        }
+        buildNotification(builder)
     }
+
+    private fun buildNotification(builder: NotificationCompat.Builder) {
+        with(NotificationManagerCompat.from(baseContext)) {
+        val notificationId = System.currentTimeMillis().toInt()
+        Log.i(TAG, "notificationId : $notificationId")
+        // notificationId is a unique int for each notification that you must define
+        notify(notificationId, builder.build())
+    }}
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
