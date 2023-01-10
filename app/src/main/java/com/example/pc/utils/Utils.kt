@@ -29,8 +29,6 @@ const val BASE_AWS_S3_LINK = "https://pcfy.s3.eu-west-3.amazonaws.com/"
 const val USERS_AWS_S3_LINK = "https://pcfy-profiles.s3.eu-west-3.amazonaws.com/"
 const val ERROR_MSG = "Erreur inattendue"
 const val NON_AUTHENTICATED = "Utilisateur non authentifié"
-const val SERVER_KEY =
-    "AAAApNDBs8k:APA91bHoGeyh0K1pbjbeFRpqfGeTbnaDLE3ntcVlxdOdDu3-2z-E3zS_NSsUOnGIz1-vgGvRy2tT0g9r4WY7vRBJ39NOsSbVSXzLH_lM2L18WEM_UbAqyrd3LnTebX8Scrd5nFH4an3a"
 
 interface OnDialogClicked {
     fun onPositiveButtonClicked()

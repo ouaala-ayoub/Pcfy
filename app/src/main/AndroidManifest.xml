@@ -18,6 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="FIREBASE_KEY"
+            android:value="${FIREBASE_KEY}" />
+
         <activity
             android:name=".ui.activities.RequestsActivity"
             android:exported="false"

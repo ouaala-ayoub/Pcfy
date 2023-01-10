@@ -52,8 +52,9 @@ class OrderModel(
         }
     }
 
-    fun notifySeller(message: Message) {
-        RetrofitNotificationService.getInstance().sendMessage(message)
+    fun notifySeller(message: Message, fireBaseKey: String) {
+        RetrofitNotificationService.getInstance()
+            .sendMessage(message, fireBaseKey = "key=$fireBaseKey")
             .enqueue(object : Callback<MessageResponse> {
                 override fun onResponse(
                     call: Call<MessageResponse>,

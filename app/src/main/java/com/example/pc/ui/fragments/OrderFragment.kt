@@ -1,6 +1,7 @@
 package com.example.pc.ui.fragments
 
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -134,6 +135,13 @@ class OrderFragment : Fragment() {
                                                                         "seller : ${it.userId}"
                                                                     )
                                                                     if (sellerToken != null) {
+                                                                        val fireBaseKey =
+                                                                            getFirebaseKey()
+
+                                                                        Log.d(
+                                                                            TAG,
+                                                                            "fireBaseKey: $fireBaseKey"
+                                                                        )
                                                                         val message = Message(
                                                                             Data(
                                                                                 annonce.title,
@@ -142,7 +150,10 @@ class OrderFragment : Fragment() {
                                                                             ),
                                                                             it.token
                                                                         )
-                                                                        notifySeller(message)
+                                                                        notifySeller(
+                                                                            message,
+                                                                            fireBaseKey
+                                                                        )
                                                                         doOnSuccess(
                                                                             ORDER_SUCCESS
                                                                         )
@@ -273,6 +284,20 @@ class OrderFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun getFirebaseKey(): String {
+        return try {
+            val ai = requireContext().packageManager.getApplicationInfo(
+                requireContext().packageName,
+                PackageManager.GET_META_DATA
+            ).metaData.get("FIREBASE_KEY")
+
+            ai.toString()
+        } catch (e: Throwable) {
+            Log.e(TAG, "getFirebaseKey: ${e.message}")
+            "key_not_found"
+        }
     }
 
 
