@@ -1,5 +1,6 @@
 package com.example.pc.ui.fragments
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -21,6 +22,12 @@ import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.ui.viewmodels.OrderModel
 import com.example.pc.utils.*
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.squareup.picasso.Picasso
 
 private const val ERROR_AUTH = "Erreur d'authentification"
@@ -29,6 +36,7 @@ private const val TAG = "OrderFragment"
 
 class OrderFragment : Fragment() {
 
+    private var mInterstitialAd: InterstitialAd? = null
     private lateinit var viewModel: AnnonceModel
     private lateinit var authModel: AuthModel
     private lateinit var orderModel: OrderModel
@@ -54,14 +62,13 @@ class OrderFragment : Fragment() {
 
         authModel.apply {
             auth.observe(viewLifecycleOwner) {
-
+                initialiseAdd()
                 if (isAuth()) {
                     val userId = getUserId()!!
 
                     binding.apply {
 
                         viewModel.apply {
-
 
                             isTurning.observe(viewLifecycleOwner) { loading ->
                                 isProgressBarTurning.observe(viewLifecycleOwner) { annonceLoading ->
@@ -82,7 +89,9 @@ class OrderFragment : Fragment() {
                                         requireContext(),
                                         object : OnDialogClicked {
                                             override fun onPositiveButtonClicked() {
+                                                showAdd()
                                                 orderModel.apply {
+                                                    showAdd()
                                                     val orderToAdd = Order(
                                                         seller = IdResponse(
                                                             annonce.seller.id
@@ -118,7 +127,7 @@ class OrderFragment : Fragment() {
                                                         )
 
                                                         if (addedId != null) {
-//
+
                                                             getSellerById(
                                                                 annonce.seller.id,
                                                                 "seller"
@@ -285,6 +294,67 @@ class OrderFragment : Fragment() {
 
         return binding.root
     }
+
+    private fun initialiseAdd() {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(
+            requireContext(),
+            INTERSTITIAL_ORDER_DONE_ADD_ID,
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d(TAG, "onAdFailedToLoad ${adError.message}")
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d(TAG, "Ad was loaded ${interstitialAd.responseInfo}")
+                    mInterstitialAd = interstitialAd
+
+//                    showAdd()
+                }
+            })
+
+        mInterstitialAd?.fullScreenContentCallback = object :FullScreenContentCallback() {
+            override fun onAdClicked() {
+                // Called when a click is recorded for an ad.
+                super.onAdClicked()
+                Log.d(TAG, "Ad was clicked.")
+            }
+
+            override fun onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                Log.d(TAG, "Ad dismissed fullscreen content.")
+                mInterstitialAd = null
+            }
+
+            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                // Called when ad fails to show.
+                Log.e(TAG, "Ad failed to show fullscreen content error ${p0.message}.")
+                mInterstitialAd = null
+            }
+
+            override fun onAdImpression() {
+                // Called when an impression is recorded for an ad.
+                Log.d(TAG, "Ad recorded an impression.")
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                // Called when ad is shown.
+                Log.d(TAG, "Ad showed fullscreen content.")
+            }
+        }
+    }
+
+    private fun showAdd() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.show(requireContext() as Activity)
+            Log.d(TAG, "mInterstitialAd showed")
+        } else {
+            Log.d(TAG, "The interstitial ad wasn't ready yet.")
+        }
+    }
+
 
     private fun getFirebaseKey(): String {
         return try {

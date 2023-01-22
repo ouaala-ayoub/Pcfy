@@ -107,7 +107,7 @@ class SearchFragment : Fragment() {
                     updateSearchMessage()
                 }
 
-                priceRange.addOnChangeListener { slider, value, fromUser ->
+                priceRange.addOnChangeListener { _, value, _ ->
                     Log.i(TAG, "getMaxPrice slider: $value")
                     getMaxPrice(value)
 

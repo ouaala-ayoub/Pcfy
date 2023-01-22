@@ -52,7 +52,9 @@ class UserAnnoncesFragment : Fragment() {
             UserInfoRepository(
                 retrofitService,
             )
-        )
+        ).also {
+            it.initialiseAdd(requireContext())
+        }
     }
 
     override fun onCreateView(
@@ -62,6 +64,8 @@ class UserAnnoncesFragment : Fragment() {
         // Inflate the layout for this fragment
         currentTokens = LocalStorage.getTokens(requireActivity())
         binding = FragmentUserAnnoncesBinding.inflate(inflater, container, false)
+
+//        userAnnoncesModel.showAdd(requireContext())
 
         val adapter = FavouritesAdapter(
 
@@ -80,8 +84,6 @@ class UserAnnoncesFragment : Fragment() {
                                 userAnnoncesModel.apply {
                                     //delete then observe the deleted Boolean
                                     deleteAnnonce(currentTokens, annonceId)
-
-
                                 }
                             }
 

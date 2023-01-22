@@ -23,6 +23,10 @@
             android:name="FIREBASE_KEY"
             android:value="${FIREBASE_KEY}" />
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8302914035567843~9533006982"/>
+
         <activity
             android:name=".ui.activities.RequestsActivity"
             android:exported="false"

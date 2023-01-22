@@ -22,6 +22,7 @@ import com.example.pc.data.repositories.LoginRepository
 import com.example.pc.databinding.ActivityMainBinding
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.toast
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
 
@@ -39,6 +40,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //initialise mobileAds
+        //weird bug
+        MobileAds.initialize(this)
 
 //        picasso = Picasso.get()
         binding = ActivityMainBinding.inflate(layoutInflater)

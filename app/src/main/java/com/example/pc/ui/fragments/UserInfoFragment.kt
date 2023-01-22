@@ -226,7 +226,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
 
     private fun showForm() {
         binding!!.apply {
-            linearLayoutForm?.apply {
+            linearLayoutForm.apply {
                 isActivated = true
                 isVisible = true
             }

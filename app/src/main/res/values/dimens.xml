@@ -31,4 +31,5 @@
     <dimen name="text_size">18sp</dimen>
     <dimen name="single_image_modify">150dp</dimen>
     <bool name="isTablet">false</bool>
+    <dimen name="add_size">100dp</dimen>
 </resources>

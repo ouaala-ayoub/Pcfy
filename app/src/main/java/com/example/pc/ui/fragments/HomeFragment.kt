@@ -25,6 +25,7 @@ import com.example.pc.ui.adapters.AnnoncesAdapter
 import com.example.pc.ui.adapters.CategoryAdapter
 import com.example.pc.ui.adapters.PopularsAdapter
 import com.example.pc.ui.viewmodels.HomeModel
+import com.google.android.gms.ads.AdRequest
 import com.google.android.material.appbar.AppBarLayout
 
 private const val NUM_ROWS = 2
@@ -93,6 +94,10 @@ class HomeFragment : Fragment() {
         )
 
         binding!!.apply {
+
+            val adRequest = AdRequest.Builder().build()
+            Log.d(TAG, "adRequest: $adRequest")
+            adView?.loadAd(adRequest)
 
             var multiplier = 1
             val orientation = resources.configuration.orientation

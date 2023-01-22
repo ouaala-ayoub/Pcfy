@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.pc.R
 import com.example.pc.databinding.SingleImageModifyBinding
 import com.example.pc.utils.BASE_AWS_S3_LINK

@@ -24,7 +24,11 @@
             android:lines="2"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="TextView" />
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="TextView" />
 
         <TextView
             android:id="@+id/quantity"
@@ -33,7 +37,7 @@
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="2" />
+            tools:text="2" />
 
         <ImageView
             android:id="@+id/order_status"

@@ -22,6 +22,7 @@ import com.example.pc.ui.adapters.ImagesAdapter
 import com.example.pc.ui.viewmodels.AnnonceModel
 import com.example.pc.ui.viewmodels.AuthModel
 import com.example.pc.utils.*
+import com.google.android.gms.ads.AdRequest
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 
@@ -55,14 +56,17 @@ class AnnonceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        val adRequest = AdRequest.Builder().build()
         binding = FragmentAnnonceBinding.inflate(
             inflater,
             container,
             false
-        )
+        ).apply { adView?.loadAd(adRequest) }
+
 
         binding!!.apply {
             viewModel.apply {
+
 
                 getAnnonceById(annonceId)
 

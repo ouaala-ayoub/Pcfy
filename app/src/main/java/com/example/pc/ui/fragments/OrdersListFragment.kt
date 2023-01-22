@@ -32,7 +32,9 @@ class OrdersListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val activity = requireActivity() as FullOrdersActivity
 
-        fullOrdersModel = FullOrdersModel(OrdersRepository(RetrofitService.getInstance()))
+        fullOrdersModel = FullOrdersModel(OrdersRepository(RetrofitService.getInstance())).also {
+            it.initialiseAdd(requireContext())
+        }
         userId = activity.userId
         orderId = activity.orderId
 
@@ -63,6 +65,7 @@ class OrdersListFragment : Fragment() {
                         adapter =
                             OrdersFullAdapter(orders, object : OrdersShortAdapter.OnOrderClicked {
                                 override fun onOrderClicked(orderId: String) {
+                                    showAdd(requireContext())
                                     goToOrderPage(orderId)
                                 }
                             })

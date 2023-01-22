@@ -14,8 +14,20 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/commander_maintenant"
         android:src="@drawable/ic_baseline_shopping_cart_24"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adView"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -24,7 +36,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -129,9 +141,9 @@
                 android:id="@+id/details_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/single_detail"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp" />
+                android:paddingEnd="10dp"
+                tools:listitem="@layout/single_detail" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -225,7 +237,6 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 
     <ProgressBar
         android:id="@+id/annonce_progress_bar"

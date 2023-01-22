@@ -82,6 +82,6 @@ dependencies {
     //shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-    //glide
-    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    //ad mob
+    implementation 'com.google.android.gms:play-services-ads:21.4.0'
 }
