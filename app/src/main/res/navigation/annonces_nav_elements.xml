@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/userAnnoncesFragment"
-        android:name="com.example.pc.ui.fragments.UserAnnoncesFragment"
+        android:name="alpha.company.pc.ui.fragments.UserAnnoncesFragment"
         android:label="fragment_user_annonces"
         tools:layout="@layout/fragment_user_annonces" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderPageFragment2"
-        android:name="com.example.pc.ui.fragments.OrderPageFragment"
+        android:name="alpha.company.pc.ui.fragments.OrderPageFragment"
         android:label="fragment_order_page"
         tools:layout="@layout/fragment_order_page" >
         <argument

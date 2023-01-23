@@ -6,12 +6,12 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.pc.ui.fragments.HomeFragment"
+        android:name="alpha.company.pc.ui.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/favouritesFragment"
-        android:name="com.example.pc.ui.fragments.FavouritesFragment"
+        android:name="alpha.company.pc.ui.fragments.FavouritesFragment"
         android:label="fragment_favourites"
         tools:layout="@layout/fragment_favourites" >
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/createAnnonceFragment"
-        android:name="com.example.pc.ui.fragments.CreateAnnonceFragment"
+        android:name="alpha.company.pc.ui.fragments.CreateAnnonceFragment"
         android:label="CreateAnnonceFragment" >
         <action
             android:id="@+id/action_createAnnonceFragment_to_homeFragment"
@@ -28,13 +28,13 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.pc.ui.fragments.SearchFragment"
+        android:name="alpha.company.pc.ui.fragments.SearchFragment"
         android:label="SearchFragment" />
     <navigation android:id="@+id/userInfo"
         app:startDestination="@id/userInfoFragment">
         <fragment
             android:id="@+id/userInfoFragment"
-            android:name="com.example.pc.ui.fragments.UserInfoFragment"
+            android:name="alpha.company.pc.ui.fragments.UserInfoFragment"
             android:label="fragment_user_info"
             tools:layout="@layout/fragment_user_info">
             <action
@@ -49,12 +49,12 @@
         </fragment>
         <fragment
             android:id="@+id/infoFragment"
-            android:name="com.example.pc.ui.fragments.InfoFragment"
+            android:name="alpha.company.pc.ui.fragments.InfoFragment"
             android:label="fragment_info"
             tools:layout="@layout/fragment_info" />
 
         <fragment android:id="@+id/userImageModifyFragment"
-            android:name="com.example.pc.ui.fragments.UserImageModifyFragment"
+            android:name="alpha.company.pc.ui.fragments.UserImageModifyFragment"
             android:label="fragment_info"
             tools:layout="@layout/fragment_info" >
             <argument
@@ -66,7 +66,7 @@
         </fragment>
         <fragment
             android:id="@+id/userControlerFragment"
-            android:name="com.example.pc.ui.fragments.UserControllerFragment"
+            android:name="alpha.company.pc.ui.fragments.UserControllerFragment"
             android:label="fragment_user_controler"
             tools:layout="@layout/fragment_user_controler" >
             <argument
@@ -78,7 +78,7 @@
         </fragment>
         <fragment
             android:id="@+id/passwordChangeFragment"
-            android:name="com.example.pc.ui.fragments.PasswordChangeFragment"
+            android:name="alpha.company.pc.ui.fragments.PasswordChangeFragment"
             android:label="fragment_password_change"
             tools:layout="@layout/fragment_password_change" >
             <argument
