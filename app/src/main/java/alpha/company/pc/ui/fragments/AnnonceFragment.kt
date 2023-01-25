@@ -61,7 +61,7 @@ class AnnonceFragment : Fragment() {
             inflater,
             container,
             false
-        ).apply { adView?.loadAd(adRequest) }
+        ).apply { adView.loadAd(adRequest) }
 
 
         binding!!.apply {
@@ -75,6 +75,8 @@ class AnnonceFragment : Fragment() {
                     if (annonce != null) {
                         //bind the data to the views
 
+                        //add 1 visited
+                        addVisited(annonce.visited, annonceId)
                         try {
 //                            getSellerById(annonce.sellerId!!)
 
@@ -251,9 +253,9 @@ class AnnonceFragment : Fragment() {
         goToMainActivity()
     }
 
-    private fun doOnSuccess(message: String) {
-        requireContext().toast(message, Toast.LENGTH_SHORT)
-    }
+//    private fun doOnSuccess(message: String) {
+//        requireContext().toast(message, Toast.LENGTH_SHORT)
+//    }
 
     private fun goToMainActivity() {
         val activity = requireActivity() as AnnonceActivity

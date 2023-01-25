@@ -1,6 +1,6 @@
 package alpha.company.pc.data.repositories
 
-import alpha.company.pc.data.models.local.Visited
+import alpha.company.pc.data.models.local.VisitedEnum
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.remote.RetrofitService
 import retrofit2.Call
@@ -13,6 +13,6 @@ class HomeRepository(private val retrofitService: RetrofitService) {
         retrofitService.getAllAnnonces(category)
 
     fun getPopularAnnonces() = retrofitService.getAllAnnonces(
-        visited = Visited.MOST.value
+        visited = VisitedEnum.MOST.value
     )
 }

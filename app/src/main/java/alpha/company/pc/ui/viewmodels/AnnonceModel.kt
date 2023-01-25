@@ -58,6 +58,15 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
         })
     }
 
+    fun addVisited(visited: Int?, annonceId: String) {
+        visited.apply {
+            if (this == null) {
+                annonceRepository.addVisited(annonceId, 1)
+            } else {
+                annonceRepository.addVisited(annonceId, visited!! + 1)
+            }
+        }
+    }
 
     //add business logic
     fun getAnnonceById(annonceId: String) {

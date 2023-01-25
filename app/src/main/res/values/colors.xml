@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_darker">#fbfbfb</color>
-    <color name="main_theme">@color/some_texts_color</color>
+    <color name="main_theme">@color/cool_red</color>
     <color name="black_font">#211304</color>
     <color name="blacker_font">#211304</color>
     <color name="orange_font">#f7a179</color>
@@ -20,6 +20,7 @@
     <color name="even_darker_grey">#252422</color>
     <color name="red">#8b0000</color>
     <color name="red_cool">#FF0000</color>
+    <color name="cool_red">#F76707</color>
     <color name="color_on_primary">@color/even_darker_grey</color>
     <color name="background_color">@color/white_darker</color>
     <color name="blue_shade">#0000FF</color>

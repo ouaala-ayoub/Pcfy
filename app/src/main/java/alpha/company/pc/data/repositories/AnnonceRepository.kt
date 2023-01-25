@@ -1,5 +1,6 @@
 package alpha.company.pc.data.repositories
 
+import alpha.company.pc.data.models.local.VisitedRequest
 import alpha.company.pc.data.models.network.*
 import alpha.company.pc.data.remote.RetrofitService
 import okhttp3.ResponseBody
@@ -22,4 +23,7 @@ class AnnonceRepository(private val retrofitService: RetrofitService) {
 
     fun changeUserInfos(userId: String, userShippingInfos: UserShippingInfos) =
         retrofitService.changeUserShippingInfos(userId, userShippingInfos)
+
+    fun addVisited(annonceId: String, visited: Int) =
+        retrofitService.addVisited(annonceId, VisitedRequest(visited))
 }

@@ -42,7 +42,7 @@
             android:id="@+id/about_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="to Do" />
+            android:text="@string/PCfy" />
     </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,6 +2,7 @@ package alpha.company.pc.data.remote
 
 import alpha.company.pc.data.models.local.OrderStatusRequest
 import alpha.company.pc.data.models.local.TokenRequest
+import alpha.company.pc.data.models.local.VisitedRequest
 import alpha.company.pc.data.models.network.*
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -15,6 +16,12 @@ interface RetrofitService {
     // Announces
     @HTTP(method = "DELETE", path = "announces/{id}", hasBody = true)
     fun deleteAnnonce(@Body tokens: Tokens, @Path("id") annonceId: String): Call<IdResponse>
+
+    @PUT("announces/{id}")
+    fun addVisited(
+        @Path("id") annonceId: String,
+        visitedRequest: VisitedRequest
+    ): Call<ResponseBody>
 
     @GET("announces")
     fun getAllAnnonces(
