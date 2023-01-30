@@ -11,11 +11,13 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.UserRepository
 import alpha.company.pc.databinding.ActivityCreateUserBinding
 import alpha.company.pc.ui.adapters.FragmentsAdapter
+import alpha.company.pc.ui.fragments.UserPolicyFragment
 import alpha.company.pc.ui.fragments.UserStepOne
 import alpha.company.pc.ui.fragments.UserStepThree
 import alpha.company.pc.ui.fragments.UserStepTwo
 import alpha.company.pc.ui.viewmodels.UserModel
 import alpha.company.pc.utils.*
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
@@ -42,10 +44,11 @@ class UserCreateActivity : AppCompatActivity() {
         fragmentsList = listOf(
             UserStepOne(),
             UserStepTwo(),
-            UserStepThree()
+            UserStepThree(),
+            UserPolicyFragment()
         )
         fragmentsAdapter = FragmentsAdapter(
-            this@UserCreateActivity,
+            this,
             fragmentsList
         )
 
@@ -54,6 +57,7 @@ class UserCreateActivity : AppCompatActivity() {
         binding.apply {
             fragmentsViewPager.apply {
 
+                offscreenPageLimit = fragmentsList.size
                 adapter = fragmentsAdapter
                 TabLayoutMediator(progressTabBar, this, true) { _, _ ->
                     // to implement

@@ -160,5 +160,12 @@
     <string name="warning_2">Vérifiez l\'article avant de l\'acheter</string>
     <string name="warning_3">Payez seulement après avoir récupéré l\'article</string>
     <string name="PCfy">PCfy est une plate-forme destinée aux consommateurs qui interconnecte et facilite les achats et ventes entre des vendeurs professionnels et des acheteurs consommateurs</string>
+
+    <!-- test ads ids -->
+    <string name="banner_test_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="interstitiell_test_ad_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="terms_of_usage">terms of usage</string>
+    <string name="j_accepte_les_conditions_d_utilisation_de_pcfy">J\'accepte Les conditions d\'utilisation de PCfy</string>
+
 </resources>
 

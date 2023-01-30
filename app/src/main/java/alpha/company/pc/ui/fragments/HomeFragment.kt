@@ -1,7 +1,6 @@
 package alpha.company.pc.ui.fragments
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.R
+import alpha.company.pc.data.models.local.Category
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.models.network.CategoryEnum
 import alpha.company.pc.data.remote.RetrofitService
@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeModel
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentHomeBinding? = null
-    private lateinit var categoriesList: List<alpha.company.pc.data.models.local.Category>
+    private lateinit var categoriesList: List<Category>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
         categoriesList = CategoryEnum.values().map { category ->
             category.title
         }.map { categoryTitle ->
-            alpha.company.pc.data.models.local.Category(categoryTitle)
+            Category(categoryTitle)
         }
 
         viewModel = HomeModel(HomeRepository(retrofitService))
@@ -97,17 +97,6 @@ class HomeFragment : Fragment() {
             Log.d(TAG, "adRequest: $adRequest")
             adView?.loadAd(adRequest)
 
-            var multiplier = 1
-            val orientation = resources.configuration.orientation
-            val isTablet = resources.getBoolean(R.bool.isTablet)
-
-            if (isTablet) {
-                multiplier *= 2
-            }
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                multiplier *= 2
-            }
-
             vAppBar.addOnOffsetChangedListener { _, verticalOffset ->
                 val isScreenOnTop = verticalOffset == 0
                 Log.d(TAG, "addOnOffsetChangedListener isScreenOnTop : $isScreenOnTop")
@@ -134,7 +123,7 @@ class HomeFragment : Fragment() {
 
             //setting the annonces list
             annonceRv.apply {
-                layoutManager = GridLayoutManager(requireContext(), NUM_ROWS * multiplier)
+                layoutManager = GridLayoutManager(requireContext(), NUM_ROWS )
                 adapter = annoncesAdapter
             }
 
@@ -155,8 +144,9 @@ class HomeFragment : Fragment() {
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
                 if (annonces != null) {
-                    for (annonce in annonces) {
-                        annoncesToShow.add(annonce)
+                    annonces.map {
+                        if (!annoncesToShow.contains(it))
+                            annoncesToShow.add(it)
                     }
                     annoncesAdapter.setAnnoncesList(annoncesToShow)
                 } else {

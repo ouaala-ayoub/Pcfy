@@ -8,14 +8,16 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.children
 import alpha.company.pc.R
+import alpha.company.pc.data.models.HandleSubmitInterface
 import alpha.company.pc.data.models.local.SellerType
 import alpha.company.pc.databinding.FragmentUserStepThreeBinding
 import alpha.company.pc.ui.activities.UserCreateActivity
+import android.widget.Button
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 private const val TAG = "UserStepThree"
 
-class UserStepThree : Fragment(), alpha.company.pc.data.models.HandleSubmitInterface {
+class UserStepThree : Fragment(), HandleSubmitInterface {
 
     private lateinit var binding: FragmentUserStepThreeBinding
     private lateinit var userCreateActivity: UserCreateActivity
@@ -60,12 +62,22 @@ class UserStepThree : Fragment(), alpha.company.pc.data.models.HandleSubmitInter
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        requireActivity().findViewById<Button>(R.id.next).isEnabled = true
+        binding.apply {
+            cityTextField.isEnabled = true
+            userTypeTextField.isEnabled = true
+            organisationNameTextField.isEnabled = true
+        }
+    }
+
     override fun onBackClicked() {
         //do Nothing no need
     }
 
     private fun setTheTypeEditText() {
-        binding.userTypeTextField.editText?.setText(SellerType.SOLO.type)
+        binding.userTypeTextField.editText?.setText(getType(SellerType.SOLO.type))
 
         val values = SellerType.values().map { sellerType ->
             getType(sellerType.type)
