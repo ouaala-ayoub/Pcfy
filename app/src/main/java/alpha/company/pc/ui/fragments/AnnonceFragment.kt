@@ -76,7 +76,7 @@ class AnnonceFragment : Fragment() {
                         //bind the data to the views
 
                         //add 1 visited
-                        addVisited(annonce.visited, annonceId)
+                        addVisited( annonceId, annonce.visited)
                         try {
 //                            getSellerById(annonce.sellerId!!)
 

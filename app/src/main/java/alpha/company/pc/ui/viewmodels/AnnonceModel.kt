@@ -58,12 +58,38 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
         })
     }
 
-    fun addVisited(visited: Int?, annonceId: String) {
+    fun addVisited(annonceId: String , visited: Int?) {
+        Log.d(TAG, "addVisited: $visited , annonceId: $annonceId")
         visited.apply {
             if (this == null) {
-                annonceRepository.addVisited(annonceId, 1)
+                annonceRepository.addVisited(annonceId, 1).enqueue(object: Callback<ResponseBody>{
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+                        Log.i(TAG, "visits from 0 to 1}")
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Log.e(TAG, "onFailure: failed to add a visit for reason ${t.message}" )
+                    }
+
+                })
             } else {
-                annonceRepository.addVisited(annonceId, visited!! + 1)
+                Log.d(TAG, "addVisited: ${visited!! + 1}")
+                annonceRepository.addVisited(annonceId, visited + 1).enqueue(object: Callback<ResponseBody>{
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+                        Log.i(TAG, "visits from $visited to ${visited+1}")
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Log.e(TAG, "onFailure: failed to add a visit for reason ${t.message}" )
+                    }
+
+                })
             }
         }
     }

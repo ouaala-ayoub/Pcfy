@@ -20,7 +20,7 @@ interface RetrofitService {
     @PUT("announces/{id}")
     fun addVisited(
         @Path("id") annonceId: String,
-        visitedRequest: VisitedRequest
+        @Body visitedRequest: VisitedRequest
     ): Call<ResponseBody>
 
     @GET("announces")

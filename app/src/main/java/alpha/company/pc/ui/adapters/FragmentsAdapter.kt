@@ -1,5 +1,6 @@
 package alpha.company.pc.ui.adapters
 
+import alpha.company.pc.ui.fragments.UserPolicyFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -31,6 +32,10 @@ class FragmentsAdapter(fa: FragmentActivity, private val fragmentList: List<Frag
             }
             2 -> {
                 castedFrag = current as UserStepThree
+                castedFrag.onNextClicked()
+            }
+            3 -> {
+                castedFrag = current as UserPolicyFragment
                 castedFrag.onNextClicked()
             }
         }

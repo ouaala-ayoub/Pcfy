@@ -1,0 +1,190 @@
+CONTRAT DE LICENCE UTILISATEUR FINAL
+
+Dernière mise à jour le 30 janvier 2023
+
+
+
+
+PCfy vous est concédé (Utilisateur final) par PCfy, situé et enregistré à __________, __________, __________ __________, Maroc ('Concédant'), pour une utilisation uniquement selon les termes du présent Contrat de licence.
+
+En téléchargeant l'Application sous licence à partir de la plate-forme de distribution de logiciels de Google (« Play Store ») et toute mise à jour de celle-ci (comme autorisé par le présent Contrat de licence), Vous indiquez que Vous acceptez d'être lié par tous les termes et conditions du présent Contrat de licence, et que vous acceptez ce contrat de licence. Play Store est désigné dans le présent Contrat de licence par « Services ».
+
+Les parties au présent contrat de licence reconnaissent que les services ne sont pas partis au présent contrat de licence et ne sont liés par aucune disposition ou obligation concernant l'application sous licence, telle que la garantie, la responsabilité, la maintenance et le support de celle-ci. PCfy, et non les Services, est seul responsable de l'Application sous licence et de son contenu.
+
+Le présent contrat de licence peut ne pas prévoir de règles d'utilisation pour l'application sous licence qui sont en conflit avec les dernières conditions d'utilisation de Google Play ("règles d'utilisation"). PCfy reconnaît qu'il a eu la possibilité de revoir les règles d'utilisation et que le présent contrat de licence n'est pas en conflit avec celles-ci.
+
+PCfy, lorsqu'il est acheté ou téléchargé via les Services, vous est concédé sous licence pour une utilisation uniquement selon les termes du présent Contrat de licence. Le Concédant se réserve tous les droits qui ne Vous sont pas expressément accordés. PCfy doit être utilisé sur des appareils qui fonctionnent avec le système d'exploitation de Google ("Android").
+
+
+TABLE DES MATIÈRES
+
+1. LA CANDIDATURE
+2. CHAMP D'APPLICATION DE LA LICENCE
+3. EXIGENCES TECHNIQUES
+4. ENTRETIEN ET ASSISTANCE
+5. UTILISATION DES DONNÉES
+6. CONTRIBUTIONS GÉNÉRÉES PAR LES UTILISATEURS
+7. LICENCE DE CONTRIBUTION
+8. RESPONSABILITE
+9. GARANTIE
+10. REVENDICATIONS SUR LES PRODUITS
+11. CONFORMITÉ LÉGALE
+12. COORDONNÉES
+13. RÉSILIATION
+14. TERMES DES ACCORDS ET BÉNÉFICIAIRE DES TIERS
+15. DROITS DE PROPRIÉTÉ INTELLECTUELLE
+16. DROIT APPLICABLE
+17. DIVERS
+
+
+1. LA CANDIDATURE
+
+PCfy ("Licensed Application") est un logiciel créé pour une plateforme destinée aux consommateurs (B2C) qui interconnecte et facilite les achats et les ventes entre vendeurs professionnels (Vendeurs) et acheteurs consommateurs (les acheteurs). — et personnalisé pour les appareils mobiles Android ("Appareils"). Il est utilisé pour gérer les produits et voir les offres.
+
+
+2. CHAMP D'APPLICATION DE LA LICENCE
+
+2.1 Vous bénéficiez d'une licence non transférable, non exclusive et non sous-licenciable pour installer et utiliser l'Application sous licence sur tous les Appareils que Vous (Utilisateur final) possédez ou contrôlez et tel qu'autorisé par les Règles d'utilisation, à l'exception que ces L'application sous licence peut être consultée et utilisée par d'autres comptes qui vous sont associés (utilisateur final, l'acheteur) via le partage familial ou l'achat en volume.
+
+2.2 Cette licence régira également toutes les mises à jour de l'Application sous licence fournies par le Concédant qui remplacent, réparent et/ou complètent la première Application sous licence, à moins qu'une licence distincte ne soit fournie pour cette mise à jour, auquel cas les termes de cette nouvelle licence prévaudront. 
+
+2.3 Vous ne pouvez pas partager ou mettre l'Application sous licence à la disposition de tiers (sauf dans la mesure autorisée par les Règles d'utilisation, et avec le consentement écrit préalable de PCfy), vendre, louer, prêter, louer ou autrement redistribuer l'Application sous licence.
+
+2.4 Vous ne pouvez pas désosser, traduire, désassembler, intégrer, décompiler, supprimer, modifier, combiner, créer des œuvres dérivées ou des mises à jour, adapter ou tenter de dériver le code source de l'Application sous licence, ou toute partie de celle-ci (sauf avec l'accord de PCfy consentement écrit préalable).
+
+2.5 Les violations des obligations mentionnées ci-dessus, ainsi que la tentative d'une telle infraction, peuvent faire l'objet de poursuites et de dommages et intérêts.
+
+2.6 Le Concédant se réserve le droit de modifier les termes et conditions de la licence.
+
+
+3. EXIGENCES TECHNIQUES
+
+3.1 L'application sous licence nécessite une version de micrologiciel 1.0.0 ou supérieure. Le concédant recommande d'utiliser la dernière version du micrologiciel.
+
+3.2 Le Concédant tente de maintenir l'Application sous licence à jour afin qu'elle soit conforme aux versions modifiées/nouvelles du micrologiciel et du nouveau matériel. Vous n'êtes pas autorisé à réclamer une telle mise à jour.
+
+3.3 Vous reconnaissez qu'il est de votre responsabilité de confirmer et de déterminer que l'appareil de l'utilisateur final de l'application sur lequel vous avez l'intention d'utiliser l'application sous licence satisfait aux spécifications techniques mentionnées ci-dessus.
+
+3.4 Le Concédant se réserve le droit de modifier à tout moment les spécifications techniques comme bon lui semble.
+
+
+4. ENTRETIEN ET ASSISTANCE
+
+4.1 Le Concédant est seul responsable de la fourniture des services de maintenance et d'assistance pour cette Application sous licence. Vous pouvez joindre le concédant à l'adresse e-mail indiquée dans la présentation du Play Store pour cette application sous licence.
+
+4.2 PCfy et l'Utilisateur final reconnaissent que les Services n'ont aucune obligation de fournir des services de maintenance et d'assistance concernant l'Application sous licence.
+
+
+5. UTILISATION DES DONNÉES
+
+Vous reconnaissez que le Concédant pourra accéder et ajuster le contenu de votre application sous licence téléchargée et vos informations personnelles, et que l'utilisation par le concédant de ce matériel et de ces informations est soumise à vos accords juridiques avec le concédant et à la politique de confidentialité du concédant : https://pcfy.vercel.app/regles.
+
+Vous reconnaissez que le Concédant peut collecter et utiliser périodiquement des données techniques et des informations connexes sur votre appareil, système et logiciel d'application, et périphériques, offrir une assistance produit, faciliter les mises à jour logicielles et dans le but de vous fournir d'autres services (le cas échéant) liés à l'Application sous licence. Le Concédant peut également utiliser ces informations pour améliorer ses produits ou pour vous fournir des services ou des technologies, tant qu'elles se présentent sous une forme qui ne vous identifie pas personnellement.
+
+
+6. CONTRIBUTIONS GÉNÉRÉES PAR LES UTILISATEURS
+
+L'Application sous licence peut vous inviter à discuter, à contribuer ou à participer à des blogs, des babillards électroniques, des forums en ligne et d'autres fonctionnalités, et peut vous donner la possibilité de créer, soumettre, publier, afficher, transmettre, exécuter, publier, distribuer , ou diffuser du contenu et des éléments vers nous ou dans l'Application sous licence, y compris, mais sans s'y limiter, des textes, des écrits, des vidéos, de l'audio, des photographies, des graphiques, des commentaires, des suggestions ou des informations personnelles ou d'autres éléments (collectivement, les « Contributions »). Les contributions peuvent être visualisées par d'autres utilisateurs de l'application sous licence et par le biais de sites Web ou d'applications tiers. En tant que telles, toutes les contributions que vous transmettez peuvent être traitées comme non confidentielles et non exclusives. Lorsque vous créez ou mettez à disposition des Contributions, vous déclarez et garantissez ainsi que :
+
+1. La création, la distribution, la transmission, l'affichage public ou l'exécution, et l'accès, le téléchargement ou la copie de vos Contributions n'enfreignent pas et n'enfreindront pas les droits de propriété, y compris, mais sans s'y limiter, le droit d'auteur, le brevet, la marque, le secret commercial, ou les droits moraux d'un tiers.
+2. Vous êtes le créateur et le propriétaire de ou disposez des licences, droits, consentements, autorisations et autorisations nécessaires pour utiliser et nous autoriser, l'Application sous licence et les autres utilisateurs de l'Application sous licence à utiliser vos Contributions de la manière envisagée par l'Application sous licence et le présent Contrat de licence.
+3. Vous avez le consentement écrit, la libération et/ou la permission de chaque personne individuelle identifiable dans vos contributions d'utiliser le nom ou la ressemblance ou chacune de ces personnes individuelles identifiables pour permettre l'inclusion et l'utilisation de vos contributions de la manière envisagée. Par l'Application sous licence et le présent Contrat de licence.
+4. Vos contributions ne sont pas fausses, inexactes ou trompeuses.
+5. Vos contributions ne sont pas des publicités non sollicitées ou non autorisées, du matériel promotionnel, des systèmes pyramidaux, des chaînes de lettres, des spams, des envois de masse ou d'autres formes de sollicitation.
+6. Vos contributions ne sont pas obscènes, obscènes, lascives, sales, violentes, harcelantes, diffamatoires, calomnieuses ou autrement répréhensibles (selon notre détermination).
+7. Vos Contributions ne ridiculisent, ne se moquent, ne dénigrent, n'intimident ou n'abusent de qui que ce soit.
+8. Vos contributions ne sont pas utilisées pour harceler ou menacer (au sens juridique de ces termes) toute autre personne et pour promouvoir la violence contre une personne ou une catégorie de personnes spécifique.
+9. Vos contributions ne violent aucune loi, réglementation ou règle applicable.
+10. Vos contributions ne violent pas la vie privée ou les droits de publicité d'un tiers.
+11. Vos contributions ne violent aucune loi applicable concernant la pornographie enfantine, ou autrement destinées à protéger la santé ou le bien-être des mineurs.
+12. Vos contributions n'incluent aucun commentaire offensant lié à la race, à l'origine nationale, au sexe, à la préférence sexuelle ou au handicap physique.
+13. Vos Contributions n'enfreignent pas autrement, ou ne renvoient pas à du matériel qui enfreint, toute disposition du présent Contrat de licence, ou toute loi ou réglementation applicable.
+
+Toute utilisation de l'Application sous licence en violation de ce qui précède viole le présent Contrat de licence et peut entraîner, entre autres, la résiliation ou la suspension de vos droits d'utilisation de l'Application sous licence.
+
+
+7. LICENCE DE CONTRIBUTION
+
+En publiant vos contributions sur n'importe quelle partie de l'application sous licence ou en rendant les contributions accessibles à l'application sous licence en liant votre compte de l'application sous licence à l'un de vos comptes de réseaux sociaux, vous accordez automatiquement, et vous déclarez et garantissez que vous avez le droit de accordez-nous un droit illimité, illimité, irrévocable, perpétuel, non exclusif, transférable, libre de droits, entièrement payé et mondial, et une licence pour héberger, utiliser, copier, reproduire, divulguer, vendre, revendre, publier, diffuser , réintituler, archiver, stocker, mettre en cache, afficher publiquement, reformater, traduire, transmettre, extraire (en tout ou en partie) et distribuer ces Contributions (y compris, sans s'y limiter, votre image et votre voix) à quelque fin que ce soit, publicité commerciale ou autrement, et pour préparer des œuvres dérivées de, ou incorporer dans d'autres œuvres , telles que les contributions, et accorder et autoriser des sous-licences de ce qui précède. L'utilisation et la distribution peuvent se produire dans tous les formats de médias et par tous les canaux de médias.
+
+Cette licence s'appliquera à toute forme, média ou technologie connue ou développée ultérieurement, et inclut notre utilisation de votre nom, nom de société et nom de franchise, selon le cas, et l'une des marques de commerce, marques de service, noms commerciaux, logos, et les images personnelles et commerciales que vous fournissez. Vous renoncez à tous les droits moraux sur vos contributions et vous garantissez que les droits moraux n'ont pas été autrement revendiqués dans vos contributions.
+
+Nous n'affirmons aucun droit de propriété sur vos Contributions. Vous conservez la pleine propriété de toutes vos Contributions et de tous les droits de propriété intellectuelle ou autres droits de propriété associés à vos Contributions. Nous ne sommes pas responsables des déclarations ou représentations dans vos contributions fournies par vous dans n'importe quel domaine de l'application sous licence. Vous êtes seul responsable de vos Contributions à l'Application sous licence et vous acceptez expressément de nous exonérer de toute responsabilité et de vous abstenir de toute action en justice contre nous concernant vos Contributions.
+
+Nous avons le droit, à notre seule et absolue discrétion, (1) d'éditer, de supprimer ou de modifier autrement toute Contribution ; (2) recatégoriser les Contributions pour les placer à des emplacements plus appropriés dans l'Application sous licence ; et (3) de présélectionner ou de supprimer toute Contribution à tout moment et pour quelque raison que ce soit, sans préavis. Nous n'avons aucune obligation de surveiller vos Contributions.
+
+
+8. RESPONSABILITE
+
+8.1 Le Concédant décline toute responsabilité pour tout dommage causé en raison d'un manquement aux obligations conformément à la Section 2 du présent Contrat de licence. Pour éviter la perte de données, vous êtes tenu d'utiliser les fonctions de sauvegarde de l'application sous licence dans la mesure permise par les conditions d'utilisation tierces applicables. Vous êtes conscient qu'en cas de modifications ou de manipulations de l'Application sous licence, Vous n'aurez pas accès à l'Application sous licence.
+
+
+9. GARANTIE
+
+9.1 Le Concédant garantit que l'Application sous licence est exempte de logiciels espions, de chevaux de Troie, de virus ou de tout autre logiciel malveillant au moment de Votre téléchargement. Le concédant garantit que l'application sous licence fonctionne comme décrit dans la documentation utilisateur.
+
+9.2 Aucune garantie n'est fournie pour l'application sous licence qui n'est pas exécutable sur l'appareil, qui a été modifiée sans autorisation, manipulée de manière inappropriée ou coupable, combinée ou installée avec du matériel ou des logiciels inappropriés, utilisée avec des accessoires inappropriés, que ce soit par vous-même ou par des tiers. , ou s'il existe d'autres raisons en dehors de la sphère d'influence de PCfy qui affectent l'exécutable de l'application sous licence.
+
+9.3 Vous êtes tenu d'inspecter l'application sous licence immédiatement après l'avoir installée et d'informer PCfy des problèmes découverts sans délai par e-mail fourni dans les informations de contact. Le rapport de défaut sera pris en considération et fera l'objet d'une enquête plus approfondie s'il a été envoyé par courrier électronique dans un délai de soixante (60) jours après sa découverte.
+
+9.4 Si nous confirmons que l'Application sous licence est défectueuse, PCfy se réserve le choix de remédier à la situation soit en résolvant le défaut, soit en remplaçant la livraison.
+
+9.5 En cas de non-conformité de l'application sous licence à toute garantie applicable, vous pouvez en informer l'opérateur de la boutique de services, et le prix d'achat de votre application sous licence vous sera remboursé. Dans la mesure maximale permise par la loi applicable, l'Opérateur de la Boutique de Services n'aura aucune autre obligation de garantie concernant l'Application sous Licence, et toutes autres pertes, réclamations, dommages, responsabilités, dépenses et coûts attribuables à toute négligence pour adhérer à toute garantie.
+
+9.6 Si l'utilisateur est un entrepreneur, toute réclamation fondée sur des fautes expire après un délai de prescription légal de douze (12) mois après la mise à disposition de l'application sous licence à l'utilisateur. Les délais de prescription légaux prévus par la loi s'appliquent aux utilisateurs qui sont des consommateurs.
+   
+
+10. REVENDICATIONS SUR LES PRODUITS
+
+PCfy et l'utilisateur final reconnaissent que PCfy, et non les services, est responsable du traitement de toute réclamation de l'utilisateur final ou de tout tiers concernant l'application sous licence ou la possession et/ou l'utilisation par l'utilisateur final de cette application sous licence, y compris, mais sans s'y limiter :
+
+(i) réclamations en responsabilité du fait des produits ;
+   
+(ii) toute réclamation selon laquelle l'Application sous licence n'est pas conforme à toute exigence légale ou réglementaire applicable ; et
+
+(iii) les réclamations découlant de la protection des consommateurs, de la vie privée ou d'une législation similaire.
+
+
+11. CONFORMITÉ LÉGALE
+
+Vous déclarez et garantissez que vous n'êtes pas situé dans un pays soumis à un embargo du gouvernement américain, ou qui a été désigné par le gouvernement américain comme un pays « soutenant le terrorisme » ; et que vous ne figurez sur aucune liste gouvernementale américaine de parties interdites ou restreintes.
+
+
+12. COORDONNÉES
+
+Pour les demandes générales, les plaintes, les questions ou les réclamations concernant l'application sous licence, veuillez contacter :
+       
+pcfysupport
+__________
+__________, __________ __________
+Maroc
+escapethematrix0000@gmail.com
+
+
+13. RÉSILIATION
+
+La licence est valable jusqu'à sa résiliation par PCfy ou par vous. Vos droits en vertu de cette licence seront automatiquement résiliés et sans préavis de PCfy si vous ne respectez pas les termes de cette licence. À la résiliation de la licence, vous devez cesser toute utilisation de l'application sous licence et détruire toutes les copies, intégrales ou partielles, de l'application sous licence.
+      
+
+14. TERMES DES ACCORDS ET BÉNÉFICIAIRE DES TIERS
+
+PCfy déclare et garantit que PCfy se conformera aux conditions d'utilisation des tiers applicables lors de l'utilisation de l'application sous licence.
+
+Conformément à la section 9 des "Instructions relatives aux conditions minimales du contrat de licence utilisateur final du développeur", les filiales de Google sont des tiers bénéficiaires du présent contrat de licence utilisateur final et, dès que vous acceptez les conditions générales du présent contrat de licence, Google aura le droit (et sera réputé avoir accepté ce droit) d'appliquer le présent Contrat de licence utilisateur final à votre encontre en tant que tiers bénéficiaire de celui-ci.
+
+
+15. DROITS DE PROPRIÉTÉ INTELLECTUELLE
+
+PCfy et l'utilisateur final reconnaissent qu'en cas de réclamation d'un tiers selon laquelle l'application sous licence ou la possession et l'utilisation par l'utilisateur final de cette application sous licence enfreignent les droits de propriété intellectuelle du tiers, PCfy, et non les services, sera seul responsable de l'enquête, de la défense, du règlement et de la décharge ou de toute réclamation pour violation de la propriété intellectuelle.
+
+
+16. DROIT APPLICABLE
+
+Le présent Contrat de licence est régi par les lois du Maroc à l'exclusion de ses règles de conflits de lois.
+
+
+17. DIVERS
+
+17.1 Si l'un des termes de cet accord devait être ou devenir invalide, la validité des autres dispositions ne sera pas affectée. Les termes non valides seront remplacés par des termes valides formulés de manière à atteindre l'objectif principal.
+               
+17.2 Les accords accessoires, modifications et avenants ne sont valables que s'ils sont stipulés par écrit. Il ne peut être renoncé à la clause précédente que par écrit.
