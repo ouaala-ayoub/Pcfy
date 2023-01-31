@@ -28,6 +28,7 @@ import alpha.company.pc.utils.makeDialog
 import alpha.company.pc.utils.makeSnackBar
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
@@ -40,7 +41,7 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
     private lateinit var viewModel: UserStepTwoModel
     private lateinit var imageResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-    private lateinit var userCreateActivity: UserCreateActivity
+    private lateinit var requestBody: MultipartBody.Builder
     private var lastState = false
     private var imageUri: Uri? = null
 
@@ -48,6 +49,7 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
         super.onCreate(savedInstanceState)
 
         viewModel = UserStepTwoModel()
+        requestBody = (requireActivity() as UserCreateActivity).requestBody
 
         requestPermissionLauncher =
             registerForActivityResult(
@@ -152,16 +154,16 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
     }
 
     override fun onNextClicked() {
+        submitData()
         lastState = viewModel.isValidInput.value!!
         Log.i(TAG, "onNextClicked lastState Step Two : $lastState")
-        submitData()
     }
 
     override fun onBackClicked() {
         Log.i(TAG, "onBackClicked lastState Step Two : $lastState")
         val lastValue = viewModel.isValidInput.value
 
-        if (lastValue != null){
+        if (lastValue != null) {
             lastState = lastValue
         }
     }
@@ -173,22 +175,20 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
     }
 
     private fun submitData() {
-        userCreateActivity = requireActivity() as UserCreateActivity
 
         binding.apply {
-            userCreateActivity.apply {
-                requestBody.apply {
+            requestBody.apply {
 
-                    addFormDataPart("name", nameEditText.text.toString())
-                    addFormDataPart("phone", phoneEditText.text.toString())
+                addFormDataPart("name", nameEditText.text.toString())
+                addFormDataPart("phone", phoneEditText.text.toString())
 
-                    if (imageUri != null) {
-                        val info = getImagesRequestBody(imageUri!!)
-                        addFormDataPart("picture", info.imageName, info.imageReqBody)
-                    }
+                if (imageUri != null) {
+                    val info = getImagesRequestBody(imageUri!!)
+                    addFormDataPart("picture", info.imageName, info.imageReqBody)
                 }
             }
         }
+
     }
 
     private fun getImagesRequestBody(uri: Uri): ImageInfo {

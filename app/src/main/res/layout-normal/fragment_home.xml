@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:adSize="BANNER"
-                    app:adUnitId="ca-app-pub-8302914035567843/6205027684">
+                    app:adUnitId="@string/home_ad_id">
                 </com.google.android.gms.ads.AdView>
 
                 <TextView

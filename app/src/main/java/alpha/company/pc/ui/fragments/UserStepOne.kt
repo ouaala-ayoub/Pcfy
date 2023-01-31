@@ -12,6 +12,7 @@ import alpha.company.pc.R
 import alpha.company.pc.databinding.FragmentUserStepOneBinding
 import alpha.company.pc.ui.activities.UserCreateActivity
 import alpha.company.pc.ui.viewmodels.UserStepOneModel
+import okhttp3.MultipartBody
 
 private const val TAG = "UserStepOne"
 
@@ -19,13 +20,13 @@ class UserStepOne : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
 
     private lateinit var binding: FragmentUserStepOneBinding
     private lateinit var viewModel: UserStepOneModel
-    private lateinit var userCreateActivity: UserCreateActivity
+    private lateinit var requestBody: MultipartBody.Builder
     private var lastState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = UserStepOneModel()
-
+        requestBody = (requireActivity() as UserCreateActivity).requestBody
     }
 
     override fun onCreateView(
@@ -93,9 +94,9 @@ class UserStepOne : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
     }
 
     private fun handleUserInput() {
-        userCreateActivity = requireActivity() as UserCreateActivity
+
         binding.apply {
-            userCreateActivity.apply {
+            requestBody.apply {
                 requestBody.addFormDataPart("email", emailEditText.text.toString())
                 requestBody.addFormDataPart("password", passwordEditText.text.toString())
             }

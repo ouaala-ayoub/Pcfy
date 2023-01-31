@@ -14,16 +14,19 @@ import alpha.company.pc.databinding.FragmentUserStepThreeBinding
 import alpha.company.pc.ui.activities.UserCreateActivity
 import android.widget.Button
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 private const val TAG = "UserStepThree"
 
 class UserStepThree : Fragment(), HandleSubmitInterface {
 
     private lateinit var binding: FragmentUserStepThreeBinding
-    private lateinit var userCreateActivity: UserCreateActivity
+    private lateinit var requestBody: MultipartBody.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestBody = (requireActivity() as UserCreateActivity).requestBody
     }
 
     override fun onCreateView(
@@ -39,13 +42,12 @@ class UserStepThree : Fragment(), HandleSubmitInterface {
 
     override fun onNextClicked() {
         binding.apply {
-            userCreateActivity = requireActivity() as UserCreateActivity
 
             val cityField = cityEditText.text.toString()
             val typeField = userTypeEditText.text.toString()
             val organization = organisationNameEditText.text.toString()
 
-            userCreateActivity.requestBody.apply {
+            requestBody.apply {
                 if (cityField.isNotBlank()) {
                     addFormDataPart("city", cityField)
                 }

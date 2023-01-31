@@ -48,6 +48,7 @@ class UserPolicyFragment : Fragment(), HandleSubmitInterface {
     }
 
     override fun onNextClicked() {
+        binding.acceptCb.isEnabled = false
         Log.i(TAG, "User accepted term of usage")
     }
 

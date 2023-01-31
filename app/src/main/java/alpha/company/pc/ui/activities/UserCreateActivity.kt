@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import alpha.company.pc.R
+import alpha.company.pc.data.models.local.SellerType
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.UserRepository
 import alpha.company.pc.databinding.ActivityCreateUserBinding
@@ -59,8 +60,8 @@ class UserCreateActivity : AppCompatActivity() {
 
                 offscreenPageLimit = fragmentsList.size
                 adapter = fragmentsAdapter
-                TabLayoutMediator(progressTabBar, this, true) { _, _ ->
-                    // to implement
+                TabLayoutMediator(progressTabBar, this, true){
+                    tab, _ -> tab.view.isClickable = false
                 }.attach()
                 isUserInputEnabled = false
 
@@ -72,10 +73,11 @@ class UserCreateActivity : AppCompatActivity() {
                         userModel = UserModel(UserRepository(retrofitService))
 
                         userModel.apply {
+
                             Firebase.messaging.token.addOnCompleteListener { task ->
                                 val token = task.result
-
-                                signUp(requestBody.build()).observe(this@UserCreateActivity) { userId ->
+                                val request = requestBody.build()
+                                signUp(request).observe(this@UserCreateActivity) { userId ->
                                     if (userId.isNullOrBlank()) {
                                         //dialog ?
                                         this@UserCreateActivity.toast(SGN_FAILED, Toast.LENGTH_LONG)
