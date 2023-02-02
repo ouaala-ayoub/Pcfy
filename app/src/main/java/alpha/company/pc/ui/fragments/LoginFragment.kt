@@ -98,8 +98,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
             login(
                 userName,
-                password,
-                requireActivity()
+                password
             )
             retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
                 if (retrievedTokens) {

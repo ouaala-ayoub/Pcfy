@@ -1,18 +1,18 @@
 package alpha.company.pc.ui.fragments
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import androidx.core.widget.doOnTextChanged
 import alpha.company.pc.R
 import alpha.company.pc.databinding.FragmentUserStepOneBinding
 import alpha.company.pc.ui.activities.UserCreateActivity
 import alpha.company.pc.ui.viewmodels.UserStepOneModel
+import android.os.Bundle
+import android.text.InputFilter
+import android.util.Log
+import android.view.*
+import android.widget.Button
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import okhttp3.MultipartBody
+
 
 private const val TAG = "UserStepOne"
 
@@ -32,7 +32,7 @@ class UserStepOne : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentUserStepOneBinding.inflate(inflater, container, false)
 
@@ -46,6 +46,19 @@ class UserStepOne : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
         }
 
         binding.apply {
+
+            val filter =
+                InputFilter { source, start, end, dest, dstart, dend ->
+                    for (i in start until end) {
+                        if (Character.isWhitespace(source[i])) {
+                            return@InputFilter ""
+                        }
+                    }
+                    null
+                }
+
+            emailEditText.filters = arrayOf(filter)
+
             emailEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.apply {
                     emailLiveData.value = text.toString()

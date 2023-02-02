@@ -45,8 +45,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata"
-                android:inputType="text"
-                android:lines="1"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>

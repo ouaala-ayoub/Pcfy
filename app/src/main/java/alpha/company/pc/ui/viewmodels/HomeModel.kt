@@ -94,8 +94,6 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val test = response.body()
-                    Log.i(TAG, "onResponse popular announces : ${test?.get(0)}")
                     popularsList.postValue(response.body())
                 } else {
                     val error = response.errorBody()?.let { getError(it, response.code()) }

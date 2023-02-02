@@ -45,7 +45,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return isValidEmail && isValidPassword
     }
 
-    fun login(userName: String, password: String, activity: Activity) {
+    fun login(userName: String, password: String) {
 
         isTurning.postValue(true)
 

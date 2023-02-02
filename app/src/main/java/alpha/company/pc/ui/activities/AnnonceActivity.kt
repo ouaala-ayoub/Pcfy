@@ -25,6 +25,9 @@ class AnnonceActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
 
+        //to implement
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         setContentView(R.layout.activity_annonce)
     }
 
