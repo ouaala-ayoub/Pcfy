@@ -62,9 +62,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         viewModel.isValidLiveData.observe(viewLifecycleOwner) { isActive ->
             binding!!.login.isEnabled = isActive
-            if (isActive){
+            if (isActive) {
                 binding!!.passwordInput.setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE){
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
                         performLoginAction()
                     }
                     true
@@ -100,18 +100,17 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 userName,
                 password,
                 requireActivity()
-            ).observe(viewLifecycleOwner) {
-
-                retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
-                    if (retrievedTokens) {
-                        requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
-                        goToMainActivity()
-                    } else {
-                        requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
-                        goToMainActivity()
-                    }
+            )
+            retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
+                if (retrievedTokens) {
+                    requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
+                    goToMainActivity()
+                } else {
+                    requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
+                    goToMainActivity()
                 }
             }
+
 
             getErrorMessage().observe(viewLifecycleOwner) { error ->
                 binding!!.problemMessage.text = error

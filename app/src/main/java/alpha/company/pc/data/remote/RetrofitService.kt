@@ -76,8 +76,8 @@ interface RetrofitService {
 
     // Auth
 
-    @POST("auth/signin")
-    fun login(@Body userCredentials: UserCredentials): Call<Tokens>
+    @POST("auth/login")
+    fun login(@Body userCredentials: UserCredentials): Call<LoginResponse>
 
     @POST("auth")
     fun auth(@Body tokens: Tokens): Call<BodyX?>

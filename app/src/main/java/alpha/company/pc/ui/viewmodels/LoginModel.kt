@@ -1,5 +1,6 @@
 package alpha.company.pc.ui.viewmodels
 
+import alpha.company.pc.data.models.network.LoginResponse
 import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -44,20 +45,25 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return isValidEmail && isValidPassword
     }
 
-    fun login(userName: String, password: String, activity: Activity): MutableLiveData<Tokens> {
+    fun login(userName: String, password: String, activity: Activity) {
 
         isTurning.postValue(true)
 
-        repository.login(userName, password).enqueue(object : Callback<Tokens> {
-            override fun onResponse(call: Call<Tokens>, response: Response<Tokens>) {
+        repository.login(userName, password).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful && response.body() != null) {
+
                     Log.i(TAG, "onResponse login : ${response.body()}")
+
+                    repository.setCurrentTokens(
+                        Tokens(
+                            response.body()!!.refreshToken,
+                            response.body()!!.accessToken
+                        )
+                    )
                     retrievedTokens.postValue(true)
-                    tokens.postValue(response.body())
 
-                    repository.setCurrentTokens(response.body()!!)
-
-                    Log.i(TAG, "current token: ${LocalStorage.getTokens(activity)}")
+                    Log.i(TAG, "current tokens: ${repository.getCurrentTokens()}")
                     isTurning.postValue(false)
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
@@ -68,7 +74,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<Tokens>, t: Throwable) {
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure login : ${t.message}")
                 errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
                 retrievedTokens.postValue(false)
@@ -76,7 +82,6 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
             }
         })
 
-        return tokens
     }
 
     fun getErrorMessage(): LiveData<String> {
