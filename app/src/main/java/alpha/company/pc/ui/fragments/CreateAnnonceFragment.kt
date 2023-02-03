@@ -33,6 +33,7 @@ import alpha.company.pc.ui.activities.MainActivity
 import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.ui.viewmodels.CreateAnnonceModel
 import alpha.company.pc.utils.*
+import android.widget.EditText
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -100,7 +101,6 @@ class CreateAnnonceFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -141,10 +141,15 @@ class CreateAnnonceFragment : Fragment() {
 
                     Log.i(TAG, "isAuth: $it")
                     userId = getUserId()!!
+                    viewModel.apply {
+                        getCategories()
+                        getCities()
+                    }
 
 
                     showForm()
                     setTheStatueEditTextView()
+                    setTheCityEditText()
                     setTheCategoriesEditText()
                     validateTheData()
 
@@ -175,6 +180,10 @@ class CreateAnnonceFragment : Fragment() {
                                                     .addFormDataPart(
                                                         "category",
                                                         binding!!.categoryEditText.text.toString()
+                                                    )
+                                                    .addFormDataPart(
+                                                        "city",
+                                                        binding!!.cityEditText.text.toString()
                                                     )
                                                     .addFormDataPart(
                                                         "status",
@@ -349,29 +358,32 @@ class CreateAnnonceFragment : Fragment() {
         }
     }
 
+    private fun setTheEditText(editText: EditText, list: List<String>) {
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, list)
+        (editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+    }
+
     private fun setTheStatueEditTextView() {
         //default is new
         binding!!.statusTextField.editText?.setText(Status.NEW.status)
-
         //set the adapter
         val values = Status.values().map { status ->
             status.status
         }
-
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
-        (binding!!.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+        setTheEditText(binding!!.statusEditText, values)
     }
 
-    private fun setTheCategoriesEditText() {
-        binding!!.categoryTextField.editText?.setText(CategoryEnum.GAMER.title)
-
-        //set the adapter
-        val values = CategoryEnum.values().map { category ->
-            category.title
+    private fun setTheCityEditText() {
+        viewModel.citiesList.observe(viewLifecycleOwner) { cities ->
+            setTheEditText(binding!!.cityEditText, cities)
         }
+    }
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
-        (binding!!.categoryTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+
+    private fun setTheCategoriesEditText() {
+        viewModel.categoriesList.observe(viewLifecycleOwner) { categories ->
+            setTheEditText(binding!!.categoryEditText, categories)
+        }
     }
 
     private fun setTheUploadImage() {
@@ -417,6 +429,18 @@ class CreateAnnonceFragment : Fragment() {
 
             imageNames.doOnTextChanged { text, _, _, _ ->
                 viewModel.imagesLiveData.value = text.toString()
+            }
+
+            categoryEditText.doOnTextChanged {text, _, _, _ ->
+                viewModel.categoryLiveData.value = text.toString()
+            }
+
+            cityEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.citiesLiveData.value = text.toString()
+            }
+
+            statusEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.statusLiveData.value = text.toString()
             }
 
             viewModel.isValidInput.observe(viewLifecycleOwner) { isActive ->

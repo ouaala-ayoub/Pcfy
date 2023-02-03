@@ -15,4 +15,6 @@ class HomeRepository(private val retrofitService: RetrofitService) {
     fun getPopularAnnonces() = retrofitService.getAllAnnonces(
         visited = VisitedEnum.MOST.value
     )
+
+    fun getCategories() = retrofitService.getCategories()
 }

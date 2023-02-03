@@ -19,9 +19,28 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
     val annoncesList = MutableLiveData<List<Annonce>?>()
     val popularsList = MutableLiveData<List<Annonce>?>()
+    val categoriesList = MutableLiveData<List<String>>()
     val emptyMsg = MutableLiveData<String>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
-    private val errorMessage = MutableLiveData<Error?>()
+
+    fun getCategories(){
+        homeRepository.getCategories().enqueue(object: Callback<List<String>>{
+            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
+                if (response.isSuccessful && response.body() != null)
+                    categoriesList.postValue(response.body())
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    if (error != null)
+                        Log.e(TAG, "getCategories response error $error")
+                }
+            }
+
+            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                Log.e(TAG, "getCategories onFailure : ${t.message}")
+            }
+
+        })
+    }
 
     fun getAnnoncesListAll(): MutableLiveData<List<Annonce>?> {
 
@@ -37,10 +56,10 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
                     annoncesList.postValue(response.body())
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
-                    Log.e(TAG, "response error $error")
-                    if (error != null) {
-                        errorMessage.postValue(error)
-                    }
+
+                    if (error != null)
+                        Log.e(TAG, "response error $error")
+
                     annoncesList.postValue(null)
                 }
                 isProgressBarTurning.postValue(false)
@@ -67,9 +86,9 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
                     Log.e(TAG, "response error $error")
-                    if (error != null) {
-                        errorMessage.postValue(error)
-                    }
+                    if (error != null)
+                        Log.e(TAG, "response error $error")
+
                     annoncesList.postValue(null)
                 }
                 isProgressBarTurning.postValue(false)

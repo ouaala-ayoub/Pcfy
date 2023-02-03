@@ -19,6 +19,9 @@ private const val TAG = "AnnonceModifyModel"
 class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepository) :
     ViewModel() {
 
+    val citiesList = MutableLiveData<List<String>>()
+    val categoriesList = MutableLiveData<List<String>>()
+
     private val oldAnnonce = MutableLiveData<Annonce>()
     val updatedAnnonce = MutableLiveData<Boolean>()
     val addedImages = MutableLiveData<Boolean>()
@@ -47,6 +50,44 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
         val isValidPrice = !price.isNullOrBlank()
 
         return isValidTitle && isValidPrice
+    }
+
+    fun getCities(){
+        annonceModifyRepository.getCities().enqueue(object: Callback<List<String>>{
+            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
+                if (response.isSuccessful && response.body() != null)
+                    citiesList.postValue(response.body())
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    if (error != null)
+                        Log.e(TAG, "getCategories response error $error")
+                }
+            }
+
+            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                Log.e(TAG, "getCategories onFailure : ${t.message}")
+            }
+
+        })
+    }
+
+    fun getCategories() {
+        annonceModifyRepository.getCategories().enqueue(object : Callback<List<String>> {
+            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
+                if (response.isSuccessful && response.body() != null)
+                    categoriesList.postValue(response.body())
+                else {
+                    val error = getError(response.errorBody()!!, response.code())
+                    if (error != null)
+                        Log.e(TAG, "getCategories response error $error")
+                }
+            }
+
+            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                Log.e(TAG, "getCategories onFailure : ${t.message}")
+            }
+
+        })
     }
 
     fun getAnnonce(annonceId: String): LiveData<Annonce> {

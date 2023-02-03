@@ -19,4 +19,8 @@ class AnnonceModifyRepository(private val retrofitService: RetrofitService) {
         retrofitService.updateAnnonceInfo(annonceId, newAnnonce)
 
     fun getAnnonceById(annonceId: String) = retrofitService.getAnnonceById(annonceId)
+
+    fun getCategories() = retrofitService.getCategories()
+
+    fun getCities() = retrofitService.getCities()
 }

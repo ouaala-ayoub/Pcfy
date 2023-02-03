@@ -1,5 +1,7 @@
 package alpha.company.pc.ui.adapters
 
+import alpha.company.pc.data.models.local.Category
+import alpha.company.pc.data.models.network.CategoryEnum
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,11 +13,19 @@ private const val TAG = "CategoryAdapter"
 
 
 class CategoryAdapter(
-    private val categoriesList: List<alpha.company.pc.data.models.local.Category>,
+
     private val onClick: OnCategoryClickedListener
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
 
     private var currentClicked = 0
+    private var categoriesList = mutableListOf<Category>()
+
+    fun setCategoriesList(namesList: List<String>){
+        categoriesList = namesList.map {
+            title -> Category(title)
+        }.toMutableList().also { it.add(0, Category(CategoryEnum.ALL.title)) }
+        notifyDataSetChanged()
+    }
 
     interface OnCategoryClickedListener {
         fun onCategoryClicked(title: String)

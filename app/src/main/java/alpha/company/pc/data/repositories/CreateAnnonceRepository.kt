@@ -13,4 +13,8 @@ class CreateAnnonceRepository(private val retrofitService: RetrofitService) {
         annonce,
     )
 
+    fun getCategories() = retrofitService.getCategories()
+
+    fun getCities() = retrofitService.getCities()
+
 }

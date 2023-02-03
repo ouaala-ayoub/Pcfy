@@ -13,6 +13,9 @@ import retrofit2.http.*
 
 interface RetrofitService {
 
+    //cities
+    @GET("cities")
+    fun getCities(): Call<List<String>>
     // Announces
     @HTTP(method = "DELETE", path = "announces/{id}", hasBody = true)
     fun deleteAnnonce(@Body tokens: Tokens, @Path("id") annonceId: String): Call<IdResponse>
@@ -22,6 +25,9 @@ interface RetrofitService {
         @Path("id") annonceId: String,
         @Body visitedRequest: VisitedRequest
     ): Call<ResponseBody>
+
+    @GET("announces/categories")
+    fun getCategories(): Call<List<String>>
 
     @GET("announces")
     fun getAllAnnonces(

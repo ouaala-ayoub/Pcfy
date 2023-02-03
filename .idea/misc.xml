@@ -63,6 +63,7 @@
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-large/activity_requests.xml" value="0.8375" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-large/fragment_annonce.xml" value="0.34986945169712796" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-large/fragment_annonce_modify.xml" value="0.2864471996579735" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-large/fragment_create_annonce.xml" value="0.2864471996579735" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-large/fragment_favourites.xml" value="0.2864471996579735" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-large/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-large/fragment_image_modify.xml" value="0.33" />
@@ -97,6 +98,7 @@
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-normal/activity_requests.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-normal/fragment_annonce.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-normal/fragment_annonce_modify.xml" value="0.3489583333333333" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-normal/fragment_create_annonce.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-normal/fragment_favourites.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-normal/fragment_home.xml" value="0.3489583333333333" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-normal/fragment_image_modify.xml" value="0.3489583333333333" />
@@ -126,7 +128,7 @@
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/activity_requests.xml" value="1.475770925110132" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/fragment_annonce.xml" value="1.475770925110132" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/fragment_annonce_modify.xml" value="1.475770925110132" />
-        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/fragment_create_annonce.xml" value="1.475770925110132" />
+        <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/fragment_create_annonce.xml" value="0.30889810972798526" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/fragment_favourites.xml" value="1.475770925110132" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/fragment_home.xml" value="0.5007473841554559" />
         <entry key="..\:/Users/ouaal/AndroidStudioProjects/Pcfy/app/src/main/res/layout-small/fragment_image_modify.xml" value="1.475770925110132" />

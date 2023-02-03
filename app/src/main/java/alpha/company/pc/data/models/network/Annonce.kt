@@ -13,6 +13,9 @@ data class Annonce(
     @SerializedName("price")
     val price: Number,
 
+    @SerializedName("city")
+    val city: String,
+
     @SerializedName("category")
     val category: String,
 

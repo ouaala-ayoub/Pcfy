@@ -31,6 +31,7 @@ import alpha.company.pc.ui.adapters.AddDetailsAdapter
 import alpha.company.pc.ui.adapters.ImagesModifyAdapter
 import alpha.company.pc.ui.viewmodels.AnnonceModifyModel
 import alpha.company.pc.utils.*
+import android.widget.EditText
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -55,7 +56,12 @@ class AnnonceModifyFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val annonceActivity = (requireActivity() as AnnonceModifyActivity)
-        viewModel = annonceActivity.viewModel
+        viewModel = annonceActivity.viewModel.also {
+            it.apply {
+                getCities()
+                getCategories()
+            }
+        }
         picasso = annonceActivity.picasso
         annonceToModifyId = annonceActivity.intent.getStringExtra("id")!!
 
@@ -203,6 +209,7 @@ class AnnonceModifyFragment : Fragment() {
                         titleEditText.setText(annonce.title)
                         priceEditText.setText(annonce.price.toString())
                         setTheCategoriesEditText(annonce.category)
+                        setTheCitiesEditText(annonce.city)
                         setTheStatueEditTextView(annonce.status)
                         markEditText.setText(annonce.mark)
                         descriptionEditText.setText(annonce.description)
@@ -217,6 +224,7 @@ class AnnonceModifyFragment : Fragment() {
                                 status = statusEditText.text.toString(),
                                 mark = markEditText.text.toString(),
                                 description = descriptionEditText.text.toString(),
+                                city = cityEditText.text.toString(),
                                 details = details,
                                 pictures = annonce.pictures,
                                 seller = annonce.seller,
@@ -306,31 +314,36 @@ class AnnonceModifyFragment : Fragment() {
         findNavController().navigate(action)
     }
 
+    private fun setTheEditText(editText: EditText, list: List<String>) {
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, list)
+        (editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+    }
+
+
+    private fun setTheCategoriesEditText(default: String) {
+        //default is the annonce attribute value
+        binding.categoryTextField.editText?.setText(default)
+        //set the adapter
+        viewModel.categoriesList.observe(viewLifecycleOwner) { categories ->
+            setTheEditText(binding.categoryEditText, categories)
+        }
+    }
+
+    private fun setTheCitiesEditText(default: String) {
+        binding.cityEditText.setText(default)
+        viewModel.citiesList.observe(viewLifecycleOwner) { cities ->
+            setTheEditText(binding.cityEditText, cities)
+        }
+    }
+
     private fun setTheStatueEditTextView(default: String) {
         //default is the annonce attribute value
         binding.statusTextField.editText?.setText(default)
-
         //set the adapter
         val values = Status.values().map {
             it.status
         }
-
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
-        (binding.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
-    }
-
-    private fun setTheCategoriesEditText(default: String) {
-
-        //default is the annonce attribute value
-        binding.categoryTextField.editText?.setText(default)
-
-        //set the adapter
-        val values = CategoryEnum.values().map { category ->
-            category.title
-        }
-
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
-        (binding.categoryTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
+        setTheEditText(binding.statusEditText, values)
     }
 
     private fun validateTheData() {

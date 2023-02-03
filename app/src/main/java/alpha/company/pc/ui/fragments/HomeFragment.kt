@@ -37,19 +37,26 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeModel
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentHomeBinding? = null
-    private lateinit var categoriesList: List<Category>
+//    private lateinit var categoriesList: List<Category>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
-        categoriesList = CategoryEnum.values().map { category ->
-            category.title
-        }.map { categoryTitle ->
-            Category(categoryTitle)
+//        categoriesList = CategoryEnum.values().map { category ->
+//            category.title
+//        }.map { categoryTitle ->
+//            Category(categoryTitle)
+//        }
+
+        viewModel = HomeModel(HomeRepository(retrofitService)).also {
+            it.apply {
+                getCategories()
+                getPopularAnnonces()
+                getAnnoncesListAll()
+            }
         }
 
-        viewModel = HomeModel(HomeRepository(retrofitService))
 
         val onClickListener = object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
@@ -73,7 +80,6 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         val categoryAdapter = CategoryAdapter(
-            categoriesList,
             object : CategoryAdapter.OnCategoryClickedListener {
                 override fun onCategoryClicked(title: String) {
                     if (title == CategoryEnum.ALL.title) {
@@ -95,7 +101,7 @@ class HomeFragment : Fragment() {
 
             val adRequest = AdRequest.Builder().build()
             Log.d(TAG, "adRequest: $adRequest")
-            adView?.loadAd(adRequest)
+            adView.loadAd(adRequest)
 
             vAppBar.addOnOffsetChangedListener { _, verticalOffset ->
                 val isScreenOnTop = verticalOffset == 0
@@ -123,7 +129,7 @@ class HomeFragment : Fragment() {
 
             //setting the annonces list
             annonceRv.apply {
-                layoutManager = GridLayoutManager(requireContext(), NUM_ROWS )
+                layoutManager = GridLayoutManager(requireContext(), NUM_ROWS)
                 adapter = annoncesAdapter
             }
 
@@ -139,8 +145,11 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.apply {
-            getPopularAnnonces()
-            getAnnoncesListAll()
+
+            categoriesList.observe(viewLifecycleOwner) { categories ->
+                categoryAdapter.setCategoriesList(categories)
+            }
+
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
                 if (annonces != null) {
