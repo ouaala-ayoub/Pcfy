@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,17 +19,20 @@
             android:id="@+id/detail_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="start"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxEms="@integer/max_title_length"
             android:textSize="16sp"
-            tools:text="title" />
+            android:textStyle="bold"
+            tools:text="title holqdjqùsmdq" />
 
         <TextView
             android:id="@+id/detail_body"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
+            android:gravity="start"
+            android:paddingStart="10dp"
             android:textSize="16sp"
             android:textStyle="normal"
             tools:text="body" />

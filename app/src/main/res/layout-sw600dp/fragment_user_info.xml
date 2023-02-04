@@ -194,7 +194,6 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:gravity="center|start"
                 android:text="@string/ratez_notre_application"
                 android:textAllCaps="false"

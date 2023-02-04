@@ -32,4 +32,5 @@
     <dimen name="single_image_modify">150dp</dimen>
     <bool name="isTablet">false</bool>
     <dimen name="add_size">100dp</dimen>
+    <dimen name="max_title_size">6</dimen>
 </resources>

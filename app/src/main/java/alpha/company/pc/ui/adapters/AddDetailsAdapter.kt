@@ -37,16 +37,15 @@ class AddDetailsAdapter(
         }
     }
 
-    private fun deleteElement(position: Int){
+    private fun deleteElement(position: Int) {
 
         if (detailsList.isNotEmpty()) {
             detailsList.removeAt(position)
-            if(detailsList.size == 0){
+            if (detailsList.size == 0) {
                 isEmpty.postValue(true)
             }
             notifyDataSetChanged()
-        }
-        else {
+        } else {
             isEmpty.postValue(true)
         }
     }
@@ -67,7 +66,6 @@ class AddDetailsAdapter(
                 bodyEditText.doOnTextChanged { text, _, _, _ ->
                     detailsList[position].body = text.toString()
                 }
-
 
                 titleEditText.setText(detail.title)
                 bodyEditText.setText(detail.body)

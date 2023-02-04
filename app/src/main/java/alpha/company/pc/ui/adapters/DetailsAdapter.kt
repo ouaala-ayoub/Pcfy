@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.Detail
 import alpha.company.pc.databinding.SingleDetailBinding
+import android.text.TextUtils
 
 class DetailsAdapter(
     private val detailsList: List<Detail>
@@ -19,9 +20,12 @@ class DetailsAdapter(
 
             binding.apply {
                 detailTitle.text =
-                    binding.root.resources.getString(R.string.details_title, detail.title)
+                    root.resources.getString(R.string.details_title, detail.title)
                 detailBody.text = detail.body
             }
+        }
+        private fun getTitle(fullTitle: String): String{
+            return ""
         }
     }
 
