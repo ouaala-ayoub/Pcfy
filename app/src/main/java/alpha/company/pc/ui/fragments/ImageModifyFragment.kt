@@ -41,7 +41,7 @@ class ImageModifyFragment : Fragment() {
     private lateinit var binding: FragmentImageModifyBinding
     private lateinit var viewModel: AnnonceModifyModel
     private lateinit var annonceId: String
-    private lateinit var imagesList: List<String>
+    private lateinit var annonceActivity: AnnonceModifyActivity
     private lateinit var imagesAdapter: ImagesAdapter
     private lateinit var picasso: Picasso
     private var imageIndex: Int = -1
@@ -49,16 +49,15 @@ class ImageModifyFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val args: ImageModifyFragmentArgs by navArgs()
-        val annonceActivity = (requireActivity() as AnnonceModifyActivity)
+        annonceActivity = (requireActivity() as AnnonceModifyActivity)
         //to modify
         annonceId = requireActivity().intent.getStringExtra("id")!!
         imageIndex = args.index
-        imagesList = args.imagesArray.toList()
         viewModel = annonceActivity.viewModel
         picasso = annonceActivity.picasso
 
         Log.i(TAG, "imageIndex: $imageIndex")
-        Log.i(TAG, "imagesList: $imagesList")
+        Log.i(TAG, "imagesList: ${annonceActivity.annoncePictures}")
 
         super.onCreate(savedInstanceState)
 
@@ -69,13 +68,10 @@ class ImageModifyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val imageLoader = imagesList.toMutableList().map {
-            url -> ImageLoader(url, LoadPolicy.Cache)
-        }
 
         binding = FragmentImageModifyBinding.inflate(inflater, container, false)
         imagesAdapter = ImagesAdapter(
-            imageLoader,
+            annonceActivity.annoncePictures,
             object : ImagesAdapter.OnImageClicked {
                 override fun onLeftClicked() {
                     binding.imagesPager.currentItem -= 1
@@ -95,23 +91,26 @@ class ImageModifyFragment : Fragment() {
 
                         if (data?.data != null) {
                             val indexToChange = binding.imagesPager.currentItem
-                            val requestBody =
-                                getRequestBody(indexToChange, data.data!!)
 
-                            viewModel.apply {
-                                changePicture(annonceId, requestBody)
-                                updatedImage.observe(viewLifecycleOwner) { updated ->
-                                    Log.i(TAG, "updated: $updated")
-                                    if (updated) {
-                                        requireContext().toast(UPDATED_IMAGE, Toast.LENGTH_SHORT)
-                                        imagesAdapter.reloadImageAt(indexToChange)
-//                                        findNavController().popBackStack()
-                                    } else {
-                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
-                                        (requireActivity() as AnnonceModifyActivity).finish()
-                                    }
-                                }
-                            }
+                            imagesAdapter.modifyImageAtPosition(data.data, indexToChange)
+
+//                            val requestBody =
+//                                getRequestBody(indexToChange, data.data!!)
+
+//                            viewModel.apply {
+//                                changePicture(annonceId, requestBody)
+//                                updatedImage.observe(viewLifecycleOwner) { updated ->
+//                                    Log.i(TAG, "updated: $updated")
+//                                    if (updated) {
+//                                        requireContext().toast(UPDATED_IMAGE, Toast.LENGTH_SHORT)
+//                                        imagesAdapter.reloadImageAt(indexToChange)
+////                                        findNavController().popBackStack()
+//                                    } else {
+//                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
+//                                        (requireActivity() as AnnonceModifyActivity).finish()
+//                                    }
+//                                }
+//                            }
                         }
                     }
                 }
@@ -120,7 +119,7 @@ class ImageModifyFragment : Fragment() {
         binding.apply {
 
             imagesPager.apply {
-                offscreenPageLimit = imagesList.size
+                offscreenPageLimit = annonceActivity.annoncePictures.size
                 adapter = imagesAdapter
                 currentItem = imageIndex
             }
@@ -133,39 +132,42 @@ class ImageModifyFragment : Fragment() {
                 }
 
                 delete.setOnClickListener {
-                    val currentItem = imagesPager.currentItem
-                    Log.i(TAG, "going to delete item : $currentItem")
-                    val builder = MultipartBody
-                        .Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("index", currentItem.toString())
-                        .build()
+//                    val currentItem = imagesPager.currentItem
+//                    Log.i(TAG, "going to delete item : $currentItem")
+//                    val builder = MultipartBody
+//                        .Builder()
+//                        .setType(MultipartBody.FORM)
+//                        .addFormDataPart("index", currentItem.toString())
+//                        .build()
+//
+//                    makeDialog(
+//                        requireContext(),
+//                        object : OnDialogClicked {
+//                            override fun onPositiveButtonClicked() {
+////                                deleteImage(annonceId, builder)
+////                                deletedImage.observe(viewLifecycleOwner) { deleted ->
+////                                    // go back to the previous screen if deleted successfully
+////                                    if (deleted) {
+////                                        requireContext().toast(DELETED_IMAGE, Toast.LENGTH_SHORT)
+////                                        findNavController().popBackStack()
+////                                    } else {
+////                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
+////                                        (requireActivity() as AnnonceModifyActivity).finish()
+////                                    }
+////                                }
+//                            }
+//
+//                            override fun onNegativeButtonClicked() {
+//                                //do nothing
+//                            }
+//
+//                        },
+//                        getString(R.string.image_instructions_title),
+//                        getString(R.string.image_instructions_message)
+//                    ).show()
 
-                    makeDialog(
-                        requireContext(),
-                        object : OnDialogClicked {
-                            override fun onPositiveButtonClicked() {
-                                deleteImage(annonceId, builder)
-                                deletedImage.observe(viewLifecycleOwner) { deleted ->
-                                    // go back to the previous screen if deleted successfully
-                                    if (deleted) {
-                                        requireContext().toast(DELETED_IMAGE, Toast.LENGTH_SHORT)
-                                        findNavController().popBackStack()
-                                    } else {
-                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
-                                        (requireActivity() as AnnonceModifyActivity).finish()
-                                    }
-                                }
-                            }
+                    imagesAdapter.deleteImageAtPosition(imagesPager.currentItem)
 
-                            override fun onNegativeButtonClicked() {
-                                //do nothing
-                            }
-
-                        },
-                        getString(R.string.image_instructions_title),
-                        getString(R.string.image_instructions_message)
-                    ).show()
                 }
 
                 modify.setOnClickListener {
@@ -194,9 +196,7 @@ class ImageModifyFragment : Fragment() {
     private fun getRequestBody(index: Int, imageUri: Uri): RequestBody {
 
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
-
         val filePath = URIPathHelper().getPath(requireContext(), imageUri)
-
         val file = File(filePath!!)
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
 

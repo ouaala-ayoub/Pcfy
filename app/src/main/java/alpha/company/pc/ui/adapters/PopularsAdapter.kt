@@ -26,12 +26,16 @@ class PopularsAdapter(private val annonceClickListener: AnnoncesAdapter.OnAnnonc
             val annonce = annoncesList[position]
             try {
                 binding.apply {
-                    
-                    picasso
-                        .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
-                        .fit()
-                        .into(popularAnnonceImage)
 
+                    if (annonce.pictures.isEmpty()){
+                        popularAnnonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                    } else {
+                        picasso
+                            .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
+                            .fit()
+                            .error(R.drawable.ic_baseline_no_photography_24)
+                            .into(popularAnnonceImage)
+                    }
                     popularAnnonceTitle.text = annonce.title
 
                     popularAnnoncePrice.text =

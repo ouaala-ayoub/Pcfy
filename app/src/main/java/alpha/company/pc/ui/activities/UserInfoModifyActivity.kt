@@ -64,7 +64,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
                         phoneEditText.setText(oldUser.phoneNumber)
                         emailEditText.setText(oldUser.email)
                         cityEditText.setText(oldUser.city)
-                        setUpTheTypeEditText(getType(oldUser.userType.toString()))
+                        setUpTheTypeEditText(getType(oldUser.role.toString()))
                         organisationNameEditText.setText(oldUser.brand)
 
                         validateTheData()
@@ -80,7 +80,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
                                             phoneNumber = phoneEditText.text.toString(),
                                             email = emailEditText.text.toString(),
                                             city = cityEditText.text.toString(),
-                                            userType = getTypeRequestBody(userTypeEditText.text.toString()),
+                                            role = getTypeRequestBody(userTypeEditText.text.toString()),
                                             brand = organisationNameEditText.text.toString(),
                                             password = oldUser.password,
                                             imageUrl = oldUser.imageUrl,

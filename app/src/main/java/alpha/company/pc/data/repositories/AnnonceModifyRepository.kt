@@ -6,16 +6,16 @@ import okhttp3.RequestBody
 
 class AnnonceModifyRepository(private val retrofitService: RetrofitService) {
 
-    fun deleteImage(annonceId: String, imageIndex: RequestBody) =
-        retrofitService.deleteAnnonceImage(annonceId, imageIndex)
+//    fun deleteImage(annonceId: String, imageIndex: RequestBody) =
+//        retrofitService.deleteAnnonceImage(annonceId, imageIndex)
 
-    fun changePicture(annonceId: String, imagesToPut: RequestBody) =
-        retrofitService.changePicture(annonceId, imagesToPut)
+//    fun changePicture(annonceId: String, imagesToPut: RequestBody) =
+//        retrofitService.changePicture(annonceId, imagesToPut)
 
-    fun addPictures(annonceId: String, imagesToAdd: RequestBody)=
-        retrofitService.putPictures(annonceId, imagesToAdd)
+//    fun updatePictures(annonceId: String, imagesToAdd: RequestBody)=
+//        retrofitService.updatePictures(annonceId, imagesToAdd)
 
-    fun updateAnnonce(annonceId: String, newAnnonce: Annonce) =
+    fun updateAnnonce(annonceId: String, newAnnonce: RequestBody) =
         retrofitService.updateAnnonceInfo(annonceId, newAnnonce)
 
     fun getAnnonceById(annonceId: String) = retrofitService.getAnnonceById(annonceId)

@@ -20,8 +20,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.Detail
-import alpha.company.pc.data.models.network.Annonce
-import alpha.company.pc.data.models.network.CategoryEnum
 import alpha.company.pc.data.models.network.Status
 import alpha.company.pc.databinding.AddDetailBinding
 import alpha.company.pc.databinding.FragmentAnnonceModifyBinding
@@ -31,11 +29,13 @@ import alpha.company.pc.ui.adapters.AddDetailsAdapter
 import alpha.company.pc.ui.adapters.ImagesModifyAdapter
 import alpha.company.pc.ui.viewmodels.AnnonceModifyModel
 import alpha.company.pc.utils.*
+import android.net.Uri
 import android.widget.EditText
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
@@ -51,19 +51,23 @@ class AnnonceModifyFragment : Fragment() {
     private lateinit var viewModel: AnnonceModifyModel
     private lateinit var annonceToModifyId: String
     private lateinit var imageResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var picturesAdapter: ImagesModifyAdapter
+    private lateinit var annonceActivity: AnnonceModifyActivity
     private lateinit var picasso: Picasso
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        val annonceActivity = (requireActivity() as AnnonceModifyActivity)
+        annonceActivity = (requireActivity() as AnnonceModifyActivity)
+        picasso = annonceActivity.picasso
+        annonceToModifyId = annonceActivity.intent.getStringExtra("id")!!
+
         viewModel = annonceActivity.viewModel.also {
             it.apply {
                 getCities()
                 getCategories()
+                getAnnonce(annonceToModifyId)
             }
         }
-        picasso = annonceActivity.picasso
-        annonceToModifyId = annonceActivity.intent.getStringExtra("id")!!
 
         super.onCreate(savedInstanceState)
     }
@@ -75,6 +79,33 @@ class AnnonceModifyFragment : Fragment() {
 
         binding = FragmentAnnonceModifyBinding.inflate(inflater, container, false)
 
+        picturesAdapter = ImagesModifyAdapter(
+            annonceActivity.annoncePictures,
+            object : ImagesModifyAdapter.OnImageModifyClicked {
+                override fun onImageClicked(
+                    imageIndex: Int,
+                    imagesList: List<Picture>
+                ) {
+                    goToImageModifyFragment(
+                        imageIndex,
+                    )
+                }
+
+                override fun onAddClicked() {
+                    openGallery()
+                }
+
+//                override fun onRightClicked() {
+////                    TODO("Not yet implemented")
+//                }
+//
+//                override fun onLeftClicked() {
+////                    TODO("Not yet implemented")
+//                }
+            },
+            picasso
+        )
+
         imageResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -82,22 +113,24 @@ class AnnonceModifyFragment : Fragment() {
                     viewModel.apply {
 
                         if (data != null) {
-                            val requestBody =
-                                getRequestBody(data)
 
-                            viewModel.apply {
-                                addPictures(annonceToModifyId, requestBody)
-                                addedImages.observe(viewLifecycleOwner) { added ->
-                                    Log.i(TAG, "addedImages: $added")
-                                    if (added) {
-                                        requireContext().toast(ADDED_IMAGES, Toast.LENGTH_SHORT)
-                                        getAnnonce(annonceToModifyId)
-                                    } else {
-                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
-                                        requireActivity().finish()
-                                    }
+                            val clipData = data.clipData
+                            if (clipData == null) {
+                                picturesAdapter.addPictures(listOf(Picture("new", data.data)))
+                            } else {
+                                val pictures = mutableListOf<Picture>()
+                                for (i in 0 until clipData.itemCount) {
+                                    val currentItemUri = clipData.getItemAt(i).uri
+                                    pictures.add(
+                                        Picture(
+                                            "new",
+                                            currentItemUri
+                                        )
+                                    )
                                 }
+                                picturesAdapter.addPictures(pictures)
                             }
+
                         }
                     }
                 }
@@ -105,7 +138,7 @@ class AnnonceModifyFragment : Fragment() {
 
         binding.apply {
             viewModel.apply {
-                getAnnonce(annonceToModifyId).observe(viewLifecycleOwner) { annonce ->
+                oldAnnonce.observe(viewLifecycleOwner) { annonce ->
 
                     isTurning.observe(viewLifecycleOwner) { loading ->
                         annonceModifyProgressBar.isVisible = loading
@@ -118,7 +151,22 @@ class AnnonceModifyFragment : Fragment() {
                     } else {
 
                         Log.i(TAG, "annonce retrieved : $annonce")
-                        var details = annonce.details
+
+                        var details = if (annonce.details.isNullOrEmpty()) {
+                            mutableListOf()
+                        } else {
+                            annonce.details
+                        }
+                        //fill the annoncePictures list
+
+                        if (annonceActivity.annoncePictures.size == 1) {
+                            annonceActivity.annoncePictures = annonce.pictures.map { name ->
+                                Picture(name)
+                            }.toMutableList()
+                            picturesAdapter.setImageList(annonceActivity.annoncePictures)
+                        }
+
+                        Log.d(TAG, "annoncePictures: ${annonceActivity.annoncePictures}")
 
                         // on annonce retrieved success
                         //to add image adding and deleting
@@ -144,9 +192,11 @@ class AnnonceModifyFragment : Fragment() {
                                     }
                                 }
 
-                                addDetailsRv.adapter = detailsAddAdapter
-                                addDetailsRv.layoutManager =
-                                    LinearLayoutManager(requireContext())
+                                addDetailsRv.apply {
+                                    adapter = detailsAddAdapter
+                                    layoutManager =
+                                        LinearLayoutManager(requireContext())
+                                }
                             }
 
                             val dialog = makeDialog(
@@ -179,26 +229,7 @@ class AnnonceModifyFragment : Fragment() {
 
 
                         imagesRv.apply {
-
-                            adapter = ImagesModifyAdapter(
-                                annonce.pictures.toMutableList(),
-                                object : ImagesModifyAdapter.OnImageModifyClicked {
-                                    override fun onImageClicked(
-                                        imageIndex: Int,
-                                        imagesList: List<String>
-                                    ) {
-                                        goToImageModifyFragment(
-                                            imageIndex,
-                                            imagesList.toTypedArray()
-                                        )
-                                    }
-
-                                    override fun onAddClicked() {
-                                        openGallery()
-                                    }
-                                },
-                                picasso
-                            )
+                            adapter = picturesAdapter
 
                             layoutManager = LinearLayoutManager(
                                 requireContext(),
@@ -217,20 +248,105 @@ class AnnonceModifyFragment : Fragment() {
                         validateTheData()
 
                         submitChanges.setOnClickListener {
-                            val newAnnonce = Annonce(
-                                title = titleEditText.text.toString(),
-                                price = priceEditText.text.toString().toInt(),
-                                category = categoryEditText.text.toString(),
-                                status = statusEditText.text.toString(),
-                                mark = markEditText.text.toString(),
-                                description = descriptionEditText.text.toString(),
-                                city = cityEditText.text.toString(),
-                                details = details,
-                                pictures = annonce.pictures,
-                                seller = annonce.seller,
-                                visited = annonce.visited
-                            )
-                            updateAnnonceInfo(annonceToModifyId, newAnnonce)
+
+//                            val newAnnonce = Annonce(
+                            val title = titleEditText.text.toString()
+                            val price = priceEditText.text.toString()
+                            val category = categoryEditText.text.toString()
+                            val status = statusEditText.text.toString()
+                            val mark = markEditText.text.toString()
+                            val description = descriptionEditText.text.toString()
+                            val city = cityEditText.text.toString()
+                            val newDetails = details
+                            annonce.details
+
+                            annonceActivity.annoncePictures.removeAt(annonceActivity.annoncePictures.lastIndex)
+                            val pictures = annonceActivity.annoncePictures
+
+//                                seller = annonce.seller,
+//                                visited = annonce.visited
+//                            )
+
+                            val builder = MultipartBody.Builder()
+                                .setType(MultipartBody.FORM)
+
+                            builder.apply {
+                                if (annonce.title != title)
+                                    addFormDataPart("title", title)
+
+                                if (annonce.price.toString() != price)
+                                    addFormDataPart("price", price)
+
+                                if (annonce.category != category)
+                                    addFormDataPart("category", category)
+
+                                if (annonce.status != status)
+                                    addFormDataPart("status", status)
+
+                                if (annonce.mark != mark)
+                                    addFormDataPart("mark", mark)
+
+                                if (annonce.description != mark)
+                                    addFormDataPart("description", description)
+
+                                if (annonce.city != city)
+                                    addFormDataPart("city", city)
+
+                                Log.d(TAG, "details: $details")
+//                                if (annonce.details != details) {
+                                Log.d(TAG, "details: $details")
+                                for (i in details.indices) {
+                                    addFormDataPart("details[$i][title]", details[i].title)
+                                    addFormDataPart("details[$i][body]", details[i].body)
+                                }
+//                                }
+
+//                                Log.d(TAG, "pictures :${annonceActivity.annoncePictures}")
+//                                val test = pictures.map { picture -> picture.name }
+
+//                                if (annonce.pictures != test) {
+                                for (i in pictures.indices) {
+                                    if (pictures[i].uri != null) {
+
+                                        val pathHelper = URIPathHelper()
+                                        val filePath = pathHelper.getPath(
+                                            requireContext(),
+                                            pictures[i].uri!!
+                                        )
+                                        val file = File(filePath!!)
+                                        val requestFile =
+                                            file.asRequestBody("image/*".toMediaTypeOrNull())
+
+                                        builder.addFormDataPart(
+                                            "pictures",
+                                            file.name,
+                                            requestFile
+                                        )
+                                        Log.d(TAG, "adding pictures: file")
+
+                                    } else {
+                                        builder.addFormDataPart(
+                                            "pictures[$i][name]",
+                                            pictures[i].name
+                                        ).addFormDataPart(
+                                            "pictures[$i][position]",
+                                            i.toString()
+                                        )
+                                        Log.d(
+                                            TAG,
+                                            "adding pictures[$i][name]: ${pictures[i].name}"
+                                        )
+                                        Log.d(
+                                            TAG,
+                                            "adding pictures[$i][position]: $i}"
+                                        )
+                                    }
+                                }
+                            }
+//                            }
+
+
+                            updateAnnonceInfo(annonceToModifyId, builder.build())
                                 .observe(viewLifecycleOwner) { annonceModified ->
 
                                     //on annonce modification fail
@@ -249,6 +365,7 @@ class AnnonceModifyFragment : Fragment() {
         return binding.root
     }
 
+
     private fun changeUiEnabling(loading: Boolean) {
         binding.apply {
             scrollView.isEnabled = !loading
@@ -265,52 +382,56 @@ class AnnonceModifyFragment : Fragment() {
         imageResultLauncher.launch(intent)
     }
 
-    private fun getRequestBody(data: Intent): MultipartBody {
-        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
-        val pathHelper = URIPathHelper()
+    private fun getImagesRequest(builder: MultipartBody.Builder) {
 
-
-        if (data.clipData == null) {
-            val currentItemUri = data.data
-            val filePath = pathHelper.getPath(requireContext(), currentItemUri!!)
-
-            val file = File(filePath!!)
-            Log.i(TAG, "getRequestBody file: $file")
-            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-
-            builder.apply {
-                addFormDataPart(
-                    "pictures",
-                    file.name,
-                    requestFile
-                )
-            }
-        } else {
-            val clipData = data.clipData
-            for (i in 0 until clipData!!.itemCount) {
-                val currentItemUri = clipData.getItemAt(i).uri
-                val filePath = pathHelper.getPath(requireContext(), currentItemUri)
-
-                val file = File(filePath!!)
-                Log.i(TAG, "file $i: $file")
-                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-
-                builder.apply {
-                    addFormDataPart(
-                        "pictures",
-                        file.name,
-                        requestFile
-                    )
-                }
-            }
-        }
-
-        return builder.build()
     }
 
-    private fun goToImageModifyFragment(imageIndex: Int, imagesList: Array<String>) {
+//    private fun getRequestBody(data: Intent): MultipartBody {
+//        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+//        val pathHelper = URIPathHelper()
+//
+//
+//        if (data.clipData == null) {
+//            val currentItemUri = data.data
+//            val filePath = pathHelper.getPath(requireContext(), currentItemUri!!)
+//
+//            val file = File(filePath!!)
+//            Log.i(TAG, "getRequestBody file: $file")
+//            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+//
+//            builder.apply {
+//                addFormDataPart(
+//                    "pictures",
+//                    file.name,
+//                    requestFile
+//                )
+//            }
+//        } else {
+//            val clipData = data.clipData
+//            for (i in 0 until clipData!!.itemCount) {
+//                val currentItemUri = clipData.getItemAt(i).uri
+//                val filePath = pathHelper.getPath(requireContext(), currentItemUri)
+//
+//                val file = File(filePath!!)
+//                Log.i(TAG, "file $i: $file")
+//                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+//
+//                builder.apply {
+//                    addFormDataPart(
+//                        "pictures",
+//                        file.name,
+//                        requestFile
+//                    )
+//                }
+//            }
+//        }
+//
+//        return builder.build()
+//    }
+
+    private fun goToImageModifyFragment(imageIndex: Int) {
         val action = AnnonceModifyFragmentDirections
-            .actionAnnonceModifyFragmentToImageModifyFragment(imageIndex, imagesList)
+            .actionAnnonceModifyFragmentToImageModifyFragment(imageIndex)
         findNavController().navigate(action)
     }
 
@@ -389,3 +510,8 @@ class AnnonceModifyFragment : Fragment() {
     }
 
 }
+
+data class Picture(
+    val name: String,
+    var uri: Uri? = null
+)

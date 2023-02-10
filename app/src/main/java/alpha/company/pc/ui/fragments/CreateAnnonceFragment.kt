@@ -365,8 +365,6 @@ class CreateAnnonceFragment : Fragment() {
 
     private fun setTheStatueEditTextView() {
         //default is new
-        binding!!.statusTextField.editText?.setText(Status.NEW.status)
-        //set the adapter
         val values = Status.values().map { status ->
             status.status
         }

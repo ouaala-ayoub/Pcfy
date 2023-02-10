@@ -15,7 +15,10 @@ class UserInfoRepository(private val retrofitService: RetrofitService) {
     fun getAnnonceOrders(annonceId: String) = retrofitService.getAnnonceOrders(annonceId)
 
     fun deleteAnnonce(tokens: Tokens, annonceId: String) =
-        retrofitService.deleteAnnonce(tokens, annonceId)
+        retrofitService.deleteAnnonce(
+            "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}",
+            annonceId
+        )
 
     fun updateUserInfo(userId: String, newUser: User) =
         retrofitService.updateUserInfo(userId, newUser)

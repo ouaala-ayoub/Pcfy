@@ -25,6 +25,7 @@ class RequestsAdapter(
                 picasso
                     .load(imageUrl)
                     .fit()
+                    .error(R.drawable.ic_baseline_no_photography_24)
                     .centerCrop()
                     .into(announceImage)
 

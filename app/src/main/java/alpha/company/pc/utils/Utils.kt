@@ -29,14 +29,14 @@ const val ERROR_MSG = "Erreur inattendue"
 const val NON_AUTHENTICATED = "Utilisateur non authentifié"
 
 //real ids
-//const val INTERSTITIAL_ORDER_DONE_ADD_ID = "ca-app-pub-8302914035567843/1833402360"
-//const val INTERSTITIAL_ORDER_CLICKED_ID = "ca-app-pub-8302914035567843/7247997686"
-//const val INTERSTITIAL_ANNONCE_CLICKED_ID = "ca-app-pub-8302914035567843/6859617890"
+const val INTERSTITIAL_ORDER_DONE_ADD_ID = "ca-app-pub-8302914035567843/1833402360"
+const val INTERSTITIAL_ORDER_CLICKED_ID = "ca-app-pub-8302914035567843/7247997686"
+const val INTERSTITIAL_ANNONCE_CLICKED_ID = "ca-app-pub-8302914035567843/6859617890"
 
 //test ids
-const val INTERSTITIAL_ORDER_DONE_ADD_ID = "ca-app-pub-3940256099942544/1033173712"
-const val INTERSTITIAL_ORDER_CLICKED_ID = "ca-app-pub-3940256099942544/1033173712"
-const val INTERSTITIAL_ANNONCE_CLICKED_ID = "ca-app-pub-3940256099942544/1033173712"
+//const val INTERSTITIAL_ORDER_DONE_ADD_ID = "ca-app-pub-3940256099942544/1033173712"
+//const val INTERSTITIAL_ORDER_CLICKED_ID = "ca-app-pub-3940256099942544/1033173712"
+//const val INTERSTITIAL_ANNONCE_CLICKED_ID = "ca-app-pub-3940256099942544/1033173712"
 
 interface OnDialogClicked {
     fun onPositiveButtonClicked()
@@ -88,11 +88,12 @@ fun makeSnackBar(
 
 fun getError(responseBody: ResponseBody, code: Int): Error? {
     return try {
+        Log.d(TAG, "getError responseBody.charStream().readText() :${responseBody.charStream().readText()} ")
         val jsonObj = JSONObject(responseBody.charStream().readText())
         Error(jsonObj.getString("error"), code)
     } catch (e: Exception) {
         val error = e.message?.let { Error(it, code) }
-        Log.i(TAG, "getError: $error")
+        Log.e(TAG, "error parsing JSON error message: $error")
         return error
     }
 }
@@ -178,8 +179,8 @@ class URIPathHelper {
                 )
             }
             if (cursor != null && cursor.moveToFirst()) {
-                val column_index: Int = cursor.getColumnIndexOrThrow(column)
-                return cursor.getString(column_index)
+                val columnIndex: Int = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(columnIndex)
             }
         } finally {
             cursor?.close()

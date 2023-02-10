@@ -22,6 +22,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     val categoriesList = MutableLiveData<List<String>>()
     val citiesList = MutableLiveData<List<String>>()
     private val form = FormData()
+    val formValues = form.getValues()
     val titleLiveData = form.titleLiveData
     val priceLiveData = form.priceLiveData
     val imagesLiveData = form.imagesLiveData
@@ -165,6 +166,17 @@ class FormData {
             val city = citiesLiveData.value
             this.value = validateData(title, price, images, category, city, status)
         }
+    }
+
+    fun getValues(): List<String>{
+        return listOf(
+            titleLiveData.value.toString(),
+            priceLiveData.value.toString(),
+            imagesLiveData.value.toString(),
+            categoryLiveData.value.toString(),
+            citiesLiveData.value.toString(),
+            statusLiveData.value.toString()
+        )
     }
 
     private fun validateData(

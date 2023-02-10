@@ -77,6 +77,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                         binding!!.apply {
 
                             loggedInUser = getUserId()!!
+//                            loggedInUser = "63dbfb767218225b4aa26b96"
                             Log.i(TAG, "current user: $loggedInUser")
 
                             getUserById(loggedInUser)

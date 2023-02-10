@@ -23,7 +23,7 @@ data class User(
     val userId: String? = null,
 
     @SerializedName("role")
-    val userType: String? = null,
+    val role: String? = null,
 
     @SerializedName("createdAt")
     val createdAt: String? = null,

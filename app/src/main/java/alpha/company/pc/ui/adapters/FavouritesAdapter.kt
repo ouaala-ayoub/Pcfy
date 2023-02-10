@@ -69,15 +69,19 @@ class FavouritesAdapter(
                 )
 
                 //including the image
-                if (favourite.pictures.isEmpty()) {
+
+                if (favourite.pictures.isEmpty()){
                     favouriteImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
-                } else {
+                } else if (favourite.pictures[0].isNotBlank()) {
                     picasso
                         .load("$BASE_AWS_S3_LINK${favourite.pictures[0]}")
                         .fit()
+                        .error(R.drawable.ic_baseline_no_photography_24)
                         .centerCrop()
                         .into(favouriteImage)
                 }
+
+
 
 //                Log.i(TAG, "onFavouriteClickListener : $onFavouriteClickListener")
 //                Log.i(TAG, "onCommandsClickListener : $onCommandsClickListener")

@@ -13,9 +13,6 @@
         <argument
             android:name="index"
             app:argType="integer" />
-        <argument
-            android:name="imagesArray"
-            app:argType="string[]" />
     </fragment>
     <fragment
         android:id="@+id/annonceModifyFragment"

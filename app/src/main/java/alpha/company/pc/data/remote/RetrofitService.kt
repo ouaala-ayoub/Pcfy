@@ -2,7 +2,6 @@ package alpha.company.pc.data.remote
 
 import alpha.company.pc.data.models.local.OrderStatusRequest
 import alpha.company.pc.data.models.local.TokenRequest
-import alpha.company.pc.data.models.local.VisitedRequest
 import alpha.company.pc.data.models.network.*
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -17,14 +16,11 @@ interface RetrofitService {
     @GET("cities")
     fun getCities(): Call<List<String>>
     // Announces
-    @HTTP(method = "DELETE", path = "announces/{id}", hasBody = true)
-    fun deleteAnnonce(@Body tokens: Tokens, @Path("id") annonceId: String): Call<IdResponse>
 
-    @PUT("announces/{id}")
-    fun addVisited(
-        @Path("id") annonceId: String,
-        @Body visitedRequest: VisitedRequest
-    ): Call<ResponseBody>
+//    @HTTP(method = "DELETE", path = "announces/{id}", hasBody = true)
+    @DELETE("announces/{id}")
+    fun deleteAnnonce(@Header("Cookie") tokens: String, @Path("id") annonceId: String): Call<IdResponse>
+
 
     @GET("announces/categories")
     fun getCategories(): Call<List<String>>
@@ -54,7 +50,7 @@ interface RetrofitService {
     @PUT("announces/{id}")
     fun updateAnnonceInfo(
         @Path("id") annonceId: String,
-        @Body newAnnonce: Annonce
+        @Body newAnnonce: RequestBody
     ): Call<ResponseBody>
 
     @HTTP(method = "DELETE", path = "announces/{id}/pictures", hasBody = true)
@@ -69,11 +65,11 @@ interface RetrofitService {
         @Body imageToChange: RequestBody
     ): Call<ResponseBody>
 
-    @PUT("announces/{id}/pictures")
-    fun putPictures(
-        @Path("id") annonceId: String,
-        @Body imagesToPut: RequestBody
-    ): Call<ResponseBody>
+//    @PUT("announces/{id}/pictures")
+//    fun updatePictures(
+//        @Path("id") annonceId: String,
+//        @Body updatedPictures: RequestBody
+//    ): Call<ResponseBody>
 
     //handle users admin ?
 //
@@ -85,8 +81,8 @@ interface RetrofitService {
     @POST("auth/login")
     fun login(@Body userCredentials: UserCredentials): Call<LoginResponse>
 
-    @POST("auth")
-    fun auth(@Body tokens: Tokens): Call<BodyX?>
+    @GET("auth")
+    fun auth(@Header("Cookie") tokens: String): Call<BodyX?>
 
     // Users
 

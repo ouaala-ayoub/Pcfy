@@ -44,17 +44,18 @@ class AnnoncesAdapter(
                         annonce.price.toString()
                     )
 
-                    if (annonce.pictures.isEmpty()) {
+                    if (annonce.pictures.isEmpty()){
                         annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
-                    } else {
-                        if (annonce.pictures[0].isNotBlank()) {
-                            Picasso
-                                .get()
-                                .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
-                                .fit()
-                                .into(annonceImage)
-                        }
                     }
+                    else if (annonce.pictures[0].isNotBlank()) {
+                        Picasso
+                            .get()
+                            .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
+                            .error(R.drawable.ic_baseline_no_photography_24)
+                            .fit()
+                            .into(annonceImage)
+                    }
+
 //                    annonceSeller.text = annonce.seller.name
 
                     binding.annonce.setOnClickListener {

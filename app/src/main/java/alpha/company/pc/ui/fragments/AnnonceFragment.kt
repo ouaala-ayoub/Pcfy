@@ -75,8 +75,6 @@ class AnnonceFragment : Fragment() {
                     if (annonce != null) {
                         //bind the data to the views
 
-                        //add 1 visited
-                        addVisited( annonceId, annonce.visited)
                         try {
 //                            getSellerById(annonce.sellerId!!)
 
@@ -84,9 +82,13 @@ class AnnonceFragment : Fragment() {
 
                                 val pictures = annonce.pictures
                                 val imageLoader =
-                                    pictures.map { url -> ImageLoader(url, LoadPolicy.Cache) }
+                                    pictures.map { url -> Picture(url) }.toMutableList()
 
-                                offscreenPageLimit = pictures.size
+//                                if (imageLoader.isEmpty())
+//                                    imageLoader.add(Picture("))
+                                if (pictures.isNotEmpty())
+                                    offscreenPageLimit = pictures.size
+
                                 adapter = ImagesAdapter(
                                     imageLoader,
                                     object : ImagesAdapter.OnImageClicked {
@@ -125,16 +127,13 @@ class AnnonceFragment : Fragment() {
 
                             //the seller field
                             annonce.seller.apply {
+                                Log.d(TAG, "annonce.seller: $this")
                                 sellerName.text = this.name
-                                Log.d(TAG, "annonce.seller : $this")
-                                if (this.picture.isNullOrBlank()) {
-                                    Log.d(TAG, "picture : ${this.picture}")
-                                    selleerImage
-                                        .setImageResource(R.drawable.ic_baseline_no_photography_24)
-                                }
+
                                 picasso
                                     .load("${USERS_AWS_S3_LINK}${this.picture}")
                                     .fit()
+                                    .error(R.drawable.ic_baseline_no_photography_24)
                                     .into(selleerImage)
                             }
 

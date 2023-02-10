@@ -42,6 +42,7 @@ class UserInfoModel(
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful && response.body() != null) {
+                    Log.d(TAG, "getUserById onResponse: ${response.body()}")
                     userRetrieved.postValue(response.body())
 
                 } else {

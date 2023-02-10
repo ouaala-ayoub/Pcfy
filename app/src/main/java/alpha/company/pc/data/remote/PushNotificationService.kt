@@ -46,10 +46,9 @@ class PushNotificationService : FirebaseMessagingService() {
 
         Log.i(TAG, "onMessageReceived sellerId: $sellerId and orderId: $orderId")
 
-
-
         val tokens = LocalStorage.getTokens(baseContext)
-        RetrofitService.getInstance().auth(tokens).enqueue(object : Callback<BodyX?> {
+        val cookies = "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
+        RetrofitService.getInstance().auth(cookies).enqueue(object : Callback<BodyX?> {
 
             override fun onResponse(call: Call<BodyX?>, response: Response<BodyX?>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -141,8 +140,9 @@ class PushNotificationService : FirebaseMessagingService() {
 
         val tokens = LocalStorage.getTokens(baseContext)
         val retrofitService = RetrofitService.getInstance()
+        val cookies = "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
 
-        retrofitService.auth(tokens).enqueue(object : Callback<BodyX?> {
+        retrofitService.auth(cookies).enqueue(object : Callback<BodyX?> {
             override fun onResponse(call: Call<BodyX?>, response: Response<BodyX?>) {
                 val res = response.body()
                 if (res != null) {

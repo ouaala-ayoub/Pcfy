@@ -10,6 +10,7 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.utils.LocalStorage
 import alpha.company.pc.utils.NON_AUTHENTICATED
+import alpha.company.pc.utils.getError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,19 +50,21 @@ class AuthModel(
         isTurning.postValue(true)
 
         val tokens = LocalStorage.getTokens(context)
-        Log.i(TAG, "auth tokens: $tokens")
-        retrofitService.auth(tokens).enqueue(object : Callback<BodyX?> {
+        val cookies = "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
+        retrofitService.auth(cookies).enqueue(object : Callback<BodyX?> {
 
             override fun onResponse(call: Call<BodyX?>, response: Response<BodyX?>) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "auth ${response.body()}")
                     auth.postValue(response.body())
-                    if (isAuth()) {
-                        val newAccessToken = response.body()?.accessToken
-                        if (newAccessToken != null) {
-                            LocalStorage.storeAccessToken(context, newAccessToken)
-                        }
+                    val newAccessToken = response.body()?.accessToken
+                    if (newAccessToken != null) {
+                        Log.d(TAG, "storeAccessToken: $newAccessToken")
+                        LocalStorage.storeAccessToken(context, newAccessToken)
+                        val test = LocalStorage.getTokens(context).accessToken
+                        Log.d(TAG, "new stored access token : $test")
                     }
+
                 } else {
 //                    val error = getError(response.errorBody()!!, response.code())
 //                    Log.e(TAG, "onResponse auth $error" )

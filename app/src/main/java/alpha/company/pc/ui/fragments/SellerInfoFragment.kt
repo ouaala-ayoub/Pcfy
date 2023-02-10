@@ -128,7 +128,7 @@ class SellerInfoFragment : Fragment() {
 
             sellerContact.text = seller.phoneNumber
             sellerName.text = userName
-            sellerType.text = seller.userType
+            sellerType.text = seller.role
             sellerCity.text = seller.city
             annonceOf.text = getString(R.string.annonce_of, userName)
 

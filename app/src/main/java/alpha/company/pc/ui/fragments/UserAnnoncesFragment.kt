@@ -63,6 +63,7 @@ class UserAnnoncesFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         currentTokens = LocalStorage.getTokens(requireActivity())
+        Log.d(TAG, "currentTokens: $currentTokens")
         binding = FragmentUserAnnoncesBinding.inflate(inflater, container, false)
 
 //        userAnnoncesModel.showAdd(requireContext())
@@ -83,6 +84,7 @@ class UserAnnoncesFragment : Fragment() {
                             override fun onPositiveButtonClicked() {
                                 userAnnoncesModel.apply {
                                     //delete then observe the deleted Boolean
+                                    Log.d(TAG, "currentTokens: $currentTokens")
                                     deleteAnnonce(currentTokens, annonceId)
                                 }
                             }

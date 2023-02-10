@@ -12,8 +12,6 @@ class UserAnnoncesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //to change with fragment ?
         userId = intent.getStringExtra("id")!!
-
-
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_user_annonces)
