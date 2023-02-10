@@ -167,11 +167,11 @@
     <string name="interstitiell_test_ad_id">ca-app-pub-3940256099942544/1033173712</string>
 
 <!--    test ad ids-->
-<!--    <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>-->
+    <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
 
 <!--    real ad ids-->
-    <string name="annonce_ad_id">ca-app-pub-8302914035567843/2902937888</string>
-    <string name="home_ad_id">ca-app-pub-8302914035567843/6205027684</string>
+<!--    <string name="annonce_ad_id">ca-app-pub-8302914035567843/2902937888</string>-->
+<!--    <string name="home_ad_id">ca-app-pub-8302914035567843/6205027684</string>-->
 </resources>
 

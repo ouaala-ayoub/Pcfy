@@ -196,11 +196,15 @@ class OrderFragment : Fragment() {
                                         view = binding.root
                                     )
 
-                                    Picasso.get()
-                                        .load("${BASE_AWS_S3_LINK}${annonce.pictures[0]}")
-                                        .fit()
-                                        .into(annonceImage)
-
+                                    if (annonce.pictures.isEmpty()){
+                                        annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                                    } else {
+                                        Picasso.get()
+                                            .load("${BASE_AWS_S3_LINK}${annonce.pictures[0]}")
+                                            .error(R.drawable.ic_baseline_no_photography_24)
+                                            .fit()
+                                            .into(annonceImage)
+                                    }
                                     annonceTitle.text = annonce.title
 //                                    annonceSeller.text = annonce.seller?.userName ?: "Non Available"
                                     announcePrice.text = getString(R.string.price, annonce.price)

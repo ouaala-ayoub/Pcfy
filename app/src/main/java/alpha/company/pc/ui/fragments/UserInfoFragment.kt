@@ -51,7 +51,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val activity = requireActivity() as MainActivity
         activity.supportActionBar?.hide()
@@ -146,6 +146,7 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                                         about.setOnClickListener(this)
                                         share.setOnClickListener(this)
                                         logout.setOnClickListener(this)
+//                                        loginFromUserInfo.setOnClickListener(this)
                                     }
                                     isTurning.observe(viewLifecycleOwner) {
                                         Log.i(TAG, "isTurning: $it")
@@ -161,9 +162,24 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
                 } else {
                     errorMessage.observe(viewLifecycleOwner) { error ->
                         if (error == ERROR_MSG) {
+                            Log.e(TAG, "some error occured: $error", )
                             showError()
                         } else if (error == NON_AUTHENTICATED) {
-                            showNoUser()
+                            Log.e(TAG, "NON_AUTHENTICATED: $NON_AUTHENTICATED", )
+//                            showNoUser()
+                            binding?.apply {
+
+                                noUserConnected.isVisible = true
+                                noUserConnected.setOnClickListener {
+                                    Log.d(TAG, "noUserConnected: clicked")
+                                }
+                                loginFromUserInfo.apply {
+                                    isVisible = true
+                                    setOnClickListener {
+                                        goToLoginActivity()
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -185,6 +201,10 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
 
         when (v?.id) {
+
+//            R.id.login_from_user_info -> {
+//                goToLoginActivity()
+//            }
 
             R.id.personal_space -> {
                 goToUserControllerFragment(loggedInUser)
@@ -244,13 +264,17 @@ class UserInfoFragment : Fragment(), View.OnClickListener {
     }
 
     private fun showNoUser() {
-        binding!!.apply {
-            disconnected.apply {
-                isVisible = true
-                loginFromUserInfo.setOnClickListener {
-                    goToLoginActivity()
-                }
-            }
+        binding?.apply {
+//            disconnected.apply {
+//                isVisible = true
+////                noUserConnected.text = "test"
+////                loginFromUserInfo.apply {
+//////                    setOnClickListener {
+//////                        Log.d(TAG, "loginFromUserInfo: clicked")
+//////                        goToLoginActivity()
+//////                    }
+////                }
+//            }
         }
     }
 
