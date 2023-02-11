@@ -88,7 +88,7 @@ fun makeSnackBar(
 
 fun getError(responseBody: ResponseBody, code: Int): Error? {
     return try {
-        Log.d(TAG, "getError responseBody.charStream().readText() :${responseBody.charStream().readText()} ")
+        Log.e(TAG, "JSONObject or msg :${responseBody.charStream().readText()} ")
         val jsonObj = JSONObject(responseBody.charStream().readText())
         Error(jsonObj.getString("error"), code)
     } catch (e: Exception) {
