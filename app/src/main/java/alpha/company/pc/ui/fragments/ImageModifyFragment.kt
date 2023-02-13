@@ -73,6 +73,10 @@ class ImageModifyFragment : Fragment() {
         imagesAdapter = ImagesAdapter(
             annonceActivity.annoncePictures,
             object : ImagesAdapter.OnImageClicked {
+                override fun onImageZoomed() {
+                    TODO("Not yet implemented")
+                }
+
                 override fun onLeftClicked() {
                     binding.imagesPager.currentItem -= 1
                 }

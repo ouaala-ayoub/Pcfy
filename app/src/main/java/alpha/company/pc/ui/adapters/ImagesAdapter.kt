@@ -10,6 +10,7 @@ import alpha.company.pc.databinding.SingleScrollableImageBinding
 import alpha.company.pc.ui.fragments.Picture
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
 import android.net.Uri
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 private const val TAG = "ImagesAdapter"
@@ -21,6 +22,7 @@ class ImagesAdapter(
 ) : RecyclerView.Adapter<ImagesAdapter.ImagesHolder>() {
 
     interface OnImageClicked {
+        fun onImageZoomed()
         fun onLeftClicked()
         fun onRightClicked()
     }
@@ -49,19 +51,29 @@ class ImagesAdapter(
             val currentImage = this@ImagesAdapter.imagesList[position]
 
             binding.apply {
+
+                productImages
+
+                val circularProgressDrawable = CircularProgressDrawable(binding.root.context)
+                circularProgressDrawable.apply {
+                    strokeWidth = 5f
+                    centerRadius = 30f
+                    start()
+                }
                 //each image
-                if(currentImage.uri == null){
+                if (currentImage.uri == null) {
                     val imageUrl = "$BASE_AWS_S3_LINK${currentImage.name}"
                     picasso
                         .load(imageUrl)
                         .error(R.drawable.ic_baseline_no_photography_24)
+                        .placeholder(circularProgressDrawable)
                         .fit()
-//                    .centerCrop()
                         .into(productImages)
                 } else {
                     picasso
                         .load(currentImage.uri)
                         .error(R.drawable.ic_baseline_no_photography_24)
+                        .placeholder(circularProgressDrawable)
                         .fit()
                         .into(productImages)
                 }
@@ -85,7 +97,6 @@ class ImagesAdapter(
                             onImageClicked.onLeftClicked()
                         }
                         if (position == 0) {
-                            Log.i(TAG, "left false : $position")
                             isVisible = false
                         }
                     }

@@ -48,7 +48,7 @@ class UserStepOne : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
         binding.apply {
 
             val filter =
-                InputFilter { source, start, end, dest, dstart, dend ->
+                InputFilter { source, start, end, _, _, _ ->
                     for (i in start until end) {
                         if (Character.isWhitespace(source[i])) {
                             return@InputFilter ""

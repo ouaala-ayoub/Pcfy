@@ -22,11 +22,12 @@ import alpha.company.pc.ui.adapters.ImagesAdapter
 import alpha.company.pc.ui.viewmodels.AnnonceModel
 import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.*
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.ads.AdRequest
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 
-private const val TAG = "AnnonceActivity"
+private const val TAG = "AnnonceFragment"
 private const val ERROR_TEXT = "Erreur inattendue"
 private const val NO_USER = "Vous n'êtes pas connecté"
 
@@ -80,6 +81,18 @@ class AnnonceFragment : Fragment() {
 
                             imagesVp.apply {
 
+                                registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                                    override fun onPageSelected(position: Int) {
+
+                                    }
+
+                                    override fun onPageScrollStateChanged(state: Int) {
+
+
+
+                                    }
+                                })
+
                                 val pictures = annonce.pictures
                                 val imageLoader =
                                     pictures.map { url -> Picture(url) }.toMutableList()
@@ -92,6 +105,10 @@ class AnnonceFragment : Fragment() {
                                 adapter = ImagesAdapter(
                                     imageLoader,
                                     object : ImagesAdapter.OnImageClicked {
+                                        override fun onImageZoomed() {
+                                            TODO("Not yet implemented")
+                                        }
+
                                         override fun onLeftClicked() {
                                             currentItem -= 1
                                         }

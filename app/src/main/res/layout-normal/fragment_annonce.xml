@@ -53,12 +53,14 @@
                 android:id="@+id/images_vp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 android:overScrollMode="ifContentScrolls" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tracking_tab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="image_count"
                 android:backgroundTint="@android:color/transparent"
                 app:tabBackground="@drawable/tab_selector"
                 app:tabGravity="center"
