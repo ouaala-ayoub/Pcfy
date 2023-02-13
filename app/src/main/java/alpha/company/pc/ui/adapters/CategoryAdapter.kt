@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.databinding.SingleCategoryBinding
+import android.util.Log
 import com.google.android.material.chip.Chip
 
 private const val TAG = "CategoryAdapter"
@@ -85,7 +86,13 @@ class CategoryAdapter(
 
     override fun getItemCount() = categoriesList.size
 
-    fun getCurrentCategory() = categoriesList[currentClicked].title
+    fun getCurrentCategory(): String {
+        return if (categoriesList.isEmpty()){
+            CategoryEnum.ALL.title
+        } else {
+            categoriesList[currentClicked].title
+        }
+    }
 
     private fun setView(category: alpha.company.pc.data.models.local.Category, chip: Chip) {
         if (category.isClicked) {
