@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeModel
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentHomeBinding? = null
+    private val adBuilder = AdRequest.Builder()
     private var numTimes = 0
 //    private lateinit var categoriesList: List<Category>
 
@@ -113,7 +114,7 @@ class HomeFragment : Fragment() {
 
         binding!!.apply {
 
-            val adRequest = AdRequest.Builder().build()
+            val adRequest = adBuilder.build()
             Log.d(TAG, "adRequest: $adRequest")
             adView.loadAd(adRequest)
 
@@ -169,7 +170,7 @@ class HomeFragment : Fragment() {
                     }
                     annoncesAdapter.setAnnoncesList(annoncesToShow)
 //                    if (numTimes == 0){
-                        binding!!.annonceRv.hideShimmerAdapter()
+                    binding!!.annonceRv.hideShimmerAdapter()
 //                        Log.d(TAG, "hideShimmerAdapter: hiding")
 //                        numTimes++
 //                    }
@@ -209,12 +210,15 @@ class HomeFragment : Fragment() {
 
             binding!!.apply {
                 swiperefresh.setOnRefreshListener {
+                    val adRequest = adBuilder.build()
                     val current = categoryAdapter.getCurrentCategory()
                     annoncesToShow = if (current == CategoryEnum.ALL.title) {
+                        adView.loadAd(adRequest)
                         getPopularAnnonces()
                         getAnnoncesListAll()
                         mutableListOf()
                     } else {
+                        adView.loadAd(adRequest)
                         getPopularAnnonces()
                         getAnnoncesByCategory(current)
                         mutableListOf()
@@ -253,6 +257,7 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).supportActionBar?.show()
 //        numTimes = 0
     }
+
     private fun goToAnnonceActivity(annonceId: String) {
         val intent = Intent(activity, AnnonceActivity::class.java)
         intent.putExtra("id", annonceId)
