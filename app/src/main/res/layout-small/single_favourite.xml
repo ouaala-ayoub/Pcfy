@@ -100,7 +100,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center|end"
-                    app:srcCompat="@android:drawable/ic_delete" />
+                    app:srcCompat="@drawable/ic_baseline_delete_24" />
 
             </LinearLayout>
 

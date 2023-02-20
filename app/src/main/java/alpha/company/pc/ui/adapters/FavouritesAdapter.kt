@@ -11,6 +11,8 @@ import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.models.network.Order
 import alpha.company.pc.databinding.SingleFavouriteBinding
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.circularProgressBar
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 private const val TAG = "FavouritesAdapter"
@@ -56,7 +58,7 @@ class FavouritesAdapter(
             //set the ui elements
             binding.apply {
                 favouriteTitle.text = favourite.title
-
+                val circularProgressDrawable = circularProgressBar(binding.root.context)
                 // to discuss
 //                val sellerName = favourite.seller!!.userName
 //
@@ -77,6 +79,7 @@ class FavouritesAdapter(
                         .load("$BASE_AWS_S3_LINK${favourite.pictures[0]}")
                         .fit()
                         .error(R.drawable.ic_baseline_no_photography_24)
+                        .placeholder(circularProgressDrawable)
                         .centerCrop()
                         .into(favouriteImage)
                 }

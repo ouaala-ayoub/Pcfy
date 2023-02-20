@@ -8,6 +8,8 @@ import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.databinding.SingleAnnonceBinding
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.circularProgressBar
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 private const val TAG = "AnnoncesAdapter"
@@ -36,7 +38,7 @@ class AnnoncesAdapter(
             binding.apply {
 
                 try {
-
+                    val circularProgressDrawable = circularProgressBar(binding.root.context)
                     annonceTitle.text = annonce.title
 
                     annoncePrice.text = binding.root.resources.getString(
@@ -52,6 +54,7 @@ class AnnoncesAdapter(
                             .get()
                             .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
                             .error(R.drawable.ic_baseline_no_photography_24)
+                            .placeholder(circularProgressDrawable)
                             .fit()
                             .into(annonceImage)
                     }

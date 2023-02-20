@@ -20,11 +20,14 @@
     <color name="even_darker_grey">#252422</color>
     <color name="red">#8b0000</color>
     <color name="red_cool">#FF0000</color>
-    <color name="cool_red">#F76707</color>
+    <color name="cool_red">#FF7600</color>
     <color name="color_on_primary">@color/even_darker_grey</color>
     <color name="background_color">@color/white_darker</color>
     <color name="blue_shade">#0000FF</color>
     <color name="nvidia_green">#76b900</color>
     <color name="some_texts_color">#3052EC</color>
     <color name="purple_primary">#8A12FA</color>
+    <color name="grey_shimmer">#e3e1df</color>
+    <color name="violet">#52006A</color>
+    <color name="yellow">#FFA900</color>
 </resources>

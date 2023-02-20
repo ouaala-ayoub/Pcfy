@@ -23,7 +23,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import alpha.company.pc.R
-import alpha.company.pc.data.models.network.CategoryEnum
 import alpha.company.pc.data.models.network.Status
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.CreateAnnonceRepository
@@ -43,8 +42,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 private const val TAG = "CreateAnnonceFragment"
-private const val ERROR_MSG = "Erreur l'annonce n'est pas ajoutée"
-private const val SUCCESS_MSG = "Annonce ajoutée avec succes"
 
 class CreateAnnonceFragment : Fragment() {
 
@@ -63,6 +60,9 @@ class CreateAnnonceFragment : Fragment() {
 
         viewModel = CreateAnnonceModel(CreateAnnonceRepository(retrofitService))
         authModel = AuthModel(retrofitService, null)
+        authModel.auth(requireContext())
+
+        (requireActivity() as MainActivity).supportActionBar?.hide()
 
         requestPermissionLauncher =
             registerForActivityResult(
@@ -130,11 +130,10 @@ class CreateAnnonceFragment : Fragment() {
 
         authModel.apply {
 
-            isTurning.observe(viewLifecycleOwner) {
-                binding!!.progressBar.isVisible = it
+            isTurning.observe(viewLifecycleOwner) { isLoading ->
+                binding!!.progressBar.isVisible = isLoading
             }
 
-            auth(requireContext())
             auth.observe(viewLifecycleOwner) {
 
                 if (isAuth()) {
@@ -175,27 +174,27 @@ class CreateAnnonceFragment : Fragment() {
                                                     )
                                                     .addFormDataPart(
                                                         "price",
-                                                        binding!!.priceEditText.text.toString()
+                                                        priceEditText.text.toString()
                                                     )
                                                     .addFormDataPart(
                                                         "category",
-                                                        binding!!.categoryEditText.text.toString()
+                                                        categoryEditText.text.toString()
                                                     )
                                                     .addFormDataPart(
                                                         "city",
-                                                        binding!!.cityEditText.text.toString()
+                                                        cityEditText.text.toString()
                                                     )
                                                     .addFormDataPart(
                                                         "status",
-                                                        binding!!.statusEditText.text.toString()
+                                                        statusEditText.text.toString()
                                                     )
                                                     .addFormDataPart(
                                                         "mark",
-                                                        binding!!.markEditText.text.toString()
+                                                        markEditText.text.toString()
                                                     )
                                                     .addFormDataPart(
                                                         "description",
-                                                        binding!!.descriptionEditText.text.toString()
+                                                        descriptionEditText.text.toString()
                                                     )
                                                     .addFormDataPart("seller[id]", userId)
                                                     .addFormDataPart("seller[name]", user.name)
@@ -396,7 +395,6 @@ class CreateAnnonceFragment : Fragment() {
         else binding!!.imageNames.text = getString(R.string.multiple_images_selected, quantity)
     }
 
-
     private fun getImagesUris(clipData: ClipData): List<Uri> {
         val imagesList = mutableListOf<Uri>()
         for (i in 0 until clipData.itemCount) {
@@ -448,13 +446,13 @@ class CreateAnnonceFragment : Fragment() {
     }
 
     private fun doOnSuccess() {
-        requireContext().toast(SUCCESS_MSG, Toast.LENGTH_SHORT)
+        requireContext().toast(getString(R.string.annonce_success_msg), Toast.LENGTH_SHORT)
         //go to home fragment after the toast disappears
         goToHomeFragment()
     }
 
     private fun doOnFail() {
-        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
+        requireContext().toast(getString(R.string.error_msg), Toast.LENGTH_SHORT)
         //go to home fragment after the toast disappears
         goToHomeFragment()
     }
@@ -464,13 +462,13 @@ class CreateAnnonceFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun reloadActivity() {
-        val i = Intent(requireActivity(), MainActivity::class.java)
-        requireActivity().finish()
-        requireActivity().overridePendingTransition(0, 0)
-        startActivity(i)
-        requireActivity().overridePendingTransition(0, 0)
-    }
+//    private fun reloadActivity() {
+//        val i = Intent(requireActivity(), MainActivity::class.java)
+//        requireActivity().finish()
+//        requireActivity().overridePendingTransition(0, 0)
+//        startActivity(i)
+//        requireActivity().overridePendingTransition(0, 0)
+//    }
 
     private fun getImagesRequestBody(): HashMap<String, RequestBody> {
 

@@ -32,17 +32,22 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/category_rv"
+                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                    android:id="@+id/category_shimmer_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     tools:listitem="@layout/single_category"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:shimmer_demo_child_count="8"
+                    app:shimmer_demo_grid_child_count="2"
+                    app:shimmer_demo_layout="@layout/shimmer_category"
+                    app:shimmer_demo_layout_manager_type="linear_horizontal"
+                    app:shimmer_demo_angle="20"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                </androidx.recyclerview.widget.RecyclerView>
+                </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
 
                 <com.google.android.gms.ads.AdView
                     android:id="@+id/adView"
@@ -64,17 +69,20 @@
                     android:textSize="40sp"
                     android:textStyle="bold" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/populars_rv"
+                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                    android:id="@+id/populars_shimmer_rv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    tools:listitem="@layout/single_popular_annonce"
-                    android:orientation="horizontal"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    app:shimmer_demo_child_count="8"
+                    app:shimmer_demo_grid_child_count="2"
+                    app:shimmer_demo_layout="@layout/shimmer_popular"
+                    app:shimmer_demo_layout_manager_type="linear_horizontal"
+                    app:shimmer_demo_angle="20"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                </androidx.recyclerview.widget.RecyclerView>
+                </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
 
             </LinearLayout>
 
@@ -121,18 +129,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
             android:id="@+id/annonce_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:overScrollMode="never"
-            tools:listitem="@layout/single_annonce"
-            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:spanCount="4"
+            app:shimmer_demo_child_count="8"
+            app:shimmer_demo_grid_child_count="2"
+            app:shimmer_demo_layout="@layout/shimmer_popular"
+            app:shimmer_demo_layout_manager_type="grid"
+            app:shimmer_demo_angle="20"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintHorizontal_bias="0.5">
+            app:layout_constraintHorizontal_bias="0.5"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/single_annonce"
+            tools:spanCount="2">
 
-        </androidx.recyclerview.widget.RecyclerView>
+        </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
 
 
     </LinearLayout>

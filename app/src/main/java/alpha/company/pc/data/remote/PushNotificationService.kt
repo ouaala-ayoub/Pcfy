@@ -17,6 +17,9 @@ import alpha.company.pc.data.models.network.User
 import alpha.company.pc.ui.activities.FullOrdersActivity
 import alpha.company.pc.utils.LocalStorage
 import alpha.company.pc.utils.getError
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import retrofit2.Call
@@ -115,8 +118,22 @@ class PushNotificationService : FirebaseMessagingService() {
         with(NotificationManagerCompat.from(baseContext)) {
         val notificationId = System.currentTimeMillis().toInt()
         Log.i(TAG, "notificationId : $notificationId")
-        // notificationId is a unique int for each notification that you must define
-        notify(notificationId, builder.build())
+
+//            if (ActivityCompat.checkSelfPermission(
+//                    baseContext,
+//                    Manifest.permission.POST_NOTIFICATIONS
+//                ) != PackageManager.PERMISSION_GRANTED
+//            ) {
+//                // TODO: Consider calling
+//                //    ActivityCompat#requestPermissions
+//                // here to request the missing permissions, and then overriding
+//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                //                                          int[] grantResults)
+//                // to handle the case where the user grants the permission. See the documentation
+//                // for ActivityCompat#requestPermissions for more details.
+//                return
+//            }
+            notify(notificationId, builder.build())
     }}
 
     private fun createNotificationChannel() {

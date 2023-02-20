@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import alpha.company.pc.R
+import alpha.company.pc.data.models.local.OrderStatus
 import alpha.company.pc.data.models.network.Error
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -17,12 +18,13 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "Utils"
-private const val ERROR404 = "Page introuvable"
-private const val ERROR500 = "Erreur interne du serveur"
-private const val ERROR401 = "Email ou password incorrect"
+//private const val ERROR404 = "Page introuvable"
+//private const val ERROR500 = "Erreur interne du serveur"
+//private const val ERROR401 = "Email ou password incorrect"
 const val BASE_AWS_S3_LINK = "https://pcfy.s3.eu-west-3.amazonaws.com/"
 const val USERS_AWS_S3_LINK = "https://pcfy-profiles.s3.eu-west-3.amazonaws.com/"
 const val ERROR_MSG = "Erreur inattendue"
@@ -41,6 +43,16 @@ const val INTERSTITIAL_ANNONCE_CLICKED_ID = "ca-app-pub-3940256099942544/1033173
 interface OnDialogClicked {
     fun onPositiveButtonClicked()
     fun onNegativeButtonClicked()
+}
+
+fun circularProgressBar(context: Context): CircularProgressDrawable {
+    val circularProgressDrawable = CircularProgressDrawable(context)
+    circularProgressDrawable.apply {
+        strokeWidth = 5f
+        centerRadius = 30f
+        start()
+    }
+    return circularProgressDrawable
 }
 
 fun Context.toast(message: String, length: Int) =
@@ -106,11 +118,11 @@ fun getError(responseBody: ResponseBody, code: Int): Error? {
 //    }
 //}
 
-private fun <T> goToActivityWithUserId(userId: String, context: Context, activity: Class<T>) {
-    val intent = Intent(context, activity)
-    intent.putExtra("id", userId)
-    context.startActivity(intent)
-}
+//private fun <T> goToActivityWithUserId(userId: String, context: Context, activity: Class<T>) {
+//    val intent = Intent(context, activity)
+//    intent.putExtra("id", userId)
+//    context.startActivity(intent)
+//}
 
 class URIPathHelper {
 
@@ -202,4 +214,10 @@ class URIPathHelper {
 
 
 }
-
+fun getImageResource(orderStatus: String): Int {
+    return when(orderStatus) {
+        OrderStatus.DELIVERED.status -> R.drawable.ic_baseline_done_24
+        OrderStatus.CANCELED.status -> R.drawable.ic_baseline_cancel_24
+        else -> R.drawable.ic_baseline_access_time_24
+    }
+}

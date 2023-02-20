@@ -18,48 +18,54 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.activities.PersonalSpaceActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="FIREBASE_KEY"
             android:value="${FIREBASE_KEY}" />
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8302914035567843~3544553791"/>
+            android:value="ca-app-pub-8302914035567843~3544553791" />
 
+        <activity
+            android:name=".ui.activities.UserImageModifyActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.RequestsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.FullOrdersActivity"
-            android:parentActivityName=".ui.activities.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.UserInfoModifyActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.AnnonceModifyActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.UserAnnoncesActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionbar" />
         <activity
             android:name=".ui.activities.UserCreateActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.activities.MainActivity" />
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="false"
@@ -69,7 +75,7 @@
         <activity
             android:name=".ui.activities.AnnonceActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true"
@@ -88,7 +94,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

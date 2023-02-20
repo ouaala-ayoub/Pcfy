@@ -13,7 +13,7 @@ android {
         applicationId "alpha.company.pc"
         minSdk 21
         targetSdk 33
-        versionCode 14
+        versionCode 17
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -81,6 +81,7 @@ dependencies {
 
     //shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
 
     //image zoom
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'

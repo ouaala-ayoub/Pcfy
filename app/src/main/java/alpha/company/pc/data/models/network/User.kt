@@ -29,7 +29,7 @@ data class User(
     val createdAt: String? = null,
 
     @SerializedName("token")
-    val token: String? = null,
+    val token: List<String>? = null,
 
     // ?????????
     @SerializedName("brand")

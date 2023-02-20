@@ -10,7 +10,7 @@
     <color name="grey_primary">#35363d</color>
     <color name="grey">#CCC5B9</color>
     <color name="darker_grey">#403D39</color>
-    <color name="cool_red">#FA5252</color>
+    <color name="cool_red">#CD113B</color>
     <color name="even_darker_grey">#262626</color>
     <color name="color_on_primary">@color/white_darker</color>
     <color name="background_color">@color/even_darker_grey</color>

@@ -5,7 +5,7 @@
     <string name="utilisateur">Utilisateur</string>
     <string name="favories">Favories</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="cr_er_une_annonce">créer une annonce</string>
+    <string name="cr_er_une_annonce">Ajouter un poste</string>
     <string name="category">Catégorie</string>
     <string name="ajouter_une_annonce">Ajouter une annonce</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -32,6 +32,8 @@
     <string name="Cancel">Annuler</string>
     <string name="confirm_annonce_title">Confirmation de l\'annonce</string>
     <string name="confirm_annonce_message">lancer l\'annonce ?</string>
+    <string name="confirm_demand_title">Confirmation de la demande</string>
+    <string name="confirm_demand_message">lancer la demande ?</string>
     <string name="se_connecter">Se connecter</string>
     <string name="confirm_user_title">Confirmation des informations</string>
     <string name="confirm_user_message">Êtes vous sûre de vôs informations ?</string>
@@ -166,15 +168,46 @@
     <string name="j_accepte_les_conditions_d_utilisation_de_pcfy">J\'accepte Les conditions d\'utilisation de PCfy</string>
     <string name="interstitiell_test_ad_id">ca-app-pub-3940256099942544/1033173712</string>
 
-<!--    test ad ids-->
+    <!--    test ad ids-->
     <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!--    real ad ids-->
-<!--    <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
-<!--    <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
+    <!--    <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
+    <!--    <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
 
     <string name="product_image">product_image</string>
 
+    <string name="annonce_success_msg">Annonce ajoutée avec succes</string>
+    <string name="error_msg">Erreur l\'annonce n\'est pas ajoutée</string>
+
+    <string name="demand_success_msg">Demande ajoutée avec succes</string>
+    <string name="demand_error_msg">Erreur la demande n\'est pas ajoutée</string>
+
+    <string name="annonce">Une Annonce</string>
+    <string name="demande">Une Demande</string>
+
+    <string name="ajouter_une_demande">Ajouter une Demande</string>
+    <string name="que_voulez_vous_ajouter">Que Voulez vous ajouter ?</string>
+
+    <string name="list_empty">Pas de demandes pour le moment reviens plus tard</string>
+    <string name="error">Erreur Inattendue</string>
+    <string name="Demandes">Demandes</string>
+
+    <string name="no_auth">Utilisateur non authentifié</string>
+
+    <!-- to toggle the open close button of the navigation drawer -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="title_activity_user_image_modify">UserImageModifyActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="image_modified_success">Image Modifiée avec success</string>
+    <string name="image_deleted_success">Image supprimée avec success</string>
+    <string name="image_deleted_fail">erreur inattendue pendant la suppression de l\'image</string>
 </resources>
 

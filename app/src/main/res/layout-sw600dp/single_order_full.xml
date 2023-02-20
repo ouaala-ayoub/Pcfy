@@ -86,6 +86,14 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/status_order"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_baseline_access_time_24" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

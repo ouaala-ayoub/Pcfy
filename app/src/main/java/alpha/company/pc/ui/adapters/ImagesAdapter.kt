@@ -9,6 +9,7 @@ import alpha.company.pc.R
 import alpha.company.pc.databinding.SingleScrollableImageBinding
 import alpha.company.pc.ui.fragments.Picture
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.circularProgressBar
 import android.net.Uri
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
@@ -54,12 +55,7 @@ class ImagesAdapter(
 
                 productImages
 
-                val circularProgressDrawable = CircularProgressDrawable(binding.root.context)
-                circularProgressDrawable.apply {
-                    strokeWidth = 5f
-                    centerRadius = 30f
-                    start()
-                }
+                val circularProgressDrawable = circularProgressBar(binding.root.context)
                 //each image
                 if (currentImage.uri == null) {
                     val imageUrl = "$BASE_AWS_S3_LINK${currentImage.name}"

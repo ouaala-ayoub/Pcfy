@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/personal_space"
+        android:title="Espace Personnel" />
+
+    <item
+        android:id="@+id/share"
+        android:title="@string/partager" />
+
+    <item
+        android:id="@+id/website"
+        android:title="@string/notre_site_web" />
+
+    <item
+        android:id="@+id/about"
+        android:title="@string/propos" />
+
+    <item
+        android:id="@+id/contact"
+        android:title="@string/contactez_nous" />
+
+</menu>

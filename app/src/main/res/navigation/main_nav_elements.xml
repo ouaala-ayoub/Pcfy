@@ -30,60 +30,30 @@
         android:id="@+id/searchFragment"
         android:name="alpha.company.pc.ui.fragments.SearchFragment"
         android:label="SearchFragment" />
-    <navigation android:id="@+id/userInfo"
-        app:startDestination="@id/userInfoFragment">
-        <fragment
-            android:id="@+id/userInfoFragment"
-            android:name="alpha.company.pc.ui.fragments.UserInfoFragment"
-            android:label="fragment_user_info"
-            tools:layout="@layout/fragment_user_info">
-            <action
-                android:id="@+id/action_userInfoFragment_to_infoFragment"
-                app:destination="@id/infoFragment" />
-            <action
-                android:id="@+id/action_userInfoFragment_to_userImageModifyFragment"
-                app:destination="@id/userImageModifyFragment" />
-            <action
-                android:id="@+id/action_userInfoFragment_to_userControlerFragment"
-                app:destination="@id/userControlerFragment" />
-        </fragment>
-        <fragment
-            android:id="@+id/infoFragment"
-            android:name="alpha.company.pc.ui.fragments.InfoFragment"
-            android:label="fragment_info"
-            tools:layout="@layout/fragment_info" />
-
-        <fragment android:id="@+id/userImageModifyFragment"
-            android:name="alpha.company.pc.ui.fragments.UserImageModifyFragment"
-            android:label="fragment_info"
-            tools:layout="@layout/fragment_info" >
-            <argument
-                android:name="userId"
-                app:argType="string" />
-            <argument
-                android:name="imageName"
-                app:argType="string" />
-        </fragment>
-        <fragment
-            android:id="@+id/userControlerFragment"
-            android:name="alpha.company.pc.ui.fragments.UserControllerFragment"
-            android:label="fragment_user_controler"
-            tools:layout="@layout/fragment_user_controler" >
-            <argument
-                android:name="userId"
-                app:argType="string" />
-            <action
-                android:id="@+id/action_userControlerFragment_to_passwordChangeFragment"
-                app:destination="@id/passwordChangeFragment" />
-        </fragment>
-        <fragment
-            android:id="@+id/passwordChangeFragment"
-            android:name="alpha.company.pc.ui.fragments.PasswordChangeFragment"
-            android:label="fragment_password_change"
-            tools:layout="@layout/fragment_password_change" >
-            <argument
-                android:name="userId"
-                app:argType="string" />
-        </fragment>
-    </navigation>
+    <fragment
+        android:id="@+id/annonceOrDemandChoiceFragment"
+        android:name="alpha.company.pc.ui.fragments.AnnonceOrDemandChoiceFragment"
+        android:label="fragment_annonce_or_demand_choice"
+        tools:layout="@layout/fragment_annonce_or_demand_choice" >
+        <action
+            android:id="@+id/action_annonceOrDemandChoiceFragment_to_demandCreateFragment"
+            app:destination="@id/demandCreateFragment" />
+        <action
+            android:id="@+id/action_annonceOrDemandChoiceFragment_to_createAnnonceFragment"
+            app:destination="@id/createAnnonceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/demandCreateFragment"
+        android:name="alpha.company.pc.ui.fragments.DemandCreateFragment"
+        android:label="fragment_demand_create"
+        tools:layout="@layout/fragment_demand_create" >
+        <action
+            android:id="@+id/action_demandCreateFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/demandsFragment"
+        android:name="alpha.company.pc.ui.fragments.DemandsFragment"
+        android:label="fragment_demands"
+        tools:layout="@layout/fragment_demands" />
 </navigation>

@@ -143,7 +143,7 @@ class OrderFragment : Fragment() {
                                                                         TAG,
                                                                         "seller : ${it.userId}"
                                                                     )
-                                                                    if (sellerToken != null) {
+                                                                    if (!sellerToken.isNullOrEmpty()) {
                                                                         val fireBaseKey =
                                                                             getFirebaseKey()
 
@@ -157,7 +157,7 @@ class OrderFragment : Fragment() {
                                                                                 it.userId!!,
                                                                                 addedId
                                                                             ),
-                                                                            it.token
+                                                                            it.token[0]
                                                                         )
                                                                         notifySeller(
                                                                             message,

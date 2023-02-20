@@ -1,33 +1,27 @@
-package alpha.company.pc.ui.fragments
+package alpha.company.pc.ui.activities
 
+import alpha.company.pc.R
+import alpha.company.pc.data.models.local.LoadPolicy
+import alpha.company.pc.data.remote.RetrofitService
+import alpha.company.pc.data.repositories.UserInfoRepository
+import alpha.company.pc.databinding.ActivityUserImageModifyBinding
+import alpha.company.pc.ui.viewmodels.UserInfoModel
+import alpha.company.pc.utils.*
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import alpha.company.pc.R
-import alpha.company.pc.data.models.local.LoadPolicy
-import alpha.company.pc.data.remote.RetrofitService
-import alpha.company.pc.data.repositories.UserInfoRepository
-import alpha.company.pc.databinding.FragmentUserImageModifyBinding
-import alpha.company.pc.ui.activities.MainActivity
-import alpha.company.pc.ui.activities.imageLoader
-import alpha.company.pc.ui.viewmodels.UserInfoModel
-import alpha.company.pc.utils.*
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -36,16 +30,13 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
-private const val TAG = "UserImageModifyFragment"
-private const val IMAGE_MODIFY_SUCCESS = "Image Modifiée avec success"
-private const val IMAGE_DELETED_SUCCESS = "Image supprimée avec success"
-private const val IMAGE_DELETED_ERROR = "erreur inattendue pendant la suppression de l'image"
+private const val TAG = "UserImageModifyActivity"
 
-class UserImageModifyFragment : Fragment() {
+class UserImageModifyActivity : AppCompatActivity() {
 
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-    private lateinit var binding: FragmentUserImageModifyBinding
+    lateinit var binding: ActivityUserImageModifyBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var viewModel: UserInfoModel
     private lateinit var imageUri: Uri
     private lateinit var userId: String
@@ -55,14 +46,11 @@ class UserImageModifyFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val navArgs: UserImageModifyFragmentArgs by navArgs()
-
-        userId = navArgs.userId
-        imageUrl = navArgs.imageName
-        picasso = (requireActivity() as MainActivity).picasso
+        binding = ActivityUserImageModifyBinding.inflate(layoutInflater)
+        picasso = Picasso.get()
+        userId = intent.getStringExtra("userId") as String
+        imageUrl = intent.getStringExtra("imageName") as String
         viewModel = UserInfoModel(UserInfoRepository(RetrofitService.getInstance()), picasso)
-
-        Log.i(TAG, "userId: $userId and imageName: $imageUrl")
 
         requestPermissionLauncher =
             registerForActivityResult(
@@ -75,7 +63,7 @@ class UserImageModifyFragment : Fragment() {
                     setTheUploadImage()
                 } else {
                     val snackBar = makeSnackBar(
-                        requireView(),
+                        binding.root,
                         getString(R.string.permission),
                         Snackbar.LENGTH_INDEFINITE
                     )
@@ -93,9 +81,9 @@ class UserImageModifyFragment : Fragment() {
                     if (data?.data != null) {
                         imageUri = data.data!!
 
-                        val path = URIPathHelper().getPath(requireContext(), imageUri)
+                        val path = URIPathHelper().getPath(this, imageUri)
                         Log.i(TAG, "onClick: $path")
-                        val file = File(path)
+                        val file = File(path as String)
                         val requestFile: RequestBody =
                             file.asRequestBody("image/*".toMediaTypeOrNull())
 
@@ -105,48 +93,18 @@ class UserImageModifyFragment : Fragment() {
                             .build()
 
                         viewModel.apply {
-                            isTurning.observe(viewLifecycleOwner) {
+                            isTurning.observe(this@UserImageModifyActivity) {
                                 binding.userImageLoading.isVisible = it
                             }
                             updateImage(userId, requestBody)
-                            updatedPicture.observe(viewLifecycleOwner) { updated ->
-                                if (updated) {
-                                    Log.i(TAG, "userId: $userId")
-                                    Log.i(TAG, "imageLoader: $imageLoader")
-                                    loadUserImageNoCache(imageUrl, binding.userImage)
-                                    imageLoader?.loadingPolicy =
-                                        LoadPolicy.Reload
-                                    Log.i(
-                                        TAG,
-                                        "loading policy : ${imageLoader!!.loadingPolicy}"
-                                    )
-//                                    viewModel.getUserById(userId)
-                                    requireContext().toast(
-                                        IMAGE_MODIFY_SUCCESS,
-                                        Toast.LENGTH_SHORT
-                                    )
 
-                                } else {
-                                    requireContext().toast(
-                                        ERROR_MSG,
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    reloadActivity()
-                                }
-                            }
                         }
                     }
                 }
             }
 
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        binding = FragmentUserImageModifyBinding.inflate(inflater, container, false)
+        setContentView(binding.root)
 
         binding.apply {
 
@@ -159,7 +117,7 @@ class UserImageModifyFragment : Fragment() {
                 viewModel.loadUserImageFromCache(imageUrl, userImage)
             }
 
-            viewModel.isTurning.observe(viewLifecycleOwner) { loading ->
+            viewModel.isTurning.observe(this@UserImageModifyActivity) { loading ->
                 Log.i(TAG, "isTurning: $loading")
                 userImageLoading.isVisible = loading
 
@@ -167,26 +125,52 @@ class UserImageModifyFragment : Fragment() {
 
             }
 
+            viewModel.updatedPicture.observe(this@UserImageModifyActivity) { updated ->
+                if (updated) {
+                    Log.i(TAG, "userId: $userId")
+                    Log.i(TAG, "imageLoader: $imageLoader")
+                    viewModel.loadUserImageNoCache(imageUrl, binding.userImage)
+                    imageLoader?.loadingPolicy =
+                        LoadPolicy.Reload
+                    Log.i(
+                        TAG,
+                        "loading policy : ${imageLoader!!.loadingPolicy}"
+                    )
+//                                    viewModel.getUserById(userId)
+                    this@UserImageModifyActivity.toast(
+                        getString(R.string.image_modified_success),
+                        Toast.LENGTH_SHORT
+                    )
+
+                } else {
+                    this@UserImageModifyActivity.toast(
+                        getString(R.string.error),
+                        Toast.LENGTH_SHORT
+                    )
+                    reloadActivity()
+                }
+            }
+
             delete.setOnClickListener {
                 makeDialog(
-                    requireContext(),
+                    this@UserImageModifyActivity,
                     object : OnDialogClicked {
                         override fun onPositiveButtonClicked() {
                             viewModel.apply {
 
-                                val tokens = LocalStorage.getTokens(requireContext())
+                                val tokens = LocalStorage.getTokens(this@UserImageModifyActivity)
                                 val requestBody = getRequestBody(tokens)
                                 if (requestBody != null) {
                                     deleteProfilePicture(userId, requestBody)
-                                    deletedPicture.observe(viewLifecycleOwner) { deleted ->
+                                    deletedPicture.observe(this@UserImageModifyActivity) { deleted ->
                                         if (deleted) {
-                                            requireContext().toast(
-                                                IMAGE_DELETED_SUCCESS,
+                                            this@UserImageModifyActivity.toast(
+                                                getString(R.string.image_deleted_success),
                                                 Toast.LENGTH_SHORT
                                             )
                                             getUserById(userId)
                                         } else {
-                                            doOnFail(IMAGE_DELETED_ERROR)
+                                            doOnFail(getString(R.string.image_deleted_fail))
                                         }
                                     }
 
@@ -208,12 +192,15 @@ class UserImageModifyFragment : Fragment() {
             modify.setOnClickListener {
                 when {
                     ContextCompat.checkSelfPermission(
-                        requireContext(),
+                        this@UserImageModifyActivity,
                         Manifest.permission.READ_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED -> {
                         setTheUploadImage()
                     }
-                    shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        this@UserImageModifyActivity,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) -> {
                         showInContextUI(
                             object : OnDialogClicked {
                                 override fun onPositiveButtonClicked() {
@@ -237,7 +224,7 @@ class UserImageModifyFragment : Fragment() {
             }
         }
 
-        return binding.root
+        Log.d(TAG, "onCreate: ")
     }
 
     private fun changeUiEnabling(loading: Boolean) {
@@ -249,7 +236,7 @@ class UserImageModifyFragment : Fragment() {
 
     private fun showInContextUI(onDialogClicked: OnDialogClicked) {
         makeDialog(
-            requireContext(),
+            this,
             onDialogClicked,
             getString(R.string.permission_required),
             getString(R.string.you_cant_user),
@@ -266,12 +253,12 @@ class UserImageModifyFragment : Fragment() {
     }
 
     fun doOnFail(message: String) {
-        requireContext().toast(message, Toast.LENGTH_SHORT)
-        findNavController().popBackStack()
+        this.toast(message, Toast.LENGTH_SHORT)
+        finish()
     }
 
     private fun reloadActivity() {
-        val activity = requireActivity()
+        val activity = this
         val intent = Intent(activity, MainActivity::class.java)
         activity.finish()
         activity.overridePendingTransition(0, 0)

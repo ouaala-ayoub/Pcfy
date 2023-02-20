@@ -8,6 +8,8 @@ import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.databinding.SinglePopularAnnonceBinding
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.circularProgressBar
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 private const val TAG = "PopularsAdapter"
@@ -26,12 +28,13 @@ class PopularsAdapter(private val annonceClickListener: AnnoncesAdapter.OnAnnonc
             val annonce = annoncesList[position]
             try {
                 binding.apply {
-
+                    val circularProgressDrawable = circularProgressBar(binding.root.context)
                     if (annonce.pictures.isEmpty()){
                         popularAnnonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                     } else {
                         picasso
                             .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
+                            .placeholder(circularProgressDrawable)
                             .fit()
                             .error(R.drawable.ic_baseline_no_photography_24)
                             .into(popularAnnonceImage)

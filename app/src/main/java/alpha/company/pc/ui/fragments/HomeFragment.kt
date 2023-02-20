@@ -19,6 +19,7 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.databinding.FragmentHomeBinding
 import alpha.company.pc.ui.activities.AnnonceActivity
+import alpha.company.pc.ui.activities.MainActivity
 import alpha.company.pc.ui.adapters.AnnoncesAdapter
 import alpha.company.pc.ui.adapters.CategoryAdapter
 import alpha.company.pc.ui.adapters.PopularsAdapter
@@ -37,6 +38,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeModel
     private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentHomeBinding? = null
+    private var numTimes = 0
 //    private lateinit var categoriesList: List<Category>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +81,8 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+//        Thread.sleep(5000)
+
         val categoryAdapter = CategoryAdapter(
             object : CategoryAdapter.OnCategoryClickedListener {
                 override fun onCategoryClicked(title: String) {
@@ -96,6 +100,16 @@ class HomeFragment : Fragment() {
                 }
             }
         )
+        binding!!.categoryShimmerRv.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = categoryAdapter
+            showShimmerAdapter()
+
+        }
 
         binding!!.apply {
 
@@ -108,7 +122,7 @@ class HomeFragment : Fragment() {
                 Log.d(TAG, "addOnOffsetChangedListener isScreenOnTop : $isScreenOnTop")
                 swiperefresh.isEnabled = isScreenOnTop
             }
-            popularsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            popularsShimmerRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     val isRvDragging = newState == RecyclerView.SCROLL_STATE_DRAGGING
@@ -118,29 +132,24 @@ class HomeFragment : Fragment() {
             })
 
             //setting the categories list
-            categoryRv.apply {
-                layoutManager = LinearLayoutManager(
-                    requireContext(),
-                    LinearLayoutManager.HORIZONTAL,
-                    false
-                )
-                adapter = categoryAdapter
-            }
+
 
             //setting the annonces list
             annonceRv.apply {
                 layoutManager = GridLayoutManager(requireContext(), NUM_ROWS)
                 adapter = annoncesAdapter
+                showShimmerAdapter()
             }
 
             //setting the popular annonces list
-            popularsRv.apply {
+            popularsShimmerRv.apply {
                 layoutManager = LinearLayoutManager(
                     requireContext(),
                     LinearLayoutManager.HORIZONTAL,
                     false
                 )
                 adapter = popularsAdapter
+                showShimmerAdapter()
             }
         }
 
@@ -148,6 +157,7 @@ class HomeFragment : Fragment() {
 
             categoriesList.observe(viewLifecycleOwner) { categories ->
                 categoryAdapter.setCategoriesList(categories)
+                binding!!.categoryShimmerRv.hideShimmerAdapter()
             }
 
             annoncesList.observe(viewLifecycleOwner) { annonces ->
@@ -158,6 +168,11 @@ class HomeFragment : Fragment() {
                             annoncesToShow.add(it)
                     }
                     annoncesAdapter.setAnnoncesList(annoncesToShow)
+//                    if (numTimes == 0){
+                        binding!!.annonceRv.hideShimmerAdapter()
+//                        Log.d(TAG, "hideShimmerAdapter: hiding")
+//                        numTimes++
+//                    }
                 } else {
                     Log.e(TAG, "annoncesList is $annonces")
                 }
@@ -186,6 +201,7 @@ class HomeFragment : Fragment() {
                     val popularsList = populars.map { popular -> popular.title }
                     Log.d(TAG, "popularsList: $popularsList")
                     popularsAdapter.setPopularsList(populars)
+                    binding!!.popularsShimmerRv.hideShimmerAdapter()
                 } else {
                     Log.e(TAG, "popularsList is : $populars")
                 }
@@ -232,6 +248,11 @@ class HomeFragment : Fragment() {
         return binding?.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).supportActionBar?.show()
+//        numTimes = 0
+    }
     private fun goToAnnonceActivity(annonceId: String) {
         val intent = Intent(activity, AnnonceActivity::class.java)
         intent.putExtra("id", annonceId)

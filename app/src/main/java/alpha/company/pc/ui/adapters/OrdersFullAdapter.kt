@@ -7,6 +7,9 @@ import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Order
 import alpha.company.pc.databinding.SingleOrderFullBinding
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.circularProgressBar
+import alpha.company.pc.utils.getImageResource
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 class OrdersFullAdapter(
@@ -24,10 +27,12 @@ class OrdersFullAdapter(
             val order = ordersList[position]
 
             binding.apply {
+                val circularProgressDrawable = circularProgressBar(binding.root.context)
                 val imageUrl = "$BASE_AWS_S3_LINK${order.annonce.picture}"
                 picasso
                     .load(imageUrl)
                     .fit()
+                    .placeholder(circularProgressDrawable)
                     .error(R.drawable.ic_baseline_no_photography_24)
                     .centerCrop()
                     .into(announceImage)
@@ -36,6 +41,7 @@ class OrdersFullAdapter(
                 orderProductName.text = order.annonce.name
                 costumerName.text = order.customer.name
                 costumerNumber.text = order.customer.number
+                statusOrder.setImageResource(getImageResource(order.orderStatus))
 
                 orderWhole.setOnClickListener {
                     onOrderClicked.onOrderClicked(order.id!!)

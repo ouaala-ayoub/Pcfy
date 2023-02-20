@@ -7,6 +7,7 @@ import alpha.company.pc.R
 import alpha.company.pc.data.models.local.OrderStatus
 import alpha.company.pc.data.models.network.Order
 import alpha.company.pc.databinding.SingleOrderShortBinding
+import alpha.company.pc.utils.getImageResource
 
 class OrdersShortAdapter(
     private val onOrderClicked: OnOrderClicked
@@ -59,11 +60,5 @@ class OrdersShortAdapter(
 
     override fun getItemCount() = ordersList.size
 }
-fun getImageResource(orderStatus: String): Int {
-    return when(orderStatus) {
-        OrderStatus.DELIVERED.status -> R.drawable.ic_baseline_done_24
-        OrderStatus.CANCELED.status -> R.drawable.ic_baseline_cancel_24
-        else -> R.drawable.ic_baseline_access_time_24
-    }
-}
+
 

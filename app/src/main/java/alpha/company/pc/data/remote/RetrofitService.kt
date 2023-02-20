@@ -175,6 +175,19 @@ interface RetrofitService {
     @DELETE("orders/{id}")
     fun deleteOrderById(@Path("id") orderToDeleteId: String): Call<IdResponse>
 
+    //Demands
+    @GET("demands")
+    fun getDemands(): Call<List<Demand>>
+
+    @GET("demands/{id}")
+    fun getDemandById(@Path("id") demandId: String): Call<Demand>
+
+    @POST("demands")
+    fun addDemand(@Body requestBody: RequestBody): Call<IdResponse>
+
+    @DELETE("demands/{id}")
+    fun deleteDemand(@Path("id") demandId: String): Call<IdResponse>
+
     companion object {
 
         //to learn

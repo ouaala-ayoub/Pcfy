@@ -34,6 +34,8 @@
         <item name="android:fontFamily">@font/alata</item>
         <item name="android:textColor">@color/color_on_primary</item>
         <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:ellipsize">end</item>
+
     </style>
 
     <style name="AlataButtonStyle" parent="Widget.Material3.Button">

@@ -8,12 +8,18 @@
         android:id="@+id/searchFragment"
         android:title="@string/recherche"
         android:icon="@drawable/ic_baseline_search_24"/>
+
+<!--    <item-->
+<!--        android:id="@+id/demandsFragment"-->
+<!--        android:title="@string/Demandes"-->
+<!--        android:icon="@drawable/baseline_local_offer_24"/>-->
+
     <item
         android:id="@+id/favouritesFragment"
         android:title="@string/favories"
         android:icon="@drawable/ic_baseline_favorite_24"/>
     <item
-        android:id="@+id/createAnnonceFragment"
+        android:id="@+id/annonceOrDemandChoiceFragment"
         android:title="@string/cr_er_une_annonce"
         android:icon="@drawable/ic_baseline_note_add_24"/>
     <item

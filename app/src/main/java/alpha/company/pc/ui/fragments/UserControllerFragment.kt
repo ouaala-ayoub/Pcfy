@@ -1,5 +1,6 @@
 package alpha.company.pc.ui.fragments
 
+import alpha.company.pc.R
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import alpha.company.pc.databinding.FragmentUserControlerBinding
 import alpha.company.pc.ui.activities.*
+import androidx.navigation.fragment.NavHostFragment
 
 class UserControllerFragment : Fragment() {
 
@@ -18,35 +20,34 @@ class UserControllerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val activity = requireActivity() as MainActivity
+        val activity = requireActivity() as PersonalSpaceActivity
         activity.supportActionBar?.hide()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentUserControlerBinding.inflate(inflater, container, false)
 
-        val args: UserControllerFragmentArgs by navArgs()
-        val userId = args.userId
+        val userId = (requireActivity() as PersonalSpaceActivity).intent.getStringExtra("userId")
 
         binding.apply {
             userInfo.setOnClickListener {
-                goToUserInfoModify(userId)
+                goToUserInfoModify(userId!!)
             }
             userAnnounces.setOnClickListener {
-                goToUserAnnonces(userId)
+                goToUserAnnonces(userId!!)
             }
             orders.setOnClickListener {
-                goToFullOrdersPage(userId)
+                goToFullOrdersPage(userId!!)
             }
             buys.setOnClickListener {
-                goToUserRequests(userId)
+                goToUserRequests(userId!!)
             }
             passwordChange.setOnClickListener {
-                goToPasswordChange(userId)
+                goToPasswordChange(userId!!)
             }
         }
 
@@ -55,7 +56,7 @@ class UserControllerFragment : Fragment() {
 
     private fun goToPasswordChange(userId: String) {
         val action =
-            UserControllerFragmentDirections.actionUserControlerFragmentToPasswordChangeFragment(
+            UserControllerFragmentDirections.actionUserControllerFragmentToPasswordChangeFragment2(
                 userId
             )
         findNavController().navigate(action)
