@@ -168,14 +168,6 @@
     <string name="j_accepte_les_conditions_d_utilisation_de_pcfy">J\'accepte Les conditions d\'utilisation de PCfy</string>
     <string name="interstitiell_test_ad_id">ca-app-pub-3940256099942544/1033173712</string>
 
-    <!--    test ad ids-->
-    <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
-
-    <!--    real ad ids-->
-    <!--    <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
-    <!--    <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
-
     <string name="product_image">product_image</string>
 
     <string name="annonce_success_msg">Annonce ajoutée avec succes</string>
@@ -209,5 +201,16 @@
     <string name="image_modified_success">Image Modifiée avec success</string>
     <string name="image_deleted_success">Image supprimée avec success</string>
     <string name="image_deleted_fail">erreur inattendue pendant la suppression de l\'image</string>
+
+    <string name="dissconected">Deconnecté avec success</string>
+
+    <!--    test ad ids-->
+    <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!--    real ad ids-->
+    <!--        <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
+    <!--        <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
+
 </resources>
 

@@ -5,14 +5,17 @@ import alpha.company.pc.data.models.network.Demand
 import alpha.company.pc.databinding.SingleDemandBinding
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
+private const val TAG = "DemandsAdapter"
+
 class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
     RecyclerView.Adapter<DemandsAdapter.DemandsHolder>() {
-    private var demandsList = listOf<Demand>()
+    var demandsList: MutableList<Demand> = mutableListOf()
 
     interface OnDemandClicked {
         fun onDemandClicked(demandId: String)
@@ -47,9 +50,18 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
         }
     }
 
-    fun setDemandsList(list: List<Demand>) {
-        demandsList = list
+    fun isListEmpty() = demandsList.isEmpty()
+    fun setList(list: List<Demand>) {
+        demandsList = list.toMutableList()
+        Log.i(TAG, "setList: ")
         notifyDataSetChanged()
+    }
+
+    fun addDemands(list: List<Demand>) {
+//        val test = demandsList.toMutableList()
+        demandsList.addAll(list)
+
+        notifyItemRangeInserted(demandsList.lastIndex, list.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DemandsHolder {
@@ -66,5 +78,9 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
 
     override fun onBindViewHolder(holder: DemandsHolder, position: Int) {
         holder.bind(position)
+    }
+
+    fun freeList() {
+        demandsList = mutableListOf()
     }
 }

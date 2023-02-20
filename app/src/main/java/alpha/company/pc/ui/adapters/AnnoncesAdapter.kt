@@ -9,7 +9,6 @@ import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.databinding.SingleAnnonceBinding
 import alpha.company.pc.utils.BASE_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 private const val TAG = "AnnoncesAdapter"
@@ -23,11 +22,21 @@ class AnnoncesAdapter(
         fun onAnnonceLoadFail()
     }
 
-    private var annoncesList = listOf<Annonce>()
+    private var annoncesList: MutableList<Annonce> = mutableListOf()
 
+    fun isListEmpty() = annoncesList.isEmpty()
     fun setAnnoncesList(annonceToSet: List<Annonce>) {
-        annoncesList = annonceToSet
+        annoncesList = annonceToSet.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun addElements(list: List<Annonce>) {
+        annoncesList.addAll(list)
+        notifyItemRangeInserted(annoncesList.lastIndex, list.size)
+    }
+
+    fun freeList() {
+        annoncesList = mutableListOf()
     }
 
     inner class AnnonceHolder(private val binding: SingleAnnonceBinding) :
@@ -46,10 +55,9 @@ class AnnoncesAdapter(
                         annonce.price.toString()
                     )
 
-                    if (annonce.pictures.isEmpty()){
+                    if (annonce.pictures.isEmpty()) {
                         annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
-                    }
-                    else if (annonce.pictures[0].isNotBlank()) {
+                    } else if (annonce.pictures[0].isNotBlank()) {
                         Picasso
                             .get()
                             .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")

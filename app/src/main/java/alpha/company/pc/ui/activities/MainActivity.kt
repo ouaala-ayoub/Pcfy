@@ -37,16 +37,16 @@ import com.squareup.picasso.Picasso
 
 
 private const val TAG = "MainActivity"
-const val LOGOUT_SUCCESS = "Deconnecté avec success"
 var imageLoader: ImageLoader? = ImageLoader("no yet", LoadPolicy.Cache)
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-    private var userId: String? = null
     private lateinit var authModel: AuthModel
+    private var userId: String? = null
     var picasso: Picasso = Picasso.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.personal_space -> {
                     Log.d(TAG, "onOptionsItemSelected clicked personal_space ")
 
-                    if (userId != null){
+                    if (userId != null) {
                         goToPersonalSpaceActivity(userId!!)
                     } else {
                         goToLoginActivity()
@@ -84,7 +84,10 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 R.id.website -> {
-                    openTheWebsite()
+                    openTheWebsite(getString(R.string.pcfy_website))
+                }
+                R.id.about -> {
+                    openTheWebsite(getString(R.string.pcfy_website))
                 }
             }
             true
@@ -120,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                             if (imageName != null) {
                                 imageLoader?.imageUrl = imageName
                             }
-                            if (imageName.isNullOrBlank()){
+                            if (imageName.isNullOrBlank()) {
                                 userImage.setOnClickListener {
                                     goToUserImageModify(
                                         user.userId!!,
@@ -159,20 +162,26 @@ class MainActivity : AppCompatActivity() {
 
                         } else {
 
-                            userImage.setOnClickListener {
-                                goToLoginActivity()
+                            userImage.apply {
+                                setImageResource(R.drawable.ic_baseline_no_photography_24)
+                                setOnClickListener {
+                                    goToLoginActivity()
+                                }
                             }
                             userName.text = getString(R.string.error)
-                            userEmail.text = getString(R.string.error)
+                            userEmail.text = ""
 
                         }
                     }
                 } else {
-                    userImage.setOnClickListener {
-                        goToLoginActivity()
+                    userImage.apply {
+                        setImageResource(R.drawable.ic_baseline_no_photography_24)
+                        setOnClickListener {
+                            goToLoginActivity()
+                        }
                     }
                     userName.text = getString(R.string.no_auth)
-                    userEmail.text = getString(R.string.no_auth)
+                    userEmail.text = ""
                 }
 
             }
@@ -270,6 +279,7 @@ class MainActivity : AppCompatActivity() {
             imageLoader?.loadingPolicy = LoadPolicy.Cache
         }
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -286,7 +296,7 @@ class MainActivity : AppCompatActivity() {
 
             R.id.logout -> {
                 authModel.logout()
-                this.toast(LOGOUT_SUCCESS, Toast.LENGTH_SHORT)
+                this.toast(getString(R.string.dissconected), Toast.LENGTH_SHORT)
                 reloadActivity()
                 true
             }
@@ -309,9 +319,9 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun openTheWebsite() {
+    private fun openTheWebsite(link: String) {
         val openURL = Intent(Intent.ACTION_VIEW)
-        openURL.data = Uri.parse(getString(R.string.pcfy_website))
+        openURL.data = Uri.parse(link)
         startActivity(openURL)
     }
 

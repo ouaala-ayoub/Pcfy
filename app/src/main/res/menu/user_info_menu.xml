@@ -19,6 +19,18 @@
 
     <item
         android:id="@+id/contact"
-        android:title="@string/contactez_nous" />
+        android:title="@string/contactez_nous" >
+        <menu >
+            <item
+                android:id="@+id/email"
+                android:title="email" />
+            <item
+                android:id="@+id/instagram"
+                android:title="instagram" />
+            <item
+                android:id="@+id/twitter"
+                android:title="twitter" />
+        </menu>
+    </item>
 
 </menu>

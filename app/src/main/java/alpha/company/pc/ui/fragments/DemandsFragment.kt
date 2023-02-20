@@ -13,10 +13,8 @@ import alpha.company.pc.ui.adapters.DemandsAdapter
 import alpha.company.pc.ui.viewmodels.DemandsModel
 import alpha.company.pc.ui.viewmodels.MessageText
 import android.util.Log
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 
-private const val NUM_ROWS = 2
 private const val TAG = "DemandsFragment"
 
 class DemandsFragment : Fragment() {
@@ -24,6 +22,7 @@ class DemandsFragment : Fragment() {
     private lateinit var binding: FragmentDemandsBinding
     private lateinit var demandsModel: DemandsModel
     private lateinit var demandsAdapter: DemandsAdapter
+//    private var demandsToShow = mutableListOf<Demand>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +33,14 @@ class DemandsFragment : Fragment() {
                 getString(R.string.list_empty)
             )
         )
-        demandsModel.getDemands()
-
         demandsAdapter = DemandsAdapter(object : DemandsAdapter.OnDemandClicked {
             override fun onDemandClicked(demandId: String) {
                 goToDemandFragment(demandId)
             }
         })
+        demandsModel.getDemands()
+
+
     }
 
     override fun onCreateView(
@@ -51,6 +51,15 @@ class DemandsFragment : Fragment() {
         binding = FragmentDemandsBinding.inflate(inflater, container, false)
 
         binding.apply {
+            demandsRv.showShimmerAdapter()
+            swipeRefresh.apply {
+                setOnRefreshListener {
+                    demandsAdapter.freeList()
+                    demandsModel.getDemands()
+                    isRefreshing = false
+                }
+            }
+
             demandsRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = demandsAdapter
@@ -63,7 +72,15 @@ class DemandsFragment : Fragment() {
                     demandsList.observe(viewLifecycleOwner) { demands ->
                         //show the data fetched
                         if (demands != null) {
-                            demandsAdapter.setDemandsList(demands)
+                            if (demandsAdapter.isListEmpty()) {
+                                Log.d(TAG, "setting demands list $demands")
+                                demandsAdapter.setList(demands)
+                                hideShimmerAdapter()
+                            } else {
+                                Log.d(TAG, "adding demands : ")
+                                demandsAdapter.addDemands(demands)
+                            }
+
                         } else {
                             Log.e(TAG, "demands is: $demands")
                         }
