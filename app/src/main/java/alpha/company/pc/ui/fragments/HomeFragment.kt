@@ -16,6 +16,7 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.databinding.FragmentHomeBinding
 import alpha.company.pc.ui.activities.AnnonceActivity
+import alpha.company.pc.ui.activities.MainActivity
 import alpha.company.pc.ui.adapters.AnnoncesAdapter
 import alpha.company.pc.ui.adapters.CategoryAdapter
 import alpha.company.pc.ui.adapters.PopularsAdapter
@@ -68,6 +69,7 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        (requireActivity() as MainActivity).supportActionBar?.show()
 //        Thread.sleep(5000)
 
         val categoryAdapter = CategoryAdapter(
@@ -94,8 +96,8 @@ class HomeFragment : Fragment() {
                 false
             )
             adapter = categoryAdapter
+            Log.d(TAG, "showing categories shimmer")
             showShimmerAdapter()
-
         }
 
         binding!!.apply {
@@ -137,6 +139,7 @@ class HomeFragment : Fragment() {
                     false
                 )
                 adapter = popularsAdapter
+                Log.d(TAG, "showing populars shimmer")
                 showShimmerAdapter()
             }
         }
@@ -145,6 +148,7 @@ class HomeFragment : Fragment() {
 
             categoriesList.observe(viewLifecycleOwner) { categories ->
                 categoryAdapter.setCategoriesList(categories)
+                Log.d(TAG, "hiding categories shimmer")
                 binding!!.categoryShimmerRv.hideShimmerAdapter()
             }
 
@@ -154,14 +158,14 @@ class HomeFragment : Fragment() {
 
                     if (annoncesAdapter.isListEmpty()) {
                         Log.d(TAG, "setting new list : $annonces")
-                        annoncesAdapter.setAnnoncesList(annonces)
 
-                        Log.d(TAG, "hiding annonce shimmer")
-                        binding!!.annonceRv.hideShimmerAdapter()
+                        annoncesAdapter.setAnnoncesList(annonces)
                     } else {
                         Log.d(TAG, "adding new elements : $annonces")
                         annoncesAdapter.addElements(annonces)
                     }
+                    Log.d(TAG, "hiding annonce shimmer")
+                    binding!!.annonceRv.hideShimmerAdapter()
 
                 } else {
                     Log.e(TAG, "annoncesList is $annonces")
@@ -191,6 +195,7 @@ class HomeFragment : Fragment() {
                     val popularsList = populars.map { popular -> popular.title }
                     Log.d(TAG, "popularsList: $popularsList")
                     popularsAdapter.setPopularsList(populars)
+                    Log.d(TAG, "hiding populars shimmer")
                     binding!!.popularsShimmerRv.hideShimmerAdapter()
                 } else {
                     Log.e(TAG, "popularsList is : $populars")
@@ -241,7 +246,8 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding!!.annonceRv.hideShimmerAdapter()
+//        (requireActivity() as MainActivity).supportActionBar?.show()
+//        binding!!.annonceRv.hideShimmerAdapter()
     }
 
     private fun goToAnnonceActivity(annonceId: String) {

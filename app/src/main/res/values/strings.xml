@@ -27,7 +27,7 @@
     <string name="logout">Se Deconnecter</string>
     <string name="settings">Réglages</string>
     <string name="Oui">Oui</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="no_thanks">Non merci</string>
     <string name="Cancel">Annuler</string>
     <string name="confirm_annonce_title">Confirmation de l\'annonce</string>
@@ -209,8 +209,8 @@
     <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!--    real ad ids-->
-    <!--        <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
-    <!--        <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
+<!--            <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
+<!--            <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
 
 </resources>
 

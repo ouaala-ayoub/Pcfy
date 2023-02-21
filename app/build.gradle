@@ -13,7 +13,7 @@ android {
         applicationId "alpha.company.pc"
         minSdk 21
         targetSdk 33
-        versionCode 19
+        versionCode 21
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -73,11 +73,11 @@ dependencies {
     //image loading
     implementation 'com.squareup.picasso:picasso:2.71828'
     //jwt auth
-    implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
-    implementation 'io.github.nefilim.kjwt:kjwt-jwks:0.5.3'
+//    implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
+//    implementation 'io.github.nefilim.kjwt:kjwt-jwks:0.5.3'
 
     //kt core
-    implementation("io.arrow-kt:arrow-core")
+//    implementation("io.arrow-kt:arrow-core")
 
     //shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
