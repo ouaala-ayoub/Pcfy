@@ -48,7 +48,6 @@ class CreateAnnonceFragment : Fragment() {
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var binding: FragmentCreateAnnonceBinding? = null
-    private val retrofitService = RetrofitService.getInstance()
     private lateinit var viewModel: CreateAnnonceModel
     private lateinit var authModel: AuthModel
     private lateinit var userId: String
@@ -58,6 +57,7 @@ class CreateAnnonceFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        val retrofitService = RetrofitService.getInstance(requireContext())
         viewModel = CreateAnnonceModel(CreateAnnonceRepository(retrofitService))
         authModel = AuthModel(retrofitService, null)
         authModel.auth(requireContext())
@@ -427,7 +427,7 @@ class CreateAnnonceFragment : Fragment() {
                 viewModel.imagesLiveData.value = text.toString()
             }
 
-            categoryEditText.doOnTextChanged {text, _, _, _ ->
+            categoryEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.categoryLiveData.value = text.toString()
             }
 

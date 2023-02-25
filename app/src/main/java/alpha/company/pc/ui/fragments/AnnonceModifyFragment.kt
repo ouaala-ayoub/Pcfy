@@ -155,7 +155,10 @@ class AnnonceModifyFragment : Fragment() {
                         var details = if (annonce.details.isNullOrEmpty()) {
                             mutableListOf()
                         } else {
-                            annonce.details
+                            annonce.details.map { detail ->
+                                val detailsSplit = detail.split(":", limit = 2)
+                                Detail(detailsSplit[0], detailsSplit[1])
+                            }
                         }
                         //fill the annoncePictures list
 
@@ -257,8 +260,6 @@ class AnnonceModifyFragment : Fragment() {
                             val mark = markEditText.text.toString()
                             val description = descriptionEditText.text.toString()
                             val city = cityEditText.text.toString()
-                            val newDetails = details
-                            annonce.details
 
                             annonceActivity.annoncePictures.removeAt(annonceActivity.annoncePictures.lastIndex)
                             val pictures = annonceActivity.annoncePictures
@@ -293,18 +294,13 @@ class AnnonceModifyFragment : Fragment() {
                                     addFormDataPart("city", city)
 
                                 Log.d(TAG, "details: $details")
-//                                if (annonce.details != details) {
-                                Log.d(TAG, "details: $details")
                                 for (i in details.indices) {
-                                    addFormDataPart("details[$i][title]", details[i].title)
-                                    addFormDataPart("details[$i][body]", details[i].body)
+                                    addFormDataPart(
+                                        "details[$i]",
+                                        "${details[i].title}:${details[i].body}"
+                                    )
                                 }
-//                                }
 
-//                                Log.d(TAG, "pictures :${annonceActivity.annoncePictures}")
-//                                val test = pictures.map { picture -> picture.name }
-
-//                                if (annonce.pictures != test) {
                                 for (i in pictures.indices) {
                                     if (pictures[i].uri != null) {
 
@@ -381,53 +377,6 @@ class AnnonceModifyFragment : Fragment() {
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         imageResultLauncher.launch(intent)
     }
-
-    private fun getImagesRequest(builder: MultipartBody.Builder) {
-
-    }
-
-//    private fun getRequestBody(data: Intent): MultipartBody {
-//        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
-//        val pathHelper = URIPathHelper()
-//
-//
-//        if (data.clipData == null) {
-//            val currentItemUri = data.data
-//            val filePath = pathHelper.getPath(requireContext(), currentItemUri!!)
-//
-//            val file = File(filePath!!)
-//            Log.i(TAG, "getRequestBody file: $file")
-//            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-//
-//            builder.apply {
-//                addFormDataPart(
-//                    "pictures",
-//                    file.name,
-//                    requestFile
-//                )
-//            }
-//        } else {
-//            val clipData = data.clipData
-//            for (i in 0 until clipData!!.itemCount) {
-//                val currentItemUri = clipData.getItemAt(i).uri
-//                val filePath = pathHelper.getPath(requireContext(), currentItemUri)
-//
-//                val file = File(filePath!!)
-//                Log.i(TAG, "file $i: $file")
-//                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-//
-//                builder.apply {
-//                    addFormDataPart(
-//                        "pictures",
-//                        file.name,
-//                        requestFile
-//                    )
-//                }
-//            }
-//        }
-//
-//        return builder.build()
-//    }
 
     private fun goToImageModifyFragment(imageIndex: Int) {
         val action = AnnonceModifyFragmentDirections

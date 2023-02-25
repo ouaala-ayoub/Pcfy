@@ -38,7 +38,7 @@ class OrderPageFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         orderId = args.orderId
-        orderPageModel = OrderPageModel(OrdersRepository(RetrofitService.getInstance()))
+        orderPageModel = OrderPageModel(OrdersRepository(RetrofitService.getInstance(requireContext())))
         Log.i(TAG, "onCreate orderId: $orderId")
     }
 

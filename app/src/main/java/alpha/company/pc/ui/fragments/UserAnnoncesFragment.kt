@@ -38,14 +38,13 @@ private const val ORDERS_ERROR = "Erreur de chargement des commandes"
 class UserAnnoncesFragment : Fragment() {
 
     private lateinit var binding: FragmentUserAnnoncesBinding
-    private val retrofitService = RetrofitService.getInstance()
     private lateinit var userId: String
     private lateinit var userAnnoncesModel: UserAnnoncesModel
     private lateinit var currentTokens: Tokens
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val retrofitService = RetrofitService.getInstance(requireContext())
         val activity = requireActivity() as UserAnnoncesActivity
         userId = activity.userId
         userAnnoncesModel = UserAnnoncesModel(
@@ -110,7 +109,13 @@ class UserAnnoncesFragment : Fragment() {
                     onOrderClicked: OrdersShortAdapter.OnOrderClicked?
                 ) {
                     val singleCommandModel =
-                        SingleAnnounceCommandModel(UserInfoRepository(retrofitService))
+                        SingleAnnounceCommandModel(
+                            UserInfoRepository(
+                                RetrofitService.getInstance(
+                                    requireContext()
+                                )
+                            )
+                        )
 
                     val adapter = OrdersShortAdapter(onOrderClicked!!)
 
@@ -157,19 +162,19 @@ class UserAnnoncesFragment : Fragment() {
 
         userAnnoncesModel.apply {
             deletedAnnonce.observe(viewLifecycleOwner) { deletedWithSuccess ->
-            if (deletedWithSuccess) {
-                getAnnoncesById(userId)
-                requireContext().toast(
-                    ANNONCE_DELETED_SUCCESS,
-                    Toast.LENGTH_SHORT
-                )
-            } else {
-                requireContext().toast(
-                    ANNONCE_ERROR_MSG,
-                    Toast.LENGTH_SHORT
-                )
+                if (deletedWithSuccess) {
+                    getAnnoncesById(userId)
+                    requireContext().toast(
+                        ANNONCE_DELETED_SUCCESS,
+                        Toast.LENGTH_SHORT
+                    )
+                } else {
+                    requireContext().toast(
+                        ANNONCE_ERROR_MSG,
+                        Toast.LENGTH_SHORT
+                    )
+                }
             }
-        }
         }
 
         userAnnoncesModel.apply {

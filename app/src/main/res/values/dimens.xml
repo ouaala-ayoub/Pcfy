@@ -36,4 +36,6 @@
     <dimen name="demand_image_size">135dp</dimen>
     <dimen name="user_image_size">150dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="choice_size">160dp</dimen>
+    <dimen name="choice_icon_size">80dp</dimen>
 </resources>

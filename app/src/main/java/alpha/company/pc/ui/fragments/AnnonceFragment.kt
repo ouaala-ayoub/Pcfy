@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import alpha.company.pc.R
+import alpha.company.pc.data.models.local.Detail
 import alpha.company.pc.data.models.local.ImageLoader
 import alpha.company.pc.data.models.local.LoadPolicy
 import alpha.company.pc.databinding.FragmentAnnonceBinding
@@ -81,13 +82,13 @@ class AnnonceFragment : Fragment() {
 
                             imagesVp.apply {
 
-                                registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                                registerOnPageChangeCallback(object :
+                                    ViewPager2.OnPageChangeCallback() {
                                     override fun onPageSelected(position: Int) {
 
                                     }
 
                                     override fun onPageScrollStateChanged(state: Int) {
-
 
 
                                     }
@@ -130,7 +131,10 @@ class AnnonceFragment : Fragment() {
                             if (!details.isNullOrEmpty()) {
                                 //setting the details recycler view
                                 detailsAdapter = DetailsAdapter(
-                                    annonce.details
+                                    annonce.details.map { detail ->
+                                        val detailsSplit = detail.split(":", limit = 2)
+                                        Detail(detailsSplit[0], detailsSplit[1])
+                                    }
                                 )
                                 detailsRv.apply {
                                     adapter = detailsAdapter
@@ -150,6 +154,7 @@ class AnnonceFragment : Fragment() {
                                 picasso
                                     .load("${USERS_AWS_S3_LINK}${this.picture}")
                                     .fit()
+                                    .placeholder(circularProgressBar(requireContext()))
                                     .error(R.drawable.ic_baseline_no_photography_24)
                                     .into(selleerImage)
                             }

@@ -49,8 +49,8 @@ class DemandCreateFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        demandCreateModel = DemandCreateModel(DemandRepository(RetrofitService.getInstance()))
-        authModel = AuthModel(RetrofitService.getInstance())
+        demandCreateModel = DemandCreateModel(DemandRepository(RetrofitService.getInstance(requireContext())))
+        authModel = AuthModel(RetrofitService.getInstance(requireContext()))
         authModel.auth(requireContext())
 
         (requireActivity() as MainActivity).supportActionBar?.hide()

@@ -1,5 +1,6 @@
 package alpha.company.pc.ui.fragments
 
+import alpha.company.pc.data.models.network.Annonce
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.data.models.network.CategoryEnum
+import alpha.company.pc.data.models.network.Seller
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.databinding.FragmentHomeBinding
@@ -31,12 +33,14 @@ class HomeFragment : Fragment() {
 
     private lateinit var annoncesAdapter: AnnoncesAdapter
     private lateinit var popularsAdapter: PopularsAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var viewModel: HomeModel
-    private val retrofitService = RetrofitService.getInstance()
+    private lateinit var onClickListener: AnnoncesAdapter.OnAnnonceClickListener
     private var binding: FragmentHomeBinding? = null
+    private var annoncesList = mutableListOf<Annonce>()
     private val adBuilder = AdRequest.Builder()
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        val retrofitService = RetrofitService.getInstance(requireContext())
         super.onCreate(savedInstanceState)
 
         viewModel = HomeModel(HomeRepository(retrofitService)).also {
@@ -48,7 +52,7 @@ class HomeFragment : Fragment() {
         }
 
 
-        val onClickListener = object : AnnoncesAdapter.OnAnnonceClickListener {
+        onClickListener = object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
                 goToAnnonceActivity(annonceId)
             }
@@ -58,8 +62,24 @@ class HomeFragment : Fragment() {
                 Log.e(TAG, "onAnnonceLoadFail : something went wrong with loading the annonce")
             }
         }
-        annoncesAdapter = AnnoncesAdapter(onClickListener)
+        annoncesAdapter = AnnoncesAdapter(onClickListener, annoncesList)
         popularsAdapter = PopularsAdapter(onClickListener)
+        categoryAdapter = CategoryAdapter(
+            object : CategoryAdapter.OnCategoryClickedListener {
+                override fun onCategoryClicked(title: String) {
+                    annoncesAdapter.setAnnoncesListFromAdapter(listOf())
+                    if (title == CategoryEnum.ALL.title) {
+                        viewModel.apply {
+                            getAnnoncesListAll()
+                        }
+                    } else {
+                        viewModel.apply {
+                            getAnnoncesByCategory(title)
+                        }
+                    }
+                }
+            }
+        )
     }
 
     override fun onCreateView(
@@ -69,26 +89,7 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        (requireActivity() as MainActivity).supportActionBar?.show()
-//        Thread.sleep(5000)
 
-        val categoryAdapter = CategoryAdapter(
-            object : CategoryAdapter.OnCategoryClickedListener {
-                override fun onCategoryClicked(title: String) {
-                    if (title == CategoryEnum.ALL.title) {
-                        viewModel.apply {
-                            getAnnoncesListAll()
-                            annoncesAdapter.setAnnoncesList(listOf())
-                        }
-                    } else {
-                        viewModel.apply {
-                            getAnnoncesByCategory(title)
-                            annoncesAdapter.setAnnoncesList(listOf())
-                        }
-                    }
-                }
-            }
-        )
         binding!!.categoryShimmerRv.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
@@ -99,7 +100,6 @@ class HomeFragment : Fragment() {
             Log.d(TAG, "showing categories shimmer")
             showShimmerAdapter()
         }
-
         binding!!.apply {
 
             val adRequest = adBuilder.build()
@@ -143,6 +143,14 @@ class HomeFragment : Fragment() {
                 showShimmerAdapter()
             }
         }
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).supportActionBar?.show()
+//        Thread.sleep(5000)
+
 
         viewModel.apply {
 
@@ -156,13 +164,20 @@ class HomeFragment : Fragment() {
 
                 if (annonces != null) {
 
+                    val annonceRv = binding!!.annonceRv.layoutManager
                     if (annoncesAdapter.isListEmpty()) {
                         Log.d(TAG, "setting new list : $annonces")
+                        val recyclerViewState =
+                            annonceRv?.onSaveInstanceState()
+                        annoncesAdapter.setAnnoncesListFromAdapter(annonces)
+                        annonceRv?.onRestoreInstanceState(recyclerViewState)
 
-                        annoncesAdapter.setAnnoncesList(annonces)
                     } else {
                         Log.d(TAG, "adding new elements : $annonces")
+                        val recyclerViewState =
+                            annonceRv?.onSaveInstanceState()
                         annoncesAdapter.addElements(annonces)
+                        annonceRv?.onRestoreInstanceState(recyclerViewState)
                     }
                     Log.d(TAG, "hiding annonce shimmer")
                     binding!!.annonceRv.hideShimmerAdapter()
@@ -208,6 +223,9 @@ class HomeFragment : Fragment() {
                     val current = categoryAdapter.getCurrentCategory()
 
                     adView.loadAd(adRequest)
+                    if (categoryAdapter.isEmptyList()) {
+                        viewModel.getCategories()
+                    }
                     annoncesAdapter.freeList()
                     if (current == CategoryEnum.ALL.title) {
                         getAnnoncesListAll()
@@ -241,7 +259,6 @@ class HomeFragment : Fragment() {
             }
 
         }
-        return binding?.root
     }
 
     override fun onResume() {

@@ -32,9 +32,10 @@ class OrdersListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val activity = requireActivity() as FullOrdersActivity
 
-        fullOrdersModel = FullOrdersModel(OrdersRepository(RetrofitService.getInstance())).also {
-            it.initialiseAdd(requireContext())
-        }
+        fullOrdersModel =
+            FullOrdersModel(OrdersRepository(RetrofitService.getInstance(requireContext()))).also {
+                it.initialiseAdd(requireContext())
+            }
         userId = activity.userId
         orderId = activity.orderId
 

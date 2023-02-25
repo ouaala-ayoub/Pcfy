@@ -25,7 +25,7 @@ class RequestsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         binding = ActivityRequestsBinding.inflate(layoutInflater)
-        requestsModel = RequestsModel(OrdersRepository(RetrofitService.getInstance()))
+        requestsModel = RequestsModel(OrdersRepository(RetrofitService.getInstance(this)))
         userId = intent.getStringExtra("id") as String
 
         supportActionBar?.hide()

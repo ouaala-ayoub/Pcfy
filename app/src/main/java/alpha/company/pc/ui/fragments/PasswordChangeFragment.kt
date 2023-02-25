@@ -33,7 +33,7 @@ class PasswordChangeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPasswordChangeBinding.inflate(inflater, container, false)
-        changePasswordModel = ChangePasswordModel(UserInfoRepository(RetrofitService.getInstance()))
+        changePasswordModel = ChangePasswordModel(UserInfoRepository(RetrofitService.getInstance(requireContext())))
 
         binding.apply {
             changePasswordModel.apply {

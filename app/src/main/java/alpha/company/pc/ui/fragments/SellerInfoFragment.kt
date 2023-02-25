@@ -41,7 +41,7 @@ class SellerInfoFragment : Fragment() {
         sellerId = args.id
         viewModel = SellerInfoModel(
             AnnonceRepository(
-                RetrofitService.getInstance()
+                RetrofitService.getInstance(requireContext())
             )
         )
     }
@@ -87,10 +87,10 @@ class SellerInfoFragment : Fragment() {
                                     override fun onAnnonceLoadFail() {
                                         findNavController().popBackStack()
                                     }
-                                }
+                                }, mutableListOf()
                             )
                             binding.sellerAnnoncesRv.apply {
-                                adapter.setAnnoncesList(annonces)
+                                adapter.setAnnoncesListFromAdapter(annonces)
                                 this.adapter = adapter
                                 layoutManager = GridLayoutManager(requireContext(), NUM_ROWS)
                             }

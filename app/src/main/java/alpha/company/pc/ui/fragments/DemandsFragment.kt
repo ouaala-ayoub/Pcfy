@@ -27,7 +27,7 @@ class DemandsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         demandsModel = DemandsModel(
-            DemandRepository(RetrofitService.getInstance()), MessageText(
+            DemandRepository(RetrofitService.getInstance(requireContext())), MessageText(
                 "",
                 getString(R.string.error),
                 getString(R.string.list_empty)

@@ -1,6 +1,5 @@
 package alpha.company.pc.data.models.network
 
-import alpha.company.pc.data.models.local.Detail
 import com.google.gson.annotations.SerializedName
 
 data class Annonce(
@@ -31,11 +30,11 @@ data class Annonce(
 
     //non required
 //    not needed ?
-    @SerializedName("visited")
+    @SerializedName("orders")
     val visited: Int? = null,
 
     @SerializedName("details")
-    val details: List<Detail>? = null,
+    val details: List<String>? = null,
 
     @SerializedName("mark")
     val mark: String? = null,

@@ -196,7 +196,7 @@ class OrderFragment : Fragment() {
                                         view = binding.root
                                     )
 
-                                    if (annonce.pictures.isEmpty()){
+                                    if (annonce.pictures.isEmpty()) {
                                         annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                                     } else {
                                         Picasso.get()
@@ -319,7 +319,7 @@ class OrderFragment : Fragment() {
                 }
             })
 
-        mInterstitialAd?.fullScreenContentCallback = object :FullScreenContentCallback() {
+        mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdClicked() {
                 // Called when a click is recorded for an ad.
                 super.onAdClicked()
@@ -365,7 +365,7 @@ class OrderFragment : Fragment() {
             val ai = requireContext().packageManager.getApplicationInfo(
                 requireContext().packageName,
                 PackageManager.GET_META_DATA
-            ).metaData.get("FIREBASE_KEY")
+            ).metaData.getString("FIREBASE_KEY")
 
             ai.toString()
         } catch (e: Throwable) {

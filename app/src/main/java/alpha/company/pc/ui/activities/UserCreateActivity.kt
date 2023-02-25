@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import alpha.company.pc.R
-import alpha.company.pc.data.models.local.SellerType
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.UserRepository
 import alpha.company.pc.databinding.ActivityCreateUserBinding
@@ -18,7 +17,6 @@ import alpha.company.pc.ui.fragments.UserStepThree
 import alpha.company.pc.ui.fragments.UserStepTwo
 import alpha.company.pc.ui.viewmodels.UserModel
 import alpha.company.pc.utils.*
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
@@ -32,7 +30,6 @@ class UserCreateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateUserBinding
     private lateinit var fragmentsList: List<Fragment>
     private lateinit var fragmentsAdapter: FragmentsAdapter
-    private val retrofitService = RetrofitService.getInstance()
     private lateinit var userModel: UserModel
     val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
 
@@ -40,7 +37,7 @@ class UserCreateActivity : AppCompatActivity() {
 
         //hiding the support bar
         supportActionBar?.hide()
-
+        val retrofitService = RetrofitService.getInstance(this)
         binding = ActivityCreateUserBinding.inflate(layoutInflater)
         fragmentsList = listOf(
             UserStepOne(),
@@ -150,7 +147,4 @@ class UserCreateActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }

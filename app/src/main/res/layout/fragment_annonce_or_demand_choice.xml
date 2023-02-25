@@ -6,57 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.AnnonceOrDemandChoiceFragment">
 
+    <TextView
+        android:id="@+id/info_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/que_voulez_vous_ajouter"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/info_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:padding="10dp"
-            android:text="@string/que_voulez_vous_ajouter"
-            android:textSize="25sp" />
 
-        <Button
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/annonce_choice"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:gravity="center|start"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/choice_size"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
             android:text="@string/annonce"
             android:textAllCaps="false"
-            android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="17sp"
-            app:icon="@drawable/ic_baseline_shopping_bag_24"
-            app:iconPadding="10dp"
-            app:iconTint="@color/main_theme"
-            app:strokeColor="@color/color_on_primary" />
+            app:strokeColor="@color/color_on_primary">
 
-        <Button
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="10dp"
+                android:text="@string/une_annonce" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="@dimen/choice_icon_size"
+                android:layout_height="@dimen/choice_icon_size"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:contentDescription="annonce"
+                android:src="@drawable/ic_baseline_shopping_bag_24" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/demand_choice"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:gravity="center|start"
-            android:text="@string/demande"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/choice_size"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/annonce"
             android:textAllCaps="false"
-            android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="17sp"
-            app:icon="@drawable/baseline_local_offer_24"
-            app:iconPadding="10dp"
-            app:iconTint="@color/main_theme"
-            app:strokeColor="@color/color_on_primary" />
+            app:strokeColor="@color/color_on_primary">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="10dp"
+                android:text="@string/une_demande" />
+
+            <ImageView
+
+                android:layout_width="@dimen/choice_icon_size"
+                android:layout_height="@dimen/choice_icon_size"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:contentDescription="demande"
+                android:src="@drawable/baseline_local_offer_24" />
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

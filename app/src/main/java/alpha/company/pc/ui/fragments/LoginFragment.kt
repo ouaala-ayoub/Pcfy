@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import alpha.company.pc.R
-import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.databinding.FragmentLoginBinding
 import alpha.company.pc.ui.activities.MainActivity
@@ -25,7 +24,6 @@ private const val TAG = "LoginFragment"
 
 class LoginFragment : Fragment(), View.OnClickListener {
 
-    private val retrofitService = RetrofitService.getInstance()
     private var binding: FragmentLoginBinding? = null
     private lateinit var viewModel: LoginModel
     private lateinit var loginRepository: LoginRepository
@@ -34,8 +32,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        loginRepository = LoginRepository(retrofitService, requireContext().applicationContext)
+        loginRepository = LoginRepository( requireContext())
         binding = FragmentLoginBinding.inflate(
             inflater,
             container,
@@ -106,7 +103,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                     goToMainActivity()
                 } else {
                     requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
-                    goToMainActivity()
+//                    goToMainActivity()
                 }
             }
 

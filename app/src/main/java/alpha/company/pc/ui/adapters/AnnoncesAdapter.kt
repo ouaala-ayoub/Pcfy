@@ -14,7 +14,8 @@ import com.squareup.picasso.Picasso
 private const val TAG = "AnnoncesAdapter"
 
 class AnnoncesAdapter(
-    private val annonceClickListener: OnAnnonceClickListener
+    private val annonceClickListener: OnAnnonceClickListener,
+    private var annoncesList: MutableList<Annonce>
 ) : RecyclerView.Adapter<AnnoncesAdapter.AnnonceHolder>() {
 
     interface OnAnnonceClickListener {
@@ -22,17 +23,23 @@ class AnnoncesAdapter(
         fun onAnnonceLoadFail()
     }
 
-    private var annoncesList: MutableList<Annonce> = mutableListOf()
+//    private var annoncesList: MutableList<Annonce> = mutableListOf()
 
     fun isListEmpty() = annoncesList.isEmpty()
-    fun setAnnoncesList(annonceToSet: List<Annonce>) {
+    fun setAnnoncesListFromAdapter(annonceToSet: List<Annonce>) {
         annoncesList = annonceToSet.toMutableList()
+
+
+
         notifyDataSetChanged()
     }
 
     fun addElements(list: List<Annonce>) {
+        val test = mutableListOf(1, 2, 3)
+        test.addAll(listOf(4, 5, 6))
+        Log.d(TAG, "test adding list : $test")
         annoncesList.addAll(list)
-        notifyItemRangeInserted(annoncesList.lastIndex, list.size)
+        notifyItemRangeInserted(itemCount, list.size)
     }
 
     fun freeList() {
@@ -43,7 +50,7 @@ class AnnoncesAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val annonce = annoncesList[position]
-            Log.i(TAG, "bind: annonce $annonce")
+            Log.i(TAG, "bind [$position] ${annonce.title}")
             binding.apply {
 
                 try {

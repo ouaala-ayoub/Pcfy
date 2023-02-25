@@ -15,7 +15,7 @@ class AnnonceModifyActivity : AppCompatActivity() {
     lateinit var annoncePictures: MutableList<Picture>
     private lateinit var binding: ActivityAnnonceModifyBinding
     val viewModel =
-        AnnonceModifyModel(AnnonceModifyRepository(RetrofitService.getInstance()))
+        AnnonceModifyModel(AnnonceModifyRepository(RetrofitService.getInstance(this)))
     val picasso: Picasso = Picasso.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {

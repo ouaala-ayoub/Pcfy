@@ -48,8 +48,8 @@ class SearchFragment : Fragment() {
             override fun onAnnonceLoadFail() {
                 findNavController().popBackStack()
             }
-        })
-        viewModel = SearchModel(SearchRepository(RetrofitService.getInstance()), MAX_SEARCH_PRICE)
+        }, mutableListOf())
+        viewModel = SearchModel(SearchRepository(RetrofitService.getInstance(requireContext())), MAX_SEARCH_PRICE)
         super.onCreate(savedInstanceState)
     }
 
@@ -94,7 +94,7 @@ class SearchFragment : Fragment() {
             viewModel.apply {
                 searchResult.observe(viewLifecycleOwner) { searchResult ->
                     if (searchResult != null) {
-                        rvAdapter.setAnnoncesList(searchResult)
+                        rvAdapter.setAnnoncesListFromAdapter(searchResult)
                     } else {
 //                        doOnFail(SEARCH_ERROR)
                         Log.e(TAG, "searchResult fail" )

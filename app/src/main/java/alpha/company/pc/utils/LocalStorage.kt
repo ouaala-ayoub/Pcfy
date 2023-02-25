@@ -11,9 +11,9 @@ class LocalStorage {
 
     companion object {
 
-        fun storeTokens(activity: Context, token: Tokens){
-            val sharedPrefs = activity.getSharedPreferences("tokens",Context.MODE_PRIVATE)
-            with (sharedPrefs!!.edit()) {
+        fun storeTokens(activity: Context, token: Tokens) {
+            val sharedPrefs = activity.getSharedPreferences("tokens", Context.MODE_PRIVATE)
+            with(sharedPrefs!!.edit()) {
                 putString(activity.resources.getString(R.string.refresh_token), token.refreshToken)
                 putString(activity.resources.getString(R.string.access_token), token.accessToken)
                 apply()
@@ -22,9 +22,9 @@ class LocalStorage {
 
         }
 
-        fun storeAccessToken(activity: Context, accessToken: String){
+        fun storeAccessToken(activity: Context, accessToken: String) {
             val sharedPrefs = activity.getSharedPreferences("tokens", Context.MODE_PRIVATE)
-            with (sharedPrefs!!.edit()) {
+            with(sharedPrefs!!.edit()) {
                 putString(activity.applicationContext.getString(R.string.access_token), accessToken)
                 apply()
             }
@@ -37,10 +37,10 @@ class LocalStorage {
             )
         }
 
-        private fun getAccessToken(activity: Context): String?{
+        fun getAccessToken(activity: Context): String? {
             val accessToken: String?
             activity.apply {
-                accessToken = getSharedPreferences("tokens",Context.MODE_PRIVATE)
+                accessToken = getSharedPreferences("tokens", Context.MODE_PRIVATE)
                     .getString(
                         resources.getString(R.string.access_token), null
                     )
@@ -48,7 +48,7 @@ class LocalStorage {
             return accessToken
         }
 
-        private fun getRefreshToken(activity: Context): String?{
+        private fun getRefreshToken(activity: Context): String? {
             val refreshToken: String?
             activity.apply {
                 refreshToken = getSharedPreferences("tokens", Context.MODE_PRIVATE)
@@ -59,7 +59,7 @@ class LocalStorage {
             return refreshToken
         }
 
-        fun deleteTokens(activity: Context) : Boolean{
+        fun deleteTokens(activity: Context): Boolean {
             try {
                 val sharedPrefs = activity.getSharedPreferences("tokens", Context.MODE_PRIVATE)
                 val editor = sharedPrefs.edit()
@@ -67,8 +67,7 @@ class LocalStorage {
                     .remove(activity.resources.getString(R.string.refresh_token))
                     .remove(activity.resources.getString(R.string.access_token))
                     .apply()
-            }
-            catch (e: Throwable){
+            } catch (e: Throwable) {
                 return false
             }
             return true

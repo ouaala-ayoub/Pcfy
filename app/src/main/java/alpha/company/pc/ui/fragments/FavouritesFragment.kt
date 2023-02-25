@@ -30,16 +30,17 @@ class FavouritesFragment : Fragment() {
     private var binding: FragmentFavouritesBinding? = null
     private lateinit var adapter: FavouritesAdapter
     private lateinit var userId: String
-    private val retrofitService = RetrofitService.getInstance()
-    private var viewModel = FavouritesModel(
-        FavouritesRepository(
-            retrofitService
-        )
-    )
+    private lateinit var viewModel: FavouritesModel
     private lateinit var authModel: AuthModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val retrofitService = RetrofitService.getInstance(requireContext())
+        viewModel = FavouritesModel(
+            FavouritesRepository(
+                retrofitService
+            )
+        )
         authModel = AuthModel(retrofitService, null)
     }
 

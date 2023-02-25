@@ -50,7 +50,7 @@ class UserImageModifyActivity : AppCompatActivity() {
         picasso = Picasso.get()
         userId = intent.getStringExtra("userId") as String
         imageUrl = intent.getStringExtra("imageName") as String
-        viewModel = UserInfoModel(UserInfoRepository(RetrofitService.getInstance()), picasso)
+        viewModel = UserInfoModel(UserInfoRepository(RetrofitService.getInstance(this)), picasso)
 
         requestPermissionLauncher =
             registerForActivityResult(

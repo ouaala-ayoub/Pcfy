@@ -13,7 +13,7 @@ android {
         applicationId "alpha.company.pc"
         minSdk 21
         targetSdk 33
-        versionCode 21
+        versionCode 22
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -54,6 +54,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.0.1')
     implementation 'com.google.firebase:firebase-messaging:23.1.1'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
+    implementation 'androidx.test:core-ktx:1.5.0'
 
     //test
     testImplementation 'junit:junit:4.13.2'
@@ -73,8 +74,8 @@ dependencies {
     //image loading
     implementation 'com.squareup.picasso:picasso:2.71828'
     //jwt auth
-//    implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
-//    implementation 'io.github.nefilim.kjwt:kjwt-jwks:0.5.3'
+    implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
+    implementation 'io.github.nefilim.kjwt:kjwt-jwks:0.5.3'
 
     //kt core
 //    implementation("io.arrow-kt:arrow-core")

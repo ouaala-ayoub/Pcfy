@@ -28,6 +28,8 @@ class CategoryAdapter(
         notifyDataSetChanged()
     }
 
+    fun isEmptyList() = categoriesList.isEmpty()
+
     interface OnCategoryClickedListener {
         fun onCategoryClicked(title: String)
     }
@@ -94,7 +96,7 @@ class CategoryAdapter(
         }
     }
 
-    private fun setView(category: alpha.company.pc.data.models.local.Category, chip: Chip) {
+    private fun setView(category: Category, chip: Chip) {
         if (category.isClicked) {
             chip.setTypeface(null, Typeface.BOLD)
 

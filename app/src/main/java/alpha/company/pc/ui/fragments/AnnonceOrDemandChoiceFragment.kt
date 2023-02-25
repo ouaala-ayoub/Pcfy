@@ -28,7 +28,9 @@ class AnnonceOrDemandChoiceFragment : Fragment(), View.OnClickListener {
 
         binding.apply {
             annonceChoice.setOnClickListener(this@AnnonceOrDemandChoiceFragment)
+            annonceChoice.setBackgroundResource(R.drawable.nav_support_background)
             demandChoice.setOnClickListener(this@AnnonceOrDemandChoiceFragment)
+            demandChoice.setBackgroundResource(R.drawable.nav_support_background)
         }
 
         return binding.root

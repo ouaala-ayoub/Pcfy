@@ -12,14 +12,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.TokenRequest
-import alpha.company.pc.data.models.network.BodyX
 import alpha.company.pc.data.models.network.User
 import alpha.company.pc.ui.activities.FullOrdersActivity
 import alpha.company.pc.utils.LocalStorage
 import alpha.company.pc.utils.getError
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import retrofit2.Call
@@ -51,9 +47,9 @@ class PushNotificationService : FirebaseMessagingService() {
 
         val tokens = LocalStorage.getTokens(baseContext)
         val cookies = "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
-        RetrofitService.getInstance().auth(cookies).enqueue(object : Callback<BodyX?> {
+        RetrofitService.getInstance(baseContext).auth().enqueue(object : Callback<User?> {
 
-            override fun onResponse(call: Call<BodyX?>, response: Response<BodyX?>) {
+            override fun onResponse(call: Call<User?>, response: Response<User?>) {
                 if (response.isSuccessful && response.body() != null) {
                     val auth = response.body()
                     createNotificationChannel()
@@ -64,17 +60,17 @@ class PushNotificationService : FirebaseMessagingService() {
                         orderId
                     )
                     if (auth != null) {
-                        val newAccessToken = auth.accessToken
-                        if (newAccessToken != null) {
-                            LocalStorage.storeAccessToken(baseContext, newAccessToken)
-                        }
+//                        val newAccessToken = auth
+//                        if (newAccessToken != null) {
+//                            LocalStorage.storeAccessToken(baseContext, newAccessToken)
+//                        }
                     }
                 } else {
                     Log.e(TAG, "non authenticated")
                 }
             }
 
-            override fun onFailure(call: Call<BodyX?>, t: Throwable) {
+            override fun onFailure(call: Call<User?>, t: Throwable) {
                 Log.e(TAG, "auth onFailure: ${t.message}")
             }
         })
@@ -156,16 +152,16 @@ class PushNotificationService : FirebaseMessagingService() {
     private fun setNewFirebaseToken(token: String) {
 
         val tokens = LocalStorage.getTokens(baseContext)
-        val retrofitService = RetrofitService.getInstance()
+        val retrofitService = RetrofitService.getInstance(baseContext)
         val cookies = "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
 
-        retrofitService.auth(cookies).enqueue(object : Callback<BodyX?> {
-            override fun onResponse(call: Call<BodyX?>, response: Response<BodyX?>) {
+        retrofitService.auth().enqueue(object : Callback<User?> {
+            override fun onResponse(call: Call<User?>, response: Response<User?>) {
                 val res = response.body()
                 if (res != null) {
-                    val userId = res.id
+                    val userId = res.userId
 
-                    retrofitService.putFireBaseToken(userId, TokenRequest(token))
+                    retrofitService.putFireBaseToken(userId!!, TokenRequest(token))
                         .enqueue(object : Callback<User> {
                             override fun onResponse(call: Call<User>, response: Response<User>) {
                                 if (response.isSuccessful && response.body() != null) {
@@ -196,7 +192,7 @@ class PushNotificationService : FirebaseMessagingService() {
                 }
             }
 
-            override fun onFailure(call: Call<BodyX?>, t: Throwable) {
+            override fun onFailure(call: Call<User?>, t: Throwable) {
                 Log.e(TAG, "onFailure set New Token: ")
             }
 

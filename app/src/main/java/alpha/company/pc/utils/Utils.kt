@@ -11,7 +11,6 @@ import alpha.company.pc.data.models.network.Error
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import android.content.ContentUris
-import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -98,11 +97,11 @@ fun makeSnackBar(
     return Snackbar.make(view, message, duration)
 }
 
-fun getError(responseBody: ResponseBody, code: Int): Error? {
+fun getError(responseBody: ResponseBody?, code: Int): Error? {
     return try {
-        Log.e(TAG, "JSONObject or msg :${responseBody.charStream().readText()} ")
-        val jsonObj = JSONObject(responseBody.charStream().readText())
-        Error(jsonObj.getString("error"), code)
+        Log.e(TAG, "JSONObject or msg :${responseBody?.charStream()?.readText()} ")
+        val jsonObj = responseBody?.charStream()?.readText()?.let { JSONObject(it) }
+        jsonObj?.getString("error")?.let { Error(it, code) }
     } catch (e: Exception) {
         val error = e.message?.let { Error(it, code) }
         Log.e(TAG, "error parsing JSON error message: $error")

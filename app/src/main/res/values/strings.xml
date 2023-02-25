@@ -207,6 +207,8 @@
     <!--    test ad ids-->
     <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="une_annonce">Une Annonce</string>
+    <string name="une_demande">Une Demande</string>
 
     <!--    real ad ids-->
 <!--            <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->

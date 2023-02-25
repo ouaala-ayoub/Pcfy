@@ -40,7 +40,7 @@ class UserInfoModifyActivity : AppCompatActivity() {
         userToModifyId = intent.getStringExtra("id")!!
         viewModel = UserInfoModifyModel(
             UserInfoRepository(
-                RetrofitService.getInstance()
+                RetrofitService.getInstance(this)
             )
         )
 

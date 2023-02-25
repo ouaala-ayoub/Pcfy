@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.utils.getError
-import alpha.company.pc.data.models.network.Error
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,7 +16,7 @@ private const val ERROR_MSG = "Erreur inattendue"
 
 class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
-    val annoncesList = MutableLiveData<List<Annonce>?>()
+    var annoncesList = MutableLiveData<List<Annonce>?>()
     val popularsList = MutableLiveData<List<Annonce>?>()
     val categoriesList = MutableLiveData<List<String>>()
     val emptyMsg = MutableLiveData<String>()

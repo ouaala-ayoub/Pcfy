@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso
 class AnnonceActivity : AppCompatActivity() {
 
     val picasso: Picasso = Picasso.get()
-    private val retrofitService = RetrofitService.getInstance()
+    private val retrofitService = RetrofitService.getInstance(this)
     val viewModel = AnnonceModel(AnnonceRepository(retrofitService))
     val authModel = AuthModel(retrofitService, null)
 

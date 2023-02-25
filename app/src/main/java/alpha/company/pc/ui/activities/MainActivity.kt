@@ -3,6 +3,7 @@ package alpha.company.pc.ui.activities
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.ImageLoader
 import alpha.company.pc.data.models.local.LoadPolicy
+import alpha.company.pc.data.models.network.User
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.databinding.ActivityMainBinding
@@ -13,6 +14,7 @@ import alpha.company.pc.utils.toast
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -21,6 +23,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -31,19 +34,35 @@ import androidx.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.Base64
 
 
 private const val TAG = "MainActivity"
+val freeUser = User(
+    "Non Authentifié",
+    "",
+    "",
+    imageUrl = ""
+)
+var globalUserObject: User = freeUser
 var imageLoader: ImageLoader? = ImageLoader("no yet", LoadPolicy.Cache)
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
-    private val retrofitService = RetrofitService.getInstance()
+
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var authModel: AuthModel
     private var userId: String? = null
@@ -54,10 +73,11 @@ class MainActivity : AppCompatActivity() {
 
         //initialise mobileAds
         //weird bug
+        val retrofitService = RetrofitService.getInstance(this)
         MobileAds.initialize(this)
         authModel = AuthModel(
             retrofitService,
-            LoginRepository(retrofitService, this)
+            LoginRepository(this)
         ).apply { auth(this@MainActivity) }
 
 //        picasso = Picasso.get()
@@ -106,73 +126,56 @@ class MainActivity : AppCompatActivity() {
 //
 //
         authModel.apply {
-            auth.observe(this@MainActivity) {
+            user.observe(this@MainActivity) { user ->
                 val view = binding.navView.getHeaderView(0)
                 val userImage = view.findViewById<ImageView>(R.id.user_picture)
                 val userName = view.findViewById<TextView>(R.id.user_name)
                 val userEmail = view.findViewById<TextView>(R.id.user_email)
-                userId = getUserId()
 
-                if (isAuth()) {
-                    getUserById(userId!!)
-                    user.observe(this@MainActivity) { user ->
-                        if (user != null) {
-                            val imageName = user.imageUrl
-                            val circularProgressDrawable = circularProgressBar(this@MainActivity)
+                if (user != null) {
+                    globalUserObject = user
+                    val imageName = globalUserObject.imageUrl
+                    val circularProgressDrawable = circularProgressBar(this@MainActivity)
 
-                            if (imageName != null) {
-                                imageLoader?.imageUrl = imageName
-                            }
-                            if (imageName.isNullOrBlank()) {
-                                userImage.setOnClickListener {
-                                    goToUserImageModify(
-                                        user.userId!!,
-                                        "undefined"
-                                    )
-                                }
-                            } else {
-                                userImage.setOnClickListener {
-                                    Log.d(TAG, "userImage.setOnClickListener: ")
-                                    goToUserImageModify(
-                                        user.userId!!,
-                                        user.imageUrl
-                                    )
-                                }
-                            }
-
-                            if (imageLoader?.loadingPolicy == LoadPolicy.Cache) {
-                                Log.i(TAG, "loading image with cache")
-                                loadUserImageFromCache(
-                                    circularProgressDrawable,
-                                    imageLoader!!.imageUrl,
-                                    userImage
-                                )
-                            } else if (imageLoader?.loadingPolicy == LoadPolicy.Reload) {
-                                Log.i(TAG, "loading image with no cache")
-                                loadUserImageNoCache(
-                                    circularProgressDrawable,
-                                    imageLoader!!.imageUrl,
-                                    userImage
-                                )
-                                imageLoader?.loadingPolicy = LoadPolicy.Cache
-                            }
-
-                            userName.text = user.name
-                            userEmail.text = user.email
-
-                        } else {
-
-                            userImage.apply {
-                                setImageResource(R.drawable.ic_baseline_no_photography_24)
-                                setOnClickListener {
-                                    goToLoginActivity()
-                                }
-                            }
-                            userName.text = getString(R.string.error)
-                            userEmail.text = ""
-
+                    if (imageName != null) {
+                        imageLoader?.imageUrl = imageName
+                    }
+                    if (imageName.isNullOrBlank()) {
+                        userImage.setOnClickListener {
+                            goToUserImageModify(
+                                globalUserObject.userId!!,
+                                "undefined"
+                            )
+                        }
+                    } else {
+                        userImage.setOnClickListener {
+                            Log.d(TAG, "userImage.setOnClickListener: ")
+                            goToUserImageModify(
+                                globalUserObject.userId!!,
+                                imageName
+                            )
                         }
                     }
+
+                    if (imageLoader?.loadingPolicy == LoadPolicy.Cache) {
+                        Log.i(TAG, "loading image with cache")
+                        loadUserImageFromCache(
+                            circularProgressDrawable,
+                            imageLoader!!.imageUrl,
+                            userImage
+                        )
+                    } else if (imageLoader?.loadingPolicy == LoadPolicy.Reload) {
+                        Log.i(TAG, "loading image with no cache")
+                        loadUserImageNoCache(
+                            circularProgressDrawable,
+                            imageLoader!!.imageUrl,
+                            userImage
+                        )
+                        imageLoader?.loadingPolicy = LoadPolicy.Cache
+                    }
+
+                    userName.text = globalUserObject.name
+                    userEmail.text = globalUserObject.email
                 } else {
                     userImage.apply {
                         setImageResource(R.drawable.ic_baseline_no_photography_24)
@@ -182,8 +185,8 @@ class MainActivity : AppCompatActivity() {
                     }
                     userName.text = getString(R.string.no_auth)
                     userEmail.text = ""
-                }
 
+                }
             }
         }
         supportActionBar?.setBackgroundDrawable(
@@ -239,8 +242,9 @@ class MainActivity : AppCompatActivity() {
 
 
         authModel.apply {
-            auth.observe(this@MainActivity) {
-                if (isAuth()) {
+            user.observe(this@MainActivity) { user ->
+                if (user != null) {
+                    globalUserObject = user
                     Log.i(TAG, "onCreateOptionsMenu: logged_in")
                     inflater.inflate(R.menu.logged_in_options_menu, menu)
 
