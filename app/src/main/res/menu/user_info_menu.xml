@@ -18,9 +18,13 @@
         android:title="@string/propos" />
 
     <item
+        android:id="@+id/settings"
+        android:title="@string/settings" />
+
+    <item
         android:id="@+id/contact"
-        android:title="@string/contactez_nous" >
-        <menu >
+        android:title="@string/contactez_nous">
+        <menu>
             <item
                 android:id="@+id/email"
                 android:title="email" />

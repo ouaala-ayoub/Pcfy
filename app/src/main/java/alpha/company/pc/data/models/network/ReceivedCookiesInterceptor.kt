@@ -14,21 +14,25 @@ class ReceivedCookiesInterceptor(private val context: Context) : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalResponse = chain.proceed(chain.request())
-        if (originalResponse.headers("Set-Cookie").isNotEmpty()) {
+        Log.i(TAG, "intercept: ${originalResponse.headers("set-cookie")}")
+        if (originalResponse.headers("set-cookie").isNotEmpty()) {
 
-            val cookies = originalResponse.headers("Set-Cookie")
+            val cookies = originalResponse.headers("set-cookie")
             Log.d(TAG, "intercept cookies 0 : $cookies")
             if (cookies.size == 2) {
-                Log.d(TAG, "access token intercepted : ${cookies[0].split(";")[0].split("=")[1]}")
-                Log.d(TAG, "refresh token intercepted : ${cookies[1].split(";")[0].split("=")[1]}")
+                val accessToken = cookies[0].split(";")[0].split("=")[1]
+                val refreshToken = cookies[1].split(";")[0].split("=")[1]
+                Log.d(TAG, "access token intercepted : $accessToken")
+                Log.d(TAG, "refresh token intercepted : $refreshToken")
                 val tokens = Tokens(
-                    cookies[1].split(";")[0].split("=")[1],
-                    cookies[0].split(";")[0].split("=")[1]
+                    refreshToken,
+                    accessToken
                 )
                 LocalStorage.storeTokens(context, tokens)
             } else if (cookies.size == 1) {
+                val accessToken = cookies[0].split(";")[0].split("=")[1]
                 Log.d(TAG, "access token intercepted : ${cookies[0].split(";")[0].split("=")[1]}")
-                LocalStorage.storeAccessToken(context, cookies[0])
+                LocalStorage.storeAccessToken(context, accessToken)
             }
         }
         return originalResponse

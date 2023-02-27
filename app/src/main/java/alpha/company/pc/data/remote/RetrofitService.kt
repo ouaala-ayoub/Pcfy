@@ -3,8 +3,8 @@ package alpha.company.pc.data.remote
 import alpha.company.pc.data.models.local.OrderStatusRequest
 import alpha.company.pc.data.models.local.TokenRequest
 import alpha.company.pc.data.models.network.*
-import alpha.company.pc.utils.LocalStorage
 import android.content.Context
+import com.google.gson.annotations.SerializedName
 import okhttp3.*
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -87,14 +87,13 @@ interface RetrofitService {
     // Auth
 
     @POST("auth/login")
-    fun login(@Body userCredentials: UserCredentials): Call<LoginResponse>
+    fun login(@Body userCredentials: UserCredentials): Call<CustomMessageResponse>
 
     @GET("auth")
     fun auth(): Call<User?>
 
-    @POST("refresh")
+    @POST("auth/refresh")
     fun refresh(
-        @Header("auth-access") accessToken: String,
         @Body refreshToken: RefreshToken
     ): Call<AccessToken>
 
@@ -219,34 +218,19 @@ interface RetrofitService {
 //        });
 //        "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
 
-
-        private fun getClient(context: Context): OkHttpClient.Builder {
-            return OkHttpClient.Builder().addInterceptor(Interceptor { chain ->
-                val tokens = LocalStorage.getTokens(context)
-                val request = chain.request().newBuilder().addHeader(
-                    "Cookie",
-                    "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
-                ).build()
-                chain.proceed(request)
-            })
-
-        }
-
-
         fun getInstance(context: Context): RetrofitService {
 
-            val builder = OkHttpClient.Builder()
-            builder.interceptors()
-                .add(AddCookiesInterceptor(context))
-//            builder.interceptors()
-//                .add(ReceivedCookiesInterceptor(context))
-            val client = builder.build()
+            val client = OkHttpClient
+                .Builder()
+                .addInterceptor(AddCookiesInterceptor(context))
+                .addInterceptor(ReceivedCookiesInterceptor(context))
+
 
             if (retrofitService == null) {
                 val retrofit = Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(client)
+                    .client(client.build())
                     .build()
                 retrofitService = retrofit.create(RetrofitService::class.java)
             }
@@ -254,3 +238,8 @@ interface RetrofitService {
         }
     }
 }
+
+data class CustomMessageResponse(
+    @SerializedName("message")
+    val message: String
+)

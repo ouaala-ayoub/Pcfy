@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_baseline_settings_24"
-        app:showAsAction="ifRoom"/>
+        android:id="@+id/light_dark"
+        android:actionLayout="@layout/light_dark_switch"
+        android:title="Theme"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/login"
+        android:icon="@drawable/ic_baseline_login_24"
         android:title="@string/se_connecter"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_baseline_login_24"/>
+        app:showAsAction="always" />
 
 </menu>

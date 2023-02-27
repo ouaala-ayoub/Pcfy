@@ -42,8 +42,9 @@ data class PayloadClass(
 
     fun isExpired(): Boolean {
         val currentTime = System.currentTimeMillis() / 100
-        println("current time = $currentTime")
+
         return if (exp != null) {
+            Log.d(TAG, "isExpired currentTime = $currentTime > exp = $exp: ")
             currentTime > exp!!
         } else {
             false

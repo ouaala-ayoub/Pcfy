@@ -15,14 +15,16 @@ class AddCookiesInterceptor(private val context: Context) : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder: Request.Builder = chain.request().newBuilder()
-
 //        getting tokens tokens
-        val accessToken = LocalStorage.getAccessToken(context)
-        if (accessToken != null) {
-            Log.d(TAG, "sending authorization header  jwt-access=${accessToken}")
+        val tokens = LocalStorage.getTokens(context)
+        if (tokens.accessToken != null && tokens.refreshToken != null) {
+            Log.d(
+                TAG,
+                "Cookie jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
+            )
             builder.addHeader(
-                "authorization",
-                "Bearer $accessToken"
+                "Cookie",
+                "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
             )
         }
         return chain.proceed(builder.build())

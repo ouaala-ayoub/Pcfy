@@ -39,6 +39,7 @@
             android:textAllCaps="false"
             android:textColor="@color/color_on_primary"
             android:textSize="17sp"
+            app:cardCornerRadius="10dp"
             app:strokeColor="@color/color_on_primary">
 
             <TextView
@@ -69,6 +70,7 @@
             android:textAllCaps="false"
             android:textColor="@color/color_on_primary"
             android:textSize="17sp"
+            app:cardCornerRadius="10dp"
             app:strokeColor="@color/color_on_primary">
 
             <TextView

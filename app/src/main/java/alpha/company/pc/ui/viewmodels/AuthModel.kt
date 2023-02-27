@@ -49,12 +49,11 @@ class AuthModel(
     }
 
     private fun refresh(
-        accessToken: String,
         refreshToken: String,
         onRefresh: (accessToken: String) -> Unit,
         onFailRefresh: () -> Unit
     ) {
-        retrofitService.refresh(accessToken, RefreshToken(refreshToken))
+        retrofitService.refresh(RefreshToken(refreshToken))
             .enqueue(object : Callback<AccessToken> {
                 override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
                     if (response.isSuccessful && response.body() != null) {
@@ -86,41 +85,48 @@ class AuthModel(
 
             override fun onResponse(call: Call<User?>, response: Response<User?>) {
                 if (response.isSuccessful && response.body() != null) {
+                    Log.i(TAG, "onResponse: ${response.raw()}")
                     Log.i(TAG, "auth ${response.body()}")
                     user.postValue(response.body())
 
                 } else {
 
-                    val tokens = LocalStorage.getTokens(context)
-                    if (tokens.accessToken != null && tokens.refreshToken != null) {
-                        val payload = PayloadClass.getInfoFromJwt(tokens.accessToken)
-                        fun onRefreshFail() {
-                            user.postValue(null)
-                            errorMessage.postValue(NON_AUTHENTICATED)
-                            Log.e(TAG, "onRefreshFail: error refreshing the token")
-                        }
+                    val error = getError(response.errorBody(), response.code())
+                    Log.e(TAG, "onResponse not successful: $error")
+                    user.postValue(null)
+                    errorMessage.postValue(NON_AUTHENTICATED)
 
-                        fun onRefreshSuccess(newAccessToken: String) {
-                            LocalStorage.storeAccessToken(context, newAccessToken)
-                            auth(context)
-                        }
-
-                        if (payload?.isExpired() == true) {
-                            refresh(
-                                tokens.accessToken,
-                                tokens.refreshToken,
-                                ::onRefreshSuccess,
-                                ::onRefreshFail
-                            )
-                        } else {
-                            onRefreshFail()
-                        }
-
-
-                    } else {
-                        user.postValue(null)
-                        errorMessage.postValue(NON_AUTHENTICATED)
-                    }
+//                    val tokens = LocalStorage.getTokens(context)
+//                    if (tokens.accessToken != null && tokens.refreshToken != null) {
+//                        val payload = PayloadClass.getInfoFromJwt(tokens.accessToken)
+//                        fun onRefreshFail() {
+//                            user.postValue(null)
+//                            errorMessage.postValue(NON_AUTHENTICATED)
+//                            Log.e(TAG, "onRefreshFail: error refreshing the token")
+//                        }
+//
+//                        fun onRefreshSuccess(newAccessToken: String) {
+//                            Log.i(TAG, "setting newAccessToken: $newAccessToken")
+//                            LocalStorage.storeAccessToken(context, newAccessToken)
+//                            auth(context)
+//                        }
+//
+//                        if (payload?.isExpired() == true) {
+//                            Log.i(TAG, "payload?.isExpired(): true")
+//                            refresh(
+//                                tokens.refreshToken,
+//                                ::onRefreshSuccess,
+//                                ::onRefreshFail
+//                            )
+//                        } else {
+//                            onRefreshFail()
+//                        }
+//
+//
+//                    } else {
+//                        user.postValue(null)
+//                        errorMessage.postValue(NON_AUTHENTICATED)
+//                    }
 
                 }
                 isTurning.postValue(false)

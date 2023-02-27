@@ -11,10 +11,11 @@ import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.USERS_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import alpha.company.pc.utils.toast
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -23,10 +24,10 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -34,18 +35,9 @@ import androidx.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import okhttp3.ResponseBody
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.Base64
 
 
 private const val TAG = "MainActivity"
@@ -62,7 +54,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var authModel: AuthModel
     private var userId: String? = null
@@ -78,7 +69,9 @@ class MainActivity : AppCompatActivity() {
         authModel = AuthModel(
             retrofitService,
             LoginRepository(this)
-        ).apply { auth(this@MainActivity) }
+        ).apply {
+            auth(this@MainActivity)
+        }
 
 //        picasso = Picasso.get()
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -102,6 +95,9 @@ class MainActivity : AppCompatActivity() {
                         goToLoginActivity()
                     }
 
+                }
+                R.id.settings -> {
+                    goToSettingsActivity()
                 }
                 R.id.website -> {
                     openTheWebsite(getString(R.string.pcfy_website))
@@ -133,8 +129,8 @@ class MainActivity : AppCompatActivity() {
                 val userEmail = view.findViewById<TextView>(R.id.user_email)
 
                 if (user != null) {
-                    globalUserObject = user
-                    val imageName = globalUserObject.imageUrl
+                    userId = user.userId
+                    val imageName = user.imageUrl
                     val circularProgressDrawable = circularProgressBar(this@MainActivity)
 
                     if (imageName != null) {
@@ -143,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                     if (imageName.isNullOrBlank()) {
                         userImage.setOnClickListener {
                             goToUserImageModify(
-                                globalUserObject.userId!!,
+                                user.userId!!,
                                 "undefined"
                             )
                         }
@@ -151,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                         userImage.setOnClickListener {
                             Log.d(TAG, "userImage.setOnClickListener: ")
                             goToUserImageModify(
-                                globalUserObject.userId!!,
+                                user.userId!!,
                                 imageName
                             )
                         }
@@ -174,8 +170,8 @@ class MainActivity : AppCompatActivity() {
                         imageLoader?.loadingPolicy = LoadPolicy.Cache
                     }
 
-                    userName.text = globalUserObject.name
-                    userEmail.text = globalUserObject.email
+                    userName.text = user.name
+                    userEmail.text = user.email
                 } else {
                     userImage.apply {
                         setImageResource(R.drawable.ic_baseline_no_photography_24)
@@ -199,26 +195,9 @@ class MainActivity : AppCompatActivity() {
         )
         when (prefs.getBoolean(getString(R.string.dark_mode), false)) {
             false -> {
-//                supportActionBar?.setBackgroundDrawable(
-//                    ColorDrawable(
-//                        (ContextCompat.getColor(
-//                            this,
-//                            R.color.white_darker
-//                        ))
-//                    )
-//                )
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-
             true -> {
-//                supportActionBar?.setBackgroundDrawable(
-//                    ColorDrawable(
-//                        (ContextCompat.getColor(
-//                            this,
-//                            R.color.even_darker_grey
-//                        ))
-//                    )
-//                )
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
@@ -242,22 +221,72 @@ class MainActivity : AppCompatActivity() {
 
 
         authModel.apply {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
+
+            val editor = sharedPreferences.edit()
             user.observe(this@MainActivity) { user ->
                 if (user != null) {
-                    globalUserObject = user
                     Log.i(TAG, "onCreateOptionsMenu: logged_in")
                     inflater.inflate(R.menu.logged_in_options_menu, menu)
+                    val itemSwitch = menu!!.findItem(R.id.light_dark)
+                    itemSwitch.setActionView(R.layout.light_dark_switch)
+                    val switch =
+                        itemSwitch.actionView?.findViewById<SwitchCompat>(R.id.light_dark_switch)
 
+                    switch?.isChecked =
+                        sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
+                    switch?.setOnCheckedChangeListener { _, isChecked ->
+                        Log.d(TAG, "switch: $isChecked")
+                        if (isChecked) {
+                            editor.putBoolean(getString(R.string.dark_mode), true).apply()
+                            updateUI(sharedPreferences, switch)
+                        } else {
+                            editor.putBoolean(getString(R.string.dark_mode), false).apply()
+                            updateUI(sharedPreferences, switch)
+                        }
+                    }
                     return@observe
                 } else {
                     Log.i(TAG, "onCreateOptionsMenu: logged_out")
                     inflater.inflate(R.menu.logged_out_options_menu, menu)
+                    val itemSwitch = menu!!.findItem(R.id.light_dark)
+                    itemSwitch.setActionView(R.layout.light_dark_switch)
+                    val switch =
+                        itemSwitch.actionView?.findViewById<SwitchCompat>(R.id.light_dark_switch)
+                    switch?.isChecked =
+                        sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
+                    Log.d(TAG, "switch?.isChecked: ${switch?.isChecked}")
+                    switch?.setOnCheckedChangeListener { _, isChecked ->
+                        Log.d(TAG, "switch: $isChecked")
+                        if (isChecked) {
+                            editor.putBoolean(getString(R.string.dark_mode), true).apply()
+                            updateUI(sharedPreferences, switch)
+                        } else {
+                            editor.putBoolean(getString(R.string.dark_mode), false).apply()
+                            updateUI(sharedPreferences, switch)
+                        }
+                    }
                     return@observe
                 }
             }
+
         }
 
+
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun updateUI(sharedPreferences: SharedPreferences?, switchCompat: SwitchCompat?) {
+        switchCompat.apply {
+            val isChecked = sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
+            Log.d(TAG, "isChecked from updateUI: $isChecked")
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
     }
 
     override fun onResume() {
@@ -305,9 +334,37 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.settings -> {
-                goToSettingsActivity()
+            R.id.light_dark -> {
+
+                Log.d(TAG, "light_dark: clicked")
+//                Log.d(TAG, "light_dark_switch: clicked")
+//                val isDark = PreferenceManager.getDefaultSharedPreferences(this)
+//                    .getBoolean(getString(R.string.dark_mode), false)
+//                Log.d(TAG, "isDark before: $isDark")
+//                val test =
+//                    this.getSharedPreferences(getString(R.string.dark_mode), Context.MODE_PRIVATE)
+//                with(test!!.edit()) {
+//                    putBoolean(getString(R.string.dark_mode), !isDark)
+//                    commit()
+//                }
+//
+//                when (isDark) {
+//
+//                    true -> {
+//                        Log.i(TAG, "onCreatePreferences: switching to dark mode")
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                    }
+//                    else -> {
+//                        Log.i(TAG, "onCreatePreferences: switching to light mode")
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                    }
+//                }
+
                 true
+
+//                val itemSwitch = menu!!.findItem(R.id.light_dark_switch)
+//                itemSwitch.setActionView(R.layout.light_dark_switch)
+
             }
             else -> super.onOptionsItemSelected(item)
         }

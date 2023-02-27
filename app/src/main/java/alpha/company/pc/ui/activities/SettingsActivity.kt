@@ -58,6 +58,7 @@ class SettingsActivity : AppCompatActivity() {
 
             val darkModePref: SwitchPreference? = findPreference(getString(R.string.dark_mode))
 
+//            darkModePref?.isChecked = darkModePref?.sharedPreferences?.getBoolean(getString(R.string.dark_mode), false)
             darkModePref?.setOnPreferenceClickListener {
 
                 val isChecked = it

@@ -1,9 +1,9 @@
 package alpha.company.pc.data.repositories
 
-import alpha.company.pc.data.models.network.LoginResponse
 import android.content.Context
 import alpha.company.pc.data.models.network.Tokens
 import alpha.company.pc.data.models.network.UserCredentials
+import alpha.company.pc.data.remote.CustomMessageResponse
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.ui.activities.freeUser
 import alpha.company.pc.ui.activities.globalUserObject
@@ -27,7 +27,7 @@ class LoginRepository(private val activity: Context) {
         LocalStorage.storeTokens(activity, token)
     }
 
-    fun login(userName: String, password: String): Call<LoginResponse> {
+    fun login(userName: String, password: String): Call<CustomMessageResponse> {
         return RetrofitService.getInstance(activity).login(UserCredentials(userName, password))
     }
 }
