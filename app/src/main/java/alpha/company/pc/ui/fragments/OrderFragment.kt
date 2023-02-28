@@ -61,10 +61,10 @@ class OrderFragment : Fragment() {
         binding = FragmentOrderBinding.inflate(inflater, container, false)
 
         authModel.apply {
-            auth.observe(viewLifecycleOwner) {
+            user.observe(viewLifecycleOwner) { user ->
                 initialiseAdd()
-                if (isAuth()) {
-                    val userId = getUserId()!!
+                if (user != null) {
+                    val userId = user.userId!!
 
                     binding.apply {
 
@@ -231,59 +231,53 @@ class OrderFragment : Fragment() {
 
                                     order.setOnClickListener {
 
-                                        getSellerById(userId, "user")
-                                        user.observe(viewLifecycleOwner) { user ->
-                                            if (user != null) {
-                                                binding.apply {
+                                        binding.apply {
 
-                                                    nameEditText.setText(user.name)
-                                                    phoneEditText.setText(user.phoneNumber)
-                                                    if (user.address != null) {
-                                                        addressEditText.setText(user.address)
-                                                    }
+                                            nameEditText.setText(user.name)
+                                            phoneEditText.setText(user.phoneNumber)
+                                            if (user.address != null) {
+                                                addressEditText.setText(user.address)
+                                            }
 
-                                                    orderModel.apply {
-                                                        val userAddress = user.address
+                                            orderModel.apply {
+                                                val userAddress = user.address
 
-                                                        name.value = user.name
-                                                        phoneNumber.value = user.phoneNumber
-                                                        if (userAddress != null) {
-                                                            address.value = userAddress
-                                                        } else {
-                                                            address.value = ""
-                                                        }
-
-                                                        nameEditText.doOnTextChanged { text, _, _, _ ->
-                                                            name.value = text.toString()
-                                                            Log.i(TAG, "name.value: ${name.value}")
-                                                        }
-                                                        phoneEditText.doOnTextChanged { text, _, _, _ ->
-                                                            phoneNumber.value = text.toString()
-                                                            Log.i(
-                                                                TAG,
-                                                                "phoneNumber.value: ${phoneNumber.value}"
-                                                            )
-                                                        }
-                                                        addressEditText.doOnTextChanged { text, _, _, _ ->
-                                                            address.value = text.toString()
-                                                            Log.i(
-                                                                TAG,
-                                                                "address.value: ${address.value}"
-                                                            )
-                                                        }
-
-                                                        dialog.show()
-                                                        isValidData.observe(viewLifecycleOwner) { isValid ->
-                                                            dialog
-                                                                .getButton(AlertDialog.BUTTON_POSITIVE)
-                                                                .isEnabled = isValid
-                                                        }
-                                                    }
+                                                name.value = user.name
+                                                phoneNumber.value = user.phoneNumber
+                                                if (userAddress != null) {
+                                                    address.value = userAddress
+                                                } else {
+                                                    address.value = ""
                                                 }
-                                            } else {
-                                                doOnFail(ERROR_MSG)
+
+                                                nameEditText.doOnTextChanged { text, _, _, _ ->
+                                                    name.value = text.toString()
+                                                    Log.i(TAG, "name.value: ${name.value}")
+                                                }
+                                                phoneEditText.doOnTextChanged { text, _, _, _ ->
+                                                    phoneNumber.value = text.toString()
+                                                    Log.i(
+                                                        TAG,
+                                                        "phoneNumber.value: ${phoneNumber.value}"
+                                                    )
+                                                }
+                                                addressEditText.doOnTextChanged { text, _, _, _ ->
+                                                    address.value = text.toString()
+                                                    Log.i(
+                                                        TAG,
+                                                        "address.value: ${address.value}"
+                                                    )
+                                                }
+
+                                                dialog.show()
+                                                isValidData.observe(viewLifecycleOwner) { isValid ->
+                                                    dialog
+                                                        .getButton(AlertDialog.BUTTON_POSITIVE)
+                                                        .isEnabled = isValid
+                                                }
                                             }
                                         }
+
 
                                     }
                                 }

@@ -182,10 +182,10 @@ class AnnonceFragment : Fragment() {
 
 
                     authModel.apply {
-                        auth.observe(viewLifecycleOwner) {
+                        user.observe(viewLifecycleOwner) {user ->
 
-                            if (isAuth()) {
-                                userId = getUserId()!!
+                            if (user != null) {
+                                userId = user.userId!!
                                 updateIsAddedToFav(userId, annonceId)
 
                                 isAddedToFav.observe(viewLifecycleOwner) { isFavChecked ->
