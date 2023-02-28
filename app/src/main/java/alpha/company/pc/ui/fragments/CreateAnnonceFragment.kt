@@ -134,12 +134,11 @@ class CreateAnnonceFragment : Fragment() {
                 binding!!.progressBar.isVisible = isLoading
             }
 
-            auth.observe(viewLifecycleOwner) {
+            user.observe(viewLifecycleOwner) { user ->
 
-                if (isAuth()) {
+                if (user != null) {
 
-                    Log.i(TAG, "isAuth: $it")
-                    userId = getUserId()!!
+                    userId = user.userId!!
                     viewModel.apply {
                         getCategories()
                         getCities()
@@ -161,90 +160,83 @@ class CreateAnnonceFragment : Fragment() {
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
 
-                                        getUserById(userId)
-                                        user.observe(viewLifecycleOwner) { user ->
-                                            if (user != null) {
-                                                val imagesPart = getImagesRequestBody()
+                                        val imagesPart = getImagesRequestBody()
 
-                                                val builder = MultipartBody.Builder()
-                                                    .setType(MultipartBody.FORM)
-                                                    .addFormDataPart(
-                                                        "title",
-                                                        viewModel.titleLiveData.value!!
-                                                    )
-                                                    .addFormDataPart(
-                                                        "price",
-                                                        priceEditText.text.toString()
-                                                    )
-                                                    .addFormDataPart(
-                                                        "category",
-                                                        categoryEditText.text.toString()
-                                                    )
-                                                    .addFormDataPart(
-                                                        "city",
-                                                        cityEditText.text.toString()
-                                                    )
-                                                    .addFormDataPart(
-                                                        "status",
-                                                        statusEditText.text.toString()
-                                                    )
-                                                    .addFormDataPart(
-                                                        "mark",
-                                                        markEditText.text.toString()
-                                                    )
-                                                    .addFormDataPart(
-                                                        "description",
-                                                        descriptionEditText.text.toString()
-                                                    )
-                                                    .addFormDataPart("seller[id]", userId)
-                                                    .addFormDataPart("seller[name]", user.name)
+                                        val builder = MultipartBody.Builder()
+                                            .setType(MultipartBody.FORM)
+                                            .addFormDataPart(
+                                                "title",
+                                                viewModel.titleLiveData.value!!
+                                            )
+                                            .addFormDataPart(
+                                                "price",
+                                                priceEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "category",
+                                                categoryEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "city",
+                                                cityEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "status",
+                                                statusEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "mark",
+                                                markEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "description",
+                                                descriptionEditText.text.toString()
+                                            )
+                                            .addFormDataPart("seller[id]", user.userId)
+                                            .addFormDataPart("seller[name]", user.name)
 
-                                                if (user.imageUrl != null) {
-                                                    builder.addFormDataPart(
-                                                        "seller[picture]",
-                                                        user.imageUrl
-                                                    )
-                                                }
+                                        if (user.imageUrl != null) {
+                                            builder.addFormDataPart(
+                                                "seller[picture]",
+                                                user.imageUrl
+                                            )
+                                        }
 
 
-                                                var i = 0
-                                                for (body in imagesPart) {
-                                                    builder.addFormDataPart(
-                                                        "pictures",
-                                                        body.key,
-                                                        body.value
-                                                    )
-                                                    i++
-                                                }
-                                                val annonceToAdd = builder.build()
+                                        var i = 0
+                                        for (body in imagesPart) {
+                                            builder.addFormDataPart(
+                                                "pictures",
+                                                body.key,
+                                                body.value
+                                            )
+                                            i++
+                                        }
+                                        val annonceToAdd = builder.build()
 
 
-                                                viewModel.apply {
+                                        viewModel.apply {
 
-                                                    isTurning.observe(viewLifecycleOwner) { loading ->
-                                                        binding!!.progressBar.isVisible = loading
-                                                        changeUiEnabling(loading)
-                                                    }
-
-                                                    //to change
-                                                    addAnnonce(annonceToAdd)
-                                                    requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
-                                                        isTurning.observe(viewLifecycleOwner) { isVisible ->
-                                                            progressBar.isVisible = isVisible
-                                                        }
-                                                        Log.i(
-                                                            TAG,
-                                                            "response succes from fragment $requestSuccess"
-                                                        )
-                                                        if (requestSuccess) doOnSuccess()
-                                                        else doOnFail()
-                                                    }
-                                                }
-                                            } else {
-                                                doOnFail()
+                                            isTurning.observe(viewLifecycleOwner) { loading ->
+                                                binding!!.progressBar.isVisible = loading
+                                                changeUiEnabling(loading)
                                             }
 
+                                            //to change
+                                            addAnnonce(annonceToAdd)
+                                            requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
+                                                isTurning.observe(viewLifecycleOwner) { isVisible ->
+                                                    progressBar.isVisible = isVisible
+                                                }
+                                                Log.i(
+                                                    TAG,
+                                                    "response succes from fragment $requestSuccess"
+                                                )
+                                                if (requestSuccess) doOnSuccess()
+                                                else doOnFail()
+                                            }
                                         }
+
 
                                     }
 
@@ -259,7 +251,7 @@ class CreateAnnonceFragment : Fragment() {
                     }
 
                 } else {
-                    Log.i(TAG, "user not connected auth body $it")
+                    Log.i(TAG, "user not connected auth body $user")
                     showNoUserConnected()
                 }
             }

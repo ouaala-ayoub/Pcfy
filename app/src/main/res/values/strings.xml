@@ -58,6 +58,7 @@
 
     <!--Preferences keys-->
     <string name="dark_mode">dark_theme</string>
+    <string name="language_pref">language_pref</string>
     <string name="refresh_token">"refresh token"</string>
     <string name="access_token">"access token"</string>
 
@@ -213,8 +214,8 @@
     <string name="une_demande">Une Demande</string>
 
     <!--    real ad ids-->
-<!--            <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
-<!--            <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
+    <!--            <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
+    <!--            <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
 
 </resources>
 

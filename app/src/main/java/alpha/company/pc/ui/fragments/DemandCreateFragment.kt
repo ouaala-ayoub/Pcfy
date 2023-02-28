@@ -49,7 +49,8 @@ class DemandCreateFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        demandCreateModel = DemandCreateModel(DemandRepository(RetrofitService.getInstance(requireContext())))
+        demandCreateModel =
+            DemandCreateModel(DemandRepository(RetrofitService.getInstance(requireContext())))
         authModel = AuthModel(RetrofitService.getInstance(requireContext()))
         authModel.auth(requireContext())
 
@@ -112,8 +113,8 @@ class DemandCreateFragment : Fragment() {
             isTurning.observe(viewLifecycleOwner) { isLoading ->
                 binding.progressBar.isVisible = isLoading
             }
-            auth.observe(viewLifecycleOwner) {
-                if (isAuth()) {
+            user.observe(viewLifecycleOwner) { user ->
+                if (user != null) {
 
                     showForm()
                     //set the other fields
@@ -121,82 +122,72 @@ class DemandCreateFragment : Fragment() {
 
                     binding.apply {
 
-                        val userId = getUserId()!!
-
                         addButton.setOnClickListener {
 
                             makeDialog(
                                 requireContext(),
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
+                                        val userId = user.userId!!
+                                        val imagesPart = getImagesRequestBody()
+                                        val builder = MultipartBody.Builder()
+                                            .setType(MultipartBody.FORM)
+                                            .addFormDataPart(
+                                                "title",
+                                                titleEditText.text.toString()
+                                            )
+                                            .addFormDataPart(
+                                                "price",
+                                                priceEditText.text.toString()
+                                            )
 
-                                        getUserById(userId)
-                                        user.observe(viewLifecycleOwner) { user ->
-                                            if (user != null) {
-                                                val imagesPart = getImagesRequestBody()
+                                            .addFormDataPart(
+                                                "status",
+                                                statusEditText.text.toString()
+                                            )
 
-                                                val builder = MultipartBody.Builder()
-                                                    .setType(MultipartBody.FORM)
-                                                    .addFormDataPart(
-                                                        "title",
-                                                        titleEditText.text.toString()
-                                                    )
-                                                    .addFormDataPart(
-                                                        "price",
-                                                        priceEditText.text.toString()
-                                                    )
+                                            //to change maybe by another name demander ???
+                                            .addFormDataPart("seller[id]", userId)
+                                            .addFormDataPart("seller[name]", user.name)
 
-                                                    .addFormDataPart(
-                                                        "status",
-                                                        statusEditText.text.toString()
-                                                    )
-
-                                                    //to change maybe by another name demander ???
-                                                    .addFormDataPart("seller[id]", userId)
-                                                    .addFormDataPart("seller[name]", user.name)
-
-                                                if (user.imageUrl != null) {
-                                                    builder.addFormDataPart(
-                                                        "seller[picture]",
-                                                        user.imageUrl
-                                                    )
-                                                }
+                                        if (user.imageUrl != null) {
+                                            builder.addFormDataPart(
+                                                "seller[picture]",
+                                                user.imageUrl
+                                            )
+                                        }
 
 
-                                                for (body in imagesPart) {
-                                                    builder.addFormDataPart(
-                                                        "pictures",
-                                                        body.key,
-                                                        body.value
-                                                    )
-                                                }
-                                                val annonceToAdd = builder.build()
+                                        for (body in imagesPart) {
+                                            builder.addFormDataPart(
+                                                "pictures",
+                                                body.key,
+                                                body.value
+                                            )
+                                        }
+                                        val annonceToAdd = builder.build()
 
 
-                                                demandCreateModel.apply {
+                                        demandCreateModel.apply {
 
-                                                    isTurning.observe(viewLifecycleOwner) { loading ->
-                                                        progressBar.isVisible = loading
-                                                        changeUiEnabling(loading)
-                                                    }
-
-                                                    //to change
-                                                    addDemand(annonceToAdd)
-                                                    demandAdded.observe(viewLifecycleOwner) { demandAdded ->
-
-                                                        Log.i(
-                                                            TAG,
-                                                            "response succes from fragment $demandAdded"
-                                                        )
-                                                        if (demandAdded) doOnSuccess()
-                                                        else doOnFail()
-                                                    }
-                                                }
-                                            } else {
-                                                doOnFail()
+                                            isTurning.observe(viewLifecycleOwner) { loading ->
+                                                progressBar.isVisible = loading
+                                                changeUiEnabling(loading)
                                             }
 
+                                            //to change
+                                            addDemand(annonceToAdd)
+                                            demandAdded.observe(viewLifecycleOwner) { demandAdded ->
+
+                                                Log.i(
+                                                    TAG,
+                                                    "response succes from fragment $demandAdded"
+                                                )
+                                                if (demandAdded) doOnSuccess()
+                                                else doOnFail()
+                                            }
                                         }
+
 
                                     }
 
@@ -213,7 +204,7 @@ class DemandCreateFragment : Fragment() {
 
 
                 } else {
-                    Log.i(TAG, "user not connected auth body $it")
+                    Log.i(TAG, "user not connected auth body $user")
                     showNoUserConnected()
                 }
             }

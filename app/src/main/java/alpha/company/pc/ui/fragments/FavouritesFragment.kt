@@ -41,7 +41,7 @@ class FavouritesFragment : Fragment() {
                 retrofitService
             )
         )
-        authModel = AuthModel(retrofitService, null)
+        authModel = AuthModel(retrofitService, null).also { it.auth(requireContext()) }
     }
 
     override fun onCreateView(
@@ -58,35 +58,37 @@ class FavouritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         authModel.apply {
-            auth(requireContext())
-            auth.observe(viewLifecycleOwner) {
-                if (isAuth()) {
-                    Log.i(TAG, "isAuth: $it")
+            user.observe(viewLifecycleOwner) { user ->
+                if (user != null) {
+                    Log.i(TAG, "isAuth: $user")
 
-                    userId = getUserId()!!
-                    Log.i(TAG, "user id: $userId")
-
-                    adapter =
-                        FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener {
-                            override fun onFavouriteClicked(annonceId: String) {
-                                goToAnnonceActivity(annonceId)
-                            }
-
-                            override fun onDeleteClickListener(annonceId: String) {
-                                viewModel.apply {
-
-                                    deleteFavourite(userId, annonceId)
-
-                                }
-                            }
-                        })
+                    userId = user.userId!!
 
                     binding!!.apply {
-                        favouritesRv.layoutManager = LinearLayoutManager(activity)
-                        favouritesRv.adapter = adapter
+                        adapter =
+                            FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener {
+                                override fun onFavouriteClicked(annonceId: String) {
+                                    goToAnnonceActivity(annonceId)
+                                }
+
+                                override fun onDeleteClickListener(annonceId: String) {
+                                    viewModel.apply {
+
+                                        deleteFavourite(userId, annonceId)
+                                    }
+                                }
+                            })
+                        favouritesRv.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = adapter
+                        }
 
                         viewModel.apply {
                             getFavourites(userId)
+                            //message to show
+                            emptyMsg.observe(viewLifecycleOwner) { isVisible ->
+                                isEmpty.text = isVisible
+                            }
                             favouritesListLiveData.observe(viewLifecycleOwner) { favourites ->
                                 if (favourites == null) {
                                     requireContext().toast(FAVOURITE_ERROR_MSG, Toast.LENGTH_SHORT)
@@ -95,9 +97,6 @@ class FavouritesFragment : Fragment() {
                                     Log.i(TAG, "favourites : $favourites")
                                     adapter.setList(favourites)
                                     updateIsEmpty()
-                                    emptyMsg.observe(viewLifecycleOwner) { isVisible ->
-                                        isEmpty.text = isVisible
-                                    }
                                 }
                             }
 

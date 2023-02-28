@@ -10,5 +10,11 @@
             android:title="Dark Mode" />
 
     </PreferenceCategory>
+    <EditTextPreference
+        android:defaultValue="Francais"
+        android:key="@string/language_pref"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Language" />
 
 </PreferenceScreen>
