@@ -14,6 +14,9 @@ import retrofit2.http.*
 
 interface RetrofitService {
 
+    @GET("ayoub")
+    fun test(): Call<ResponseBody>
+
     //    @GET("infos")
 //
 //    fun getInfos(): Call<ResponseBody>

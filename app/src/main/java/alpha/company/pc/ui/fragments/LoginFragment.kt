@@ -16,7 +16,17 @@ import alpha.company.pc.databinding.FragmentLoginBinding
 import alpha.company.pc.ui.activities.MainActivity
 import alpha.company.pc.ui.activities.UserCreateActivity
 import alpha.company.pc.ui.viewmodels.LoginModel
-import alpha.company.pc.utils.toast
+import alpha.company.pc.utils.*
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 
 private const val LOGIN_FAILED = "Erreur de Connexion"
 private const val LOGIN_SUCCESS = "Connecté avec success"
@@ -27,17 +37,42 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private var binding: FragmentLoginBinding? = null
     private lateinit var viewModel: LoginModel
     private lateinit var loginRepository: LoginRepository
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        loginRepository = LoginRepository( requireContext())
+
+        loginRepository = LoginRepository(requireContext())
+        viewModel = LoginModel(loginRepository)
         binding = FragmentLoginBinding.inflate(
             inflater,
             container,
             false
         )
+        requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            Log.d(TAG, "permission to show notifications $isGranted")
+            if (isGranted) {
+                Log.d(TAG, "permission to show notifications $isGranted")
+            } else {
+                val snackBar = makeSnackBar(
+                    binding!!.root,
+                    getString(R.string.permission),
+                    Snackbar.LENGTH_INDEFINITE
+                )
+                snackBar.setAction(R.string.ok) {
+                    snackBar.dismiss()
+                }.show()
+            }
+        }
         return binding?.root
     }
 
@@ -46,7 +81,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         //if the user is already logged in ?
 
-        viewModel = LoginModel(loginRepository)
 
         binding!!.login.isEnabled = false
 
@@ -97,16 +131,31 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 userName,
                 password
             )
-            retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
-                if (retrievedTokens) {
-                    requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
-                    goToMainActivity()
-                } else {
-                    requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
+            Firebase.messaging.token.addOnCompleteListener { task ->
+                retrievedTokens.observe(viewLifecycleOwner) { retrievedTokens ->
+                    if (retrievedTokens) {
+                        val userId =
+                            LocalStorage.getTokens(requireContext()).refreshToken?.let {
+                                PayloadClass.getInfoFromJwt(
+                                    it
+                                )
+                            }?.id
+                        if (userId != null) {
+                            val token = task.result
+                            Log.d(TAG, "performLoginAction userId: $userId")
+                            Log.d(TAG, "performLoginAction token: $token")
+                            registerToken(userId, token)
+                            askNotificationPermission()
+                        }
+
+                        requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
+                        goToMainActivity()
+                    } else {
+                        requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
 //                    goToMainActivity()
+                    }
                 }
             }
-
 
             getErrorMessage().observe(viewLifecycleOwner) { error ->
                 binding!!.problemMessage.text = error
@@ -136,6 +185,49 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun goToUserFragment() {
         val intent = Intent(requireContext(), UserCreateActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            ) {
+                showInContextUI(object : OnDialogClicked {
+                    override fun onPositiveButtonClicked() {
+                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+
+                    override fun onNegativeButtonClicked() {
+                        Log.d(TAG, "onNegativeButtonClicked: user declined notifications service")
+                    }
+
+                })
+
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private fun showInContextUI(onDialogClicked: OnDialogClicked) {
+        makeDialog(
+            requireContext(),
+            onDialogClicked,
+            getString(R.string.permission_required),
+            getString(R.string.no_notifications),
+            negativeText = getString(R.string.no_thanks),
+            positiveText = getString(R.string.authorise)
+        ).show()
     }
 
 }

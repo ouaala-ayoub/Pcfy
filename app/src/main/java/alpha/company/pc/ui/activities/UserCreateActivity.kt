@@ -57,8 +57,8 @@ class UserCreateActivity : AppCompatActivity() {
 
                 offscreenPageLimit = fragmentsList.size
                 adapter = fragmentsAdapter
-                TabLayoutMediator(progressTabBar, this, true){
-                    tab, _ -> tab.view.isClickable = false
+                TabLayoutMediator(progressTabBar, this, true) { tab, _ ->
+                    tab.view.isClickable = false
                 }.attach()
                 isUserInputEnabled = false
 
@@ -146,5 +146,6 @@ class UserCreateActivity : AppCompatActivity() {
     private fun goToLoginPage() {
         finish()
     }
+
 
 }

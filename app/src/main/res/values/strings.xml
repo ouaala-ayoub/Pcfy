@@ -67,6 +67,7 @@
 
     <!--our website-->
     <string name="pcfy_website">https://pcfy.vercel.app/</string>
+    <string name="pcfy_website_regles">https://pcfy.vercel.app/regles</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
@@ -104,6 +105,7 @@
         Vous ne pouvez pas lancer une annonce car l\'application n\'as pas le droit d\'accéder a
         votre galerie des photos
     </string>
+    <string name="no_notifications">Autoriser les notifications pour booster vos ventes</string>
     <string name="you_cant_user">Vous ne pouvez pas modifier votre profile car l\'application n\'as pas le droit d\'accéder a
         votre galerie des photos</string>
     <string name="authorise">autoriser</string>

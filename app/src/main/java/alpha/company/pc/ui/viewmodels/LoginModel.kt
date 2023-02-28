@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Tokens
+import alpha.company.pc.data.models.network.User
 import alpha.company.pc.data.remote.CustomMessageResponse
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.utils.getError
@@ -14,7 +15,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val PASS_MIN_LENGTH = 8
-private const val EMAIL_PASS_WRONG = "Email ou Mot de passe incorrect"
 private const val TAG = "LoginModel"
 
 class LoginModel(private val repository: LoginRepository) : ViewModel() {
@@ -43,6 +43,27 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
         return isValidEmail && isValidPassword
     }
 
+    fun registerToken(userId: String, token: String) {
+        repository.registerToken(userId, token).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful && response.body() != null) {
+                    Log.i(TAG, "putFireBaseToken isSuccessful")
+                } else {
+                    try {
+                        val error =
+                            getError(response.errorBody()!!, response.code())
+                        Log.e(TAG, "putFireBaseToken : ${error?.message}")
+                    } catch (e: Throwable) {
+                        Log.e(TAG, "getError : ${e.message}")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "putFireBaseToken : ${t.message}")
+            }
+        })
+    }
     fun login(userName: String, password: String) {
 
         isTurning.postValue(true)

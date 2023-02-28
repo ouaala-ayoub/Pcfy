@@ -11,7 +11,6 @@ import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.USERS_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import alpha.company.pc.utils.toast
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
@@ -38,16 +37,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 private const val TAG = "MainActivity"
-val freeUser = User(
-    "Non Authentifié",
-    "",
-    "",
-    imageUrl = ""
-)
-var globalUserObject: User = freeUser
+
+//val freeUser = User(
+//    "Non Authentifié",
+//    "",
+//    "",
+//    imageUrl = ""
+//)
+//var globalUserObject: User = freeUser
 var imageLoader: ImageLoader? = ImageLoader("no yet", LoadPolicy.Cache)
 
 class MainActivity : AppCompatActivity() {
@@ -72,6 +76,17 @@ class MainActivity : AppCompatActivity() {
         ).apply {
             auth(this@MainActivity)
         }
+
+        RetrofitService.getInstance(this).test().enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Log.d(TAG, "JSONObject or msg :${response.body()?.charStream()?.readText()} ")
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message}")
+            }
+
+        })
 
 //        picasso = Picasso.get()
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -117,10 +132,23 @@ class MainActivity : AppCompatActivity() {
         bottomNav.setupWithNavController(navController)
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        //
-//        Log.i(TAG, "current theme: $isNightTheme")
-//
-//
+        supportActionBar?.setBackgroundDrawable(
+            ColorDrawable(
+                (ContextCompat.getColor(
+                    this,
+                    R.color.main_theme
+                ))
+            )
+        )
+        when (prefs.getBoolean(getString(R.string.dark_mode), false)) {
+            false -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            true -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        }
+
         authModel.apply {
             user.observe(this@MainActivity) { user ->
                 val view = binding.navView.getHeaderView(0)
@@ -185,22 +213,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        supportActionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                (ContextCompat.getColor(
-                    this,
-                    R.color.main_theme
-                ))
-            )
-        )
-        when (prefs.getBoolean(getString(R.string.dark_mode), false)) {
-            false -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            true -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-        }
+
     }
 
     private fun goToPersonalSpaceActivity(userId: String) {
@@ -334,38 +347,6 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.light_dark -> {
-
-                Log.d(TAG, "light_dark: clicked")
-//                Log.d(TAG, "light_dark_switch: clicked")
-//                val isDark = PreferenceManager.getDefaultSharedPreferences(this)
-//                    .getBoolean(getString(R.string.dark_mode), false)
-//                Log.d(TAG, "isDark before: $isDark")
-//                val test =
-//                    this.getSharedPreferences(getString(R.string.dark_mode), Context.MODE_PRIVATE)
-//                with(test!!.edit()) {
-//                    putBoolean(getString(R.string.dark_mode), !isDark)
-//                    commit()
-//                }
-//
-//                when (isDark) {
-//
-//                    true -> {
-//                        Log.i(TAG, "onCreatePreferences: switching to dark mode")
-//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//                    }
-//                    else -> {
-//                        Log.i(TAG, "onCreatePreferences: switching to light mode")
-//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//                    }
-//                }
-
-                true
-
-//                val itemSwitch = menu!!.findItem(R.id.light_dark_switch)
-//                itemSwitch.setActionView(R.layout.light_dark_switch)
-
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
