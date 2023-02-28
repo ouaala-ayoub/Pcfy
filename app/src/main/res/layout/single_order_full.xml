@@ -46,6 +46,8 @@
                 android:gravity="center|start"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="order_id"
                 android:textSize="12sp" />
 
@@ -58,6 +60,8 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="order_product_name"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -67,6 +71,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="costumer_name"
@@ -80,6 +86,8 @@
                 android:gravity="center|start"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="costumer_number"
                 android:textColor="@color/main_theme"
                 android:textStyle="bold" />

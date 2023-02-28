@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                     openTheWebsite(getString(R.string.pcfy_website))
                 }
                 R.id.about -> {
-                    openTheWebsite(getString(R.string.pcfy_website))
+                    openTheWebsite(getString(R.string.pcfy_website_regles))
                 }
             }
             true

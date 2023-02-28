@@ -10,7 +10,11 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import alpha.company.pc.R
+import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 private const val TAG = "SettingsFragment"
 
@@ -58,11 +62,7 @@ class SettingsActivity : AppCompatActivity() {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
             val darkModePref: SwitchPreference? = findPreference(getString(R.string.dark_mode))
-            val languagePref: EditTextPreference? = findPreference(getString(R.string.language_pref))
-
-//            darkModePref?.isChecked = darkModePref?.sharedPreferences?.getBoolean(getString(R.string.dark_mode), false)
-
-            languagePref
+            val languagePref = findPreference<ListPreference>(getString(R.string.language_pref))
 
             darkModePref?.setOnPreferenceClickListener {
 
