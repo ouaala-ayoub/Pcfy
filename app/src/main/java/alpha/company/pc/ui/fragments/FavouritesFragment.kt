@@ -28,7 +28,7 @@ private const val TAG = "FavouritesFragment"
 class FavouritesFragment : Fragment() {
 
     private var binding: FragmentFavouritesBinding? = null
-    private lateinit var adapter: FavouritesAdapter
+    private lateinit var favouritesAdapter: FavouritesAdapter
     private lateinit var userId: String
     private lateinit var viewModel: FavouritesModel
     private lateinit var authModel: AuthModel
@@ -50,7 +50,19 @@ class FavouritesFragment : Fragment() {
     ): View? {
 
         binding = FragmentFavouritesBinding.inflate(inflater, container, false)
+        favouritesAdapter =
+            FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener {
+                override fun onFavouriteClicked(annonceId: String) {
+                    goToAnnonceActivity(annonceId)
+                }
 
+                override fun onDeleteClickListener(annonceId: String) {
+                    viewModel.apply {
+
+                        deleteFavourite(userId, annonceId)
+                    }
+                }
+            })
         return binding?.root
     }
 
@@ -59,28 +71,17 @@ class FavouritesFragment : Fragment() {
 
         authModel.apply {
             user.observe(viewLifecycleOwner) { user ->
+                Log.i(TAG, "isAuth: $user")
                 if (user != null) {
-                    Log.i(TAG, "isAuth: $user")
+
 
                     userId = user.userId!!
 
                     binding!!.apply {
-                        adapter =
-                            FavouritesAdapter(object : FavouritesAdapter.OnFavouriteClickListener {
-                                override fun onFavouriteClicked(annonceId: String) {
-                                    goToAnnonceActivity(annonceId)
-                                }
 
-                                override fun onDeleteClickListener(annonceId: String) {
-                                    viewModel.apply {
-
-                                        deleteFavourite(userId, annonceId)
-                                    }
-                                }
-                            })
                         favouritesRv.apply {
                             layoutManager = LinearLayoutManager(activity)
-                            adapter = adapter
+                            adapter = favouritesAdapter
                         }
 
                         viewModel.apply {
@@ -95,7 +96,7 @@ class FavouritesFragment : Fragment() {
                                     reloadActivity()
                                 } else {
                                     Log.i(TAG, "favourites : $favourites")
-                                    adapter.setList(favourites)
+                                    favouritesAdapter.setList(favourites)
                                     updateIsEmpty()
                                 }
                             }

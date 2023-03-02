@@ -49,7 +49,10 @@ class SearchFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }, mutableListOf())
-        viewModel = SearchModel(SearchRepository(RetrofitService.getInstance(requireContext())), MAX_SEARCH_PRICE)
+        viewModel = SearchModel(
+            SearchRepository(RetrofitService.getInstance(requireContext())),
+            MAX_SEARCH_PRICE
+        )
         super.onCreate(savedInstanceState)
     }
 
@@ -97,7 +100,7 @@ class SearchFragment : Fragment() {
                         rvAdapter.setAnnoncesListFromAdapter(searchResult)
                     } else {
 //                        doOnFail(SEARCH_ERROR)
-                        Log.e(TAG, "searchResult fail" )
+                        Log.e(TAG, "searchResult fail")
                     }
                     updateSearchMessage()
                 }
@@ -146,19 +149,20 @@ class SearchFragment : Fragment() {
         }.toMutableList().apply { add(WHATEVER) }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, values)
+        Log.d(TAG, "setUpStatusEditText : $values")
         (binding.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
 
-        binding.statusEditText.doOnTextChanged { text, _, _, _ ->
-            statusQuery = getStatusQuery()
-            val searchQuery = binding.searchView.query.toString()
-            if (searchQuery.isNotBlank()){
-                viewModel.search(searchQuery, priceQuery, statusQuery)
-            }
-            Log.i(
-                TAG,
-                "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
-            )
-        }
+//        binding.statusEditText.doOnTextChanged { text, _, _, _ ->
+//            statusQuery = getStatusQuery()
+//            val searchQuery = binding.searchView.query.toString()
+//            if (searchQuery.isNotBlank()) {
+//                viewModel.search(searchQuery, priceQuery, statusQuery)
+//            }
+//            Log.i(
+//                TAG,
+//                "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
+//            )
+//        }
     }
 
     fun getStatusQuery(): String? {
@@ -183,4 +187,9 @@ class SearchFragment : Fragment() {
         requireContext().toast(message, Toast.LENGTH_SHORT)
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        setUpStatusEditText(Status.NEW.status)
+    }
 }

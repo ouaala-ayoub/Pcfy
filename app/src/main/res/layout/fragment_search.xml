@@ -19,15 +19,15 @@
         android:id="@+id/search_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:listitem="@layout/single_annonce"
-        tools:orientation="vertical"
-        tools:spanCount="2"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/single_annonce"
+        tools:orientation="vertical"
+        tools:spanCount="2" />
 
     <ProgressBar
         android:id="@+id/search_progress_bar"
@@ -96,8 +96,7 @@
             android:id="@+id/statusTextField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/statusEditText"
