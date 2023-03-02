@@ -27,10 +27,9 @@ class UserAnnoncesModel(
 ) : ViewModel() {
 
     private var mInterstitialAd: InterstitialAd? = null
-    private val annoncesList = MutableLiveData<MutableList<Annonce>?>()
+    val annoncesList = MutableLiveData<MutableList<Annonce>?>()
     private val isEmpty = MutableLiveData<Boolean>()
     val isTurning = MutableLiveData<Boolean>()
-    val errorMessage = MutableLiveData<Error?>()
     val deletedAnnonce = MutableLiveData<Boolean>()
 
     fun getAnnoncesById(userId: String): MutableLiveData<MutableList<Annonce>?> {
@@ -43,9 +42,10 @@ class UserAnnoncesModel(
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse body ${response.body()}")
                     annoncesList.postValue(response.body()!!.toMutableList())
+
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
-                    errorMessage.postValue(error)
+                    annoncesList.postValue(null)
                     Log.e(TAG, "onResponse error $error")
                 }
                 isTurning.postValue(false)
@@ -53,6 +53,7 @@ class UserAnnoncesModel(
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
                 Log.e(TAG, "getAnnoncesById onFailure: ${t.message}")
+                annoncesList.postValue(null)
                 isTurning.postValue(false)
             }
 
@@ -157,5 +158,7 @@ class UserAnnoncesModel(
         } else isEmpty.postValue(false)
         return isEmpty
     }
+
+
 
 }

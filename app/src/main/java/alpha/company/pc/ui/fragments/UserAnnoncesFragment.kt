@@ -25,10 +25,7 @@ import alpha.company.pc.ui.adapters.FavouritesAdapter
 import alpha.company.pc.ui.adapters.OrdersShortAdapter
 import alpha.company.pc.ui.viewmodels.SingleAnnounceCommandModel
 import alpha.company.pc.ui.viewmodels.UserAnnoncesModel
-import alpha.company.pc.utils.LocalStorage
-import alpha.company.pc.utils.OnDialogClicked
-import alpha.company.pc.utils.makeDialog
-import alpha.company.pc.utils.toast
+import alpha.company.pc.utils.*
 
 private const val TAG = "UserAnnoncesFragment"
 private const val ANNONCE_DELETED_SUCCESS = "Annonce suprimée avec succès"
@@ -178,17 +175,36 @@ class UserAnnoncesFragment : Fragment() {
         }
 
         userAnnoncesModel.apply {
-            getAnnoncesById(userId).observe(viewLifecycleOwner) { annonces ->
+            getAnnoncesById(userId)
+            annoncesList.observe(viewLifecycleOwner) { annonces ->
+
+//                updateIsEmpty().observe(viewLifecycleOwner) {
+//                    Log.i(TAG, "updateIsEmpty: $it")
+//
+//                    binding.isEmpty.isVisible = it
+//                    errorMessage.observe(viewLifecycleOwner) { message ->
+//                        if (message == ERROR_MSG){
+//                            binding.isEmpty.text = message
+//                        } else {
+//
+//                        }
+//                    }
+//                }
 
                 if (annonces == null) {
                     requireContext().toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
-                    returnToUserInfo()
+                    binding.isEmpty.text = getString(R.string.error)
+//                    returnToUserInfo()
                 } else {
-                    updateIsEmpty().observe(viewLifecycleOwner) {
-                        binding.isEmpty.isVisible = it
+
+                    if (annonces.isEmpty()) {
+                        binding.isEmpty.text = getString(R.string.no_annonce)
+                    } else {
+                        binding.isEmpty.text = ""
+                        adapter.setList(annonces)
                     }
                     Log.i(TAG, "annonces : $annonces")
-                    adapter.setList(annonces)
+
                 }
             }
         }

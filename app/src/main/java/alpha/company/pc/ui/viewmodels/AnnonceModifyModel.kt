@@ -24,9 +24,6 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
 
     val oldAnnonce = MutableLiveData<Annonce>()
     val updatedAnnonce = MutableLiveData<Boolean>()
-    val addedImages = MutableLiveData<Boolean>()
-    val updatedImage = MutableLiveData<Boolean>()
-    val deletedImage = MutableLiveData<Boolean>()
 
     val isTurning = MutableLiveData<Boolean>()
 
@@ -50,10 +47,6 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
         val isValidPrice = !price.isNullOrBlank()
 
         return isValidTitle && isValidPrice
-    }
-
-    fun putImagesArray(annonceId: String, requestBody: RequestBody) {
-        annonceModifyRepository
     }
 
     fun getCities() {
@@ -135,7 +128,8 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
                         Log.i(TAG, "onResponse: ${response.body()}")
                         updatedAnnonce.postValue(true)
                     } else {
-                        Log.e(TAG, "onResponse updateAnnonceInfo : ${response.code()}")
+                        val error = getError(response.errorBody(), response.code())
+                        Log.e(TAG, "onResponse updateAnnonceInfo : ${error}")
                         updatedAnnonce.postValue(false)
                     }
                     isTurning.postValue(false)

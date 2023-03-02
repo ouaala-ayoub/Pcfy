@@ -18,7 +18,7 @@ class FullOrdersActivity : AppCompatActivity() {
 
 //        binding = ActivityFullOrdersBinding.inflate(layoutInflater)
         userId = intent.getStringExtra("id") as String
-        orderId = intent.getSerializableExtra("orderId") as String?
+        orderId = intent.getStringExtra("orderId")
 
         Log.d(TAG, "userId : $userId , orderId: $orderId")
 
@@ -36,7 +36,7 @@ class FullOrdersActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if(orderId != null){
+        if (orderId != null) {
             this.finish()
         }
     }

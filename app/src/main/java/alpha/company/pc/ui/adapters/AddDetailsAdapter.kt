@@ -1,13 +1,15 @@
 package alpha.company.pc.ui.adapters
 
+import alpha.company.pc.data.models.local.Detail
+import alpha.company.pc.databinding.SingleDetailFieldBinding
+import android.text.InputFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import alpha.company.pc.data.models.local.Detail
-import alpha.company.pc.databinding.SingleDetailFieldBinding
+
 
 private const val MAX_SIZE = 5
 private const val TAG = "AddDetailsAdapter"
@@ -28,7 +30,8 @@ class AddDetailsAdapter(
     fun addEmptyField(): Boolean {
         return if (detailsList.size < MAX_SIZE) {
             detailsList.add(Detail("", ""))
-            notifyDataSetChanged()
+//            notifyDataSetChanged()
+            notifyItemInserted(detailsList.lastIndex)
             Log.i(TAG, "addEmptyField details list : $detailsList")
             true
         } else {
@@ -44,7 +47,8 @@ class AddDetailsAdapter(
             if (detailsList.size == 0) {
                 isEmpty.postValue(true)
             }
-            notifyDataSetChanged()
+//            notifyDataSetChanged()
+            notifyItemRemoved(position)
         } else {
             isEmpty.postValue(true)
         }
@@ -52,6 +56,17 @@ class AddDetailsAdapter(
 
     inner class AddDetailsHolder(private val binding: SingleDetailFieldBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private val regex = Regex(":")
+        private val filter = InputFilter { source, _, _, _, _, _ ->
+            return@InputFilter when {
+                source?.matches(regex) == true -> ""
+                source.length > 1 -> source.trim {
+                    it.toString().matches(regex)
+                } // Put your desired logic here, these sample logic was doing a trim/remove
+                else -> null
+            }
+        }
 
         fun bind(position: Int) {
 
@@ -67,8 +82,14 @@ class AddDetailsAdapter(
                     detailsList[position].body = text.toString()
                 }
 
-                titleEditText.setText(detail.title)
-                bodyEditText.setText(detail.body)
+                titleEditText.apply {
+                    filters = arrayOf(filter)
+                    setText(detail.title)
+                }
+                bodyEditText.apply {
+                    filters = arrayOf(filter)
+                    setText(detail.body)
+                }
 
                 if (position <= size - 2) {
                     addEmptyField.setOnClickListener(null)
