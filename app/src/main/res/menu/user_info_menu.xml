@@ -21,6 +21,7 @@
         android:id="@+id/settings"
         android:title="@string/settings" />
 
+<!--    <item android:title="Item" />-->
     <item
         android:id="@+id/contact"
         android:title="@string/contactez_nous">

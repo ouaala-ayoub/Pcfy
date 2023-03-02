@@ -15,6 +15,7 @@ import alpha.company.pc.data.models.local.TokenRequest
 import alpha.company.pc.data.models.network.User
 import alpha.company.pc.ui.activities.FullOrdersActivity
 import alpha.company.pc.ui.activities.MainActivity
+import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.LocalStorage
 import alpha.company.pc.utils.getError
 import android.Manifest
@@ -49,8 +50,6 @@ class PushNotificationService : FirebaseMessagingService() {
 
         Log.i(TAG, "onMessageReceived sellerId: $sellerId and orderId: $orderId")
 
-        val tokens = LocalStorage.getTokens(baseContext)
-        val cookies = "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
         RetrofitService.getInstance(baseContext).auth().enqueue(object : Callback<User?> {
 
             override fun onResponse(call: Call<User?>, response: Response<User?>) {
@@ -116,8 +115,8 @@ class PushNotificationService : FirebaseMessagingService() {
 
     private fun buildNotification(builder: NotificationCompat.Builder) {
         with(NotificationManagerCompat.from(baseContext)) {
-        val notificationId = System.currentTimeMillis().toInt()
-        Log.i(TAG, "notificationId : $notificationId")
+            val notificationId = System.currentTimeMillis().toInt()
+            Log.i(TAG, "notificationId : $notificationId")
 
             if (ActivityCompat.checkSelfPermission(
                     baseContext,
@@ -135,7 +134,8 @@ class PushNotificationService : FirebaseMessagingService() {
                 return
             }
             notify(notificationId, builder.build())
-    }}
+        }
+    }
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
