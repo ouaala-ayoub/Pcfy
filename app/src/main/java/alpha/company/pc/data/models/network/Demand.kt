@@ -13,7 +13,10 @@ data class Demand(
     @SerializedName("price")
     val price: String,
 
-    @SerializedName("pictures")
-    val pictures: List<String>,
+    @SerializedName("picture")
+    val picture: String,
 
-)
+    @SerializedName("description")
+    val description: String,
+
+    )

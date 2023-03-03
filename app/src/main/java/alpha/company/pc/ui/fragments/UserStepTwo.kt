@@ -22,16 +22,10 @@ import alpha.company.pc.R
 import alpha.company.pc.databinding.FragmentUserStepTwoBinding
 import alpha.company.pc.ui.activities.UserCreateActivity
 import alpha.company.pc.ui.viewmodels.UserStepTwoModel
-import alpha.company.pc.utils.OnDialogClicked
-import alpha.company.pc.utils.URIPathHelper
-import alpha.company.pc.utils.makeDialog
-import alpha.company.pc.utils.makeSnackBar
+import alpha.company.pc.utils.*
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 
 private const val TAG = "UserStepTwo"
 
@@ -75,7 +69,7 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentUserStepTwoBinding.inflate(inflater, container, false)
 
@@ -183,7 +177,7 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
                 addFormDataPart("phone", phoneEditText.text.toString())
 
                 if (imageUri != null) {
-                    val info = getImagesRequestBody(imageUri!!)
+                    val info = getImageRequestBody(imageUri!!, requireContext())
                     addFormDataPart("picture", info.imageName, info.imageReqBody)
                 }
             }
@@ -191,18 +185,6 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
 
     }
 
-    private fun getImagesRequestBody(uri: Uri): ImageInfo {
-
-        val file = File(URIPathHelper().getPath(requireContext(), uri)!!)
-        Log.i(TAG, "file selected : ${file.name}")
-        val requestFile: RequestBody =
-            file.asRequestBody("image/*".toMediaTypeOrNull())
-
-        return ImageInfo(
-            file.name,
-            requestFile
-        )
-    }
 
     private fun setTheUploadImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -223,5 +205,6 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
     }
 
     class ImageInfo(val imageName: String, val imageReqBody: RequestBody)
+
 
 }

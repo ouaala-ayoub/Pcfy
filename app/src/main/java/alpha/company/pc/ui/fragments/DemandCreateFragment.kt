@@ -16,7 +16,6 @@ import alpha.company.pc.ui.viewmodels.DemandCreateModel
 import alpha.company.pc.utils.*
 import android.Manifest
 import android.app.Activity
-import android.content.ClipData
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -30,11 +29,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 
 private const val TAG = "DemandCreateFragment"
 
@@ -44,7 +39,7 @@ class DemandCreateFragment : Fragment() {
     private lateinit var binding: FragmentDemandCreateBinding
     private lateinit var demandCreateModel: DemandCreateModel
     private lateinit var authModel: AuthModel
-    private var imagesUris = listOf<Uri>()
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,14 +92,10 @@ class DemandCreateFragment : Fragment() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     // There are no request codes
                     val data: Intent? = result.data
-
                     if (data?.data != null) {
-                        updateImageText(1)
-                        imagesUris = listOf(data.data!!)
-                    } else if (data?.clipData?.itemCount != null) {
-                        val itemCount = data.clipData?.itemCount
-                        updateImageText(itemCount)
-                        imagesUris = getImagesUris(data.clipData!!)
+                        Log.d(TAG, "data?.data: ${data.data}")
+                        imageUri = data.data!!
+                        binding.plusButton.setImageURI(imageUri)
                     }
                 }
             }
@@ -128,8 +119,8 @@ class DemandCreateFragment : Fragment() {
                                 requireContext(),
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
-                                        val userId = user.userId!!
-                                        val imagesPart = getImagesRequestBody()
+
+
                                         val builder = MultipartBody.Builder()
                                             .setType(MultipartBody.FORM)
                                             .addFormDataPart(
@@ -140,33 +131,31 @@ class DemandCreateFragment : Fragment() {
                                                 "price",
                                                 priceEditText.text.toString()
                                             )
-
                                             .addFormDataPart(
-                                                "status",
-                                                statusEditText.text.toString()
+                                                "description",
+                                                descriptionEditText.text.toString()
                                             )
+
 
                                             //to change maybe by another name demander ???
-                                            .addFormDataPart("seller[id]", userId)
-                                            .addFormDataPart("seller[name]", user.name)
+//                                            .addFormDataPart("seller[id]", user.userId!!)
+//                                            .addFormDataPart("seller[name]", user.name)
 
-                                        if (user.imageUrl != null) {
+                                        if (imageUri != null) {
+                                            val imagePart =
+                                                getImageRequestBody(imageUri!!, requireContext())
                                             builder.addFormDataPart(
-                                                "seller[picture]",
-                                                user.imageUrl
+                                                "picture",
+                                                imagePart.imageName,
+                                                imagePart.imageReqBody
                                             )
                                         }
-
-
-                                        for (body in imagesPart) {
-                                            builder.addFormDataPart(
-                                                "pictures",
-                                                body.key,
-                                                body.value
-                                            )
-                                        }
-                                        val annonceToAdd = builder.build()
-
+//                                        if (user.imageUrl != null) {
+//                                            builder.addFormDataPart(
+//                                                "seller[picture]",
+//                                                user.imageUrl
+//                                            )
+//                                        }
 
                                         demandCreateModel.apply {
 
@@ -176,7 +165,7 @@ class DemandCreateFragment : Fragment() {
                                             }
 
                                             //to change
-                                            addDemand(annonceToAdd)
+                                            addDemand(builder.build())
                                             demandAdded.observe(viewLifecycleOwner) { demandAdded ->
 
                                                 Log.i(
@@ -219,7 +208,7 @@ class DemandCreateFragment : Fragment() {
             for (i in linearLayout.children) {
                 i.isEnabled = !loading
             }
-            imageSelection.isEnabled = !loading
+            plusButton.isEnabled = !loading
             addButton.isEnabled = !loading
         }
     }
@@ -235,7 +224,7 @@ class DemandCreateFragment : Fragment() {
                 isVisible = true
                 isActivated = true
             }
-            imageSelection.setOnClickListener {
+            plusButton.setOnClickListener {
 
                 when {
                     ContextCompat.checkSelfPermission(
@@ -306,21 +295,7 @@ class DemandCreateFragment : Fragment() {
     private fun setTheUploadImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         resultLauncher.launch(intent)
-    }
-
-    private fun updateImageText(quantity: Int?) {
-        if (quantity == 1) binding.imageNames.text = getString(R.string.image_selected)
-        else binding.imageNames.text = getString(R.string.multiple_images_selected, quantity)
-    }
-
-    private fun getImagesUris(clipData: ClipData): List<Uri> {
-        val imagesList = mutableListOf<Uri>()
-        for (i in 0 until clipData.itemCount) {
-            imagesList.add(clipData.getItemAt(i).uri)
-        }
-        return imagesList
     }
 
     private fun goToLoginActivity() {
@@ -343,25 +318,6 @@ class DemandCreateFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun getImagesRequestBody(): HashMap<String, RequestBody> {
-
-        val partsList = HashMap<String, RequestBody>()
-        val uriPathHelper = URIPathHelper()
-
-        for (uri in imagesUris) {
-            val filePath = uriPathHelper.getPath(requireContext(), uri)
-            val file = File(filePath!!)
-            Log.i(TAG, "getImagesRequestBody: file $file")
-            val requestFile: RequestBody =
-                file.asRequestBody("image/*".toMediaTypeOrNull())
-
-            partsList[file.name] = requestFile
-        }
-        Log.i(TAG, "getRequestBody: $partsList")
-        return partsList
-
     }
 
 }

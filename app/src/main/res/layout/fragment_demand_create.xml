@@ -84,106 +84,21 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/image_selection"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/buttons_height"
-                    android:layout_weight="1"
-                    android:lineSpacingMultiplier="0.7"
-                    android:text="Sélect. images" />
+                <ImageView
+                    android:id="@+id/plus_button"
+                    android:layout_width="@dimen/user_image_input_size"
+                    android:layout_height="@dimen/user_image_input_size"
+                    android:layout_gravity="center"
+                    android:contentDescription="add_image"
+                    android:src="@drawable/ic_baseline_add_24" />
 
-                <TextView
-                    android:id="@+id/image_names"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="0.1"
-                    android:gravity="center"
-                    tools:text='2 Images Selectionees' />
             </LinearLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/categoryTextField"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:hint="Categorie">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/categoryEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:inputType="none"
-                    android:labelFor="@id/categoryTextField"
-                    android:lines="1"
-                    android:textStyle="bold" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cityTextField"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:hint="Cité">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/cityEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:inputType="none"
-                    android:labelFor="@id/categoryTextField"
-                    android:lines="1"
-                    android:textStyle="bold" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/statusTextField"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:hint="Statue">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/statusEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:inputType="none"
-                    android:lines="1"
-                    android:textStyle="bold" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/markTextField"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:hint="Marque">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/markEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:lines="1"
-                    android:textStyle="bold" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionTextField"

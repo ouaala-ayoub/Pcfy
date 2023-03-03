@@ -34,18 +34,13 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
                 demandTitle.text = demand.title
                 demandPrice.text = binding.root.context.getString(R.string.price, demand.price)
 
-                if (demand.pictures.isEmpty()) {
-                    demandImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
-                } else if (demand.pictures[0].isNotBlank()) {
-                    Picasso
-                        .get()
-                        .load("$BASE_AWS_S3_LINK${demand.pictures[0]}")
-                        .error(R.drawable.ic_baseline_no_photography_24)
-                        .placeholder(circularProgressBar(binding.root.context))
-                        .fit()
-                        .into(demandImage)
-
-                }
+                Picasso
+                    .get()
+                    .load("$BASE_AWS_S3_LINK${demand.picture}")
+                    .error(R.drawable.ic_baseline_no_photography_24)
+                    .placeholder(circularProgressBar(binding.root.context))
+                    .fit()
+                    .into(demandImage)
             }
         }
     }

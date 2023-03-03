@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.OrderStatus
 import alpha.company.pc.data.models.network.Error
+import alpha.company.pc.ui.fragments.UserStepTwo
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import android.content.ContentUris
@@ -19,6 +20,10 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 private const val TAG = "Utils"
 //private const val ERROR404 = "Page introuvable"
@@ -219,4 +224,17 @@ fun getImageResource(orderStatus: String): Int {
         OrderStatus.CANCELED.status -> R.drawable.ic_baseline_cancel_24
         else -> R.drawable.ic_baseline_access_time_24
     }
+}
+
+fun getImageRequestBody(uri: Uri, context: Context): UserStepTwo.ImageInfo {
+
+    val file = File(URIPathHelper().getPath(context, uri)!!)
+    Log.i(TAG, "file selected : ${file.name}")
+    val requestFile: RequestBody =
+        file.asRequestBody("image/*".toMediaTypeOrNull())
+
+    return UserStepTwo.ImageInfo(
+        file.name,
+        requestFile
+    )
 }

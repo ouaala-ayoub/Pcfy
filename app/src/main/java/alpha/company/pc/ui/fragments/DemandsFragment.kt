@@ -14,6 +14,7 @@ import alpha.company.pc.ui.viewmodels.DemandsModel
 import alpha.company.pc.ui.viewmodels.MessageText
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 private const val TAG = "DemandsFragment"
 
@@ -32,14 +33,12 @@ class DemandsFragment : Fragment() {
                 getString(R.string.error),
                 getString(R.string.list_empty)
             )
-        )
+        ).also { it.getDemands() }
         demandsAdapter = DemandsAdapter(object : DemandsAdapter.OnDemandClicked {
             override fun onDemandClicked(demandId: String) {
                 goToDemandFragment(demandId)
             }
         })
-        demandsModel.getDemands()
-
 
     }
 
@@ -59,6 +58,18 @@ class DemandsFragment : Fragment() {
                     isRefreshing = false
                 }
             }
+
+            demandsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (!recyclerView.canScrollVertically(1) &&
+                        newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        !demandsAdapter.isListEmpty()
+                    ) {
+                        //add more data when bottom is reached
+                        demandsModel.getDemands()
+                    }
+                }
+            })
 
             demandsRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
