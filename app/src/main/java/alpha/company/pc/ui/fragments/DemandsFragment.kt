@@ -14,6 +14,7 @@ import alpha.company.pc.ui.viewmodels.DemandsModel
 import alpha.company.pc.ui.viewmodels.MessageText
 import android.util.Log
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,7 @@ class DemandsFragment : Fragment() {
                 getString(R.string.error),
                 getString(R.string.list_empty)
             )
-        ).also { it.getDemands() }
+        )
         demandsAdapter = DemandsAdapter(object : DemandsAdapter.OnDemandClicked {
             override fun onDemandClicked(demandId: String) {
                 goToDemandFragment(demandId)
@@ -51,12 +52,14 @@ class DemandsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentDemandsBinding.inflate(inflater, container, false)
         binding.apply {
+            demandsModel.isTurning.observe(viewLifecycleOwner) { isTurning ->
+                demandsPrpgressBar.isVisible = isTurning
+            }
             demandSearchView.onActionViewExpanded()
             swipeRefresh.apply {
                 setOnRefreshListener {
                     demandsAdapter.freeList()
                     demandsModel.getDemands()
-                    isRefreshing = false
                 }
             }
 
@@ -68,13 +71,12 @@ class DemandsFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    demandsAdapter.freeList()
                     if (!newText.isNullOrBlank()) {
-                        demandsAdapter.freeList()
                         demandsModel.getDemands(newText)
                     } else {
                         demandsModel.getDemands()
                     }
-
                     return false
                 }
             })
@@ -101,10 +103,11 @@ class DemandsFragment : Fragment() {
                         //bind the message value to the textView
                         msg.text = message
                     }
-                    demandsList.observe(viewLifecycleOwner) { demands ->
+                    getDemandsList()?.observe(viewLifecycleOwner) { demands ->
                         //show the data fetched
                         if (demands != null) {
                             //to save the state of the recycler view (to fix later)
+                            swipeRefresh.isRefreshing = false
                             val recyclerViewState =
                                 demandsRv.layoutManager?.onSaveInstanceState()
                             demandsAdapter.addDemands(demands)

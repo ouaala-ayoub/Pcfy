@@ -1,15 +1,17 @@
 package alpha.company.pc.ui.viewmodels
 
 import alpha.company.pc.data.models.network.Demand
+import alpha.company.pc.data.models.network.User
 import alpha.company.pc.data.repositories.DemandRepository
 import alpha.company.pc.utils.getError
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 private const val TAG = "DemandsModel"
 
@@ -17,7 +19,15 @@ class DemandsModel(
     private val demandRepository: DemandRepository,
     private val errorMsg: MessageText
 ) : ViewModel() {
-    val demandsList = MutableLiveData<List<Demand>?>()
+    var demandsList: MutableLiveData<List<Demand>?>? = null
+    fun getDemandsList(): LiveData<List<Demand>?>? {
+        if (demandsList == null) {
+            demandsList = MutableLiveData()
+            getDemands()
+        }
+        return demandsList
+    }
+
     val messageTv = MutableLiveData<String>()
     val isTurning = MutableLiveData<Boolean>()
 
@@ -29,7 +39,7 @@ class DemandsModel(
             override fun onResponse(call: Call<List<Demand>>, response: Response<List<Demand>>) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse getDemands: ${response.body()}")
-                    demandsList.postValue(response.body())
+                    demandsList?.postValue(response.body())
                     if (response.body()!!.isEmpty()) {
                         messageTv.postValue(errorMsg.listEmpty)
                     } else {
@@ -39,7 +49,7 @@ class DemandsModel(
 
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
-                    demandsList.postValue(null)
+                    demandsList?.postValue(null)
                     messageTv.postValue(errorMsg.error)
                     Log.e(TAG, "onResponse getDemands error: $error")
                 }
@@ -48,7 +58,7 @@ class DemandsModel(
 
             override fun onFailure(call: Call<List<Demand>>, t: Throwable) {
                 Log.e(TAG, "onFailure getDemands : ${t.message}")
-                demandsList.postValue(null)
+                demandsList?.postValue(null)
                 isTurning.postValue(false)
                 messageTv.postValue(errorMsg.error)
             }

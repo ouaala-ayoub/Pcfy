@@ -84,5 +84,6 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
 
     fun freeList() {
         demandsList = mutableListOf()
+        notifyDataSetChanged()
     }
 }

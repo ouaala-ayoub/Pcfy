@@ -4,6 +4,7 @@ import alpha.company.pc.data.models.network.IdResponse
 import alpha.company.pc.data.repositories.DemandRepository
 import alpha.company.pc.utils.getError
 import android.util.Log
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okhttp3.RequestBody
@@ -17,7 +18,12 @@ class DemandCreateModel(private val createDemandRepository: DemandRepository) : 
 
     val isTurning = MutableLiveData<Boolean>()
     val demandAdded = MutableLiveData<Boolean>()
-
+    val titleLiveData = MutableLiveData<String>()
+    val isValidData = MediatorLiveData<Boolean>().apply {
+        addSource(titleLiveData) { title ->
+            this.value = !title.isNullOrBlank()
+        }
+    }
 
     fun addDemand(requestBody: RequestBody) {
         isTurning.postValue(true)

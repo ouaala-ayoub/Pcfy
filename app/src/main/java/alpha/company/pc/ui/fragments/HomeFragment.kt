@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var onClickListener: AnnoncesAdapter.OnAnnonceClickListener
     private var binding: FragmentHomeBinding? = null
     private var annoncesList = mutableListOf<Annonce>()
-    private val adBuilder = AdRequest.Builder()
+//    private val adBuilder = AdRequest.Builder()
     override fun onCreate(savedInstanceState: Bundle?) {
         val retrofitService = RetrofitService.getInstance(requireContext())
         super.onCreate(savedInstanceState)
@@ -207,10 +207,10 @@ class HomeFragment : Fragment() {
 
             binding!!.apply {
                 swiperefresh.setOnRefreshListener {
-                    val adRequest = adBuilder.build()
+//                    val adRequest = adBuilder.build()
                     val current = categoryAdapter.getCurrentCategory()
 
-                    adView.loadAd(adRequest)
+//                    adView.loadAd(adRequest)
                     if (categoryAdapter.isEmptyList()) {
                         viewModel.getCategories()
                     }

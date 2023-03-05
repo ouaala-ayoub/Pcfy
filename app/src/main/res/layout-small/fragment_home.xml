@@ -49,14 +49,14 @@
 
                 </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
 
-                <com.google.android.gms.ads.AdView
-                    android:id="@+id/adView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:adSize="BANNER"
-                    app:adUnitId="@string/home_ad_id">
+<!--                <com.google.android.gms.ads.AdView-->
+<!--                    android:id="@+id/adView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:adSize="BANNER"-->
+<!--                    app:adUnitId="@string/home_ad_id">-->
 
-                </com.google.android.gms.ads.AdView>
+<!--                </com.google.android.gms.ads.AdView>-->
 
                 <TextView
                     android:id="@+id/popular_tv"

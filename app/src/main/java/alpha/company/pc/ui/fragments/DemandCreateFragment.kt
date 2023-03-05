@@ -27,6 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.MultipartBody
@@ -112,15 +113,19 @@ class DemandCreateFragment : Fragment() {
                     //validate the data using the view model
 
                     binding.apply {
-
+                        addButton.isEnabled = false
+                        titleEditText.doOnTextChanged { text, _, _, _ ->
+                            demandCreateModel.titleLiveData.value = text.toString()
+                        }
+                        demandCreateModel.isValidData.observe(viewLifecycleOwner) { isActive ->
+                            addButton.isEnabled = isActive
+                        }
                         addButton.setOnClickListener {
 
                             makeDialog(
                                 requireContext(),
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
-
-
                                         val builder = MultipartBody.Builder()
                                             .setType(MultipartBody.FORM)
                                             .addFormDataPart(
