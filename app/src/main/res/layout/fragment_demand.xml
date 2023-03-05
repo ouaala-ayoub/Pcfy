@@ -29,7 +29,7 @@
             app:contentScrim="@color/background_color"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
 
-            <ImageView
+            <com.github.chrisbanes.photoview.PhotoView
                 android:id="@+id/demand_page_image"
                 android:layout_width="@dimen/annonce_image_height"
                 android:layout_height="@dimen/annonce_image_height"
@@ -119,6 +119,7 @@
                         android:id="@+id/creator_image"
                         android:layout_width="@dimen/store_image_size"
                         android:layout_height="@dimen/store_image_size"
+                        android:contentDescription="@string/creator_image"
                         android:scaleType="centerCrop"
                         tools:src="@tools:sample/avatars" />
                 </androidx.cardview.widget.CardView>
@@ -169,8 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:adSize="BANNER"
-                app:adUnitId="@string/home_ad_id">
-            </com.google.android.gms.ads.AdView>
+                app:adUnitId="@string/home_ad_id"></com.google.android.gms.ads.AdView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

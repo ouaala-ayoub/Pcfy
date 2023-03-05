@@ -12,19 +12,20 @@ import alpha.company.pc.data.repositories.UserInfoRepository
 import alpha.company.pc.databinding.FragmentDemandBinding
 import alpha.company.pc.ui.viewmodels.DemandModel
 import alpha.company.pc.utils.*
+import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
+
+private const val TAG = "DemandFragment"
 
 class DemandFragment : Fragment() {
     private lateinit var binding: FragmentDemandBinding
     private lateinit var demandId: String
     private lateinit var demandModel: DemandModel
     private lateinit var picasso: Picasso
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,9 +35,6 @@ class DemandFragment : Fragment() {
         demandId = navArgs.demandId
         demandModel =
             DemandModel(DemandRepository(retrofitService), UserInfoRepository((retrofitService)))
-                .also {
-                    it.getDemandById(demandId)
-                }
 
     }
 
@@ -49,7 +47,7 @@ class DemandFragment : Fragment() {
 
         binding.apply {
             demandModel.apply {
-
+                getDemandById(demandId)
                 isTurning.observe(viewLifecycleOwner) { isTurning ->
                     demandProgressBar.isVisible = isTurning
                 }
@@ -58,6 +56,7 @@ class DemandFragment : Fragment() {
                     if (demand != null) {
                         getUserById(demand.creatorId)
                         creator.observe(viewLifecycleOwner) { creator ->
+                            Log.d(TAG, "creator: ${creator?.name}")
                             if (creator != null) {
 
                                 creatorInfo.setOnClickListener {

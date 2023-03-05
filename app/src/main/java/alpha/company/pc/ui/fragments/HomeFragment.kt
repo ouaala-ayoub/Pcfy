@@ -42,14 +42,7 @@ class HomeFragment : Fragment() {
         val retrofitService = RetrofitService.getInstance(requireContext())
         super.onCreate(savedInstanceState)
 
-        viewModel = HomeModel(HomeRepository(retrofitService)).also {
-            it.apply {
-                getCategories()
-                getPopularAnnonces()
-                getAnnoncesListAll()
-            }
-        }
-
+        viewModel = HomeModel(HomeRepository(retrofitService))
 
         onClickListener = object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
@@ -87,7 +80,11 @@ class HomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        viewModel.apply {
+            getCategories()
+            getPopularAnnonces()
+            getAnnoncesListAll()
+        }
 
         binding!!.categoryShimmerRv.apply {
             layoutManager = LinearLayoutManager(

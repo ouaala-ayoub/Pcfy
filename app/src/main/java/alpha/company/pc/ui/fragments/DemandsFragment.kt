@@ -71,6 +71,8 @@ class DemandsFragment : Fragment() {
                     if (!newText.isNullOrBlank()) {
                         demandsAdapter.freeList()
                         demandsModel.getDemands(newText)
+                    } else {
+                        demandsModel.getDemands()
                     }
 
                     return false
