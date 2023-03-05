@@ -13,21 +13,24 @@ import retrofit2.Response
 
 private const val TAG = "DemandsModel"
 
-class DemandsModel(private val demandRepository: DemandRepository, private val errorMsg: MessageText) : ViewModel() {
+class DemandsModel(
+    private val demandRepository: DemandRepository,
+    private val errorMsg: MessageText
+) : ViewModel() {
     val demandsList = MutableLiveData<List<Demand>?>()
     val messageTv = MutableLiveData<String>()
     val isTurning = MutableLiveData<Boolean>()
 
-    fun getDemands() {
+    fun getDemands(searchQuery: String? = null) {
 
         isTurning.postValue(true)
 
-        demandRepository.getDemands().enqueue(object : Callback<List<Demand>> {
+        demandRepository.getDemands(searchQuery).enqueue(object : Callback<List<Demand>> {
             override fun onResponse(call: Call<List<Demand>>, response: Response<List<Demand>>) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse getDemands: ${response.body()}")
                     demandsList.postValue(response.body())
-                    if (response.body()!!.isEmpty()){
+                    if (response.body()!!.isEmpty()) {
                         messageTv.postValue(errorMsg.listEmpty)
                     } else {
                         messageTv.postValue(errorMsg.empty)
@@ -53,8 +56,9 @@ class DemandsModel(private val demandRepository: DemandRepository, private val e
         })
     }
 }
+
 data class MessageText(
-    val empty: String ,
+    val empty: String,
     val error: String,
     val listEmpty: String
 )

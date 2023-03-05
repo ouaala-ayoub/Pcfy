@@ -21,6 +21,7 @@ import alpha.company.pc.data.repositories.SearchRepository
 import alpha.company.pc.databinding.FragmentSearchBinding
 import alpha.company.pc.ui.activities.AnnonceActivity
 import alpha.company.pc.ui.adapters.AnnoncesAdapter
+import alpha.company.pc.ui.adapters.DemandsAdapter
 import alpha.company.pc.ui.viewmodels.SearchModel
 import alpha.company.pc.utils.toast
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -34,13 +35,14 @@ private const val WHATEVER = "-"
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var rvAdapter: AnnoncesAdapter
+    private lateinit var rvAdapterAnnonces: AnnoncesAdapter
+    private lateinit var rvAdapterDemands: DemandsAdapter
     private lateinit var viewModel: SearchModel
     private var priceQuery: Int? = null
     private var statusQuery: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        rvAdapter = AnnoncesAdapter(object : AnnoncesAdapter.OnAnnonceClickListener {
+        rvAdapterAnnonces = AnnoncesAdapter(object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
                 goToAnnonceActivity(annonceId)
             }
@@ -70,7 +72,7 @@ class SearchFragment : Fragment() {
             setUpStatusEditText(Status.NEW.status)
 
             searchRv.apply {
-                this.adapter = rvAdapter
+                this.adapter = rvAdapterAnnonces
                 this.layoutManager = GridLayoutManager(requireContext(), NUM_ROWS)
             }
 
@@ -97,7 +99,7 @@ class SearchFragment : Fragment() {
             viewModel.apply {
                 searchResult.observe(viewLifecycleOwner) { searchResult ->
                     if (searchResult != null) {
-                        rvAdapter.setAnnoncesListFromAdapter(searchResult)
+                        rvAdapterAnnonces.setAnnoncesListFromAdapter(searchResult)
                     } else {
 //                        doOnFail(SEARCH_ERROR)
                         Log.e(TAG, "searchResult fail")
@@ -152,17 +154,17 @@ class SearchFragment : Fragment() {
         Log.d(TAG, "setUpStatusEditText : $values")
         (binding.statusTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(adapter)
 
-//        binding.statusEditText.doOnTextChanged { text, _, _, _ ->
-//            statusQuery = getStatusQuery()
-//            val searchQuery = binding.searchView.query.toString()
-//            if (searchQuery.isNotBlank()) {
-//                viewModel.search(searchQuery, priceQuery, statusQuery)
-//            }
-//            Log.i(
-//                TAG,
-//                "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
-//            )
-//        }
+        binding.statusEditText.doOnTextChanged { text, _, _, _ ->
+            statusQuery = getStatusQuery()
+            val searchQuery = binding.searchView.query.toString()
+            if (searchQuery.isNotBlank()) {
+                viewModel.search(searchQuery, priceQuery, statusQuery)
+            }
+            Log.i(
+                TAG,
+                "setUpStatusEditText search query : ${binding.searchView.query},price : $priceQuery,status : $statusQuery"
+            )
+        }
     }
 
     fun getStatusQuery(): String? {

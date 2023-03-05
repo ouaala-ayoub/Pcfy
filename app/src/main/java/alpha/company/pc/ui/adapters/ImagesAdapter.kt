@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.R
 import alpha.company.pc.databinding.SingleScrollableImageBinding
 import alpha.company.pc.ui.fragments.Picture
-import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.ANNONCES_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import android.net.Uri
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 private const val TAG = "ImagesAdapter"
@@ -58,7 +57,7 @@ class ImagesAdapter(
                 val circularProgressDrawable = circularProgressBar(binding.root.context)
                 //each image
                 if (currentImage.uri == null) {
-                    val imageUrl = "$BASE_AWS_S3_LINK${currentImage.name}"
+                    val imageUrl = "$ANNONCES_AWS_S3_LINK${currentImage.name}"
                     picasso
                         .load(imageUrl)
                         .error(R.drawable.ic_baseline_no_photography_24)

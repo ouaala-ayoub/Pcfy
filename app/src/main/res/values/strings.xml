@@ -209,13 +209,17 @@
     <string name="une_annonce">Une Annonce</string>
     <string name="une_demande">Une Demande</string>
 
+    <string name="demand_page_image">demand_page_image</string>
+    <string name="no_description">Pas de description pour le moment</string>
+    <string name="no_price">Prix non determiné</string>
+
     <!--    test ad ids-->
     <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!--    real ad ids-->
-<!--                <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
-<!--                <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
+    <!--                <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->
+    <!--                <string name="home_ad_id">ca-app-pub-8302914035567843/6796020208</string>-->
 
 </resources>
 

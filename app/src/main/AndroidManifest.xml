@@ -19,6 +19,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.SplashActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.PersonalSpaceActivity"
             android:exported="false" />
 
@@ -36,10 +39,12 @@
         <activity
             android:name=".ui.activities.RequestsActivity"
             android:exported="false"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.FullOrdersActivity"
             android:exported="false"
+            android:noHistory="true"
             android:parentActivityName=".ui.activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity

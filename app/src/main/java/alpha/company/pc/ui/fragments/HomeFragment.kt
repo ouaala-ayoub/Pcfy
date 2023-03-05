@@ -162,23 +162,15 @@ class HomeFragment : Fragment() {
 
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
+                Log.d(TAG, "annonces: $annonces")
                 if (annonces != null) {
 
                     val annonceRv = binding!!.annonceRv.layoutManager
-                    if (annoncesAdapter.isListEmpty()) {
-                        Log.d(TAG, "setting new list : $annonces")
-                        val recyclerViewState =
-                            annonceRv?.onSaveInstanceState()
-                        annoncesAdapter.setAnnoncesListFromAdapter(annonces)
-                        annonceRv?.onRestoreInstanceState(recyclerViewState)
+                    val recyclerViewState =
+                        annonceRv?.onSaveInstanceState()
+                    annoncesAdapter.addElements(annonces)
+                    annonceRv?.onRestoreInstanceState(recyclerViewState)
 
-                    } else {
-                        Log.d(TAG, "adding new elements : $annonces")
-                        val recyclerViewState =
-                            annonceRv?.onSaveInstanceState()
-                        annoncesAdapter.addElements(annonces)
-                        annonceRv?.onRestoreInstanceState(recyclerViewState)
-                    }
                     Log.d(TAG, "hiding annonce shimmer")
                     binding!!.annonceRv.hideShimmerAdapter()
 

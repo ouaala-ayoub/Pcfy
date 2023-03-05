@@ -18,9 +18,9 @@
             android:id="@+id/demand_image"
             android:layout_width="@dimen/demand_image_size"
             android:layout_height="@dimen/demand_image_size"
+            android:background="@drawable/shimmer_background"
             android:contentDescription="demand_image"
-            android:scaleType="center"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            android:scaleType="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,22 +30,20 @@
             android:layout_marginEnd="5dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/demand_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textColor="@color/main_theme"
-                tools:text="3500 DH" />
+            <ImageView
+                android:id="@+id/title_shimmer"
+                android:layout_width="@dimen/shimmer_width"
+                android:layout_height="@dimen/shimmer_height"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/shimmer_background" />
 
-            <TextView
-                android:id="@+id/demand_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:padding="5dp"
-                tools:text="piece only god knows where the fuck you can find it" />
+            <ImageView
+                android:id="@+id/price_shimmer"
+                android:layout_width="@dimen/shimmer_width"
+                android:layout_height="@dimen/shimmer_height"
+                android:layout_weight="1"
+                android:background="@drawable/shimmer_background" />
 
         </LinearLayout>
 

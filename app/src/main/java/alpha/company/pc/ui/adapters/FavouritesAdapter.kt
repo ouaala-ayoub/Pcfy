@@ -10,9 +10,8 @@ import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.models.network.Order
 import alpha.company.pc.databinding.SingleFavouriteBinding
-import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.ANNONCES_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 private const val TAG = "FavouritesAdapter"
@@ -76,7 +75,7 @@ class FavouritesAdapter(
                     favouriteImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                 } else if (favourite.pictures[0].isNotBlank()) {
                     picasso
-                        .load("$BASE_AWS_S3_LINK${favourite.pictures[0]}")
+                        .load("$ANNONCES_AWS_S3_LINK${favourite.pictures[0]}")
                         .fit()
                         .error(R.drawable.ic_baseline_no_photography_24)
                         .placeholder(circularProgressDrawable)

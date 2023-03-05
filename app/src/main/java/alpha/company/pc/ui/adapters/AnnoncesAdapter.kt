@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.databinding.SingleAnnonceBinding
-import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.ANNONCES_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import com.squareup.picasso.Picasso
 
@@ -67,7 +67,7 @@ class AnnoncesAdapter(
                     } else if (annonce.pictures[0].isNotBlank()) {
                         Picasso
                             .get()
-                            .load("$BASE_AWS_S3_LINK${annonce.pictures[0]}")
+                            .load("$ANNONCES_AWS_S3_LINK${annonce.pictures[0]}")
                             .error(R.drawable.ic_baseline_no_photography_24)
                             .placeholder(circularProgressDrawable)
                             .fit()

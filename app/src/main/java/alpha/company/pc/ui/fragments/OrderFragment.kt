@@ -200,7 +200,7 @@ class OrderFragment : Fragment() {
                                         annonceImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                                     } else {
                                         Picasso.get()
-                                            .load("${BASE_AWS_S3_LINK}${annonce.pictures[0]}")
+                                            .load("${ANNONCES_AWS_S3_LINK}${annonce.pictures[0]}")
                                             .error(R.drawable.ic_baseline_no_photography_24)
                                             .fit()
                                             .into(annonceImage)

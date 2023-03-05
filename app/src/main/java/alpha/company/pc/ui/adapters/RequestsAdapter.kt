@@ -6,10 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Order
 import alpha.company.pc.databinding.SingleRequestBinding
-import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.ANNONCES_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import alpha.company.pc.utils.getImageResource
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.squareup.picasso.Picasso
 
 class RequestsAdapter(
@@ -25,7 +24,7 @@ class RequestsAdapter(
             binding.apply {
                 val circularProgressDrawable = circularProgressBar(binding.root.context)
 
-                val imageUrl = "$BASE_AWS_S3_LINK${order.annonce.picture}"
+                val imageUrl = "$ANNONCES_AWS_S3_LINK${order.annonce.picture}"
                 picasso
                     .load(imageUrl)
                     .fit()

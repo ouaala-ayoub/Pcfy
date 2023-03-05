@@ -193,7 +193,7 @@ interface RetrofitService {
 
     //Demands
     @GET("demands")
-    fun getDemands(): Call<List<Demand>>
+    fun getDemands(@Query("s") searchBody: String? = null): Call<List<Demand>>
 
     @GET("demands/{id}")
     fun getDemandById(@Path("id") demandId: String): Call<Demand>

@@ -6,7 +6,7 @@
         android:title="@string/accueil" />
 
     <item
-        android:id="@+id/demandsFragment"
+        android:id="@+id/demands"
         android:icon="@drawable/baseline_local_offer_24"
         android:title="@string/Demandes" />
 

@@ -11,12 +11,15 @@ data class Demand(
     val title: String,
 
     @SerializedName("price")
-    val price: String,
+    val price: String?,
+
+    @SerializedName("creator")
+    val creatorId: String,
 
     @SerializedName("picture")
-    val picture: String,
+    val picture: String?,
 
     @SerializedName("description")
-    val description: String,
+    val description: String?,
 
     )

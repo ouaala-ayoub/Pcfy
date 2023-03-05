@@ -13,6 +13,8 @@ import alpha.company.pc.ui.adapters.DemandsAdapter
 import alpha.company.pc.ui.viewmodels.DemandsModel
 import alpha.company.pc.ui.viewmodels.MessageText
 import android.util.Log
+import android.widget.SearchView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -48,9 +50,8 @@ class DemandsFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentDemandsBinding.inflate(inflater, container, false)
-
         binding.apply {
-            demandsRv.showShimmerAdapter()
+            demandSearchView.onActionViewExpanded()
             swipeRefresh.apply {
                 setOnRefreshListener {
                     demandsAdapter.freeList()
@@ -58,6 +59,23 @@ class DemandsFragment : Fragment() {
                     isRefreshing = false
                 }
             }
+
+            demandSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+//                    demandsModel.getDemands(query)
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (!newText.isNullOrBlank()) {
+                        demandsAdapter.freeList()
+                        demandsModel.getDemands(newText)
+                    }
+
+                    return false
+                }
+            })
 
             demandsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -74,6 +92,7 @@ class DemandsFragment : Fragment() {
             demandsRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = demandsAdapter
+                demandsRv.showShimmerAdapter()
 
                 demandsModel.apply {
                     messageTv.observe(viewLifecycleOwner) { message ->
@@ -83,15 +102,13 @@ class DemandsFragment : Fragment() {
                     demandsList.observe(viewLifecycleOwner) { demands ->
                         //show the data fetched
                         if (demands != null) {
-                            if (demandsAdapter.isListEmpty()) {
-                                Log.d(TAG, "setting demands list $demands")
-                                demandsAdapter.setList(demands)
-                                hideShimmerAdapter()
-                            } else {
-                                Log.d(TAG, "adding demands : ")
-                                demandsAdapter.addDemands(demands)
-                            }
+                            //to save the state of the recycler view (to fix later)
+                            val recyclerViewState =
+                                demandsRv.layoutManager?.onSaveInstanceState()
+                            demandsAdapter.addDemands(demands)
+                            demandsRv.layoutManager?.onRestoreInstanceState(recyclerViewState)
 
+                            hideShimmerAdapter()
                         } else {
                             Log.e(TAG, "demands is: $demands")
                         }
@@ -104,6 +121,8 @@ class DemandsFragment : Fragment() {
     }
 
     private fun goToDemandFragment(demandId: String) {
-        Log.i(TAG, "goToDemandFragment: $demandId")
+        Log.d(TAG, "goToDemandFragment: $demandId")
+        val action = DemandsFragmentDirections.actionDemandsFragmentToDemandFragment(demandId)
+        findNavController().navigate(action)
     }
 }

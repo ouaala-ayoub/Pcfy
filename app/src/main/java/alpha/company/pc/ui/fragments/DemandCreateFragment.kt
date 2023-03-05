@@ -135,11 +135,7 @@ class DemandCreateFragment : Fragment() {
                                                 "description",
                                                 descriptionEditText.text.toString()
                                             )
-
-
-                                            //to change maybe by another name demander ???
-//                                            .addFormDataPart("seller[id]", user.userId!!)
-//                                            .addFormDataPart("seller[name]", user.name)
+                                            .addFormDataPart("creator", user.userId.toString())
 
                                         if (imageUri != null) {
                                             val imagePart =
@@ -150,12 +146,6 @@ class DemandCreateFragment : Fragment() {
                                                 imagePart.imageReqBody
                                             )
                                         }
-//                                        if (user.imageUrl != null) {
-//                                            builder.addFormDataPart(
-//                                                "seller[picture]",
-//                                                user.imageUrl
-//                                            )
-//                                        }
 
                                         demandCreateModel.apply {
 

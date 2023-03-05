@@ -3,7 +3,8 @@ package alpha.company.pc.ui.adapters
 import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Demand
 import alpha.company.pc.databinding.SingleDemandBinding
-import alpha.company.pc.utils.BASE_AWS_S3_LINK
+import alpha.company.pc.utils.ANNONCES_AWS_S3_LINK
+import alpha.company.pc.utils.DEMANDS_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,11 +33,17 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
                 }
 
                 demandTitle.text = demand.title
-                demandPrice.text = binding.root.context.getString(R.string.price, demand.price)
+
+                if (!demand.price.isNullOrBlank()) {
+                    demandPrice.text =
+                        binding.root.context.getString(R.string.price, demand.price)
+                } else {
+                    demandPrice.text = binding.root.context.getString(R.string.no_price)
+                }
 
                 Picasso
                     .get()
-                    .load("$BASE_AWS_S3_LINK${demand.picture}")
+                    .load("$DEMANDS_AWS_S3_LINK${demand.picture}")
                     .error(R.drawable.ic_baseline_no_photography_24)
                     .placeholder(circularProgressBar(binding.root.context))
                     .fit()
