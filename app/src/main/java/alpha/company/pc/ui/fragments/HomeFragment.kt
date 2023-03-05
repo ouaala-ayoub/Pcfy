@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.data.models.network.CategoryEnum
-import alpha.company.pc.data.models.network.Seller
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.databinding.FragmentHomeBinding
@@ -102,9 +101,9 @@ class HomeFragment : Fragment() {
         }
         binding!!.apply {
 
-            val adRequest = adBuilder.build()
-            Log.d(TAG, "adRequest: $adRequest")
-            adView.loadAd(adRequest)
+//            val adRequest = adBuilder.build()
+//            Log.d(TAG, "adRequest: $adRequest")
+//            adView.loadAd(adRequest)
 
             vAppBar.addOnOffsetChangedListener { _, verticalOffset ->
                 val isScreenOnTop = verticalOffset == 0

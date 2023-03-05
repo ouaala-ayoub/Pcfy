@@ -49,7 +49,7 @@ class UserAnnoncesFragment : Fragment() {
                 retrofitService,
             )
         ).also {
-            it.initialiseAdd(requireContext())
+//            it.initialiseAdd(requireContext())
         }
     }
 
@@ -178,19 +178,6 @@ class UserAnnoncesFragment : Fragment() {
             getAnnoncesById(userId)
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
-//                updateIsEmpty().observe(viewLifecycleOwner) {
-//                    Log.i(TAG, "updateIsEmpty: $it")
-//
-//                    binding.isEmpty.isVisible = it
-//                    errorMessage.observe(viewLifecycleOwner) { message ->
-//                        if (message == ERROR_MSG){
-//                            binding.isEmpty.text = message
-//                        } else {
-//
-//                        }
-//                    }
-//                }
-
                 if (annonces == null) {
                     requireContext().toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
                     binding.isEmpty.text = getString(R.string.error)
@@ -231,12 +218,6 @@ class UserAnnoncesFragment : Fragment() {
             UserAnnoncesFragmentDirections.actionUserAnnoncesFragmentToOrderPageFragment2(orderId)
         findNavController().navigate(action)
     }
-
-    private fun returnToUserInfo() {
-        val intent = Intent(requireContext(), MainActivity::class.java)
-        startActivity(intent)
-    }
-
     private fun goToAnnonceModifyActivity(annonceId: String) {
         val intent = Intent(requireContext(), AnnonceModifyActivity::class.java)
         intent.putExtra("id", annonceId)

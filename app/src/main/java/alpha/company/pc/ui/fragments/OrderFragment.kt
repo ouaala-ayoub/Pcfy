@@ -62,7 +62,7 @@ class OrderFragment : Fragment() {
 
         authModel.apply {
             user.observe(viewLifecycleOwner) { user ->
-                initialiseAdd()
+//                initialiseAdd()
                 if (user != null) {
                     val userId = user.userId!!
 
@@ -89,9 +89,9 @@ class OrderFragment : Fragment() {
                                         requireContext(),
                                         object : OnDialogClicked {
                                             override fun onPositiveButtonClicked() {
-                                                showAdd()
+//                                                showAdd()
                                                 orderModel.apply {
-                                                    showAdd()
+//                                                    showAdd()
                                                     val orderToAdd = Order(
                                                         seller = IdResponse(
                                                             annonce.seller.id

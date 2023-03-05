@@ -13,8 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.Detail
-import alpha.company.pc.data.models.local.ImageLoader
-import alpha.company.pc.data.models.local.LoadPolicy
 import alpha.company.pc.databinding.FragmentAnnonceBinding
 import alpha.company.pc.ui.activities.AnnonceActivity
 import alpha.company.pc.ui.activities.LoginActivity
@@ -58,12 +56,14 @@ class AnnonceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val adRequest = AdRequest.Builder().build()
+//        val adRequest = AdRequest.Builder().build()
         binding = FragmentAnnonceBinding.inflate(
             inflater,
             container,
             false
-        ).apply { adView.loadAd(adRequest) }
+        ).apply {
+//            adView.loadAd(adRequest)
+        }
 
 
         binding!!.apply {
@@ -182,7 +182,7 @@ class AnnonceFragment : Fragment() {
 
 
                     authModel.apply {
-                        user.observe(viewLifecycleOwner) {user ->
+                        user.observe(viewLifecycleOwner) { user ->
 
                             if (user != null) {
                                 userId = user.userId!!

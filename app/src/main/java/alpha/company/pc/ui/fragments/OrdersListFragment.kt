@@ -60,7 +60,7 @@ class OrdersListFragment : Fragment() {
                 if (user != null) {
                     fullOrdersModel =
                         FullOrdersModel(OrdersRepository(RetrofitService.getInstance(requireContext()))).also {
-                            it.initialiseAdd(requireContext())
+//                            it.initialiseAdd(requireContext())
                         }
                     orderId?.let {
                         Log.d(TAG, "orderId : going to order page")
