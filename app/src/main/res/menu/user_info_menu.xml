@@ -21,9 +21,9 @@
         android:id="@+id/settings"
         android:title="@string/settings" />
 
-    <item
-        android:id="@+id/logout_or_login"
-        android:title="@string/se_connecter" />
+<!--    <item-->
+<!--        android:id="@+id/logout_or_login"-->
+<!--        android:title="@string/se_connecter" />-->
 
     <!--    <item android:title="Item" />-->
     <item

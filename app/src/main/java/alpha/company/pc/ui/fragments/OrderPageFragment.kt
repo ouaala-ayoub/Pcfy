@@ -19,9 +19,11 @@ import alpha.company.pc.data.models.local.getDate
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.OrdersRepository
 import alpha.company.pc.databinding.FragmentOrderPageBinding
+import alpha.company.pc.ui.activities.FullOrdersActivity
 import alpha.company.pc.ui.viewmodels.OrderPageModel
 import alpha.company.pc.utils.ERROR_MSG
 import alpha.company.pc.utils.toast
+import androidx.activity.OnBackPressedCallback
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 private const val TAG = "OrderPageFragment"
@@ -36,9 +38,27 @@ class OrderPageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val activity = requireActivity() as FullOrdersActivity
 
         orderId = args.orderId
-        orderPageModel = OrderPageModel(OrdersRepository(RetrofitService.getInstance(requireContext())))
+        orderPageModel =
+            OrderPageModel(OrdersRepository(RetrofitService.getInstance(requireContext())))
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (activity.orderId == null) {
+                        Log.d(TAG, "handleOnBackPressed: ${activity.orderId}")
+                        findNavController().popBackStack()
+                    } else {
+                        Log.d(TAG, "handleOnBackPressed: ${activity.orderId}")
+                        activity.finish()
+                    }
+                }
+
+            })
+
         Log.i(TAG, "onCreate orderId: $orderId")
     }
 

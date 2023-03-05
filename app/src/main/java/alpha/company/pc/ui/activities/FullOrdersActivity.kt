@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import alpha.company.pc.R
-import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.databinding.ActivityFullOrdersBinding
-import alpha.company.pc.ui.viewmodels.AuthModel
-import androidx.activity.addCallback
 
 private const val TAG = "FullOrdersActivity"
 
@@ -25,18 +22,6 @@ class FullOrdersActivity : AppCompatActivity() {
         orderId = intent.getStringExtra("orderId")
 
         Log.d(TAG, "userId : $userId , orderId: $orderId")
-
-//        if (orderId != null) {
-//            findNavController(R.id.ordersFragmentContainerView).navigate(R.id.action_ordersListFragment_to_orderPageFragment)
-//
-//        }
-
-        //handle back button click
-        onBackPressedDispatcher.addCallback(this) {
-            if (orderId != null) {
-                finish()
-            }
-        }
 
         supportActionBar?.hide()
 

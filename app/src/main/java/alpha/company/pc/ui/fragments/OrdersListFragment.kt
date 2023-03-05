@@ -22,6 +22,7 @@ import alpha.company.pc.ui.viewmodels.FullOrdersModel
 import alpha.company.pc.utils.ERROR_MSG
 import alpha.company.pc.utils.toast
 import android.content.Intent
+import androidx.activity.OnBackPressedCallback
 
 private const val TAG = "OrdersListFragment"
 
@@ -35,7 +36,14 @@ class OrdersListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val activity = requireActivity() as FullOrdersActivity
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
 
+            })
         authModel =
             AuthModel(RetrofitService.getInstance(requireContext())).also { it.auth(requireContext()) }
 
