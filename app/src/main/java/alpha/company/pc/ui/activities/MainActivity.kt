@@ -3,7 +3,6 @@ package alpha.company.pc.ui.activities
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.ImageLoader
 import alpha.company.pc.data.models.local.LoadPolicy
-import alpha.company.pc.data.models.network.User
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.databinding.ActivityMainBinding
@@ -37,11 +36,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
 
 private const val TAG = "MainActivity"
 
@@ -76,17 +70,6 @@ class MainActivity : AppCompatActivity() {
         ).apply {
             auth(this@MainActivity)
         }
-
-        RetrofitService.getInstance(this).test().enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Log.d(TAG, "JSONObject or msg :${response.body()?.charStream()?.readText()} ")
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-
-        })
 
 //        picasso = Picasso.get()
         binding = ActivityMainBinding.inflate(layoutInflater)

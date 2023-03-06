@@ -118,6 +118,10 @@ fun getError(responseBody: ResponseBody?, code: Int): Error? {
 //        jsonObj?.getString("error")?.let { Error(it, code) }
         Error(error.error, code)
     } catch (e: Exception) {
+        for (test in e.stackTrace) {
+            Log.e(TAG, "getError: $test")
+        }
+        Log.e(TAG, "getError: ")
         val error = e.message?.let { Error(it, code) }
         Log.e(TAG, "error parsing JSON error message: $error")
         return error

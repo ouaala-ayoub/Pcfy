@@ -143,16 +143,19 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             val token = task.result
                             Log.d(TAG, "performLoginAction userId: $userId")
                             Log.d(TAG, "performLoginAction token: $token")
-                            registerToken(userId, token)
                             askNotificationPermission()
+                            registerToken(userId, token)
                         }
 
-                        requireContext().toast(getString(R.string.login_success), Toast.LENGTH_SHORT)
+                        requireContext().toast(
+                            getString(R.string.login_success),
+                            Toast.LENGTH_SHORT
+                        )
                         goToMainActivity()
                     } else {
 //                        requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
 //                    goToMainActivity()
-                        Log.e(TAG, "performLoginAction: $LOGIN_FAILED" )
+                        Log.e(TAG, "performLoginAction: $LOGIN_FAILED")
                     }
                 }
             }
