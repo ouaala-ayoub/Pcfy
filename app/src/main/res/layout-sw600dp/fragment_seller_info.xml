@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:context=".ui.fragments.SellerInfoFragment">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    tools:context=".ui.fragments.SellerInfoFragment">
 
     <TextView
         android:id="@+id/no_announces"
@@ -27,12 +27,12 @@
         android:layout_gravity="center"
         android:elevation="2dp" />
 
-        <com.google.android.material.appbar.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/background_color">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="0dp"
@@ -92,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:textColor="@color/main_theme"
+                        android:textIsSelectable="true"
                         tools:text="www.pcfy.vercel.app" />
 
                 </LinearLayout>
@@ -133,19 +134,19 @@
                 android:id="@+id/swiperefresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_anchorGravity="center"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_anchorGravity="center">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/seller_annonces_rv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:listitem="@layout/single_annonce"
                     tools:orientation="vertical"
-                    tools:spanCount="2"
-                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager">
+                    tools:spanCount="2">
 
                 </androidx.recyclerview.widget.RecyclerView>
 

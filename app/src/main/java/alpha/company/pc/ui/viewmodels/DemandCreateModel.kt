@@ -43,6 +43,7 @@ class DemandCreateModel(private val createDemandRepository: DemandRepository) : 
             override fun onFailure(call: Call<IdResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure addDemand: ${t.message}")
                 isTurning.postValue(false)
+                demandAdded.postValue(false)
             }
 
         })

@@ -29,6 +29,7 @@ class SellerInfoModel(private val annonceRepository: AnnonceRepository) : ViewMo
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful && response.body() != null) {
+                    Log.d(TAG, "getUserById onResponse: ${response.body()}")
                     seller.postValue(response.body())
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
@@ -54,7 +55,7 @@ class SellerInfoModel(private val annonceRepository: AnnonceRepository) : ViewMo
 
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
                 if (response.isSuccessful && response.body() != null) {
-                    Log.i(TAG, "onResponse body ${response.body()}")
+                    Log.i(TAG, "getSellerAnnonces onResponse body ${response.body()}")
                     annoncesList.postValue(response.body())
                     isTurning.postValue(false)
                 } else {

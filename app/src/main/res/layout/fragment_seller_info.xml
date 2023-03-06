@@ -52,6 +52,7 @@
                         android:layout_width="@dimen/seller_image_size"
                         android:layout_height="@dimen/seller_image_size"
                         android:layout_gravity="center|start"
+                        android:contentDescription="seller_image"
                         tools:src="@tools:sample/avatars" />
                 </androidx.cardview.widget.CardView>
 
@@ -92,6 +93,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:textColor="@color/main_theme"
+                        android:textIsSelectable="true"
                         android:textSize="18sp"
                         tools:text="www.pcfy.vercel.app" />
 

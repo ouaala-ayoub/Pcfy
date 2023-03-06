@@ -46,7 +46,7 @@ class UserInfoModel(
                     userRetrieved.postValue(response.body())
 
                 } else {
-                    val error = getError(response.errorBody()!!, response.code())
+                    val error = getError(response.errorBody(), response.code())
                     Log.e(TAG, "error body : $error")
                 }
                 isTurning.postValue(false)

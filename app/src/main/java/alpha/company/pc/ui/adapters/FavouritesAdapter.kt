@@ -12,6 +12,7 @@ import alpha.company.pc.data.models.network.Order
 import alpha.company.pc.databinding.SingleFavouriteBinding
 import alpha.company.pc.utils.ANNONCES_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
+import alpha.company.pc.utils.defineField
 import com.squareup.picasso.Picasso
 
 private const val TAG = "FavouritesAdapter"
@@ -59,10 +60,7 @@ class FavouritesAdapter(
                 favouriteTitle.text = favourite.title
                 val circularProgressDrawable = circularProgressBar(binding.root.context)
                 // to discuss
-//                val sellerName = favourite.seller!!.userName
-//
-//                favouriteSeller.text = sellerName
-
+                defineField(favouriteSeller, favourite.seller.name, binding.root.context)
 
                 favouritePrice.text = binding.root.resources.getString(
                     R.string.price,
@@ -71,7 +69,7 @@ class FavouritesAdapter(
 
                 //including the image
 
-                if (favourite.pictures.isEmpty()){
+                if (favourite.pictures.isEmpty()) {
                     favouriteImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
                 } else if (favourite.pictures[0].isNotBlank()) {
                     picasso
@@ -83,12 +81,6 @@ class FavouritesAdapter(
                         .into(favouriteImage)
                 }
 
-
-
-//                Log.i(TAG, "onFavouriteClickListener : $onFavouriteClickListener")
-//                Log.i(TAG, "onCommandsClickListener : $onCommandsClickListener")
-//                Log.i(TAG, "onOrderClicked : $onOrderClicked")
-
                 favouriteWhole.setOnClickListener {
                     onFavouriteClickListener.onFavouriteClicked(favourite.id!!)
                 }
@@ -98,7 +90,6 @@ class FavouritesAdapter(
                 }
 
                 if (onCommandsClickListener != null && onOrderClicked != null) {
-//                    linearLayout9.visibility = View.VISIBLE
                     commandes.apply {
                         visibility = View.VISIBLE
                         setOnClickListener {
@@ -107,36 +98,6 @@ class FavouritesAdapter(
                             )
                         }
                     }
-
-
-//                    val adapter = OrdersShortAdapter(
-//                        onOrderClicked
-//                    )
-//                    linearLayout9.visibility = View.VISIBLE
-//                    commandes.apply {
-//                        visibility = View.VISIBLE
-//                        setOnClickListener {
-//                            ordersRv.apply {
-//                                val isVisible = visibility
-//                                if (isVisible == View.VISIBLE) {
-//                                    visibility = View.GONE
-//                                } else {
-//                                    visibility = View.VISIBLE
-//
-//                                    this.adapter = adapter
-//                                    layoutManager = LinearLayoutManager(context)
-//                                    val singleCommandModel = SingleAnnounceCommandModel(
-//                                        UserInfoRepository(RetrofitService.getInstance())
-//                                    )
-//                                    onCommandsClickListener.onCommandClicked(
-//                                        favourite.id!!,
-//                                        adapter,
-//                                        singleCommandModel
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
                 }
 
             }

@@ -21,7 +21,10 @@ import alpha.company.pc.ui.activities.AnnonceActivity
 import alpha.company.pc.ui.adapters.AnnoncesAdapter
 import alpha.company.pc.ui.viewmodels.SellerInfoModel
 import alpha.company.pc.utils.USERS_AWS_S3_LINK
+import alpha.company.pc.utils.circularProgressBar
+import alpha.company.pc.utils.defineField
 import alpha.company.pc.utils.toast
+import android.widget.TextView
 import com.squareup.picasso.Picasso
 
 private const val NUM_ROWS = 2
@@ -115,21 +118,20 @@ class SellerInfoFragment : Fragment() {
             val userName = seller.name
 
 //            sellerImage to add
-            if (seller.imageUrl.isNullOrBlank()) {
-                sellerImage.setImageResource(R.drawable.ic_baseline_no_photography_24)
+            Picasso
+                .get()
+                .load("${USERS_AWS_S3_LINK}${seller.imageUrl}")
+                .error(R.drawable.ic_baseline_no_photography_24)
+                .placeholder(circularProgressBar(requireContext()))
+                .fit()
+                .into(sellerImage)
 
-            } else {
-                Picasso
-                    .get()
-                    .load("${USERS_AWS_S3_LINK}${seller.imageUrl}")
-                    .fit()
-                    .into(sellerImage)
-            }
 
             sellerContact.text = seller.phoneNumber
             sellerName.text = userName
-            sellerType.text = seller.role
-            sellerCity.text = seller.city
+            defineField(sellerType, seller.role, requireContext())
+            defineField(sellerCity, seller.city, requireContext())
+
             annonceOf.text = getString(R.string.annonce_of, userName)
 
             swiperefresh.setOnRefreshListener {
@@ -137,6 +139,7 @@ class SellerInfoFragment : Fragment() {
                 swiperefresh.isRefreshing = false
             }
 
+//            TODO("seller website redirect to link")
 //            sellerWebsite.text
 //            sellerWebsite.setOnClickListener {
 //                to do

@@ -210,6 +210,8 @@
     <string name="une_demande">Une Demande</string>
     <string name="login_success">Connecté avec success</string>
 
+    <string name="no_defined">-</string>
+
     <string name="demand_page_image">demand_page_image</string>
     <string name="no_description">Pas de description pour le moment</string>
     <string name="no_price">Prix non determiné</string>

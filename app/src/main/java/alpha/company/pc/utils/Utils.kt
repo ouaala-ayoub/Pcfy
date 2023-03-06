@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.widget.TextView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -252,4 +253,12 @@ fun getImageRequestBody(uri: Uri, context: Context): UserStepTwo.ImageInfo {
         file.name,
         requestFile
     )
+}
+
+fun defineField(textView: TextView, value: String?, context: Context) {
+    if (value != null) {
+        textView.text = value
+    } else {
+        textView.text = context.getString(R.string.no_defined)
+    }
 }
