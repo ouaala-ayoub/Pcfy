@@ -26,6 +26,7 @@ import alpha.company.pc.utils.*
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 
 private const val TAG = "UserStepTwo"
 
@@ -178,7 +179,9 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
 
                 if (imageUri != null) {
                     val info = getImageRequestBody(imageUri!!, requireContext())
-                    addFormDataPart("picture", info.imageName, info.imageReqBody)
+                    if (info != null) {
+                        addFormDataPart("picture", info.imageName, info.imageReqBody)
+                    }
                 }
             }
         }

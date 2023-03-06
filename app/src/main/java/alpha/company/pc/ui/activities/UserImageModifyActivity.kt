@@ -81,23 +81,19 @@ class UserImageModifyActivity : AppCompatActivity() {
                     if (data?.data != null) {
                         imageUri = data.data!!
 
-                        val path = URIPathHelper().getPath(this, imageUri)
-                        Log.i(TAG, "onClick: $path")
-                        val file = File(path as String)
-                        val requestFile: RequestBody =
-                            file.asRequestBody("image/*".toMediaTypeOrNull())
+                        val file = getImageRequestBody(imageUri, this@UserImageModifyActivity)
 
-                        val requestBody = MultipartBody.Builder()
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("picture", file.name, requestFile)
-                            .build()
-
-                        viewModel.apply {
-                            isTurning.observe(this@UserImageModifyActivity) {
-                                binding.userImageLoading.isVisible = it
+                        if (file != null) {
+                            val requestBody = MultipartBody.Builder()
+                                .setType(MultipartBody.FORM)
+                                .addFormDataPart("picture", file.imageName, file.imageReqBody)
+                                .build()
+                            viewModel.apply {
+                                isTurning.observe(this@UserImageModifyActivity) {
+                                    binding.userImageLoading.isVisible = it
+                                }
+                                updateImage(userId, requestBody)
                             }
-                            updateImage(userId, requestBody)
-
                         }
                     }
                 }

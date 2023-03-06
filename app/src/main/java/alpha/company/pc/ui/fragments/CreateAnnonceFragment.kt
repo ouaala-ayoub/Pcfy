@@ -160,7 +160,7 @@ class CreateAnnonceFragment : Fragment() {
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
 
-                                        val imagesPart = getImagesRequestBody()
+                                        val imagesPart = getImagesRequest()
 
                                         val builder = MultipartBody.Builder()
                                             .setType(MultipartBody.FORM)
@@ -462,19 +462,17 @@ class CreateAnnonceFragment : Fragment() {
 //        requireActivity().overridePendingTransition(0, 0)
 //    }
 
-    private fun getImagesRequestBody(): HashMap<String, RequestBody> {
+    private fun getImagesRequest(): HashMap<String, RequestBody> {
 
         val partsList = HashMap<String, RequestBody>()
-        val uriPathHelper = URIPathHelper()
 
         for (uri in imagesUris) {
-            val filePath = uriPathHelper.getPath(requireContext(), uri)
-            val file = File(filePath!!)
-            Log.i(TAG, "getImagesRequestBody: file $file")
-            val requestFile: RequestBody =
-                file.asRequestBody("image/*".toMediaTypeOrNull())
+            val file = getImageRequestBody(uri, requireContext())
 
-            partsList[file.name] = requestFile
+            if (file != null) {
+                partsList[file.imageName] = file.imageReqBody
+            }
+
         }
         Log.i(TAG, "getRequestBody: $partsList")
         return partsList

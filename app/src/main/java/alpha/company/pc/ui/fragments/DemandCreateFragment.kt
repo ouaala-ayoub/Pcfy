@@ -144,12 +144,18 @@ class DemandCreateFragment : Fragment() {
 
                                         if (imageUri != null) {
                                             val imagePart =
-                                                getImageRequestBody(imageUri!!, requireContext())
-                                            builder.addFormDataPart(
-                                                "picture",
-                                                imagePart.imageName,
-                                                imagePart.imageReqBody
-                                            )
+                                                getImageRequestBody(
+                                                    imageUri!!,
+                                                    requireContext(),
+                                                )
+                                            if (imagePart != null) {
+                                                builder.addFormDataPart(
+                                                    "picture",
+                                                    imagePart.imageName,
+                                                    imagePart.imageReqBody
+                                                )
+                                            }
+
                                         }
 
                                         demandCreateModel.apply {

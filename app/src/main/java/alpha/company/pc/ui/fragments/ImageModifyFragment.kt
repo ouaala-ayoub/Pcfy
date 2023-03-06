@@ -95,26 +95,7 @@ class ImageModifyFragment : Fragment() {
 
                         if (data?.data != null) {
                             val indexToChange = binding.imagesPager.currentItem
-
                             imagesAdapter.modifyImageAtPosition(data.data, indexToChange)
-
-//                            val requestBody =
-//                                getRequestBody(indexToChange, data.data!!)
-
-//                            viewModel.apply {
-//                                changePicture(annonceId, requestBody)
-//                                updatedImage.observe(viewLifecycleOwner) { updated ->
-//                                    Log.i(TAG, "updated: $updated")
-//                                    if (updated) {
-//                                        requireContext().toast(UPDATED_IMAGE, Toast.LENGTH_SHORT)
-//                                        imagesAdapter.reloadImageAt(indexToChange)
-////                                        findNavController().popBackStack()
-//                                    } else {
-//                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
-//                                        (requireActivity() as AnnonceModifyActivity).finish()
-//                                    }
-//                                }
-//                            }
                         }
                     }
                 }
@@ -136,42 +117,7 @@ class ImageModifyFragment : Fragment() {
                 }
 
                 delete.setOnClickListener {
-//                    val currentItem = imagesPager.currentItem
-//                    Log.i(TAG, "going to delete item : $currentItem")
-//                    val builder = MultipartBody
-//                        .Builder()
-//                        .setType(MultipartBody.FORM)
-//                        .addFormDataPart("index", currentItem.toString())
-//                        .build()
-//
-//                    makeDialog(
-//                        requireContext(),
-//                        object : OnDialogClicked {
-//                            override fun onPositiveButtonClicked() {
-////                                deleteImage(annonceId, builder)
-////                                deletedImage.observe(viewLifecycleOwner) { deleted ->
-////                                    // go back to the previous screen if deleted successfully
-////                                    if (deleted) {
-////                                        requireContext().toast(DELETED_IMAGE, Toast.LENGTH_SHORT)
-////                                        findNavController().popBackStack()
-////                                    } else {
-////                                        requireContext().toast(ERROR_MSG, Toast.LENGTH_SHORT)
-////                                        (requireActivity() as AnnonceModifyActivity).finish()
-////                                    }
-////                                }
-//                            }
-//
-//                            override fun onNegativeButtonClicked() {
-//                                //do nothing
-//                            }
-//
-//                        },
-//                        getString(R.string.image_instructions_title),
-//                        getString(R.string.image_instructions_message)
-//                    ).show()
-
                     imagesAdapter.deleteImageAtPosition(imagesPager.currentItem)
-
                 }
 
                 modify.setOnClickListener {
@@ -195,25 +141,6 @@ class ImageModifyFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         imageResultLauncher.launch(intent)
-    }
-
-    private fun getRequestBody(index: Int, imageUri: Uri): RequestBody {
-
-        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
-        val filePath = URIPathHelper().getPath(requireContext(), imageUri)
-        val file = File(filePath!!)
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-
-        builder.apply {
-            addFormDataPart("index", index.toString())
-            addFormDataPart(
-                "picture",
-                file.name,
-                requestFile
-            )
-        }
-
-        return builder.build()
     }
 
 }

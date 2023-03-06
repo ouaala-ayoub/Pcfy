@@ -304,20 +304,16 @@ class AnnonceModifyFragment : Fragment() {
                                 for (i in pictures.indices) {
                                     if (pictures[i].uri != null) {
 
-                                        val pathHelper = URIPathHelper()
-                                        val filePath = pathHelper.getPath(
-                                            requireContext(),
-                                            pictures[i].uri!!
-                                        )
-                                        val file = File(filePath!!)
-                                        val requestFile =
-                                            file.asRequestBody("image/*".toMediaTypeOrNull())
+                                        val file =
+                                            getImageRequestBody(pictures[i].uri!!, requireContext())
 
-                                        builder.addFormDataPart(
-                                            "pictures",
-                                            file.name,
-                                            requestFile
-                                        )
+                                        if (file != null) {
+                                            builder.addFormDataPart(
+                                                "pictures",
+                                                file.imageName,
+                                                file.imageReqBody
+                                            )
+                                        }
                                         Log.d(TAG, "adding pictures: file")
 
                                     } else {
