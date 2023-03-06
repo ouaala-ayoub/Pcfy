@@ -19,38 +19,9 @@
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/createAnnonceFragment"
-        android:name="alpha.company.pc.ui.fragments.CreateAnnonceFragment"
-        android:label="CreateAnnonceFragment">
-        <action
-            android:id="@+id/action_createAnnonceFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/searchFragment"
         android:name="alpha.company.pc.ui.fragments.SearchFragment"
         android:label="SearchFragment" />
-    <fragment
-        android:id="@+id/annonceOrDemandChoiceFragment"
-        android:name="alpha.company.pc.ui.fragments.AnnonceOrDemandChoiceFragment"
-        android:label="fragment_annonce_or_demand_choice"
-        tools:layout="@layout/fragment_annonce_or_demand_choice">
-        <action
-            android:id="@+id/action_annonceOrDemandChoiceFragment_to_demandCreateFragment"
-            app:destination="@id/demandCreateFragment" />
-        <action
-            android:id="@+id/action_annonceOrDemandChoiceFragment_to_createAnnonceFragment"
-            app:destination="@id/createAnnonceFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/demandCreateFragment"
-        android:name="alpha.company.pc.ui.fragments.DemandCreateFragment"
-        android:label="fragment_demand_create"
-        tools:layout="@layout/fragment_demand_create">
-        <action
-            android:id="@+id/action_demandCreateFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
     <navigation
         android:id="@+id/demands"
         app:startDestination="@id/demandsFragment">
@@ -80,12 +51,45 @@
             android:id="@+id/sellerInfoFragment"
             android:name="alpha.company.pc.ui.fragments.SellerInfoFragment"
             android:label="fragment_seller_info"
-            tools:layout="@layout/fragment_seller_info" >
+            tools:layout="@layout/fragment_seller_info">
             <argument
                 android:name="id"
                 app:argType="string" />
         </fragment>
 
+    </navigation>
+    <navigation
+        android:id="@+id/postChoice"
+        app:startDestination="@id/annonceOrDemandChoiceFragment">
+        <fragment
+            android:id="@+id/demandCreateFragment"
+            android:name="alpha.company.pc.ui.fragments.DemandCreateFragment"
+            android:label="fragment_demand_create"
+            tools:layout="@layout/fragment_demand_create">
+            <action
+                android:id="@+id/action_demandCreateFragment_to_homeFragment"
+                app:destination="@id/homeFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/annonceOrDemandChoiceFragment"
+            android:name="alpha.company.pc.ui.fragments.AnnonceOrDemandChoiceFragment"
+            android:label="fragment_annonce_or_demand_choice"
+            tools:layout="@layout/fragment_annonce_or_demand_choice">
+            <action
+                android:id="@+id/action_annonceOrDemandChoiceFragment_to_demandCreateFragment"
+                app:destination="@id/demandCreateFragment" />
+            <action
+                android:id="@+id/action_annonceOrDemandChoiceFragment_to_createAnnonceFragment"
+                app:destination="@id/createAnnonceFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/createAnnonceFragment"
+            android:name="alpha.company.pc.ui.fragments.CreateAnnonceFragment"
+            android:label="CreateAnnonceFragment">
+            <action
+                android:id="@+id/action_createAnnonceFragment_to_homeFragment"
+                app:destination="@id/homeFragment" />
+        </fragment>
     </navigation>
 
 </navigation>

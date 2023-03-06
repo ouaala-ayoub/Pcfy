@@ -29,7 +29,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 
 private const val LOGIN_FAILED = "Erreur de Connexion"
-private const val LOGIN_SUCCESS = "Connecté avec success"
 private const val TAG = "LoginFragment"
 
 class LoginFragment : Fragment(), View.OnClickListener {
@@ -148,11 +147,12 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             askNotificationPermission()
                         }
 
-                        requireContext().toast(LOGIN_SUCCESS, Toast.LENGTH_SHORT)
+                        requireContext().toast(getString(R.string.login_success), Toast.LENGTH_SHORT)
                         goToMainActivity()
                     } else {
-                        requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
+//                        requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
 //                    goToMainActivity()
+                        Log.e(TAG, "performLoginAction: $LOGIN_FAILED" )
                     }
                 }
             }

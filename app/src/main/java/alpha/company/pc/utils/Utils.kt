@@ -10,7 +10,6 @@ import alpha.company.pc.data.models.local.OrderStatus
 import alpha.company.pc.data.models.network.Error
 import alpha.company.pc.ui.fragments.UserStepTwo
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
@@ -20,12 +19,15 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 private const val TAG = "Utils"
+
 //private const val ERROR404 = "Page introuvable"
 //private const val ERROR500 = "Erreur interne du serveur"
 //private const val ERROR401 = "Email ou password incorrect"
@@ -105,15 +107,26 @@ fun makeSnackBar(
 
 fun getError(responseBody: ResponseBody?, code: Int): Error? {
     return try {
-        Log.e(TAG, "JSONObject or msg :${responseBody?.charStream()?.readText()} ")
-        val jsonObj = responseBody?.charStream()?.readText()?.let { JSONObject(it) }
-        jsonObj?.getString("error")?.let { Error(it, code) }
+
+        val test = responseBody?.charStream()?.readText()
+        val error = Gson().fromJson(test, ErrorResponse::class.java)
+        Log.e(TAG, "error: $error")
+
+//        Log.e(TAG, "JSONObject or msg :${responseBody?.charStream()?.readText()} ")
+//        val jsonObj = responseBody?.charStream()?.readText()?.let { JSONObject(it) }
+//        jsonObj?.getString("error")?.let { Error(it, code) }
+        Error(error.error, code)
     } catch (e: Exception) {
         val error = e.message?.let { Error(it, code) }
         Log.e(TAG, "error parsing JSON error message: $error")
         return error
     }
 }
+
+data class ErrorResponse(
+    @SerializedName("error")
+    val error: String
+)
 
 //fun getTheErrorMessage(error: Error) {
 //    when (error.code) {
@@ -219,8 +232,9 @@ class URIPathHelper {
 
 
 }
+
 fun getImageResource(orderStatus: String): Int {
-    return when(orderStatus) {
+    return when (orderStatus) {
         OrderStatus.DELIVERED.status -> R.drawable.ic_baseline_done_24
         OrderStatus.CANCELED.status -> R.drawable.ic_baseline_cancel_24
         else -> R.drawable.ic_baseline_access_time_24

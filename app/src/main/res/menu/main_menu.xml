@@ -16,7 +16,7 @@
         android:title="@string/recherche" />
 
     <item
-        android:id="@+id/annonceOrDemandChoiceFragment"
+        android:id="@+id/postChoice"
         android:icon="@drawable/ic_baseline_note_add_24"
         android:title="@string/cr_er_une_annonce" />
 
