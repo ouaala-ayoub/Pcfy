@@ -24,11 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 
 private const val TAG = "UserImageModifyActivity"
 
@@ -45,6 +41,8 @@ class UserImageModifyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.hide()
 
         binding = ActivityUserImageModifyBinding.inflate(layoutInflater)
         picasso = Picasso.get()
@@ -219,8 +217,6 @@ class UserImageModifyActivity : AppCompatActivity() {
                 }
             }
         }
-
-        Log.d(TAG, "onCreate: ")
     }
 
     private fun changeUiEnabling(loading: Boolean) {

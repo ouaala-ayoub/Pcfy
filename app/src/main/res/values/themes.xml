@@ -59,4 +59,11 @@
     <style name="Widget.MaterialComponents.Chip.Choice.CustomShip" parent="Widget.MaterialComponents.Chip.Choice">
 
     </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="colorPrimary">@color/main_theme</item>
+        <item name="colorPrimaryDark">@color/even_darker_grey</item>
+    </style>
+
 </resources>

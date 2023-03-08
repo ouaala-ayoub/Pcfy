@@ -20,7 +20,15 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.activities.SplashActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.activities.PersonalSpaceActivity"
             android:exported="false" />
@@ -83,13 +91,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service

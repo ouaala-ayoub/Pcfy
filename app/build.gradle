@@ -4,6 +4,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id 'com.google.gms.google-services'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id("kotlin-parcelize")
 }
 
 android {
@@ -13,7 +14,7 @@ android {
         applicationId "alpha.company.pc"
         minSdk 21
         targetSdk 33
-        versionCode 29
+        versionCode 31
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

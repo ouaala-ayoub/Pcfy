@@ -11,25 +11,17 @@ import alpha.company.pc.data.models.network.Error
 import alpha.company.pc.ui.fragments.UserStepTwo
 import android.content.ContentResolver
 import okhttp3.ResponseBody
-import android.content.ContentUris
-import android.database.Cursor
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.provider.DocumentsContract
-import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.widget.TextView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okio.BufferedSink
 import java.io.File
 import java.io.FileInputStream
@@ -118,18 +110,15 @@ fun getError(responseBody: ResponseBody?, code: Int): Error? {
     return try {
 
         val test = responseBody?.charStream()?.readText()
+        Log.e(TAG, "JSONObject or msg : $test ")
         val error = Gson().fromJson(test, ErrorResponse::class.java)
         Log.e(TAG, "error: $error")
 
-//        Log.e(TAG, "JSONObject or msg :${responseBody?.charStream()?.readText()} ")
 //        val jsonObj = responseBody?.charStream()?.readText()?.let { JSONObject(it) }
 //        jsonObj?.getString("error")?.let { Error(it, code) }
         Error(error.error, code)
     } catch (e: Exception) {
-        for (test in e.stackTrace) {
-            Log.e(TAG, "getError: $test")
-        }
-        Log.e(TAG, "getError: ")
+        Log.e(TAG, "getError: $e.stackTrace")
         val error = e.message?.let { Error(it, code) }
         Log.e(TAG, "error parsing JSON error message: $error")
         return error
@@ -293,11 +282,15 @@ fun getImageRequestBody(
     )
 }
 
-fun defineField(textView: TextView, value: String?, context: Context) {
+fun defineField(textView: TextView, value: String?, context: Context, fillWith: String? = null) {
     if (value != null) {
         textView.text = value
     } else {
-        textView.text = context.getString(R.string.no_defined)
+        if (fillWith == null) {
+            textView.text = context.getString(R.string.no_defined)
+        } else {
+            textView.text = fillWith
+        }
     }
 }
 

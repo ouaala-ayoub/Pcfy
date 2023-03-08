@@ -22,7 +22,6 @@ import alpha.company.pc.ui.viewmodels.AnnonceModel
 import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.*
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.gms.ads.AdRequest
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 
@@ -149,24 +148,30 @@ class AnnonceFragment : Fragment() {
                             //the seller field
                             annonce.seller.apply {
                                 Log.d(TAG, "annonce.seller: $this")
-                                sellerName.text = this.name
+                                defineField(sellerName, name, requireContext())
 
                                 picasso
-                                    .load("${USERS_AWS_S3_LINK}${this.picture}")
+                                    .load("${USERS_AWS_S3_LINK}${picture}")
                                     .fit()
                                     .placeholder(circularProgressBar(requireContext()))
                                     .error(R.drawable.ic_baseline_no_photography_24)
                                     .into(selleerImage)
+
+                                productSeller.setOnClickListener {
+                                    goToSellerPage(id)
+                                }
+                                sellerInfo.setOnClickListener {
+                                    goToSellerPage(id)
+                                }
                             }
 
-                            productDescription.text = annonce.description
+                            defineField(
+                                productDescription,
+                                annonce.description,
+                                requireContext(),
+                                getString(R.string.no_description)
+                            )
 
-                            productSeller.setOnClickListener {
-                                goToSellerPage(annonce.seller.id)
-                            }
-                            sellerInfo.setOnClickListener {
-                                goToSellerPage(annonce.seller.id)
-                            }
 
                         } catch (e: Throwable) {
                             Log.e(TAG, "binding error : ${e.message}")

@@ -19,7 +19,6 @@ import alpha.company.pc.data.models.local.getDate
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.OrdersRepository
 import alpha.company.pc.databinding.FragmentOrderPageBinding
-import alpha.company.pc.ui.activities.FullOrdersActivity
 import alpha.company.pc.ui.viewmodels.OrderPageModel
 import alpha.company.pc.utils.ERROR_MSG
 import alpha.company.pc.utils.toast
@@ -38,28 +37,30 @@ class OrderPageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activity = requireActivity() as FullOrdersActivity
+        val activity = requireActivity()
 
         orderId = args.orderId
         orderPageModel =
             OrderPageModel(OrdersRepository(RetrofitService.getInstance(requireContext())))
 
+        val orderId = activity.intent.getStringExtra("orderId")
+        Log.d(TAG, "orderId from OrderPageFragment: $orderId")
+
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (activity.orderId == null) {
-                        Log.d(TAG, "handleOnBackPressed: ${activity.orderId}")
+                    if (orderId == null) {
+                        Log.d(TAG, "handleOnBackPressed: ${orderId}")
                         findNavController().popBackStack()
                     } else {
-                        Log.d(TAG, "handleOnBackPressed: ${activity.orderId}")
+                        Log.d(TAG, "handleOnBackPressed: ${orderId}")
                         activity.finish()
                     }
                 }
 
             })
 
-        Log.i(TAG, "onCreate orderId: $orderId")
     }
 
     override fun onCreateView(

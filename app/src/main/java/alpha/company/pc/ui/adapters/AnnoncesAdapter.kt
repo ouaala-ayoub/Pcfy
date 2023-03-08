@@ -35,15 +35,12 @@ class AnnoncesAdapter(
     }
 
     fun addElements(list: List<Annonce>) {
-        val test = mutableListOf(1, 2, 3)
-        test.addAll(listOf(4, 5, 6))
-        Log.d(TAG, "test adding list : $test")
         annoncesList.addAll(list)
         notifyItemRangeInserted(itemCount, list.size)
     }
 
     fun freeList() {
-        annoncesList = mutableListOf()
+        setAnnoncesListFromAdapter(mutableListOf())
     }
 
     inner class AnnonceHolder(private val binding: SingleAnnonceBinding) :
