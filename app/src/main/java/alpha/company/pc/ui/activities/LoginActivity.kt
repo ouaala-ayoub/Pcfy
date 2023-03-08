@@ -1,9 +1,9 @@
 package alpha.company.pc.ui.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import alpha.company.pc.R
+import androidx.activity.OnBackPressedCallback
 
 private const val TAG = "LoginActivity"
 
@@ -13,15 +13,16 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         supportActionBar?.hide()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
 
-    override fun onBackPressed() {
-        finish()
-        goToMainActivity()
-    }
-
-    private fun goToMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
+//    private fun goToMainActivity() {
+//        val intent = Intent(this, MainActivity::class.java)
+//        startActivity(intent)
+//    }
 }
