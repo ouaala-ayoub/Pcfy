@@ -22,7 +22,6 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     val categoriesList = MutableLiveData<List<String>>()
     val citiesList = MutableLiveData<List<String>>()
     private val form = FormData()
-    val formValues = form.getValues()
     val titleLiveData = form.titleLiveData
     val priceLiveData = form.priceLiveData
     val imagesLiveData = form.imagesLiveData
@@ -34,8 +33,12 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
 
     //get the user id ??
 
-    fun getCities(){
-        createAnnonceRepository.getCities().enqueue(object: Callback<List<String>>{
+    fun triggerLoading() {
+        isTurning.postValue(true)
+    }
+
+    fun getCities() {
+        createAnnonceRepository.getCities().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
                 if (response.isSuccessful && response.body() != null)
                     citiesList.postValue(response.body())
@@ -168,16 +171,16 @@ class FormData {
         }
     }
 
-    fun getValues(): List<String>{
-        return listOf(
-            titleLiveData.value.toString(),
-            priceLiveData.value.toString(),
-            imagesLiveData.value.toString(),
-            categoryLiveData.value.toString(),
-            citiesLiveData.value.toString(),
-            statusLiveData.value.toString()
-        )
-    }
+//    fun getValues(): List<String> {
+//        return listOf(
+//            titleLiveData.value.toString(),
+//            priceLiveData.value.toString(),
+//            imagesLiveData.value.toString(),
+//            categoryLiveData.value.toString(),
+//            citiesLiveData.value.toString(),
+//            statusLiveData.value.toString()
+//        )
+//    }
 
     private fun validateData(
         title: String?,

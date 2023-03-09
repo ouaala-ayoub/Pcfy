@@ -34,6 +34,11 @@ class UserInfoModel(
     val isTurning = MutableLiveData<Boolean>()
     val error = MutableLiveData<String>()
 
+
+    fun triggerLoading() {
+        isTurning.postValue(true)
+    }
+
     fun getUserById(userId: String): LiveData<User> {
 
         isTurning.postValue(true)
@@ -116,7 +121,7 @@ class UserInfoModel(
     fun getRequestBody(tokens: Tokens?): RequestBody? {
         return if (tokens?.accessToken == null || tokens.refreshToken == null) {
             null
-        }else {
+        } else {
             val builder = MultipartBody
                 .Builder()
                 .setType(MultipartBody.FORM)

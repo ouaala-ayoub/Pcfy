@@ -14,7 +14,7 @@ android {
         applicationId "alpha.company.pc"
         minSdk 21
         targetSdk 33
-        versionCode 31
+        versionCode 32
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -90,4 +90,8 @@ dependencies {
 
     //ad mob
     implementation 'com.google.android.gms:play-services-ads:21.5.0'
+
+    //image size optimisation
+    implementation 'id.zelory:compressor:3.0.1'
+
 }

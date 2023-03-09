@@ -31,16 +31,15 @@ import alpha.company.pc.ui.viewmodels.AnnonceModifyModel
 import alpha.company.pc.utils.*
 import android.net.Uri
 import android.widget.EditText
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.squareup.picasso.Picasso
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 
 private const val TAG = "AnnonceModifyActivity"
-private const val ADDED_IMAGES = "Images Ajoutée avec succes"
 private const val ERROR_GET_ANNONCE = "Erreur innatendue"
 private const val ERROR_SET_ANNONCE = "Erreur de La modification de l'annonce"
 private const val SUCCESS_SET_ANNONCE = "Annonce modifié avec succes"
@@ -252,6 +251,8 @@ class AnnonceModifyFragment : Fragment() {
 
                         submitChanges.setOnClickListener {
 
+                            triggerLoading()
+
 //                            val newAnnonce = Annonce(
                             val title = titleEditText.text.toString()
                             val price = priceEditText.text.toString()
@@ -301,20 +302,23 @@ class AnnonceModifyFragment : Fragment() {
                                     )
                                 }
 
+
                                 for (i in pictures.indices) {
                                     if (pictures[i].uri != null) {
 
-                                        val file =
+                                        val job = lifecycleScope.async(Dispatchers.IO) {
                                             getImageRequestBody(pictures[i].uri!!, requireContext())
-
-                                        if (file != null) {
-                                            builder.addFormDataPart(
-                                                "pictures",
-                                                file.imageName,
-                                                file.imageReqBody
-                                            )
                                         }
-                                        Log.d(TAG, "adding pictures: file")
+                                        lifecycleScope.launch {
+                                            val file = job.await()
+                                            if (file != null) {
+                                                builder.addFormDataPart(
+                                                    "pictures",
+                                                    file.imageName,
+                                                    file.imageReqBody
+                                                )
+                                            }
+                                        }
 
                                     } else {
                                         builder.addFormDataPart(
@@ -324,30 +328,22 @@ class AnnonceModifyFragment : Fragment() {
                                             "pictures[$i][position]",
                                             i.toString()
                                         )
-                                        Log.d(
-                                            TAG,
-                                            "adding pictures[$i][name]: ${pictures[i].name}"
-                                        )
-                                        Log.d(
-                                            TAG,
-                                            "adding pictures[$i][position]: $i}"
-                                        )
                                     }
                                 }
-                            }
-//                            }
 
+                            }
 
                             updateAnnonceInfo(annonceToModifyId, builder.build())
-                                .observe(viewLifecycleOwner) { annonceModified ->
 
-                                    //on annonce modification fail
-                                    if (!annonceModified) {
-                                        doOnFail(ERROR_SET_ANNONCE)
-                                    } else {
-                                        doOnSuccess(SUCCESS_SET_ANNONCE)
-                                    }
+                            updatedAnnonce.observe(viewLifecycleOwner) { annonceModified ->
+
+                                //on annonce modification fail
+                                if (!annonceModified) {
+                                    doOnFail(ERROR_SET_ANNONCE)
+                                } else {
+                                    doOnSuccess(SUCCESS_SET_ANNONCE)
                                 }
+                            }
                         }
                     }
                 }

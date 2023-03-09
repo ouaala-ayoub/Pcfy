@@ -113,6 +113,10 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
         return oldAnnonce
     }
 
+    fun triggerLoading() {
+        isTurning.postValue(true)
+    }
+
     fun updateAnnonceInfo(annonceId: String, newAnnonce: RequestBody): MutableLiveData<Boolean> {
 
         isTurning.postValue(true)
@@ -137,6 +141,7 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG, "onFailure updateAnnonceInfo: ${t.message}")
+                    updatedAnnonce.postValue(false)
                     isTurning.postValue(false)
                 }
 

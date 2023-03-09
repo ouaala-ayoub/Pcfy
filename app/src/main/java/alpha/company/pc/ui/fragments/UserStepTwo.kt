@@ -23,10 +23,13 @@ import alpha.company.pc.databinding.FragmentUserStepTwoBinding
 import alpha.company.pc.ui.activities.UserCreateActivity
 import alpha.company.pc.ui.viewmodels.UserStepTwoModel
 import alpha.company.pc.utils.*
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
 
 private const val TAG = "UserStepTwo"
 
@@ -79,8 +82,18 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
                 if (result.resultCode == Activity.RESULT_OK) {
                     val data: Intent? = result.data
                     Log.i(TAG, "resultLauncher: ${data?.data}")
-                    imageUri = data?.data
-                    binding.imageSelect.setImageURI(imageUri)
+                    try {
+                        imageUri = data?.data
+//                        binding.imageSelect.setImageURI(imageUri)
+                        Picasso.get()
+                            .load(imageUri)
+                            .fit()
+                            .into(binding.imageSelect)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "binding.imageSelect.setImageURI(imageUri): ${e.stackTrace}")
+                        binding.imageSelect.setImageResource(R.drawable.ic_baseline_no_photography_24)
+                    }
+
                 }
             }
 
@@ -88,6 +101,7 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
         nextButton.apply {
             isEnabled = false
             viewModel.isValidInput.observe(viewLifecycleOwner) {
+                lastState = it
                 isEnabled = it
             }
         }
@@ -150,22 +164,22 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
 
     override fun onNextClicked() {
         submitData()
-        lastState = viewModel.isValidInput.value!!
         Log.i(TAG, "onNextClicked lastState Step Two : $lastState")
     }
 
     override fun onBackClicked() {
         Log.i(TAG, "onBackClicked lastState Step Two : $lastState")
-        val lastValue = viewModel.isValidInput.value
-
-        if (lastValue != null) {
-            lastState = lastValue
-        }
+//        val lastValue = viewModel.isValidInput.value
+//
+//        if (lastValue != null) {
+//            lastState = lastValue
+//        }
     }
 
     override fun onResume() {
         super.onResume()
         val nextButton = requireActivity().findViewById<Button>(R.id.next)
+        Log.d(TAG, "onResume lastState step two: $lastState")
         nextButton.isEnabled = lastState
     }
 
@@ -178,9 +192,14 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
                 addFormDataPart("phone", phoneEditText.text.toString())
 
                 if (imageUri != null) {
-                    val info = getImageRequestBody(imageUri!!, requireContext())
-                    if (info != null) {
-                        addFormDataPart("picture", info.imageName, info.imageReqBody)
+                    val job = lifecycleScope.async {
+                        getImageRequestBody(imageUri!!, requireContext())
+                    }
+                    lifecycleScope.launch {
+                        val info = job.await()
+                        if (info != null) {
+                            addFormDataPart("picture", info.imageName, info.imageReqBody)
+                        }
                     }
                 }
             }

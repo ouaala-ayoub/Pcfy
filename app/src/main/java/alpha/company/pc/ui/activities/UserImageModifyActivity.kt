@@ -22,8 +22,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 private const val TAG = "UserImageModifyActivity"
@@ -78,19 +81,20 @@ class UserImageModifyActivity : AppCompatActivity() {
                     val data: Intent? = result.data
                     if (data?.data != null) {
                         imageUri = data.data!!
+                        viewModel.triggerLoading()
+                        val job = lifecycleScope.async {
+                            getImageRequestBody(imageUri, this@UserImageModifyActivity)
+                        }
+                        lifecycleScope.launch {
+                            viewModel.isTurning.postValue(true)
+                            val file = job.await()
+                            if (file != null) {
+                                val requestBody = MultipartBody.Builder()
+                                    .setType(MultipartBody.FORM)
+                                    .addFormDataPart("picture", file.imageName, file.imageReqBody)
+                                    .build()
 
-                        val file = getImageRequestBody(imageUri, this@UserImageModifyActivity)
-
-                        if (file != null) {
-                            val requestBody = MultipartBody.Builder()
-                                .setType(MultipartBody.FORM)
-                                .addFormDataPart("picture", file.imageName, file.imageReqBody)
-                                .build()
-                            viewModel.apply {
-                                isTurning.observe(this@UserImageModifyActivity) {
-                                    binding.userImageLoading.isVisible = it
-                                }
-                                updateImage(userId, requestBody)
+                                viewModel.updateImage(userId, requestBody)
                             }
                         }
                     }
@@ -98,7 +102,12 @@ class UserImageModifyActivity : AppCompatActivity() {
             }
 
 
+
         setContentView(binding.root)
+
+        viewModel.isTurning.observe(this@UserImageModifyActivity) { isLoading ->
+            binding.userImageLoading.isVisible = isLoading
+        }
 
         binding.apply {
 

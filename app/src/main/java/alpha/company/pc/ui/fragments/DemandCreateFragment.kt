@@ -28,8 +28,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 private const val TAG = "DemandCreateFragment"
@@ -96,7 +99,7 @@ class DemandCreateFragment : Fragment() {
                     if (data?.data != null) {
                         Log.d(TAG, "data?.data: ${data.data}")
                         imageUri = data.data!!
-                        binding.plusButton.setImageURI(imageUri)
+//                        binding.plusButton.setImageURI(imageUri)
                     }
                 }
             }
@@ -143,19 +146,23 @@ class DemandCreateFragment : Fragment() {
                                             .addFormDataPart("creator", user.userId.toString())
 
                                         if (imageUri != null) {
-                                            val imagePart =
+                                            val job = lifecycleScope.async {
                                                 getImageRequestBody(
                                                     imageUri!!,
                                                     requireContext(),
                                                 )
-                                            if (imagePart != null) {
-                                                builder.addFormDataPart(
-                                                    "picture",
-                                                    imagePart.imageName,
-                                                    imagePart.imageReqBody
-                                                )
                                             }
-
+                                            lifecycleScope.launch {
+                                                val imagePart = job.await()
+                                                if (imagePart != null) {
+                                                    builder.addFormDataPart(
+                                                        "picture",
+                                                        imagePart.imageName,
+                                                        imagePart.imageReqBody
+                                                    )
+                                                }
+                                                demandCreateModel.addDemand(builder.build())
+                                            }
                                         }
 
                                         demandCreateModel.apply {
@@ -166,7 +173,6 @@ class DemandCreateFragment : Fragment() {
                                             }
 
                                             //to change
-                                            addDemand(builder.build())
                                             demandAdded.observe(viewLifecycleOwner) { demandAdded ->
 
                                                 Log.i(

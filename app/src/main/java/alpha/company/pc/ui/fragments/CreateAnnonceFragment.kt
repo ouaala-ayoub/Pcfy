@@ -33,13 +33,12 @@ import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.ui.viewmodels.CreateAnnonceModel
 import alpha.company.pc.utils.*
 import android.widget.EditText
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 
 private const val TAG = "CreateAnnonceFragment"
 
@@ -155,86 +154,86 @@ class CreateAnnonceFragment : Fragment() {
 
                         addButton.setOnClickListener {
 
+
                             makeDialog(
                                 requireContext(),
                                 object : OnDialogClicked {
                                     override fun onPositiveButtonClicked() {
-
-                                        val imagesPart = getImagesRequest()
-
-                                        val builder = MultipartBody.Builder()
-                                            .setType(MultipartBody.FORM)
-                                            .addFormDataPart(
-                                                "title",
-                                                viewModel.titleLiveData.value!!
-                                            )
-                                            .addFormDataPart(
-                                                "price",
-                                                priceEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "category",
-                                                categoryEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "city",
-                                                cityEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "status",
-                                                statusEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "mark",
-                                                markEditText.text.toString()
-                                            )
-                                            .addFormDataPart(
-                                                "description",
-                                                descriptionEditText.text.toString()
-                                            )
-                                            .addFormDataPart("seller[id]", user.userId)
-                                            .addFormDataPart("seller[name]", user.name)
-
-                                        if (user.imageUrl != null) {
-                                            builder.addFormDataPart(
-                                                "seller[picture]",
-                                                user.imageUrl
-                                            )
-                                        }
-
-
-                                        var i = 0
-                                        for (body in imagesPart) {
-                                            builder.addFormDataPart(
-                                                "pictures",
-                                                body.key,
-                                                body.value
-                                            )
-                                            i++
-                                        }
-                                        val annonceToAdd = builder.build()
-
-
-                                        viewModel.apply {
-
-                                            isTurning.observe(viewLifecycleOwner) { loading ->
-                                                binding!!.progressBar.isVisible = loading
-                                                changeUiEnabling(loading)
-                                            }
-
-                                            //to change
-                                            addAnnonce(annonceToAdd)
-                                            requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
-                                                isTurning.observe(viewLifecycleOwner) { isVisible ->
-                                                    progressBar.isVisible = isVisible
-                                                }
-                                                Log.i(
-                                                    TAG,
-                                                    "response succes from fragment $requestSuccess"
+                                        try {
+                                            viewModel.triggerLoading()
+                                            val builder = MultipartBody.Builder()
+                                                .setType(MultipartBody.FORM)
+                                                .addFormDataPart(
+                                                    "title",
+                                                    viewModel.titleLiveData.value!!
                                                 )
-                                                if (requestSuccess) doOnSuccess()
-                                                else doOnFail()
+                                                .addFormDataPart(
+                                                    "price",
+                                                    priceEditText.text.toString()
+                                                )
+                                                .addFormDataPart(
+                                                    "category",
+                                                    categoryEditText.text.toString()
+                                                )
+                                                .addFormDataPart(
+                                                    "city",
+                                                    cityEditText.text.toString()
+                                                )
+                                                .addFormDataPart(
+                                                    "status",
+                                                    statusEditText.text.toString()
+                                                )
+                                                .addFormDataPart(
+                                                    "mark",
+                                                    markEditText.text.toString()
+                                                )
+                                                .addFormDataPart(
+                                                    "description",
+                                                    descriptionEditText.text.toString()
+                                                )
+                                                .addFormDataPart("seller[id]", user.userId)
+                                                .addFormDataPart("seller[name]", user.name)
+
+                                            if (user.imageUrl != null) {
+                                                builder.addFormDataPart(
+                                                    "seller[picture]",
+                                                    user.imageUrl
+                                                )
                                             }
+
+                                            val job = lifecycleScope.async {
+                                                getImagesRequest(builder)
+                                            }
+                                            lifecycleScope.launch {
+                                                job.await()
+                                                viewModel.addAnnonce(builder.build())
+                                            }
+
+                                            viewModel.apply {
+
+                                                isTurning.observe(viewLifecycleOwner) { loading ->
+                                                    binding!!.progressBar.isVisible = loading
+                                                    changeUiEnabling(loading)
+                                                }
+
+                                                //to change
+
+                                                requestSuccessful.observe(viewLifecycleOwner) { requestSuccess ->
+                                                    isTurning.observe(viewLifecycleOwner) { isVisible ->
+                                                        progressBar.isVisible = isVisible
+                                                    }
+                                                    Log.i(
+                                                        TAG,
+                                                        "response succes from fragment $requestSuccess"
+                                                    )
+                                                    if (requestSuccess) doOnSuccess()
+                                                    else doOnFail()
+                                                }
+                                            }
+                                        } catch (e: Exception) {
+                                            Log.e(
+                                                TAG, "onPositiveButtonClicked: ${e.stackTrace}"
+                                            )
                                         }
 
 
@@ -462,21 +461,20 @@ class CreateAnnonceFragment : Fragment() {
 //        requireActivity().overridePendingTransition(0, 0)
 //    }
 
-    private fun getImagesRequest(): HashMap<String, RequestBody> {
+    suspend fun getImagesRequest(
+        builder: MultipartBody.Builder
+    ) {
 
-        val partsList = HashMap<String, RequestBody>()
-
-        for (uri in imagesUris) {
-            val file = getImageRequestBody(uri, requireContext())
-
-            if (file != null) {
-                partsList[file.imageName] = file.imageReqBody
+        (0..imagesUris.lastIndex).map { index ->
+            val image = getImageRequestBody(imagesUris[index], requireContext())
+            if (image != null) {
+                builder.addFormDataPart(
+                    "pictures",
+                    image.imageName,
+                    image.imageReqBody
+                )
             }
-
         }
-        Log.i(TAG, "getRequestBody: $partsList")
-        return partsList
-
     }
 
 }

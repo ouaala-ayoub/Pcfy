@@ -1,31 +1,31 @@
 package alpha.company.pc.utils
 
-import android.content.Context
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.OrderStatus
 import alpha.company.pc.data.models.network.Error
 import alpha.company.pc.ui.fragments.UserStepTwo
 import android.content.ContentResolver
-import okhttp3.ResponseBody
+import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.OpenableColumns
+import android.util.Log
+import android.view.View
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import okio.BufferedSink
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io.*
 
 private const val TAG = "UtilsFolder"
 
@@ -250,30 +250,30 @@ fun getImageResource(orderStatus: String): Int {
     }
 }
 
-fun getImageRequestBody(
+suspend fun getImageRequestBody(
     uri: Uri,
     context: Context,
 ): UserStepTwo.ImageInfo? {
 
     Log.d(TAG, "getImageRequestBody uri: $uri")
-//    val file = File(URIPathHelper().getPath(context, uri)!!)
-//    Log.i(TAG, "file selected : ${file.name}")
-//    val requestFile: RequestBody =
-//        file.asRequestBody("image/*".toMediaTypeOrNull())
 
     val parcelFileDescriptor =
         context.contentResolver.openFileDescriptor(uri, "r", null) ?: return null
 
     val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
     val file = File(context.cacheDir, context.contentResolver.getFileName(uri))
-    val outputStream = FileOutputStream(file)
+    val outputStream = withContext(Dispatchers.IO) {
+        FileOutputStream(file)
+    }
     inputStream.copyTo(outputStream)
+    Log.d(TAG, "files size : ${file.fileSize()}KB")
 
-//    val requestFile: RequestBody =
-//        file.asRequestBody("image/*".toMediaTypeOrNull())
+
+    val compressedImageFile = Compressor.compress(context, file, Dispatchers.Main)
+    Log.d(TAG, "compressedImageFile size : ${compressedImageFile.fileSize()}KB")
 
 //    progress_bar.progress = 0
-    val body = UploadRequestBody(file, "image")
+    val body = UploadRequestBody(compressedImageFile, "image")
 
     parcelFileDescriptor.close()
     return UserStepTwo.ImageInfo(
@@ -348,4 +348,32 @@ class UploadRequestBody(
     companion object {
         private const val DEFAULT_BUFFER_SIZE = 2048
     }
+}
+
+fun readTextFile(idRes: Int, context: Context): String {
+    try {
+        var string: String? = ""
+        val stringBuilder = StringBuilder()
+        val `is`: InputStream = context.resources.openRawResource(idRes)
+        val reader = BufferedReader(InputStreamReader(`is`))
+        while (true) {
+            try {
+                if (reader.readLine().also { string = it } == null) break
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            stringBuilder.append(string).append("\n")
+//            binding.userPolicyTv.text = stringBuilder
+        }
+        `is`.close()
+        return stringBuilder.toString()
+    } catch (e: Exception) {
+        Log.e(TAG, "readTextFile: ${e.stackTrace}")
+        return String()
+    }
+
+}
+
+fun File.fileSize(): Int {
+    return java.lang.String.valueOf(this.length() / 1024).toInt()
 }
