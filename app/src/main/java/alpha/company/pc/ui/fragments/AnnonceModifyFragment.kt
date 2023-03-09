@@ -34,15 +34,11 @@ import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 private const val TAG = "AnnonceModifyActivity"
-private const val ERROR_GET_ANNONCE = "Erreur innatendue"
-private const val ERROR_SET_ANNONCE = "Erreur de La modification de l'annonce"
-private const val SUCCESS_SET_ANNONCE = "Annonce modifié avec succes"
 
 class AnnonceModifyFragment : Fragment() {
 
@@ -146,7 +142,7 @@ class AnnonceModifyFragment : Fragment() {
 
                     // on annonce retrieved fail
                     if (annonce == null) {
-                        doOnFail(ERROR_GET_ANNONCE)
+                        doOnFail(getString(R.string.error))
                     } else {
 
                         Log.i(TAG, "annonce retrieved : $annonce")
@@ -263,8 +259,6 @@ class AnnonceModifyFragment : Fragment() {
                             val city = cityEditText.text.toString()
 
                             annonceActivity.annoncePictures.removeAt(annonceActivity.annoncePictures.lastIndex)
-                            val pictures = annonceActivity.annoncePictures
-
 //                                seller = annonce.seller,
 //                                visited = annonce.visited
 //                            )
@@ -302,46 +296,25 @@ class AnnonceModifyFragment : Fragment() {
                                     )
                                 }
 
-
-                                for (i in pictures.indices) {
-                                    if (pictures[i].uri != null) {
-
-                                        val job = lifecycleScope.async(Dispatchers.IO) {
-                                            getImageRequestBody(pictures[i].uri!!, requireContext())
-                                        }
-                                        lifecycleScope.launch {
-                                            val file = job.await()
-                                            if (file != null) {
-                                                builder.addFormDataPart(
-                                                    "pictures",
-                                                    file.imageName,
-                                                    file.imageReqBody
-                                                )
-                                            }
-                                        }
-
-                                    } else {
-                                        builder.addFormDataPart(
-                                            "pictures[$i][name]",
-                                            pictures[i].name
-                                        ).addFormDataPart(
-                                            "pictures[$i][position]",
-                                            i.toString()
-                                        )
-                                    }
+                                val job = lifecycleScope.async {
+                                    getImagesRequest(builder)
+                                }
+                                lifecycleScope.launch {
+                                    job.await()
+                                    updateAnnonceInfo(annonceToModifyId, builder.build())
                                 }
 
                             }
 
-                            updateAnnonceInfo(annonceToModifyId, builder.build())
+
 
                             updatedAnnonce.observe(viewLifecycleOwner) { annonceModified ->
 
                                 //on annonce modification fail
                                 if (!annonceModified) {
-                                    doOnFail(ERROR_SET_ANNONCE)
+                                    doOnFail(getString(R.string.error))
                                 } else {
-                                    doOnSuccess(SUCCESS_SET_ANNONCE)
+                                    doOnSuccess(getString(R.string.annonce_modify_success))
                                 }
                             }
                         }
@@ -448,6 +421,30 @@ class AnnonceModifyFragment : Fragment() {
     private fun doOnSuccess(message: String) {
         requireContext().toast(message, Toast.LENGTH_SHORT)
         requireActivity().finish()
+    }
+
+    private suspend fun getImagesRequest(builder: MultipartBody.Builder) {
+        val pictures = annonceActivity.annoncePictures
+        for (i in pictures.indices) {
+            if (pictures[i].uri != null) {
+                val file = getImageRequestBody(pictures[i].uri!!, requireContext())
+                if (file != null) {
+                    builder.addFormDataPart(
+                        "pictures",
+                        file.imageName,
+                        file.imageReqBody
+                    )
+                }
+            } else {
+                builder.addFormDataPart(
+                    "pictures[$i][name]",
+                    pictures[i].name
+                ).addFormDataPart(
+                    "pictures[$i][position]",
+                    i.toString()
+                )
+            }
+        }
     }
 
 }

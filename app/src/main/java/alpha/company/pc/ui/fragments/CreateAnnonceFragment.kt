@@ -461,7 +461,7 @@ class CreateAnnonceFragment : Fragment() {
 //        requireActivity().overridePendingTransition(0, 0)
 //    }
 
-    suspend fun getImagesRequest(
+    private suspend fun getImagesRequest(
         builder: MultipartBody.Builder
     ) {
 
