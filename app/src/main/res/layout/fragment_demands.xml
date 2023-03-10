@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.DemandsFragment">
 
+    <ImageView
+        android:id="@+id/scroll_top_demands"
+        android:layout_width="@dimen/scroll_to_size"
+        android:layout_height="@dimen/scroll_to_size"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="5dp"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_upward_24" />
+
     <SearchView
         android:id="@+id/demand_search_view"
         android:layout_width="0dp"

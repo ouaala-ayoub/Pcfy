@@ -7,149 +7,158 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp">
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.HomeFragment">
-
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/vAppBar"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/background_color">
+        android:layout_height="match_parent"
+        tools:context=".ui.fragments.HomeFragment">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/vAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="0dp"
-            android:scrollbarSize="0dp"
-            app:contentScrim="@color/background_color"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
+            android:backgroundTint="@color/background_color">
 
-            <LinearLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                android:scrollbarSize="0dp"
+                app:contentScrim="@color/background_color"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
 
-                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
-                    android:id="@+id/category_shimmer_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:overScrollMode="never"
-                    tools:listitem="@layout/single_category"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:shimmer_demo_child_count="8"
-                    app:shimmer_demo_grid_child_count="2"
-                    app:shimmer_demo_layout="@layout/shimmer_category"
-                    app:shimmer_demo_layout_manager_type="linear_horizontal"
-                    app:shimmer_demo_angle="20"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
-
-<!--                <com.google.android.gms.ads.AdView-->
-<!--                    android:id="@+id/adView"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:adSize="BANNER"-->
-<!--                    app:adUnitId="@string/home_ad_id">-->
-<!--                </com.google.android.gms.ads.AdView>-->
-
-                <TextView
-                    android:id="@+id/popular_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="Populaires "
-                    android:textColor="@color/main_theme"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
-                    android:id="@+id/populars_shimmer_rv"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:shimmer_demo_child_count="8"
-                    app:shimmer_demo_grid_child_count="2"
-                    app:shimmer_demo_layout="@layout/shimmer_popular"
-                    app:shimmer_demo_layout_manager_type="linear_horizontal"
-                    app:shimmer_demo_angle="20"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                    android:orientation="vertical">
 
-                </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
+                    <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                        android:id="@+id/category_shimmer_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:overScrollMode="never"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:shimmer_demo_angle="20"
+                        app:shimmer_demo_child_count="8"
+                        app:shimmer_demo_grid_child_count="2"
+                        app:shimmer_demo_layout="@layout/shimmer_category"
+                        app:shimmer_demo_layout_manager_type="linear_horizontal"
+                        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/single_category">
 
-            </LinearLayout>
+                    </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                    <!--                <com.google.android.gms.ads.AdView-->
+                    <!--                    android:id="@+id/adView"-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    app:adSize="BANNER"-->
+                    <!--                    app:adUnitId="@string/home_ad_id">-->
+                    <!--                </com.google.android.gms.ads.AdView>-->
 
-    </com.google.android.material.appbar.AppBarLayout>
+                    <TextView
+                        android:id="@+id/popular_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:text="Populaires "
+                        android:textColor="@color/main_theme"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-    <ProgressBar
-        android:id="@+id/home_progress_bar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:elevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                    <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                        android:id="@+id/populars_shimmer_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:shimmer_demo_angle="20"
+                        app:shimmer_demo_child_count="8"
+                        app:shimmer_demo_grid_child_count="2"
+                        app:shimmer_demo_layout="@layout/shimmer_popular"
+                        app:shimmer_demo_layout_manager_type="linear_horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                    </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
 
-        <TextView
-            android:id="@+id/foru_tv"
+                </LinearLayout>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ProgressBar
+            android:id="@+id/home_progress_bar"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="Pour Vous "
-            android:textColor="@color/main_theme"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-
-        <TextView
-            android:id="@+id/no_annonce"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
-            android:id="@+id/annonce_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_gravity="center"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:shimmer_demo_angle="20"
-            app:shimmer_demo_child_count="8"
-            app:shimmer_demo_grid_child_count="2"
-            app:shimmer_demo_layout="@layout/shimmer_popular"
-            app:shimmer_demo_layout_manager_type="grid"
-            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:listitem="@layout/single_annonce"
-            tools:spanCount="2">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
+        <ImageView
+            android:id="@+id/scroll_top"
+            android:layout_width="@dimen/scroll_to_size"
+            android:layout_height="@dimen/scroll_to_size"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="5dp"
+            android:elevation="2dp"
+            app:srcCompat="@drawable/baseline_arrow_upward_24" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <TextView
+                android:id="@+id/foru_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Pour Vous "
+                android:textColor="@color/main_theme"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/no_annonce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                android:id="@+id/annonce_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:shimmer_demo_angle="20"
+                app:shimmer_demo_child_count="8"
+                app:shimmer_demo_grid_child_count="2"
+                app:shimmer_demo_layout="@layout/shimmer_popular"
+                app:shimmer_demo_layout_manager_type="grid"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/single_annonce"
+                tools:spanCount="2">
+
+            </com.cooltechworks.views.shimmer.ShimmerRecyclerView>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

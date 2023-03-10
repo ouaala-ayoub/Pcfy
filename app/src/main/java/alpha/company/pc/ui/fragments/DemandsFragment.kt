@@ -57,7 +57,9 @@ class DemandsFragment : Fragment() {
             demandsModel.isTurning.observe(viewLifecycleOwner) { isTurning ->
                 demandsPrpgressBar.isVisible = isTurning
             }
+            //maybe it's the reason the recycler view doesn't keep its state after resume
             demandSearchView.onActionViewExpanded()
+
             swipeRefresh.apply {
                 setOnRefreshListener {
                     demandsModel.getDemands()
@@ -99,6 +101,10 @@ class DemandsFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = demandsAdapter
 
+                scrollTopDemands.setOnClickListener {
+                    smoothScrollToPosition(0)
+                }
+
                 showShimmerAdapter()
 
                 demandsModel.apply {
@@ -131,7 +137,6 @@ class DemandsFragment : Fragment() {
 
         return binding.root
     }
-
 
 
     override fun onResume() {

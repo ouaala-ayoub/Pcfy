@@ -127,6 +127,11 @@ class HomeFragment : Fragment() {
                 adapter = annoncesAdapter
                 Log.d(TAG, "showing annonce shimmer")
                 showShimmerAdapter()
+
+                scrollTop.setOnClickListener {
+                    smoothScrollToPosition(0)
+                }
+
             }
 
             //setting the popular annonces list
@@ -248,12 +253,6 @@ class HomeFragment : Fragment() {
             }
 
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        (requireActivity() as MainActivity).supportActionBar?.show()
-//        binding!!.annonceRv.hideShimmerAdapter()
     }
 
     private fun goToAnnonceActivity(annonceId: String) {

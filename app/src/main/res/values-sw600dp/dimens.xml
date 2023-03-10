@@ -31,4 +31,5 @@
     <dimen name="text_size">40sp</dimen>
     <dimen name="single_image_modify">300dp</dimen>
     <bool name="isTablet">true</bool>
+    <dimen name="scroll_to_size">80dp</dimen>
 </resources>

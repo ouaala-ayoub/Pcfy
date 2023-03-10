@@ -40,4 +40,5 @@
     <dimen name="choice_icon_size">80dp</dimen>
     <dimen name="shimmer_height">35dp</dimen>
     <dimen name="shimmer_width">220dp</dimen>
+    <dimen name="scroll_to_size">40dp</dimen>
 </resources>
