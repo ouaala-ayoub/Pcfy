@@ -189,6 +189,8 @@
     <string name="error">Erreur Inattendue</string>
     <string name="Demandes">Demandes</string>
 
+    <string name="rv_state">Recycler view state</string>
+
     <string name="no_auth">Utilisateur non authentifié</string>
 
     <!-- to toggle the open close button of the navigation drawer -->

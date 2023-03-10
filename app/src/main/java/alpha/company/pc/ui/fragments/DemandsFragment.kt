@@ -1,10 +1,5 @@
 package alpha.company.pc.ui.fragments
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import alpha.company.pc.R
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.DemandRepository
@@ -12,9 +7,14 @@ import alpha.company.pc.databinding.FragmentDemandsBinding
 import alpha.company.pc.ui.adapters.DemandsAdapter
 import alpha.company.pc.ui.viewmodels.DemandsModel
 import alpha.company.pc.ui.viewmodels.MessageText
+import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +26,6 @@ class DemandsFragment : Fragment() {
     private lateinit var binding: FragmentDemandsBinding
     private lateinit var demandsModel: DemandsModel
     private lateinit var demandsAdapter: DemandsAdapter
-//    private var demandsToShow = mutableListOf<Demand>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +35,18 @@ class DemandsFragment : Fragment() {
                 getString(R.string.error),
                 getString(R.string.list_empty)
             )
-        )
+        ).also {
+            it.getDemands()
+        }
         demandsAdapter = DemandsAdapter(object : DemandsAdapter.OnDemandClicked {
             override fun onDemandClicked(demandId: String) {
+                demandsModel.rvState = binding.demandsRv.layoutManager?.onSaveInstanceState()
                 goToDemandFragment(demandId)
             }
         })
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +60,6 @@ class DemandsFragment : Fragment() {
             demandSearchView.onActionViewExpanded()
             swipeRefresh.apply {
                 setOnRefreshListener {
-                    demandsAdapter.freeList()
                     demandsModel.getDemands()
                 }
             }
@@ -70,7 +72,7 @@ class DemandsFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    demandsAdapter.freeList()
+//                    demandsAdapter.freeList()
                     if (!newText.isNullOrBlank()) {
                         demandsModel.getDemands(newText)
                     } else {
@@ -87,29 +89,34 @@ class DemandsFragment : Fragment() {
                         !demandsAdapter.isListEmpty()
                     ) {
                         //add more data when bottom is reached
-                        demandsModel.getDemands()
+                        demandsModel.addDemands()
                     }
                 }
             })
 
             demandsRv.apply {
+
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = demandsAdapter
-                demandsRv.showShimmerAdapter()
+
+                showShimmerAdapter()
 
                 demandsModel.apply {
                     messageTv.observe(viewLifecycleOwner) { message ->
                         //bind the message value to the textView
                         msg.text = message
                     }
-                    getDemandsList()?.observe(viewLifecycleOwner) { demands ->
+                    demandsList.observe(viewLifecycleOwner) { demands ->
                         //show the data fetched
                         if (demands != null) {
+                            Log.d(TAG, "demandsList.observe demands")
                             //to save the state of the recycler view (to fix later)
                             swipeRefresh.isRefreshing = false
+
+                            //save state after getting new demands
                             val recyclerViewState =
                                 demandsRv.layoutManager?.onSaveInstanceState()
-                            demandsAdapter.addDemands(demands)
+                            demandsAdapter.setList(demands)
                             demandsRv.layoutManager?.onRestoreInstanceState(recyclerViewState)
 
                             hideShimmerAdapter()
@@ -118,10 +125,21 @@ class DemandsFragment : Fragment() {
                         }
                     }
                 }
+//                }
             }
         }
 
         return binding.root
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
+        if (demandsModel.rvState != null) {
+            //resume recycler view state onResume fragment
+            binding.demandsRv.layoutManager?.onRestoreInstanceState(demandsModel.rvState)
+        }
     }
 
     private fun goToDemandFragment(demandId: String) {

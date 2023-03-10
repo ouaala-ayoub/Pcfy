@@ -3,7 +3,6 @@ package alpha.company.pc.ui.adapters
 import alpha.company.pc.R
 import alpha.company.pc.data.models.network.Demand
 import alpha.company.pc.databinding.SingleDemandBinding
-import alpha.company.pc.utils.ANNONCES_AWS_S3_LINK
 import alpha.company.pc.utils.DEMANDS_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import android.util.Log
@@ -55,16 +54,16 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
     fun isListEmpty() = demandsList.isEmpty()
     fun setList(list: List<Demand>) {
         demandsList = list.toMutableList()
-        Log.i(TAG, "setList: ")
+        Log.i(TAG, "setList: ${demandsList.size}")
         notifyDataSetChanged()
     }
 
-    fun addDemands(list: List<Demand>) {
-//        val test = demandsList.toMutableList()
-        demandsList.addAll(list)
-
-        notifyItemRangeInserted(demandsList.lastIndex, list.size)
-    }
+//    fun addDemands(list: List<Demand>) {
+////        val test = demandsList.toMutableList()
+//        demandsList.addAll(list)
+//        Log.i(TAG, "addDemands: ${demandsList.size}")
+//        notifyItemRangeInserted(demandsList.lastIndex, list.size)
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DemandsHolder {
         return DemandsHolder(
@@ -82,8 +81,8 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
         holder.bind(position)
     }
 
-    fun freeList() {
-        demandsList = mutableListOf()
-        notifyDataSetChanged()
-    }
+//    fun freeList() {
+//        demandsList = mutableListOf()
+//        notifyDataSetChanged()
+//    }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.utils.getError
+import android.os.Parcelable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,14 +17,14 @@ private const val ERROR_MSG = "Erreur inattendue"
 
 class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
-    var annoncesList = MutableLiveData<List<Annonce>?>()
+    var annoncesList = MutableLiveData<MutableList<Annonce>?>()
     val popularsList = MutableLiveData<List<Annonce>?>()
     val categoriesList = MutableLiveData<List<String>>()
     val emptyMsg = MutableLiveData<String>()
     val isProgressBarTurning = MutableLiveData<Boolean>()
 
-    fun getCategories(){
-        homeRepository.getCategories().enqueue(object: Callback<List<String>>{
+    fun getCategories() {
+        homeRepository.getCategories().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
                 if (response.isSuccessful && response.body() != null)
                     categoriesList.postValue(response.body())
@@ -41,21 +42,30 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
         })
     }
 
-    fun getAnnoncesListAll(): MutableLiveData<List<Annonce>?> {
 
-        val response = homeRepository.getAnnonces(null, null)
+    fun getAnnoncesGeneral(
+        category: String? = null,
+        searchQuery: String? = null,
+        add: Boolean = true
+    ) {
+        val response = homeRepository.getAnnonces(category, searchQuery)
         isProgressBarTurning.postValue(true)
 
         response.enqueue(object : Callback<List<Annonce>> {
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
 
                 if (response.isSuccessful && response.body() != null) {
-                    Log.i(TAG, "response is successful = ${response.isSuccessful}")
-                    Log.i(TAG, "response body ${response.body()} ")
-                    annoncesList.postValue(response.body())
+                    Log.i(TAG, "response is successful = ${response.body()}")
+                    if (add) {
+                        val annoncesList = annoncesList.value
+                        annoncesList?.addAll(response.body()!!)
+                        this@HomeModel.annoncesList.postValue(annoncesList)
+                    } else {
+                        annoncesList.postValue(response.body()!!.toMutableList())
+                    }
+
                 } else {
                     val error = getError(response.errorBody()!!, response.code())
-
                     if (error != null)
                         Log.e(TAG, "response error $error")
 
@@ -70,38 +80,23 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
                 annoncesList.postValue(null)
             }
         })
-        return annoncesList
+
+    }
+
+    fun getAnnoncesListAll() {
+        getAnnoncesGeneral(add = false)
+    }
+
+    fun addAnnoncesListAll() {
+        getAnnoncesGeneral()
+    }
+
+    fun addAnnoncesByCategory(category: String) {
+        getAnnoncesGeneral(category = category)
     }
 
     fun getAnnoncesByCategory(category: String) {
-
-        isProgressBarTurning.postValue(true)
-
-        homeRepository.getAnnoncesByCategory(category).enqueue(object : Callback<List<Annonce>> {
-            override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    Log.i(TAG, "response body ${response.body()} ")
-                    annoncesList.postValue(response.body())
-                } else {
-                    val error = getError(response.errorBody()!!, response.code())
-                    Log.e(TAG, "response error $error")
-                    if (error != null)
-                        Log.e(TAG, "response error $error")
-
-                    annoncesList.postValue(null)
-                }
-                isProgressBarTurning.postValue(false)
-            }
-
-            override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-                isProgressBarTurning.postValue(false)
-                annoncesList.postValue(null)
-            }
-
-        })
-
-
+        getAnnoncesGeneral(category = category, add = false)
     }
 
     fun getPopularAnnonces() {

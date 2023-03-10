@@ -88,7 +88,10 @@ class UserStepTwo : Fragment(), alpha.company.pc.data.models.HandleSubmitInterfa
                         Picasso.get()
                             .load(imageUri)
                             .fit()
+                            .placeholder(circularProgressBar(requireContext()))
+                            .error(R.drawable.ic_baseline_no_photography_24)
                             .into(binding.imageSelect)
+                        
                     } catch (e: Exception) {
                         Log.e(TAG, "binding.imageSelect.setImageURI(imageUri): ${e.stackTrace}")
                         binding.imageSelect.setImageResource(R.drawable.ic_baseline_no_photography_24)

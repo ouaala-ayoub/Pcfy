@@ -37,12 +37,19 @@ class HomeFragment : Fragment() {
     private lateinit var onClickListener: AnnoncesAdapter.OnAnnonceClickListener
     private var binding: FragmentHomeBinding? = null
     private var annoncesList = mutableListOf<Annonce>()
-//    private val adBuilder = AdRequest.Builder()
+
+    //    private val adBuilder = AdRequest.Builder()
     override fun onCreate(savedInstanceState: Bundle?) {
         val retrofitService = RetrofitService.getInstance(requireContext())
         super.onCreate(savedInstanceState)
 
-        viewModel = HomeModel(HomeRepository(retrofitService))
+        viewModel = HomeModel(HomeRepository(retrofitService)).also {
+            it.apply {
+                getCategories()
+                getPopularAnnonces()
+                getAnnoncesListAll()
+            }
+        }
 
         onClickListener = object : AnnoncesAdapter.OnAnnonceClickListener {
             override fun onAnnonceClick(annonceId: String) {
@@ -80,11 +87,6 @@ class HomeFragment : Fragment() {
     ): View? {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        viewModel.apply {
-            getCategories()
-            getPopularAnnonces()
-            getAnnoncesListAll()
-        }
 
         binding!!.categoryShimmerRv.apply {
             layoutManager = LinearLayoutManager(
@@ -160,11 +162,11 @@ class HomeFragment : Fragment() {
 
                 Log.d(TAG, "annonces: $annonces")
                 if (annonces != null) {
-
+                    binding!!.swiperefresh.isRefreshing = false
                     val annonceRv = binding!!.annonceRv.layoutManager
                     val recyclerViewState =
                         annonceRv?.onSaveInstanceState()
-                    annoncesAdapter.addElements(annonces)
+                    annoncesAdapter.setAnnoncesListFromAdapter(annonces)
                     annonceRv?.onRestoreInstanceState(recyclerViewState)
 
                     Log.d(TAG, "hiding annonce shimmer")
@@ -214,14 +216,13 @@ class HomeFragment : Fragment() {
                     if (categoryAdapter.isEmptyList()) {
                         viewModel.getCategories()
                     }
-                    annoncesAdapter.freeList()
                     if (current == CategoryEnum.ALL.title) {
                         getAnnoncesListAll()
                     } else {
                         getAnnoncesByCategory(current)
                     }
                     getPopularAnnonces()
-                    swiperefresh.isRefreshing = false
+
                 }
                 annonceRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -233,9 +234,9 @@ class HomeFragment : Fragment() {
                             Log.i(TAG, "end")
                             val current = categoryAdapter.getCurrentCategory()
                             if (current == CategoryEnum.ALL.title) {
-                                getAnnoncesListAll()
+                                addAnnoncesListAll()
                             } else {
-                                getAnnoncesByCategory(current)
+                                addAnnoncesByCategory(current)
                             }
                         }
                     }
