@@ -1,5 +1,6 @@
 package alpha.company.pc.data.models.network
 
+import alpha.company.pc.data.models.local.OrderStatus
 import com.google.gson.annotations.SerializedName
 
 data class Order(
@@ -20,7 +21,7 @@ data class Order(
     val quantity: Int = 1,
 
     @SerializedName("status")
-    var orderStatus: String = "in progress",
+    var orderStatus: String = OrderStatus.IN_PROGRESS.status,
 
     @SerializedName("createdAt")
     var createdAt: String? = null,
@@ -54,4 +55,4 @@ data class Product(
 
     @SerializedName("price")
     val price: Number
-    )
+)

@@ -64,6 +64,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
             }
         })
     }
+
     fun login(userName: String, password: String) {
 
         isTurning.postValue(true)
@@ -82,7 +83,7 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                     Log.i(TAG, "current tokens: ${repository.getCurrentTokens()}")
                     isTurning.postValue(false)
                 } else {
-                    val error = getError(response.errorBody()!!, response.code())
+                    val error = getError(response.errorBody(), response.code())
                     Log.e(TAG, "onResponse test get error message $error")
                     errorMessage.postValue(error?.message)
                     retrievedTokens.postValue(false)

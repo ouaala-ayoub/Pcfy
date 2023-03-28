@@ -14,7 +14,7 @@ data class Demand(
     val price: String?,
 
     @SerializedName("creator")
-    val creatorId: String,
+    val creator: Creator,
 
     @SerializedName("picture")
     val picture: String?,
@@ -23,3 +23,18 @@ data class Demand(
     val description: String?,
 
     )
+
+data class Creator(
+
+    @SerializedName("id")
+    val id: String? = null,
+
+    @SerializedName("name")
+    val name: String,
+
+    @SerializedName("phone")
+    val phone: String,
+
+    @SerializedName("picture")
+    val picture: String? = null
+)

@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         //initialise mobileAds
         //weird bug
         val retrofitService = RetrofitService.getInstance(this)
-        MobileAds.initialize(this)
+//        MobileAds.initialize(this)
         authModel = AuthModel(
             retrofitService,
             LoginRepository(this)

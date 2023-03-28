@@ -3,7 +3,7 @@ package alpha.company.pc.data.models.local
 import com.google.gson.annotations.SerializedName
 
 enum class OrderStatus(val status: String) {
-    IN_PROGRESS("in progress"),
+    IN_PROGRESS("pending"),
     DELIVERED("delivered"),
     CANCELED("canceled")
 }

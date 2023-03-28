@@ -31,6 +31,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -100,6 +101,12 @@ class DemandCreateFragment : Fragment() {
                         Log.d(TAG, "data?.data: ${data.data}")
                         imageUri = data.data!!
 //                        binding.plusButton.setImageURI(imageUri)
+                        Picasso.get()
+                            .load(imageUri)
+                            .fit()
+                            .placeholder(circularProgressBar(requireContext()))
+                            .error(R.drawable.ic_baseline_no_photography_24)
+                            .into(binding.plusButton)
                     }
                 }
             }
@@ -143,7 +150,7 @@ class DemandCreateFragment : Fragment() {
                                                 "description",
                                                 descriptionEditText.text.toString()
                                             )
-                                            .addFormDataPart("creator", user.userId.toString())
+//                                            .addFormDataPart("creator", user.userId.toString())
 
                                         if (imageUri != null) {
                                             val job = lifecycleScope.async {

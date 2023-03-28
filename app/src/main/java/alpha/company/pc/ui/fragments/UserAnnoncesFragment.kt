@@ -188,8 +188,8 @@ class UserAnnoncesFragment : Fragment() {
                         binding.isEmpty.text = getString(R.string.no_annonce)
                     } else {
                         binding.isEmpty.text = ""
-                        adapter.setList(annonces)
                     }
+                    adapter.setList(annonces)
                     Log.i(TAG, "annonces : $annonces")
 
                 }
@@ -218,6 +218,7 @@ class UserAnnoncesFragment : Fragment() {
             UserAnnoncesFragmentDirections.actionUserAnnoncesFragmentToOrderPageFragment2(orderId)
         findNavController().navigate(action)
     }
+
     private fun goToAnnonceModifyActivity(annonceId: String) {
         val intent = Intent(requireContext(), AnnonceModifyActivity::class.java)
         intent.putExtra("id", annonceId)

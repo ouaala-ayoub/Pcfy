@@ -54,7 +54,7 @@ class DemandFragment : Fragment() {
 
                 demand.observe(viewLifecycleOwner) { demand ->
                     if (demand != null) {
-                        getUserById(demand.creatorId)
+                        getUserById(demand.creator.id!!)
                         creator.observe(viewLifecycleOwner) { creator ->
                             Log.d(TAG, "creator: ${creator?.name}")
                             if (creator != null) {
