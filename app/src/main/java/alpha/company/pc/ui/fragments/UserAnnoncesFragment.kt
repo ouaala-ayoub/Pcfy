@@ -14,12 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.R
-import alpha.company.pc.data.models.network.Tokens
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.UserInfoRepository
 import alpha.company.pc.databinding.FragmentUserAnnoncesBinding
 import alpha.company.pc.ui.activities.AnnonceModifyActivity
-import alpha.company.pc.ui.activities.MainActivity
 import alpha.company.pc.ui.activities.UserAnnoncesActivity
 import alpha.company.pc.ui.adapters.FavouritesAdapter
 import alpha.company.pc.ui.adapters.OrdersShortAdapter
@@ -37,7 +35,6 @@ class UserAnnoncesFragment : Fragment() {
     private lateinit var binding: FragmentUserAnnoncesBinding
     private lateinit var userId: String
     private lateinit var userAnnoncesModel: UserAnnoncesModel
-    private lateinit var currentTokens: Tokens
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +55,6 @@ class UserAnnoncesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        currentTokens = LocalStorage.getTokens(requireActivity())
-        Log.d(TAG, "currentTokens: $currentTokens")
         binding = FragmentUserAnnoncesBinding.inflate(inflater, container, false)
 
 //        userAnnoncesModel.showAdd(requireContext())
@@ -80,8 +75,7 @@ class UserAnnoncesFragment : Fragment() {
                             override fun onPositiveButtonClicked() {
                                 userAnnoncesModel.apply {
                                     //delete then observe the deleted Boolean
-                                    Log.d(TAG, "currentTokens: $currentTokens")
-                                    deleteAnnonce(currentTokens, annonceId)
+                                    deleteAnnonce(annonceId)
                                 }
                             }
 
@@ -178,6 +172,7 @@ class UserAnnoncesFragment : Fragment() {
             getAnnoncesById(userId)
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
+                binding.swiperefresh.isRefreshing = false
                 if (annonces == null) {
                     requireContext().toast(ANNONCE_ERROR_MSG, Toast.LENGTH_SHORT)
                     binding.isEmpty.text = getString(R.string.error)
@@ -202,7 +197,7 @@ class UserAnnoncesFragment : Fragment() {
 
             swiperefresh.setOnRefreshListener {
                 userAnnoncesModel.getAnnoncesById(userId)
-                swiperefresh.isRefreshing = false
+
             }
 
             userAnnoncesModel.isTurning.observe(requireActivity()) {

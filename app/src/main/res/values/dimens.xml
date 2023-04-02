@@ -33,7 +33,7 @@
     <bool name="isTablet">false</bool>
     <dimen name="add_size">100dp</dimen>
     <dimen name="max_title_size">6</dimen>
-    <dimen name="demand_image_size">135dp</dimen>
+    <dimen name="demand_image_size">120dp</dimen>
     <dimen name="user_image_size">150dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="choice_size">160dp</dimen>

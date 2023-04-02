@@ -7,18 +7,23 @@ import alpha.company.pc.utils.DEMANDS_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
 private const val TAG = "DemandsAdapter"
 
-class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
+class DemandsAdapter(
+    private val onDemandClicked: OnDemandClicked,
+    private val showDelete: Boolean = false
+) :
     RecyclerView.Adapter<DemandsAdapter.DemandsHolder>() {
     var demandsList: MutableList<Demand> = mutableListOf()
 
     interface OnDemandClicked {
         fun onDemandClicked(demandId: String)
+        fun onDeleteClicked(demandId: String) = null
     }
 
     inner class DemandsHolder(private val binding: SingleDemandBinding) :
@@ -26,6 +31,15 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
         fun bind(position: Int) {
             val demand = demandsList[position]
             binding.apply {
+
+                if (showDelete) {
+                    deleteDemand.apply {
+                        visibility = View.VISIBLE
+                        setOnClickListener {
+                            onDemandClicked.onDeleteClicked(demand.id!!)
+                        }
+                    }
+                }
 
                 demandWhole.setOnClickListener {
                     onDemandClicked.onDemandClicked(demand.id!!)
@@ -57,13 +71,6 @@ class DemandsAdapter(private val onDemandClicked: OnDemandClicked) :
         Log.i(TAG, "setList: ${demandsList.size}")
         notifyDataSetChanged()
     }
-
-//    fun addDemands(list: List<Demand>) {
-////        val test = demandsList.toMutableList()
-//        demandsList.addAll(list)
-//        Log.i(TAG, "addDemands: ${demandsList.size}")
-//        notifyItemRangeInserted(demandsList.lastIndex, list.size)
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DemandsHolder {
         return DemandsHolder(

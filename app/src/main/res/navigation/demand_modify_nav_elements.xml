@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/demand_modify_nav_elements"
+    app:startDestination="@id/userDemandsFragment">
+
+    <fragment
+        android:id="@+id/userDemandsFragment"
+        android:name="alpha.company.pc.ui.fragments.UserDemandsFragment"
+        android:label="UserDemandsFragment" />
+</navigation>

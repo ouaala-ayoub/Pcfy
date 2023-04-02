@@ -19,6 +19,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.DemandsModifyActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
@@ -28,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.activities.PersonalSpaceActivity"
             android:exported="false" />
@@ -92,9 +94,7 @@
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".data.remote.PushNotificationService"

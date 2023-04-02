@@ -1,6 +1,5 @@
 package alpha.company.pc.ui.fragments
 
-import alpha.company.pc.R
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,10 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import alpha.company.pc.databinding.FragmentUserControlerBinding
 import alpha.company.pc.ui.activities.*
-import androidx.navigation.fragment.NavHostFragment
 
 class UserControllerFragment : Fragment() {
 
@@ -31,7 +28,7 @@ class UserControllerFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentUserControlerBinding.inflate(inflater, container, false)
 
-        val userId = (requireActivity() as PersonalSpaceActivity).intent.getStringExtra("userId")
+        val userId = requireActivity().intent.getStringExtra("userId")
 
         binding.apply {
             userInfo.setOnClickListener {
@@ -39,6 +36,9 @@ class UserControllerFragment : Fragment() {
             }
             userAnnounces.setOnClickListener {
                 goToUserAnnonces(userId!!)
+            }
+            userDemands.setOnClickListener {
+                goToUserDemands(userId!!)
             }
             orders.setOnClickListener {
                 goToFullOrdersPage(userId!!)
@@ -72,6 +72,10 @@ class UserControllerFragment : Fragment() {
 
     private fun goToUserAnnonces(userId: String) {
         goToActivityWithUserId(userId, UserAnnoncesActivity::class.java)
+    }
+
+    private fun goToUserDemands(userId: String){
+        goToActivityWithUserId(userId, DemandsModifyActivity::class.java)
     }
 
     private fun goToUserRequests(userId: String) {

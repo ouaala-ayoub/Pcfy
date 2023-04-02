@@ -1,7 +1,6 @@
 package alpha.company.pc.data.repositories
 
 import alpha.company.pc.data.models.network.PasswordRequest
-import alpha.company.pc.data.models.network.Tokens
 import alpha.company.pc.data.models.network.User
 import alpha.company.pc.data.remote.RetrofitService
 import okhttp3.RequestBody
@@ -14,9 +13,8 @@ class UserInfoRepository(private val retrofitService: RetrofitService) {
 
     fun getAnnonceOrders(annonceId: String) = retrofitService.getAnnonceOrders(annonceId)
 
-    fun deleteAnnonce(tokens: Tokens, annonceId: String) =
+    fun deleteAnnonce(annonceId: String) =
         retrofitService.deleteAnnonce(
-            "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}",
             annonceId
         )
 

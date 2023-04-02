@@ -43,12 +43,30 @@
             android:text="@string/mes_annonces"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            app:iconSize="40dp"
             android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="40sp"
             app:icon="@drawable/ic_baseline_note_add_24"
             app:iconPadding="10dp"
+            app:iconSize="40dp"
+            app:iconTint="@color/main_theme"
+            app:strokeColor="@color/color_on_primary" />
+
+        <Button
+            android:id="@+id/user_demands"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="@string/my_demands"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textAppearance="@style/AlataTextView"
+            android:textColor="@color/color_on_primary"
+            android:textSize="40sp"
+            app:icon="@drawable/ic_baseline_note_add_24"
+            app:iconPadding="10dp"
+            app:iconSize="40dp"
             app:iconTint="@color/main_theme"
             app:strokeColor="@color/color_on_primary" />
 
@@ -64,9 +82,9 @@
             android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="40sp"
-            app:iconSize="40dp"
             app:icon="@drawable/ic_baseline_shopping_cart_24"
             app:iconPadding="10dp"
+            app:iconSize="40dp"
             app:iconTint="@color/main_theme"
             app:strokeColor="@color/color_on_primary" />
 
@@ -79,12 +97,12 @@
             android:text="@string/mes_achats"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            app:iconSize="40dp"
             android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="40sp"
             app:icon="@drawable/ic_baseline_shopping_bag_24"
             app:iconPadding="10dp"
+            app:iconSize="40dp"
             app:iconTint="@color/main_theme"
             app:strokeColor="@color/color_on_primary" />
 
@@ -97,12 +115,12 @@
             android:text="@string/changer_votre_mot_de_passe"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            app:iconSize="40dp"
             android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="40sp"
             app:icon="@drawable/ic_baseline_lock_24"
             app:iconPadding="10dp"
+            app:iconSize="40dp"
             app:iconTint="@color/main_theme"
             app:strokeColor="@color/color_on_primary" />
 

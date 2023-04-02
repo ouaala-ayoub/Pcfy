@@ -92,6 +92,7 @@
     <!--announces resources-->
     <string name="annonce_delete_dialog_title">Demande de confirmation</string>
     <string name="annonce_delete_dialog_message">Êtes vous sûre de supprimer cette annonce ?</string>
+    <string name="demand_delete_dialog_message">Êtes vous sûre de supprimer cette Demande ?</string>
     <string name="visiter">Visiter</string>
     <string name="contactez_nous">Contactez-nous</string>
     <string name="ratez_notre_application">Ratez notre Application</string>
@@ -190,7 +191,7 @@
     <string name="Demandes">Demandes</string>
 
     <string name="rv_state">Recycler view state</string>
-
+    <string name="my_demands">Mes demandes</string>
     <string name="no_auth">Utilisateur non authentifié</string>
 
     <!-- to toggle the open close button of the navigation drawer -->
@@ -205,6 +206,7 @@
 
     <string name="image_modified_success">Image Modifiée avec success</string>
     <string name="image_deleted_success">Image supprimée avec success</string>
+    <string name="demand_deleted_success">Demande supprimée avec success</string>
     <string name="image_deleted_fail">erreur inattendue pendant la suppression de l\'image</string>
 
     <string name="dissconected">Deconnecté avec success</string>

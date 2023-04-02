@@ -28,7 +28,6 @@ interface RetrofitService {
     //    @HTTP(method = "DELETE", path = "announces/{id}", hasBody = true)
     @DELETE("announces/{id}")
     fun deleteAnnonce(
-        @Header("Cookie") tokens: String,
         @Path("id") annonceId: String
     ): Call<IdResponse>
 
@@ -201,6 +200,9 @@ interface RetrofitService {
     @POST("demands")
     fun addDemand(@Body requestBody: RequestBody): Call<IdResponse>
 
+    @GET("users/{id}/demands")
+    fun getUserDemands(@Path("id") userId: String): Call<List<Demand>>
+
     @DELETE("demands/{id}")
     fun deleteDemand(@Path("id") demandId: String): Call<IdResponse>
 
@@ -209,17 +211,6 @@ interface RetrofitService {
         //to learn
         private const val BASE_URL = "https://pcfy.vercel.app/api/"
         private var retrofitService: RetrofitService? = null
-
-        //        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-//
-//        httpClient.addInterceptor(new Interceptor() {
-//            @Override
-//            public Response intercept(Chain chain) throws IOException {
-//                Request request = chain.request().newBuilder().addHeader("parameter", "value").build();
-//                return chain.proceed(request);
-//            }
-//        });
-//        "jwt-refresh=${tokens.refreshToken}; jwt-access=${tokens.accessToken}"
 
         fun getInstance(context: Context): RetrofitService {
 

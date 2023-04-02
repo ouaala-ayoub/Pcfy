@@ -62,11 +62,11 @@ class UserAnnoncesModel(
         return annoncesList
     }
 
-    fun deleteAnnonce(tokens: Tokens, annonceId: String) {
+    fun deleteAnnonce(annonceId: String) {
 
         isTurning.postValue(true)
 
-        userInfoRepository.deleteAnnonce(tokens, annonceId).enqueue(object : Callback<IdResponse> {
+        userInfoRepository.deleteAnnonce(annonceId).enqueue(object : Callback<IdResponse> {
 
             override fun onResponse(call: Call<IdResponse>, response: Response<IdResponse>) {
                 if (response.isSuccessful && response.body() != null) {
