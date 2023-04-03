@@ -16,6 +16,7 @@ private const val TAG = "DemandsAdapter"
 
 class DemandsAdapter(
     private val onDemandClicked: OnDemandClicked,
+    private val picasso: Picasso,
     private val showDelete: Boolean = false
 ) :
     RecyclerView.Adapter<DemandsAdapter.DemandsHolder>() {
@@ -54,8 +55,7 @@ class DemandsAdapter(
                     demandPrice.text = binding.root.context.getString(R.string.no_price)
                 }
 
-                Picasso
-                    .get()
+                picasso
                     .load("$DEMANDS_AWS_S3_LINK${demand.picture}")
                     .error(R.drawable.ic_baseline_no_photography_24)
                     .placeholder(circularProgressBar(binding.root.context))

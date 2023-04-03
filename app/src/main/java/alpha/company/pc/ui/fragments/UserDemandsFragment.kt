@@ -9,6 +9,7 @@ import alpha.company.pc.R
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.DemandRepository
 import alpha.company.pc.databinding.FragmentUserDemandsBinding
+import alpha.company.pc.ui.activities.DemandsModifyActivity
 import alpha.company.pc.ui.adapters.DemandsAdapter
 import alpha.company.pc.ui.viewmodels.UserDemandsModel
 import alpha.company.pc.utils.OnDialogClicked
@@ -65,7 +66,7 @@ class UserDemandsFragment : Fragment() {
 
                 return super.onDeleteClicked(demandId)
             }
-        }, true)
+        }, (requireActivity() as DemandsModifyActivity).picasso, true)
 
     }
 

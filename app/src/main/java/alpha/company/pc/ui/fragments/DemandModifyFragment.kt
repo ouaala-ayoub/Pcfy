@@ -9,6 +9,7 @@ import alpha.company.pc.R
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.DemandRepository
 import alpha.company.pc.databinding.FragmentDemandModifyBinding
+import alpha.company.pc.ui.activities.DemandsModifyActivity
 import alpha.company.pc.ui.viewmodels.DemandModifyModel
 import alpha.company.pc.utils.*
 import android.Manifest
@@ -29,6 +30,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -48,8 +51,9 @@ class DemandModifyFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val navArgs: DemandModifyFragmentArgs by navArgs()
-        picasso = Picasso.get()
+        picasso = (requireActivity() as DemandsModifyActivity).picasso
         demandId = navArgs.demandId
         demandModifyModel = DemandModifyModel(
             DemandRepository(
@@ -106,7 +110,7 @@ class DemandModifyFragment : Fragment() {
                         Log.d(TAG, "data?.data: ${data.data}")
                         imageUri = data.data!!
 //                        binding.plusButton.setImageURI(imageUri)
-                        Picasso.get()
+                        picasso
                             .load(imageUri)
                             .fit()
                             .placeholder(circularProgressBar(requireContext()))
@@ -199,26 +203,44 @@ class DemandModifyFragment : Fragment() {
                         requireContext().toast(getString(R.string.error_msg), Toast.LENGTH_SHORT)
                         findNavController().popBackStack()
                     }
+
+                    demandUpdated.observe(viewLifecycleOwner) { updated ->
+                        if (updated) {
+                            requireContext().toast(
+                                getString(R.string.demand_modified_succes),
+                                Toast.LENGTH_SHORT
+                            )
+                            reloadImageWithNoCache(demandRetrieved?.picture)
+//                        findNavController().popBackStack()
+                        } else {
+                            requireContext().toast(
+                                getString(R.string.error_msg),
+                                Toast.LENGTH_SHORT
+                            )
+
+                        }
+                    }
+
                 }
                 isTurning.observe(viewLifecycleOwner) { loading ->
                     changeUiEnabling(loading)
                     progressBar.isVisible = loading
                 }
-                demandUpdated.observe(viewLifecycleOwner) { updated ->
-                    if (updated) {
-                        requireContext().toast(
-                            getString(R.string.demand_modified_succes),
-                            Toast.LENGTH_SHORT
-                        )
-                        findNavController().popBackStack()
-                    } else {
-                        requireContext().toast(getString(R.string.error_msg), Toast.LENGTH_SHORT)
 
-                    }
-                }
             }
         }
         return binding.root
+    }
+
+    private fun reloadImageWithNoCache(url: String?) {
+        picasso
+            .load("$DEMANDS_AWS_S3_LINK${url}")
+            .error(R.drawable.ic_baseline_no_photography_24)
+            .placeholder(circularProgressBar(binding.root.context))
+            .networkPolicy(NetworkPolicy.NO_CACHE)
+            .memoryPolicy(MemoryPolicy.NO_CACHE)
+            .fit()
+            .into(binding.plusButton)
     }
 
     private fun handleImageChoice() {

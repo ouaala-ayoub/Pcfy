@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 private const val TAG = "DemandsFragment"
 
@@ -43,7 +44,7 @@ class DemandsFragment : Fragment() {
                 demandsModel.rvState = binding.demandsRv.layoutManager?.onSaveInstanceState()
                 goToDemandFragment(demandId)
             }
-        })
+        }, Picasso.get())
 
     }
 
