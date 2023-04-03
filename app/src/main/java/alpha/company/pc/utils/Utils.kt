@@ -154,7 +154,7 @@ suspend fun getImageRequestBody(
         FileOutputStream(file)
     }
     inputStream.copyTo(outputStream)
-    Log.d(TAG, "files size : ${file.fileSize()}KB")
+    Log.d(TAG, "file size : ${file.fileSize()}KB")
 
 
     val compressedImageFile = Compressor.compress(context, file, Dispatchers.Main)

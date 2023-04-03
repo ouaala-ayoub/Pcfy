@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/demand_modify_nav_elements"
     app:startDestination="@id/userDemandsFragment">
 
     <fragment
         android:id="@+id/userDemandsFragment"
         android:name="alpha.company.pc.ui.fragments.UserDemandsFragment"
-        android:label="UserDemandsFragment" />
+        android:label="UserDemandsFragment" >
+        <action
+            android:id="@+id/action_userDemandsFragment_to_demandModifyFragment"
+            app:destination="@id/demandModifyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/demandModifyFragment"
+        android:name="alpha.company.pc.ui.fragments.DemandModifyFragment"
+        android:label="fragment_demand_modify"
+        tools:layout="@layout/fragment_demand_modify" >
+        <argument
+            android:name="demandId"
+            app:argType="string" />
+    </fragment>
 </navigation>

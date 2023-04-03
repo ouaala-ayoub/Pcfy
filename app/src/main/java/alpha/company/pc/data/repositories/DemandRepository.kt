@@ -9,4 +9,6 @@ class DemandRepository(private val retrofitService: RetrofitService) {
     fun getDemands(searchQuery: String? = null) = retrofitService.getDemands(searchQuery)
     fun getUserDemands(userId: String) = retrofitService.getUserDemands(userId)
     fun deleteDemand(demandId: String) = retrofitService.deleteDemand(demandId)
+    fun updateDemand(demandId: String, demandBody: RequestBody) =
+        retrofitService.updateDemand(demandId, demandBody)
 }

@@ -170,6 +170,8 @@ class DemandCreateFragment : Fragment() {
                                                 }
                                                 demandCreateModel.addDemand(builder.build())
                                             }
+                                        } else {
+                                            demandCreateModel.addDemand(builder.build())
                                         }
 
                                         demandCreateModel.apply {

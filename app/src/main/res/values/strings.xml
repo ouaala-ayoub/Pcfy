@@ -93,6 +93,7 @@
     <string name="annonce_delete_dialog_title">Demande de confirmation</string>
     <string name="annonce_delete_dialog_message">Êtes vous sûre de supprimer cette annonce ?</string>
     <string name="demand_delete_dialog_message">Êtes vous sûre de supprimer cette Demande ?</string>
+    <string name="demand_modify_dialog_message">Êtes vous sûre des changements ?</string>
     <string name="visiter">Visiter</string>
     <string name="contactez_nous">Contactez-nous</string>
     <string name="ratez_notre_application">Ratez notre Application</string>
@@ -104,7 +105,7 @@
     <string name="permission">Votre autorisation est nécessaire pour utiliser notre service proprement</string>
     <string name="permission_required">Permission requis</string>
     <string name="you_cant">
-        Vous ne pouvez pas lancer une annonce car l\'application n\'as pas le droit d\'accéder a
+        Vous ne pouvez pas choisir une image car l\'application n\'as pas le droit d\'accéder a
         votre galerie des photos
     </string>
     <string name="no_notifications">Autoriser les notifications pour booster vos ventes</string>
@@ -150,6 +151,7 @@
     <string name="changer_votre_mot_de_passe">Changer votre mot de passe</string>
     <string name="mes_achats">Mes achats</string>
     <string name="gerer_vos_commandes">Gerer vos commandes</string>
+
 
     <string name="id_res">id: %1$s</string>
     <string name="order_id_res">Order #%1$s</string>
@@ -225,6 +227,8 @@
     <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="creator_image">creator_image</string>
     <string name="annonce_modify_success">Annonce modifié avec succes</string>
+    <string name="confirmer_les_changement">Confirmer les changements</string>
+    <string name="demand_modified_succes">Demande Modifiée avec success</string>
 
     <!--    real ad ids-->
     <!--                <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->

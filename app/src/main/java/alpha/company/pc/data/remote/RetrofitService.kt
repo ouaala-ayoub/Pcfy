@@ -1,5 +1,6 @@
 package alpha.company.pc.data.remote
 
+import alpha.company.pc.data.models.local.MessageResponse
 import alpha.company.pc.data.models.local.OrderStatusRequest
 import alpha.company.pc.data.models.local.TokenRequest
 import alpha.company.pc.data.models.network.*
@@ -196,6 +197,12 @@ interface RetrofitService {
 
     @GET("demands/{id}")
     fun getDemandById(@Path("id") demandId: String): Call<Demand>
+
+    @PUT("demands/{id}")
+    fun updateDemand(
+        @Path("id") demandId: String,
+        @Body demand: RequestBody
+    ): Call<CustomMessageResponse>
 
     @POST("demands")
     fun addDemand(@Body requestBody: RequestBody): Call<IdResponse>

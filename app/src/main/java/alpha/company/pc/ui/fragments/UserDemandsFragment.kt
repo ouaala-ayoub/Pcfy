@@ -17,6 +17,7 @@ import alpha.company.pc.utils.toast
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 
 private const val TAG = "UserDemandsFragment"
@@ -70,6 +71,9 @@ class UserDemandsFragment : Fragment() {
 
     private fun goToDemandModify(demandId: String) {
         Log.d(TAG, "goToDemandModify $demandId")
+        val action =
+            UserDemandsFragmentDirections.actionUserDemandsFragmentToDemandModifyFragment(demandId)
+        findNavController().navigate(action)
     }
 
     override fun onCreateView(
