@@ -139,6 +139,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                                     it
                                 )
                             }?.id
+                        Log.d(TAG, "userId from login fragment: $userId")
                         if (userId != null) {
                             val token = task.result
                             Log.d(TAG, "performLoginAction userId: $userId")

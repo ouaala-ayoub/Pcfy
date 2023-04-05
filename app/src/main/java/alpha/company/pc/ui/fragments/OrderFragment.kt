@@ -109,14 +109,9 @@ class OrderFragment : Fragment() {
                                                             annonce.pictures[0],
                                                             annonce.price
                                                         )
-                                                    )
-                                                    Log.i(
-                                                        TAG,
-                                                        "onPositiveButtonClicked: order To Add $orderToAdd"
-                                                    )
-                                                    addOrder(
-                                                        orderToAdd
-                                                    )
+                                                    ).also {
+                                                        addOrder(it)
+                                                    }
 
                                                     orderAdded.observe(
                                                         viewLifecycleOwner
@@ -135,34 +130,24 @@ class OrderFragment : Fragment() {
                                                             seller.observe(viewLifecycleOwner) {
                                                                 if (it != null) {
                                                                     val sellerToken = it.token
-                                                                    Log.i(
-                                                                        TAG,
-                                                                        "sellerToken: $sellerToken"
-                                                                    )
-                                                                    Log.d(
-                                                                        TAG,
-                                                                        "seller : ${it.userId}"
-                                                                    )
                                                                     if (!sellerToken.isNullOrEmpty()) {
                                                                         val fireBaseKey =
                                                                             getFirebaseKey()
 
-                                                                        Log.d(
-                                                                            TAG,
-                                                                            "fireBaseKey: $fireBaseKey"
-                                                                        )
-                                                                        val message = Message(
-                                                                            Data(
-                                                                                annonce.title,
-                                                                                it.userId!!,
-                                                                                addedId
-                                                                            ),
-                                                                            it.token[0]
-                                                                        )
-                                                                        notifySeller(
-                                                                            message,
-                                                                            fireBaseKey
-                                                                        )
+                                                                        for (i in sellerToken.indices) {
+                                                                            val message = Message(
+                                                                                Data(
+                                                                                    annonce.title,
+                                                                                    it.userId!!,
+                                                                                    addedId
+                                                                                ),
+                                                                                it.token[i]
+                                                                            )
+                                                                            notifySeller(
+                                                                                message,
+                                                                                fireBaseKey
+                                                                            )
+                                                                        }
                                                                         doOnSuccess(
                                                                             ORDER_SUCCESS
                                                                         )

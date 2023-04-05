@@ -23,7 +23,6 @@ import alpha.company.pc.ui.adapters.CategoryAdapter
 import alpha.company.pc.ui.adapters.PopularsAdapter
 import alpha.company.pc.ui.viewmodels.HomeModel
 import alpha.company.pc.utils.ERROR_MSG
-import com.google.android.gms.ads.AdRequest
 
 private const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"
@@ -202,13 +201,8 @@ class HomeFragment : Fragment() {
 
             popularsList.observe(viewLifecycleOwner) { populars ->
                 if (populars != null) {
-                    val popularsList = populars.map { popular -> popular.title }
-                    Log.d(TAG, "popularsList: $popularsList")
                     popularsAdapter.setPopularsList(populars)
-                    Log.d(TAG, "hiding populars shimmer")
                     binding!!.popularsShimmerRv.hideShimmerAdapter()
-                } else {
-                    Log.e(TAG, "popularsList is : $populars")
                 }
             }
 
@@ -236,7 +230,6 @@ class HomeFragment : Fragment() {
                             newState == RecyclerView.SCROLL_STATE_IDLE &&
                             !annoncesAdapter.isListEmpty()
                         ) {
-                            Log.i(TAG, "end")
                             val current = categoryAdapter.getCurrentCategory()
                             if (current == CategoryEnum.ALL.title) {
                                 addAnnoncesListAll()

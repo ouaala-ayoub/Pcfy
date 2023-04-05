@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.utils.getError
-import android.os.Parcelable
+import androidx.lifecycle.LiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,17 +17,29 @@ private const val ERROR_MSG = "Erreur inattendue"
 
 class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
-    var annoncesList = MutableLiveData<MutableList<Annonce>?>()
-    val popularsList = MutableLiveData<List<Annonce>?>()
-    val categoriesList = MutableLiveData<List<String>>()
-    val emptyMsg = MutableLiveData<String>()
-    val isProgressBarTurning = MutableLiveData<Boolean>()
+    private val _annoncesList = MutableLiveData<MutableList<Annonce>?>()
+    private val _popularsList = MutableLiveData<List<Annonce>?>()
+    private val _categoriesList = MutableLiveData<List<String>>()
+    private val _emptyMsg = MutableLiveData<String>()
+    private val _isProgressBarTurning = MutableLiveData<Boolean>()
+    var currentPage = 0
+
+    val annoncesList: LiveData<MutableList<Annonce>?>
+        get() = _annoncesList
+    val popularsList: LiveData<List<Annonce>?>
+        get() = _popularsList
+    val categoriesList: LiveData<List<String>>
+        get() = _categoriesList
+    val emptyMsg: LiveData<String>
+        get() = _emptyMsg
+    val isProgressBarTurning: LiveData<Boolean>
+        get() = _isProgressBarTurning
 
     fun getCategories() {
         homeRepository.getCategories().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
                 if (response.isSuccessful && response.body() != null)
-                    categoriesList.postValue(response.body())
+                    _categoriesList.postValue(response.body())
                 else {
                     val error = getError(response.errorBody()!!, response.code())
                     if (error != null)
@@ -43,25 +55,26 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
     }
 
 
-    fun getAnnoncesGeneral(
+    private fun getAnnoncesGeneral(
         category: String? = null,
         searchQuery: String? = null,
+        page: String? = null,
         add: Boolean = true
     ) {
-        val response = homeRepository.getAnnonces(category, searchQuery)
-        isProgressBarTurning.postValue(true)
+        _isProgressBarTurning.postValue(true)
 
+        val response = homeRepository.getAnnonces(category, searchQuery, page)
         response.enqueue(object : Callback<List<Annonce>> {
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
 
                 if (response.isSuccessful && response.body() != null) {
-                    Log.i(TAG, "response is successful = ${response.body()}")
+                    Log.i(TAG, "response is successful = ${response.body()!!.size}")
                     if (add) {
-                        val annoncesList = annoncesList.value
+                        val annoncesList = _annoncesList.value
                         annoncesList?.addAll(response.body()!!)
-                        this@HomeModel.annoncesList.postValue(annoncesList)
+                        this@HomeModel._annoncesList.postValue(annoncesList)
                     } else {
-                        annoncesList.postValue(response.body()!!.toMutableList())
+                        _annoncesList.postValue(response.body()!!.toMutableList())
                     }
 
                 } else {
@@ -69,15 +82,15 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
                     if (error != null)
                         Log.e(TAG, "response error $error")
 
-                    annoncesList.postValue(null)
+                    _annoncesList.postValue(null)
                 }
-                isProgressBarTurning.postValue(false)
+                _isProgressBarTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
                 Log.e(TAG, "onFailure : ${t.message}")
-                isProgressBarTurning.postValue(false)
-                annoncesList.postValue(null)
+                _isProgressBarTurning.postValue(false)
+                _annoncesList.postValue(null)
             }
         })
 
@@ -85,53 +98,57 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
 
     fun getAnnoncesListAll() {
         getAnnoncesGeneral(add = false)
+        currentPage = 1
     }
 
     fun addAnnoncesListAll() {
-        getAnnoncesGeneral()
+        getAnnoncesGeneral(page = currentPage.toString())
+        currentPage++
     }
 
     fun addAnnoncesByCategory(category: String) {
-        getAnnoncesGeneral(category = category)
+        getAnnoncesGeneral(category = category, page = currentPage.toString())
+        currentPage++
     }
 
     fun getAnnoncesByCategory(category: String) {
         getAnnoncesGeneral(category = category, add = false)
+        currentPage = 1
     }
 
     fun getPopularAnnonces() {
 
-        isProgressBarTurning.postValue(true)
+        _isProgressBarTurning.postValue(true)
 
         homeRepository.getPopularAnnonces().enqueue(object : Callback<List<Annonce>> {
 
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
                 if (response.isSuccessful && response.body() != null) {
-                    popularsList.postValue(response.body())
+                    _popularsList.postValue(response.body())
                 } else {
                     val error = response.errorBody()?.let { getError(it, response.code()) }
                     Log.e(TAG, "getPopularAnnonces error : ${error?.message}")
-                    popularsList.postValue(null)
+                    _popularsList.postValue(null)
                 }
-                isProgressBarTurning.postValue(false)
+                _isProgressBarTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
                 Log.e(TAG, "onFailure getPopularAnnonces: ${t.message}")
-                popularsList.postValue(null)
-                isProgressBarTurning.postValue(false)
+                _popularsList.postValue(null)
+                _isProgressBarTurning.postValue(false)
             }
 
         })
     }
 
     fun updateIsEmpty() {
-        if (annoncesList.value?.isEmpty() == true) {
-            emptyMsg.postValue(NO_ANNONCE)
-        } else if (annoncesList.value == null) {
-            emptyMsg.postValue(ERROR_MSG)
+        if (_annoncesList.value?.isEmpty() == true) {
+            _emptyMsg.postValue(NO_ANNONCE)
+        } else if (_annoncesList.value == null) {
+            _emptyMsg.postValue(ERROR_MSG)
         } else {
-            emptyMsg.postValue("")
+            _emptyMsg.postValue("")
         }
     }
 

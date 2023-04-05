@@ -9,12 +9,12 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.utils.LocalStorage
 import retrofit2.Call
 
-private const val TAG = "LoginRepository"
 
 class LoginRepository(private val activity: Context) {
 
+    val retrofitService = RetrofitService.getInstance(activity)
     fun registerToken(userId: String, token: String) =
-        RetrofitService.getInstance(activity).putFireBaseToken(userId, TokenRequest(token))
+        RetrofitService.getInstance(activity).addFireBaseToken(userId, TokenRequest(token))
 
     fun logout() {
         LocalStorage.deleteTokens(activity)
@@ -29,6 +29,6 @@ class LoginRepository(private val activity: Context) {
     }
 
     fun login(userName: String, password: String): Call<CustomMessageResponse> {
-        return RetrofitService.getInstance(activity).login(UserCredentials(userName, password))
+        return retrofitService.login(UserCredentials(userName, password))
     }
 }

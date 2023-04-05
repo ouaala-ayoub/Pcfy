@@ -33,6 +33,8 @@ import androidx.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -324,9 +326,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.logout -> {
-                authModel.logout()
-                this.toast(getString(R.string.dissconected), Toast.LENGTH_SHORT)
-                reloadActivity()
+                Firebase.messaging.token.addOnCompleteListener { task ->
+                    val token = task.result
+                    if (userId != null) {
+                        authModel.logout(userId!!, token)
+                        this.toast(getString(R.string.dissconected), Toast.LENGTH_SHORT)
+                        reloadActivity()
+                    }
+                }
                 true
             }
 

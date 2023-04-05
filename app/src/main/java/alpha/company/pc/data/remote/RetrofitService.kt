@@ -1,6 +1,5 @@
 package alpha.company.pc.data.remote
 
-import alpha.company.pc.data.models.local.MessageResponse
 import alpha.company.pc.data.models.local.OrderStatusRequest
 import alpha.company.pc.data.models.local.TokenRequest
 import alpha.company.pc.data.models.network.*
@@ -44,7 +43,8 @@ interface RetrofitService {
         @Query("st") status: String? = null,
         @Query("l") limit: Number? = null,
         @Query("n") filterByDate: String? = null,
-        @Query("v") visited: String? = null
+        @Query("v") visited: String? = null,
+        @Query("pg") page: String? = null
     ): Call<List<Annonce>>
 
     @GET("announces/{id}")
@@ -212,6 +212,22 @@ interface RetrofitService {
 
     @DELETE("demands/{id}")
     fun deleteDemand(@Path("id") demandId: String): Call<IdResponse>
+
+    //tokens
+    @GET("users/{id}/tokens")
+    fun getUserTokens(@Path("id") userId: String): Call<List<String>>
+
+    @PATCH("users/{id}/tokens")
+    fun addFireBaseToken(
+        @Path("id") userId: String,
+        @Body tokenToAdd: TokenRequest
+    ): Call<ResponseBody>
+
+    @DELETE("users/{id}/tokens/{tokenToDelete}")
+    fun deleteFireBaseToken(
+        @Path("id") userId: String,
+        @Path("tokenToDelete") tokenToDelete: String
+    ): Call<ResponseBody>
 
     companion object {
 

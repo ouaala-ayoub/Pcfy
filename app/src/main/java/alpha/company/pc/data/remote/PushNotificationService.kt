@@ -14,15 +14,16 @@ import alpha.company.pc.R
 import alpha.company.pc.data.models.local.TokenRequest
 import alpha.company.pc.data.models.network.User
 import alpha.company.pc.ui.activities.FullOrdersActivity
-import alpha.company.pc.ui.activities.MainActivity
-import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.LocalStorage
 import alpha.company.pc.utils.getError
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.messaging.ktx.messaging
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,12 +63,6 @@ class PushNotificationService : FirebaseMessagingService() {
                         sellerId,
                         orderId
                     )
-                    if (auth != null) {
-//                        val newAccessToken = auth
-//                        if (newAccessToken != null) {
-//                            LocalStorage.storeAccessToken(baseContext, newAccessToken)
-//                        }
-                    }
                 } else {
                     Log.e(TAG, "non authenticated")
                 }
@@ -166,39 +161,61 @@ class PushNotificationService : FirebaseMessagingService() {
                 if (res != null) {
                     val userId = res.userId
 
-                    retrofitService.putFireBaseToken(userId!!, TokenRequest(token))
-                        .enqueue(object : Callback<User> {
-                            override fun onResponse(call: Call<User>, response: Response<User>) {
+                    Firebase.messaging.token.addOnCompleteListener { task ->
+                        retrofitService.deleteFireBaseToken(userId!!, task.result)
+                            .enqueue(object : Callback<ResponseBody> {
+                                override fun onResponse(
+                                    call: Call<ResponseBody>,
+                                    response: Response<ResponseBody>
+                                ) {
+                                    if (response.isSuccessful && response.body() != null) {
+                                        Log.i(TAG, "delete old Firebase token Successfully")
+                                    } else {
+                                        val error =
+                                            getError(response.errorBody()!!, response.code())
+                                        Log.e(
+                                            TAG,
+                                            "delete old Firebase token error: ${error?.message}"
+                                        )
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                    Log.e(TAG, "deleteFireBaseToken onFailure: ${t.message}")
+                                }
+
+                            })
+                    }
+
+
+                    retrofitService.addFireBaseToken(userId!!, TokenRequest(token))
+                        .enqueue(object : Callback<ResponseBody> {
+                            override fun onResponse(
+                                call: Call<ResponseBody>,
+                                response: Response<ResponseBody>
+                            ) {
                                 if (response.isSuccessful && response.body() != null) {
                                     Log.i(TAG, "putFireBaseToken isSuccessful")
                                 } else {
-                                    try {
-                                        val error =
-                                            getError(response.errorBody()!!, response.code())
-                                        Log.e(TAG, "putFireBaseToken : ${error?.message}")
-                                    } catch (e: Throwable) {
-                                        Log.e(TAG, "getError : ${e.message}")
-                                    }
+                                    val error =
+                                        getError(response.errorBody()!!, response.code())
+                                    Log.e(TAG, "putFireBaseToken : ${error?.message}")
                                 }
                             }
 
-                            override fun onFailure(call: Call<User>, t: Throwable) {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                                 Log.e(TAG, "putFireBaseToken : ${t.message}")
                             }
                         })
 
                 } else {
-                    try {
-                        val error = getError(response.errorBody()!!, response.code())
-                        Log.e(TAG, "putFireBaseToken : ${error?.message}")
-                    } catch (e: Throwable) {
-                        Log.e(TAG, "getError : ${e.message}")
-                    }
+                    val error = getError(response.errorBody()!!, response.code())
+                    Log.e(TAG, "putFireBaseToken : ${error?.message}")
                 }
             }
 
             override fun onFailure(call: Call<User?>, t: Throwable) {
-                Log.e(TAG, "onFailure set New Token: ")
+                Log.e(TAG, "onFailure set New Token ${t.message}: ")
             }
 
         })

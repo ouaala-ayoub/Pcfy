@@ -5,11 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import alpha.company.pc.data.models.network.Tokens
-import alpha.company.pc.data.models.network.User
 import alpha.company.pc.data.remote.CustomMessageResponse
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.utils.getError
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,9 +18,16 @@ private const val TAG = "LoginModel"
 
 class LoginModel(private val repository: LoginRepository) : ViewModel() {
 
-    val retrievedTokens = MutableLiveData<Boolean>()
-    private val tokens = MutableLiveData<Tokens>()
-    val isTurning = MutableLiveData<Boolean>()
+    private val _retrievedTokens = MutableLiveData<Boolean>()
+    private val _isTurning = MutableLiveData<Boolean>()
+    private val _tokenAdded = MutableLiveData<Boolean>()
+
+    val retrievedTokens: LiveData<Boolean>
+        get() = _retrievedTokens
+    val isTurning: LiveData<Boolean>
+        get() = _isTurning
+    val tokenAdded: LiveData<Boolean>
+        get() = _tokenAdded
 
     val userNameLiveData = MutableLiveData<String>()
     val passwordLiveData = MutableLiveData<String>()
@@ -44,30 +50,29 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
     }
 
     fun registerToken(userId: String, token: String) {
-        repository.registerToken(userId, token).enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
+        Log.i(TAG, "registerToken: $token")
+        repository.registerToken(userId, token).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful && response.body() != null) {
+                    _tokenAdded.postValue(true)
                     Log.i(TAG, "putFireBaseToken isSuccessful")
                 } else {
-                    try {
-                        val error =
-                            getError(response.errorBody()!!, response.code())
-                        Log.e(TAG, "putFireBaseToken : ${error?.message}")
-                    } catch (e: Throwable) {
-                        Log.e(TAG, "getError : ${e.message}")
-                    }
+                    val error = getError(response.errorBody(), response.code())
+                    Log.e(TAG, "registerToken: $error")
+                    _tokenAdded.postValue(false)
                 }
             }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e(TAG, "putFireBaseToken : ${t.message}")
+                _tokenAdded.postValue(false)
             }
         })
     }
 
     fun login(userName: String, password: String) {
 
-        isTurning.postValue(true)
+        _isTurning.postValue(true)
 
         repository.login(userName, password).enqueue(object : Callback<CustomMessageResponse> {
             override fun onResponse(
@@ -75,27 +80,24 @@ class LoginModel(private val repository: LoginRepository) : ViewModel() {
                 response: Response<CustomMessageResponse>
             ) {
                 if (response.isSuccessful && response.body() != null) {
-
                     Log.i(TAG, "onResponse login : ${response.body()?.message}")
-
-                    retrievedTokens.postValue(true)
-
+                    _retrievedTokens.postValue(true)
                     Log.i(TAG, "current tokens: ${repository.getCurrentTokens()}")
-                    isTurning.postValue(false)
                 } else {
                     val error = getError(response.errorBody(), response.code())
                     Log.e(TAG, "onResponse test get error message $error")
                     errorMessage.postValue(error?.message)
-                    retrievedTokens.postValue(false)
-                    isTurning.postValue(false)
+                    _retrievedTokens.postValue(false)
+
                 }
+                _isTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<CustomMessageResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure login : ${t.message}")
                 errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
-                retrievedTokens.postValue(false)
-                isTurning.postValue(false)
+                _retrievedTokens.postValue(false)
+                _isTurning.postValue(false)
             }
         })
 
