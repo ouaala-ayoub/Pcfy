@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var viewModel: HomeModel
     private lateinit var onClickListener: AnnoncesAdapter.OnAnnonceClickListener
-    private var binding: FragmentHomeBinding? = null
+    private lateinit var binding: FragmentHomeBinding
     private var annoncesList = mutableListOf<Annonce>()
 
     //    private val adBuilder = AdRequest.Builder()
@@ -83,11 +83,11 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding!!.categoryShimmerRv.apply {
+        binding.categoryShimmerRv.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.HORIZONTAL,
@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
             Log.d(TAG, "showing categories shimmer")
             showShimmerAdapter()
         }
-        binding!!.apply {
+        binding.apply {
 
 //            val adRequest = adBuilder.build()
 //            Log.d(TAG, "adRequest: $adRequest")
@@ -145,36 +145,58 @@ class HomeFragment : Fragment() {
                 showShimmerAdapter()
             }
         }
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as MainActivity).supportActionBar?.show()
-//        Thread.sleep(5000)
-
 
         viewModel.apply {
+
+            newAnnoncesAdded.observe(viewLifecycleOwner) { newAnnoncesAdded ->
+
+                Log.d(TAG, "newAnnoncesAdded: $newAnnoncesAdded ")
+
+                val scrollListener = object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        if (!recyclerView.canScrollVertically(1) &&
+                            newState == RecyclerView.SCROLL_STATE_IDLE &&
+                            !annoncesAdapter.isListEmpty() &&
+                            newAnnoncesAdded
+                        ) {
+                            Log.d(TAG, "onScrollStateChanged sending the requests")
+                            val current = categoryAdapter.getCurrentCategory()
+                            if (current == CategoryEnum.ALL.title) {
+                                addAnnoncesListAll()
+                            } else {
+                                addAnnoncesByCategory(current)
+                            }
+                        }
+                    }
+                }
+
+                binding.annonceRv.setOnScrollListener(scrollListener)
+            }
 
             categoriesList.observe(viewLifecycleOwner) { categories ->
                 categoryAdapter.setCategoriesList(categories)
                 Log.d(TAG, "hiding categories shimmer")
-                binding!!.categoryShimmerRv.hideShimmerAdapter()
+                binding.categoryShimmerRv.hideShimmerAdapter()
             }
 
             annoncesList.observe(viewLifecycleOwner) { annonces ->
-
-                Log.d(TAG, "annonces: $annonces")
                 if (annonces != null) {
-                    binding!!.swiperefresh.isRefreshing = false
-                    val annonceRv = binding!!.annonceRv.layoutManager
+                    binding.swiperefresh.isRefreshing = false
+                    val annonceRv = binding.annonceRv.layoutManager
                     val recyclerViewState =
                         annonceRv?.onSaveInstanceState()
                     annoncesAdapter.setAnnoncesListFromAdapter(annonces)
                     annonceRv?.onRestoreInstanceState(recyclerViewState)
 
                     Log.d(TAG, "hiding annonce shimmer")
-                    binding!!.annonceRv.hideShimmerAdapter()
+                    binding.annonceRv.hideShimmerAdapter()
 
                 } else {
                     Log.e(TAG, "annoncesList is $annonces")
@@ -184,16 +206,18 @@ class HomeFragment : Fragment() {
                 emptyMsg.observe(viewLifecycleOwner) { msg ->
                     Log.i(TAG, "updateIsEmpty: $msg")
                     if (msg.isEmpty()) {
-                        binding!!.noAnnonce.visibility = View.GONE
+                        binding.noAnnonce.visibility = View.GONE
                     } else {
                         if (msg == ERROR_MSG) {
-                            binding!!.apply {
+                            binding.apply {
                                 popularTv.visibility = View.GONE
                                 foruTv.visibility = View.GONE
                             }
                         }
-                        binding!!.noAnnonce.visibility = View.VISIBLE
-                        binding!!.noAnnonce.text = msg
+                        binding.noAnnonce.apply {
+                            visibility = View.VISIBLE
+                            text = msg
+                        }
                     }
                 }
 
@@ -202,47 +226,34 @@ class HomeFragment : Fragment() {
             popularsList.observe(viewLifecycleOwner) { populars ->
                 if (populars != null) {
                     popularsAdapter.setPopularsList(populars)
-                    binding!!.popularsShimmerRv.hideShimmerAdapter()
+                    binding.popularsShimmerRv.hideShimmerAdapter()
                 }
             }
 
-            binding!!.apply {
+            binding.apply {
                 swiperefresh.setOnRefreshListener {
 //                    val adRequest = adBuilder.build()
-                    val current = categoryAdapter.getCurrentCategory()
+                    val currentCategory = categoryAdapter.getCurrentCategory()
 
 //                    adView.loadAd(adRequest)
                     if (categoryAdapter.isEmptyList()) {
                         viewModel.getCategories()
                     }
-                    if (current == CategoryEnum.ALL.title) {
+                    if (currentCategory == CategoryEnum.ALL.title) {
                         getAnnoncesListAll()
                     } else {
-                        getAnnoncesByCategory(current)
+                        getAnnoncesByCategory(currentCategory)
                     }
                     getPopularAnnonces()
 
                 }
-                annonceRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        super.onScrollStateChanged(recyclerView, newState)
-                        if (!recyclerView.canScrollVertically(1) &&
-                            newState == RecyclerView.SCROLL_STATE_IDLE &&
-                            !annoncesAdapter.isListEmpty()
-                        ) {
-                            val current = categoryAdapter.getCurrentCategory()
-                            if (current == CategoryEnum.ALL.title) {
-                                addAnnoncesListAll()
-                            } else {
-                                addAnnoncesByCategory(current)
-                            }
-                        }
-                    }
-                })
+                annoncesList.observe(viewLifecycleOwner) { annonces ->
+
+                }
             }
 
             isProgressBarTurning.observe(viewLifecycleOwner) {
-                binding!!.homeProgressBar.isVisible = it
+                binding.homeProgressBar.isVisible = it
             }
 
         }
@@ -256,6 +267,5 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
     }
 }

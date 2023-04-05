@@ -22,7 +22,8 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
     private val _categoriesList = MutableLiveData<List<String>>()
     private val _emptyMsg = MutableLiveData<String>()
     private val _isProgressBarTurning = MutableLiveData<Boolean>()
-    var currentPage = 0
+    private val _newAnnoncesAdded = MutableLiveData<Boolean>()
+    private var currentPage = 0
 
     val annoncesList: LiveData<MutableList<Annonce>?>
         get() = _annoncesList
@@ -34,6 +35,8 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
         get() = _emptyMsg
     val isProgressBarTurning: LiveData<Boolean>
         get() = _isProgressBarTurning
+    val newAnnoncesAdded: LiveData<Boolean>
+        get() = _newAnnoncesAdded
 
     fun getCategories() {
         homeRepository.getCategories().enqueue(object : Callback<List<String>> {
@@ -70,10 +73,18 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "response is successful = ${response.body()!!.size}")
                     if (add) {
-                        val annoncesList = _annoncesList.value
-                        annoncesList?.addAll(response.body()!!)
-                        this@HomeModel._annoncesList.postValue(annoncesList)
+                        if (response.body()!!.isNotEmpty()) {
+                            _newAnnoncesAdded.postValue(true)
+                            val annoncesList = _annoncesList.value
+                            annoncesList?.addAll(response.body()!!)
+                            this@HomeModel._annoncesList.postValue(annoncesList)
+                        } else {
+                            Log.i(TAG, "getAnnonces onResponse: empty list")
+                            _newAnnoncesAdded.postValue(false)
+                        }
                     } else {
+                        Log.d(TAG, "getAnnonces : setting")
+                        _newAnnoncesAdded.postValue(true)
                         _annoncesList.postValue(response.body()!!.toMutableList())
                     }
 
@@ -81,7 +92,7 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
                     val error = getError(response.errorBody()!!, response.code())
                     if (error != null)
                         Log.e(TAG, "response error $error")
-
+                    _newAnnoncesAdded.postValue(false)
                     _annoncesList.postValue(null)
                 }
                 _isProgressBarTurning.postValue(false)
@@ -90,10 +101,11 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
                 Log.e(TAG, "onFailure : ${t.message}")
                 _isProgressBarTurning.postValue(false)
+                _newAnnoncesAdded.postValue(false)
                 _annoncesList.postValue(null)
             }
         })
-        currentPage ++
+        currentPage++
 
     }
 
