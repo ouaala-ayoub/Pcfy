@@ -93,27 +93,24 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
                 _annoncesList.postValue(null)
             }
         })
+        currentPage ++
 
     }
 
     fun getAnnoncesListAll() {
         getAnnoncesGeneral(add = false)
-        currentPage = 1
     }
 
     fun addAnnoncesListAll() {
         getAnnoncesGeneral(page = currentPage.toString())
-        currentPage++
     }
 
     fun addAnnoncesByCategory(category: String) {
         getAnnoncesGeneral(category = category, page = currentPage.toString())
-        currentPage++
     }
 
     fun getAnnoncesByCategory(category: String) {
         getAnnoncesGeneral(category = category, add = false)
-        currentPage = 1
     }
 
     fun getPopularAnnonces() {
