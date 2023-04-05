@@ -157,7 +157,7 @@ class HomeFragment : Fragment() {
             newAnnoncesAdded.observe(viewLifecycleOwner) { newAnnoncesAdded ->
 
                 Log.d(TAG, "newAnnoncesAdded: $newAnnoncesAdded ")
-
+                binding.annonceRv.clearOnScrollListeners()
                 val scrollListener = object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
@@ -176,8 +176,7 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-
-                binding.annonceRv.setOnScrollListener(scrollListener)
+                binding.annonceRv.addOnScrollListener(scrollListener)
             }
 
             categoriesList.observe(viewLifecycleOwner) { categories ->
