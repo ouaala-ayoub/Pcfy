@@ -52,7 +52,7 @@ class UserStepThree : Fragment(), HandleSubmitInterface {
                     addFormDataPart("city", cityField)
                 }
                 if (typeField.isNotBlank()) {
-                    addFormDataPart("type", getTypeRequestBody(typeField))
+                    addFormDataPart("role", getTypeRequestBody(typeField))
                 }
                 if (organization.isNotBlank()) {
                     addFormDataPart("brand", organization)

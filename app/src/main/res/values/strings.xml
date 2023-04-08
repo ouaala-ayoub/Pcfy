@@ -69,6 +69,9 @@
     <!--our website-->
     <string name="pcfy_website">https://pcfy.vercel.app/</string>
     <string name="pcfy_website_regles">https://pcfy.vercel.app/regles</string>
+    <string name="pcfy_customer_service_email">customerservicepcfy@gmail.com</string>
+    <string name="pcfy_instagram">http://instagram.com/pcfy_electronics</string>
+    <string name="pcfy_twitter">https://twitter.com/pcfy_electr</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
@@ -222,13 +225,21 @@
     <string name="no_description">Pas de description pour le moment</string>
     <string name="no_price">Prix non determiné</string>
 
-    <!--    test ad ids-->
-    <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="creator_image">creator_image</string>
     <string name="annonce_modify_success">Annonce modifié avec succes</string>
     <string name="confirmer_les_changement">Confirmer les changements</string>
     <string name="demand_modified_succes">Demande Modifiée avec success</string>
+
+    <string name="test">test</string>
+
+    <!--    test ad ids-->
+    <string name="annonce_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="home_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="abonnements">abonnements</string>
+    <string name="email">email</string>
+    <string name="instagram">instagram</string>
+    <string name="twitter">twitter</string>
+    <string name="coming_soon">Coming soon !!</string>
 
     <!--    real ad ids-->
     <!--                <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->

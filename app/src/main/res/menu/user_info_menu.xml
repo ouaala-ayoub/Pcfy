@@ -21,24 +21,23 @@
         android:id="@+id/settings"
         android:title="@string/settings" />
 
-<!--    <item-->
-<!--        android:id="@+id/logout_or_login"-->
-<!--        android:title="@string/se_connecter" />-->
+    <item
+        android:id="@+id/abonnements"
+        android:title="@string/abonnements" />
 
-    <!--    <item android:title="Item" />-->
     <item
         android:id="@+id/contact"
         android:title="@string/contactez_nous">
         <menu>
             <item
                 android:id="@+id/email"
-                android:title="email" />
+                android:title="@string/email" />
             <item
                 android:id="@+id/instagram"
-                android:title="instagram" />
+                android:title="@string/instagram" />
             <item
                 android:id="@+id/twitter"
-                android:title="twitter" />
+                android:title="@string/twitter" />
         </menu>
     </item>
 

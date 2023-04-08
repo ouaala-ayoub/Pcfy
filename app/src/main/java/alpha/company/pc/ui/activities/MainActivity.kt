@@ -10,6 +10,7 @@ import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.USERS_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import alpha.company.pc.utils.toast
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
@@ -31,7 +32,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
@@ -39,15 +39,8 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
-private const val TAG = "MainActivity"
 
-//val freeUser = User(
-//    "Non Authentifié",
-//    "",
-//    "",
-//    imageUrl = ""
-//)
-//var globalUserObject: User = freeUser
+private const val TAG = "MainActivity"
 var imageLoader: ImageLoader? = ImageLoader("no yet", LoadPolicy.Cache)
 
 class MainActivity : AppCompatActivity() {
@@ -87,14 +80,11 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.personal_space -> {
-                    Log.d(TAG, "onOptionsItemSelected clicked personal_space ")
-
                     if (userId != null) {
                         goToPersonalSpaceActivity(userId!!)
                     } else {
                         goToLoginActivity()
                     }
-
                 }
                 R.id.settings -> {
                     goToSettingsActivity()
@@ -104,6 +94,25 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.about -> {
                     openTheWebsite(getString(R.string.pcfy_website_regles))
+                }
+                R.id.abonnements -> {
+                    if (userId != null) {
+                        goToSubscriptionsActivity(userId!!)
+                    } else {
+                        goToLoginActivity()
+                    }
+                }
+                R.id.email -> {
+                    val email = getString(R.string.pcfy_customer_service_email)
+                    openEmailSending(email)
+                }
+                R.id.instagram -> {
+                    val appIns = getString(R.string.pcfy_instagram)
+                    openInstagramPage(appIns)
+                }
+                R.id.twitter -> {
+                    val twtUrl = getString(R.string.pcfy_twitter)
+                    openTwitterPage(twtUrl)
                 }
             }
             true
@@ -201,6 +210,45 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun openAppWithPackage(pkg: String, url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            intent.setPackage("com.twitter.android")
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Log.e(TAG, "openAppWithPackage $pkg: ${e.message}")
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(url)
+                )
+            )
+        }
+    }
+
+    private fun openTwitterPage(twtUrl: String) {
+        openAppWithPackage("com.twitter.android", twtUrl)
+    }
+
+    private fun openInstagramPage(appIns: String) {
+        openAppWithPackage("com.instagram.android", appIns)
+    }
+
+    private fun openEmailSending(email: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_EMAIL, email)
+        intent.putExtra(Intent.EXTRA_SUBJECT, "feedback")
+        intent.type = "message/rfc822"
+        startActivity(Intent.createChooser(intent, "Send Email using:"))
+    }
+
+    private fun goToSubscriptionsActivity(userId: String) {
+        val intent = Intent(this, SubscriptionsActivity::class.java)
+        intent.putExtra("userId", userId)
+        startActivity(intent)
+    }
+
     private fun goToPersonalSpaceActivity(userId: String) {
         val intent = Intent(this, PersonalSpaceActivity::class.java)
         intent.putExtra("userId", userId)
@@ -224,7 +272,6 @@ class MainActivity : AppCompatActivity() {
             val editor = sharedPreferences.edit()
             user.observe(this@MainActivity) { user ->
                 if (user != null) {
-                    Log.i(TAG, "onCreateOptionsMenu: logged_in")
                     inflater.inflate(R.menu.logged_in_options_menu, menu)
                     val itemSwitch = menu!!.findItem(R.id.light_dark)
                     itemSwitch.setActionView(R.layout.light_dark_switch)
@@ -234,7 +281,6 @@ class MainActivity : AppCompatActivity() {
                     switch?.isChecked =
                         sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
                     switch?.setOnCheckedChangeListener { _, isChecked ->
-                        Log.d(TAG, "switch: $isChecked")
                         if (isChecked) {
                             editor.putBoolean(getString(R.string.dark_mode), true).apply()
                             updateUI(sharedPreferences, switch)
@@ -245,7 +291,6 @@ class MainActivity : AppCompatActivity() {
                     }
                     return@observe
                 } else {
-                    Log.i(TAG, "onCreateOptionsMenu: logged_out")
                     inflater.inflate(R.menu.logged_out_options_menu, menu)
                     val itemSwitch = menu!!.findItem(R.id.light_dark)
                     itemSwitch.setActionView(R.layout.light_dark_switch)
@@ -253,9 +298,7 @@ class MainActivity : AppCompatActivity() {
                         itemSwitch.actionView?.findViewById<SwitchCompat>(R.id.light_dark_switch)
                     switch?.isChecked =
                         sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
-                    Log.d(TAG, "switch?.isChecked: ${switch?.isChecked}")
                     switch?.setOnCheckedChangeListener { _, isChecked ->
-                        Log.d(TAG, "switch: $isChecked")
                         if (isChecked) {
                             editor.putBoolean(getString(R.string.dark_mode), true).apply()
                             updateUI(sharedPreferences, switch)
@@ -277,7 +320,6 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI(sharedPreferences: SharedPreferences?, switchCompat: SwitchCompat?) {
         switchCompat.apply {
             val isChecked = sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
-            Log.d(TAG, "isChecked from updateUI: $isChecked")
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/subscriptions_nav_elements"
+    app:startDestination="@id/subscriptionsFragment">
+    <fragment
+        android:id="@+id/subscriptionsFragment"
+        android:name="alpha.company.pc.ui.fragments.SubscriptionsFragment"
+        android:label="fragment_subscriptions"
+        tools:layout="@layout/fragment_subscriptions" >
+        <action
+            android:id="@+id/action_subscriptionsFragment_to_subscriptionInfoFragment"
+            app:destination="@id/subscriptionInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subscriptionInfoFragment"
+        android:name="alpha.company.pc.ui.fragments.SubscriptionInfoFragment"
+        android:label="fragment_subscription_info"
+        tools:layout="@layout/fragment_subscription_info" />
+</navigation>
