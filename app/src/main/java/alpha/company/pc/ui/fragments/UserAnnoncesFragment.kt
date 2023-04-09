@@ -153,6 +153,12 @@ class UserAnnoncesFragment : Fragment() {
 
             )
 
+        binding.apply {
+            scrollTop.setOnClickListener {
+                annoncesRv.scrollToPosition(0)
+            }
+        }
+
         userAnnoncesModel.apply {
             deletedAnnonce.observe(viewLifecycleOwner) { deletedWithSuccess ->
                 if (deletedWithSuccess) {

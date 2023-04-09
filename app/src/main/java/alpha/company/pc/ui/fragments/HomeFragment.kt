@@ -128,7 +128,7 @@ class HomeFragment : Fragment() {
                 showShimmerAdapter()
 
                 scrollTop.setOnClickListener {
-                    smoothScrollToPosition(0)
+                    scrollToPosition(0)
                 }
 
             }
@@ -269,9 +269,5 @@ class HomeFragment : Fragment() {
         val intent = Intent(activity, AnnonceActivity::class.java)
         intent.putExtra("id", annonceId)
         startActivity(intent)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }
