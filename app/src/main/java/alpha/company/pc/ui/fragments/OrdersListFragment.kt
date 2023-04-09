@@ -45,7 +45,7 @@ class OrdersListFragment : Fragment() {
 
             })
         authModel =
-            AuthModel(RetrofitService.getInstance(requireContext())).also { it.auth(requireContext()) }
+            AuthModel(RetrofitService.getInstance(requireContext())).also { it.auth() }
 
         userId = activity.userId
         orderId = activity.orderId

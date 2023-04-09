@@ -1,5 +1,6 @@
 package alpha.company.pc.ui.activities
 
+import alpha.company.pc.R
 import alpha.company.pc.databinding.ActivitySubscriptionsBinding
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,10 +11,10 @@ class SubscriptionsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        binding = ActivitySubscriptionsBinding.inflate(layoutInflater)
+//        binding = ActivitySubscriptionsBinding.inflate(layoutInflater)
 
         super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
-        setContentView(binding.root)
+
+        setContentView(R.layout.activity_subscriptions)
     }
 }

@@ -64,6 +64,8 @@
                         android:gravity="center|start"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
                         android:textSize="25dp"
                         android:textStyle="bold"
                         tools:text="Title" />

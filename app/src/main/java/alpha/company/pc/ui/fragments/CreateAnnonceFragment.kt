@@ -58,8 +58,9 @@ class CreateAnnonceFragment : Fragment() {
 
         val retrofitService = RetrofitService.getInstance(requireContext())
         viewModel = CreateAnnonceModel(CreateAnnonceRepository(retrofitService))
-        authModel = AuthModel(retrofitService, null)
-        authModel.auth(requireContext())
+        authModel = AuthModel(retrofitService, null).also {
+            it.auth()
+        }
 
         (requireActivity() as MainActivity).supportActionBar?.hide()
 

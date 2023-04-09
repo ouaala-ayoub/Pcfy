@@ -7,6 +7,7 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.databinding.ActivityMainBinding
 import alpha.company.pc.ui.viewmodels.AuthModel
+import alpha.company.pc.utils.REQUEST_TIME_OUT
 import alpha.company.pc.utils.USERS_AWS_S3_LINK
 import alpha.company.pc.utils.circularProgressBar
 import alpha.company.pc.utils.toast
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var authModel: AuthModel
     private var userId: String? = null
+    private var errorMessage: String? = null
     var picasso: Picasso = Picasso.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             retrofitService,
             LoginRepository(this)
         ).apply {
-            auth(this@MainActivity)
+            auth()
         }
 
 //        picasso = Picasso.get()
@@ -144,6 +146,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         authModel.apply {
+            errorMessage.observe(this@MainActivity){ error ->
+                this@MainActivity.errorMessage = error
+            }
+
             user.observe(this@MainActivity) { user ->
                 val view = binding.navView.getHeaderView(0)
                 val userImage = view.findViewById<ImageView>(R.id.user_picture)
@@ -382,6 +388,12 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    fun auth() {
+        authModel.auth()
+    }
+
+    fun isAuthRequestTimeout(): Boolean = errorMessage == REQUEST_TIME_OUT
 
     private fun goToSettingsActivity() {
         val intent = Intent(this, SettingsActivity::class.java)

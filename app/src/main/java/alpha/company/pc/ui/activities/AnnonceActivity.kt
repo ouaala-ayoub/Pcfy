@@ -21,7 +21,7 @@ class AnnonceActivity : AppCompatActivity() {
 
 
         authModel.apply {
-            auth(this@AnnonceActivity)
+            auth()
         }
         supportActionBar?.hide()
 

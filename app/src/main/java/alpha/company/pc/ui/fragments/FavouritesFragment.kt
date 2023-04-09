@@ -41,7 +41,7 @@ class FavouritesFragment : Fragment() {
                 retrofitService
             )
         )
-        authModel = AuthModel(retrofitService, null).also { it.auth(requireContext()) }
+        authModel = AuthModel(retrofitService, null).also { it.auth() }
     }
 
     override fun onCreateView(

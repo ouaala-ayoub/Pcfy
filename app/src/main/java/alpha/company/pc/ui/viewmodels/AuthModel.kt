@@ -9,6 +9,7 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.data.repositories.TokensRepository
 import alpha.company.pc.utils.NON_AUTHENTICATED
+import alpha.company.pc.utils.REQUEST_TIME_OUT
 import alpha.company.pc.utils.getError
 import androidx.lifecycle.LiveData
 import okhttp3.ResponseBody
@@ -32,7 +33,7 @@ class AuthModel(
         get() = _user
     val isTurning: LiveData<Boolean>
         get() = _isTurning
-    val errorResponse: LiveData<String>
+    val errorMessage: LiveData<String>
         get() = _errorMessage
 
     fun getUserById(userId: String) {
@@ -55,7 +56,6 @@ class AuthModel(
 
 
     fun auth(
-        context: Context,
     ) {
 
         _isTurning.postValue(true)
@@ -83,7 +83,7 @@ class AuthModel(
                 Log.e(TAG, "auth onFailure: ${t.message}")
                 _isTurning.postValue(false)
                 _user.postValue(null)
-                _errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
+                _errorMessage.postValue(REQUEST_TIME_OUT)
             }
         })
 

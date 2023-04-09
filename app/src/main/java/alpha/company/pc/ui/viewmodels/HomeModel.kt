@@ -64,6 +64,7 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
         page: String? = null,
         add: Boolean = true
     ) {
+        Log.d(TAG, "page: $page")
         _isProgressBarTurning.postValue(true)
 
         val response = homeRepository.getAnnonces(category, searchQuery, page)
@@ -110,6 +111,7 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
     }
 
     fun getAnnoncesListAll() {
+        currentPage = 0
         getAnnoncesGeneral(add = false)
     }
 
@@ -122,6 +124,7 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
     }
 
     fun getAnnoncesByCategory(category: String) {
+        currentPage = 0
         getAnnoncesGeneral(category = category, add = false)
     }
 

@@ -24,6 +24,7 @@ import alpha.company.pc.ui.adapters.OrdersShortAdapter
 import alpha.company.pc.ui.viewmodels.SingleAnnounceCommandModel
 import alpha.company.pc.ui.viewmodels.UserAnnoncesModel
 import alpha.company.pc.utils.*
+import android.widget.SearchView
 
 private const val TAG = "UserAnnoncesFragment"
 private const val ANNONCE_DELETED_SUCCESS = "Annonce suprimée avec succès"
@@ -47,6 +48,7 @@ class UserAnnoncesFragment : Fragment() {
             )
         ).also {
 //            it.initialiseAdd(requireContext())
+            it.getAnnoncesById(userId)
         }
     }
 
@@ -56,7 +58,7 @@ class UserAnnoncesFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentUserAnnoncesBinding.inflate(inflater, container, false)
-
+        binding.userAnnoncesSearch.onActionViewExpanded()
 //        userAnnoncesModel.showAdd(requireContext())
 
         val adapter = FavouritesAdapter(
@@ -169,7 +171,6 @@ class UserAnnoncesFragment : Fragment() {
         }
 
         userAnnoncesModel.apply {
-            getAnnoncesById(userId)
             annoncesList.observe(viewLifecycleOwner) { annonces ->
 
                 binding.swiperefresh.isRefreshing = false
@@ -185,20 +186,40 @@ class UserAnnoncesFragment : Fragment() {
                         binding.isEmpty.text = ""
                     }
                     adapter.setList(annonces)
-                    Log.i(TAG, "annonces : $annonces")
+
+                    binding.userAnnoncesSearch.setOnQueryTextListener(object :
+                        SearchView.OnQueryTextListener,
+                        androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+
+                            return false
+                        }
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            val temp = annonces.filter { annonce ->
+                                annonce.title.contains(newText.toString())
+                            }
+                            adapter.setList(temp)
+                            return false
+                        }
+                    })
 
                 }
             }
         }
 
         binding.apply {
-            annoncesRv.adapter = adapter
-            annoncesRv.layoutManager = LinearLayoutManager(requireContext())
+            annoncesRv.apply {
+                this.adapter = adapter
+                layoutManager = LinearLayoutManager(requireContext())
+            }
 
             swiperefresh.setOnRefreshListener {
                 userAnnoncesModel.getAnnoncesById(userId)
 
             }
+
+
 
             userAnnoncesModel.isTurning.observe(requireActivity()) {
                 userAnnoncesProgressbar.isVisible = it
@@ -210,7 +231,9 @@ class UserAnnoncesFragment : Fragment() {
 
     private fun goToOrderPage(orderId: String) {
         val action =
-            UserAnnoncesFragmentDirections.actionUserAnnoncesFragmentToOrderPageFragment2(orderId)
+            UserAnnoncesFragmentDirections.actionUserAnnoncesFragmentToOrderPageFragment2(
+                orderId
+            )
         findNavController().navigate(action)
     }
 

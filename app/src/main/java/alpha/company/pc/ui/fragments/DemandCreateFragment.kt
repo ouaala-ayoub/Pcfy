@@ -51,8 +51,9 @@ class DemandCreateFragment : Fragment() {
 
         demandCreateModel =
             DemandCreateModel(DemandRepository(RetrofitService.getInstance(requireContext())))
-        authModel = AuthModel(RetrofitService.getInstance(requireContext()))
-        authModel.auth(requireContext())
+        authModel = AuthModel(RetrofitService.getInstance(requireContext())).also {
+            it.auth()
+        }
 
         (requireActivity() as MainActivity).supportActionBar?.hide()
 

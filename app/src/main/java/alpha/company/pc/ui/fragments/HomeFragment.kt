@@ -226,6 +226,7 @@ class HomeFragment : Fragment() {
                 if (populars != null) {
                     popularsAdapter.setPopularsList(populars)
                     binding.popularsShimmerRv.hideShimmerAdapter()
+                    binding.popularsShimmerRv
                 }
             }
 
@@ -243,6 +244,12 @@ class HomeFragment : Fragment() {
                     } else {
                         getAnnoncesByCategory(currentCategory)
                     }
+
+                    //enhance authentication
+                    val activity = requireActivity() as MainActivity
+                    if (activity.isAuthRequestTimeout())
+                        activity.auth()
+
                     getPopularAnnonces()
 
                 }
