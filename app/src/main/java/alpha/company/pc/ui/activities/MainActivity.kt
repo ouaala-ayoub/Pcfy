@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         authModel.apply {
-            errorMessage.observe(this@MainActivity){ error ->
+            errorMessage.observe(this@MainActivity) { error ->
                 this@MainActivity.errorMessage = error
             }
 
@@ -243,9 +243,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun openEmailSending(email: String) {
         val intent = Intent(Intent.ACTION_SEND)
-        intent.putExtra(Intent.EXTRA_EMAIL, email)
-        intent.putExtra(Intent.EXTRA_SUBJECT, "feedback")
-        intent.type = "message/rfc822"
+        intent.apply {
+            putExtra(Intent.EXTRA_EMAIL, email)
+            putExtra(Intent.EXTRA_SUBJECT, "feedback")
+            type = "message/rfc822"
+        }
         startActivity(Intent.createChooser(intent, "Send Email using:"))
     }
 
@@ -271,56 +273,45 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
 
-
         authModel.apply {
+            inflater.inflate(R.menu.main_bar_menu, menu)
+
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
+            val userStatus = menu!!.findItem(R.id.user_status)
 
-            val editor = sharedPreferences.edit()
+            handleThemeSwitch(menu, sharedPreferences)
+
             user.observe(this@MainActivity) { user ->
-                if (user != null) {
-                    inflater.inflate(R.menu.logged_in_options_menu, menu)
-                    val itemSwitch = menu!!.findItem(R.id.light_dark)
-                    itemSwitch.setActionView(R.layout.light_dark_switch)
-                    val switch =
-                        itemSwitch.actionView?.findViewById<SwitchCompat>(R.id.light_dark_switch)
 
-                    switch?.isChecked =
-                        sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
-                    switch?.setOnCheckedChangeListener { _, isChecked ->
-                        if (isChecked) {
-                            editor.putBoolean(getString(R.string.dark_mode), true).apply()
-                            updateUI(sharedPreferences, switch)
-                        } else {
-                            editor.putBoolean(getString(R.string.dark_mode), false).apply()
-                            updateUI(sharedPreferences, switch)
-                        }
-                    }
+                if (user != null) {
+                    userStatus.title = getString(R.string.logout)
                     return@observe
                 } else {
-                    inflater.inflate(R.menu.logged_out_options_menu, menu)
-                    val itemSwitch = menu!!.findItem(R.id.light_dark)
-                    itemSwitch.setActionView(R.layout.light_dark_switch)
-                    val switch =
-                        itemSwitch.actionView?.findViewById<SwitchCompat>(R.id.light_dark_switch)
-                    switch?.isChecked =
-                        sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
-                    switch?.setOnCheckedChangeListener { _, isChecked ->
-                        if (isChecked) {
-                            editor.putBoolean(getString(R.string.dark_mode), true).apply()
-                            updateUI(sharedPreferences, switch)
-                        } else {
-                            editor.putBoolean(getString(R.string.dark_mode), false).apply()
-                            updateUI(sharedPreferences, switch)
-                        }
-                    }
+                    userStatus.title = getString(R.string.se_connecter)
                     return@observe
                 }
             }
-
         }
-
-
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun handleThemeSwitch(menu: Menu?, sharedPreferences: SharedPreferences?) {
+        val editor = sharedPreferences?.edit()
+        val itemSwitch = menu!!.findItem(R.id.light_dark)
+        itemSwitch.setActionView(R.layout.light_dark_switch)
+        val switch =
+            itemSwitch.actionView?.findViewById<SwitchCompat>(R.id.light_dark_switch)
+        switch?.isChecked =
+            sharedPreferences!!.getBoolean(getString(R.string.dark_mode), false)
+        switch?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                editor?.putBoolean(getString(R.string.dark_mode), true)?.apply()
+                updateUI(sharedPreferences, switch)
+            } else {
+                editor?.putBoolean(getString(R.string.dark_mode), false)?.apply()
+                updateUI(sharedPreferences, switch)
+            }
+        }
     }
 
     private fun updateUI(sharedPreferences: SharedPreferences?, switchCompat: SwitchCompat?) {
@@ -366,14 +357,14 @@ class MainActivity : AppCompatActivity() {
             return true
         }
 
-        return when (item.itemId) {
+        return when (item.title) {
 
-            R.id.login -> {
+            getString(R.string.se_connecter) -> {
                 goToLoginActivity()
                 true
             }
 
-            R.id.logout -> {
+            getString(R.string.logout) -> {
                 Firebase.messaging.token.addOnCompleteListener { task ->
                     val token = task.result
                     if (userId != null) {

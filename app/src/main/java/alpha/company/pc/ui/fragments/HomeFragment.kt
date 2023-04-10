@@ -247,8 +247,13 @@ class HomeFragment : Fragment() {
 
                     //enhance authentication
                     val activity = requireActivity() as MainActivity
-                    if (activity.isAuthRequestTimeout())
-                        activity.auth()
+                    if (activity.isAuthRequestTimeout()) {
+                        activity.apply {
+//                            requireActivity().invalidateOptionsMenu()
+                            auth()
+                        }
+                    }
+
 
                     getPopularAnnonces()
 
