@@ -240,6 +240,7 @@ class AnnonceModifyFragment : Fragment() {
                         setTheCategoriesEditText(annonce.category)
                         setTheCitiesEditText(annonce.city)
                         setTheStatueEditTextView(annonce.status)
+                        setTheAvailabilityEditText(getAvailabilityMessage(annonce.isAvailable))
                         markEditText.setText(annonce.mark)
                         descriptionEditText.setText(annonce.description)
 
@@ -252,6 +253,8 @@ class AnnonceModifyFragment : Fragment() {
 //                            val newAnnonce = Annonce(
                             val title = titleEditText.text.toString()
                             val price = priceEditText.text.toString()
+                            val availability =
+                                getAvailabilityFromString(availabilityEditText.text.toString())
                             val category = categoryEditText.text.toString()
                             val status = statusEditText.text.toString()
                             val mark = markEditText.text.toString()
@@ -272,6 +275,9 @@ class AnnonceModifyFragment : Fragment() {
 
                                 if (annonce.price.toString() != price)
                                     addFormDataPart("price", price)
+
+                                if (annonce.isAvailable != availability)
+                                    addFormDataPart("isAvailable", availability.toString())
 
                                 if (annonce.category != category)
                                     addFormDataPart("category", category)
@@ -305,8 +311,6 @@ class AnnonceModifyFragment : Fragment() {
                                 }
 
                             }
-
-
 
                             updatedAnnonce.observe(viewLifecycleOwner) { annonceModified ->
 
@@ -379,6 +383,20 @@ class AnnonceModifyFragment : Fragment() {
             it.status
         }
         setTheEditText(binding.statusEditText, values)
+    }
+
+    private fun setTheAvailabilityEditText(default: String) {
+        binding.availabilityEditText.setText(default)
+        val values = listOf(getString(R.string.in_stock), getString(R.string.out_of_stock))
+        setTheEditText(binding.availabilityEditText, values)
+    }
+
+    private fun getAvailabilityMessage(availability: Boolean): String {
+        return if (availability) getString(R.string.in_stock) else getString(R.string.out_of_stock)
+    }
+
+    private fun getAvailabilityFromString(text: String): Boolean {
+        return text == getString(R.string.in_stock)
     }
 
     private fun validateTheData() {

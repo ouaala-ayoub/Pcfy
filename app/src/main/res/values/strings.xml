@@ -240,6 +240,8 @@
     <string name="instagram">instagram</string>
     <string name="twitter">twitter</string>
     <string name="coming_soon">Coming soon !!</string>
+    <string name="in_stock">En stock</string>
+    <string name="out_of_stock">Rupture de stock</string>
 
     <!--    real ad ids-->
     <!--                <string name="annonce_ad_id">ca-app-pub-8302914035567843/3587402937</string>-->

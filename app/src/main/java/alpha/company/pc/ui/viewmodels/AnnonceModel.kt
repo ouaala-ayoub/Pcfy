@@ -73,13 +73,12 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
                         Log.i(TAG, "response body: ${response.body()}")
 //                        annonceToReturn = response.body()
                         annonceToShow.postValue(response.body())
-                        isProgressBarTurning.postValue(false)
                     } else {
                         Log.i(TAG, "response error body: ${response.errorBody()}")
                         Log.i(TAG, "response raw ${response.raw()}")
                         annonceToShow.postValue(null)
-                        isProgressBarTurning.postValue(false)
                     }
+                    isProgressBarTurning.postValue(false)
                 }
 
                 override fun onFailure(call: Call<Annonce>, t: Throwable) {
@@ -100,7 +99,6 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "response body: ${response.body()}")
-                    isProgressBarTurning.postValue(false)
                     if(target == "user"){
                         user.postValue(response.body())
                     } else if (target == "seller"){
@@ -108,10 +106,10 @@ class AnnonceModel(private val annonceRepository: AnnonceRepository) : ViewModel
                     }
 
                 } else {
-                    isProgressBarTurning.postValue(false)
                     Log.i(TAG, "response error body: ${response.errorBody()}")
                     Log.i(TAG, "response raw ${response.raw()}")
                 }
+                isProgressBarTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {

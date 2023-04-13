@@ -42,6 +42,8 @@ data class Annonce(
     @SerializedName("description")
     val description: String? = null,
 
+    @SerializedName("isAvailable")
+    val isAvailable: Boolean = true,
 
     @SerializedName("createdAt")
     val createdAt: String? = null,
@@ -58,10 +60,10 @@ data class Annonce(
 
 data class Seller(
     @SerializedName("id")
-    val id: String,
+    val id: String = "",
 
     @SerializedName("name")
-    val name: String,
+    val name: String = "",
 
 //    @SerializedName("token")
 //    val token: String,

@@ -7,10 +7,7 @@ import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.databinding.ActivityMainBinding
 import alpha.company.pc.ui.viewmodels.AuthModel
-import alpha.company.pc.utils.REQUEST_TIME_OUT
-import alpha.company.pc.utils.USERS_AWS_S3_LINK
-import alpha.company.pc.utils.circularProgressBar
-import alpha.company.pc.utils.toast
+import alpha.company.pc.utils.*
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
@@ -36,6 +33,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
+import com.google.gson.Gson
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -67,7 +65,6 @@ class MainActivity : AppCompatActivity() {
         ).apply {
             auth()
         }
-
 //        picasso = Picasso.get()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -21,6 +21,7 @@ import alpha.company.pc.ui.adapters.ImagesAdapter
 import alpha.company.pc.ui.viewmodels.AnnonceModel
 import alpha.company.pc.ui.viewmodels.AuthModel
 import alpha.company.pc.utils.*
+import android.graphics.Color
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
@@ -75,7 +76,6 @@ class AnnonceFragment : Fragment() {
 
                     if (annonce != null) {
                         //bind the data to the views
-
                         try {
 //                            getSellerById(annonce.sellerId!!)
 
@@ -125,6 +125,15 @@ class AnnonceFragment : Fragment() {
                             productTitle.text = annonce.title
                             productPrice.text = getString(R.string.price, annonce.price.toString())
                             productStatus.text = getString(R.string.status, annonce.status)
+                            availability.apply {
+                                if (annonce.isAvailable) {
+                                    text = getString(R.string.in_stock)
+                                    setTextColor(Color.GREEN)
+                                } else {
+                                    text = getString(R.string.out_of_stock)
+                                    setTextColor(Color.RED)
+                                }
+                            }
 
                             val details = annonce.details
                             if (!details.isNullOrEmpty()) {
@@ -147,6 +156,7 @@ class AnnonceFragment : Fragment() {
 
                             //the seller field
                             annonce.seller.apply {
+//                                getSellerById(this.id, )
                                 Log.d(TAG, "annonce.seller: $this")
                                 defineField(sellerName, name, requireContext())
 
@@ -221,7 +231,6 @@ class AnnonceFragment : Fragment() {
                                         }
                                     }
                                 }
-
                                 orderNow.setOnClickListener {
                                     goToOrderFragment()
                                 }
@@ -286,5 +295,10 @@ class AnnonceFragment : Fragment() {
     private fun goToMainActivity() {
         val activity = requireActivity() as AnnonceActivity
         activity.finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 }

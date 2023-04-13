@@ -35,12 +35,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private var binding: FragmentLoginBinding? = null
     private lateinit var viewModel: LoginModel
-    private lateinit var loginRepository: LoginRepository
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel = LoginModel(LoginRepository(requireContext()))
     }
 
     override fun onCreateView(
@@ -48,8 +47,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        loginRepository = LoginRepository(requireContext())
-        viewModel = LoginModel(loginRepository)
+
         binding = FragmentLoginBinding.inflate(
             inflater,
             container,
@@ -115,7 +113,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             }
             R.id.sign_up -> {
                 //sign up fragment
-                goToUserFragment()
+                goToUserCreateActivity()
             }
         }
     }
@@ -139,11 +137,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
                                     it
                                 )
                             }?.id
-                        Log.d(TAG, "userId from login fragment: $userId")
                         if (userId != null) {
                             val token = task.result
-                            Log.d(TAG, "performLoginAction userId: $userId")
-                            Log.d(TAG, "performLoginAction token: $token")
                             askNotificationPermission()
                             registerToken(userId, token)
                         }
@@ -152,7 +147,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             getString(R.string.login_success),
                             Toast.LENGTH_SHORT
                         )
-                        goToMainActivity()
+                        requireActivity().finish()
                     } else {
 //                        requireContext().toast(LOGIN_FAILED, Toast.LENGTH_SHORT)
 //                    goToMainActivity()
@@ -186,7 +181,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         startActivity(intent)
     }
 
-    private fun goToUserFragment() {
+    private fun goToUserCreateActivity() {
         val intent = Intent(requireContext(), UserCreateActivity::class.java)
         startActivity(intent)
     }
@@ -232,6 +227,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
             negativeText = getString(R.string.no_thanks),
             positiveText = getString(R.string.authorise)
         ).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
 }
