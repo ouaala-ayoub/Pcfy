@@ -45,7 +45,7 @@
             android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="17sp"
-            app:icon="@drawable/ic_baseline_note_add_24"
+            app:icon="@drawable/baseline_local_offer_24"
             app:iconPadding="10dp"
             app:iconTint="@color/main_theme"
             app:strokeColor="@color/color_on_primary" />
@@ -62,7 +62,7 @@
             android:textAppearance="@style/AlataTextView"
             android:textColor="@color/color_on_primary"
             android:textSize="17sp"
-            app:icon="@drawable/ic_baseline_note_add_24"
+            app:icon="@drawable/ic_baseline_add_shopping_cart_24"
             app:iconPadding="10dp"
             app:iconTint="@color/main_theme"
             app:strokeColor="@color/color_on_primary" />

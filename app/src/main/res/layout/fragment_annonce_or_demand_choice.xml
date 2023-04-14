@@ -57,7 +57,7 @@
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:contentDescription="annonce"
-                android:src="@drawable/ic_baseline_shopping_bag_24" />
+                android:src="@drawable/baseline_local_offer_24" />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -88,7 +88,7 @@
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:contentDescription="demande"
-                android:src="@drawable/baseline_local_offer_24" />
+                android:src="@drawable/ic_baseline_add_shopping_cart_24" />
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>

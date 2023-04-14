@@ -3,27 +3,33 @@
 
     <item
         android:id="@+id/personal_space"
-        android:title="Espace Personnel" />
+        android:title="Espace Personnel"
+        android:icon="@drawable/ic_baseline_person_24"/>
 
     <item
         android:id="@+id/share"
-        android:title="@string/partager" />
+        android:title="@string/partager"
+        android:icon="@drawable/ic_baseline_share_24"/>
 
     <item
         android:id="@+id/website"
-        android:title="@string/notre_site_web" />
+        android:title="@string/notre_site_web"
+        android:icon="@drawable/ic_baseline_web_24"/>
 
     <item
         android:id="@+id/about"
-        android:title="@string/propos" />
+        android:title="@string/propos"
+        android:icon="@drawable/ic_baseline_info_24"/>
 
     <item
         android:id="@+id/settings"
-        android:title="@string/settings" />
+        android:title="@string/settings"
+        android:icon="@drawable/ic_baseline_settings_24"/>
 
     <item
         android:id="@+id/abonnements"
-        android:title="@string/abonnements" />
+        android:title="@string/abonnements"
+        android:icon="@drawable/baseline_subscriptions_24"/>
 
     <item
         android:id="@+id/contact"
@@ -31,13 +37,16 @@
         <menu>
             <item
                 android:id="@+id/email"
-                android:title="@string/email" />
+                android:title="@string/email"
+                android:icon="@drawable/baseline_email_24"/>
             <item
                 android:id="@+id/instagram"
-                android:title="@string/instagram" />
+                android:title="@string/instagram"
+                android:icon="@drawable/instagram"/>
             <item
                 android:id="@+id/twitter"
-                android:title="@string/twitter" />
+                android:title="@string/twitter"
+                android:icon="@drawable/twitter"/>
         </menu>
     </item>
 
