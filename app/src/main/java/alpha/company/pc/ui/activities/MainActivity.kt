@@ -3,6 +3,7 @@ package alpha.company.pc.ui.activities
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.ImageLoader
 import alpha.company.pc.data.models.local.LoadPolicy
+import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.databinding.ActivityMainBinding
@@ -21,6 +22,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -37,6 +39,11 @@ import com.google.gson.Gson
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 private const val TAG = "MainActivity"
@@ -51,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     private var userId: String? = null
     private var errorMessage: String? = null
     var picasso: Picasso = Picasso.get()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -325,6 +331,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        auth()
         val view = binding.navView.getHeaderView(0)
         val userImage = view.findViewById<ImageView>(R.id.user_picture)
         val circularProgressDrawable = circularProgressBar(this)

@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Annonce
+import alpha.company.pc.data.models.network.Category
 import alpha.company.pc.data.repositories.AnnonceModifyRepository
 import alpha.company.pc.utils.getError
 import okhttp3.RequestBody
@@ -19,8 +20,13 @@ private const val TAG = "AnnonceModifyModel"
 class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepository) :
     ViewModel() {
 
-    val citiesList = MutableLiveData<List<String>>()
-    val categoriesList = MutableLiveData<List<String>>()
+    private val _citiesList = MutableLiveData<List<String>>()
+    private val _categoriesList = MutableLiveData<List<Category>>()
+
+    val citiesList: LiveData<List<String>>
+        get() = getCities()
+    val categoriesList: LiveData<List<Category>>
+        get() = getCategories()
 
     val oldAnnonce = MutableLiveData<Annonce>()
     val updatedAnnonce = MutableLiveData<Boolean>()
@@ -49,11 +55,11 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
         return isValidTitle && isValidPrice
     }
 
-    fun getCities() {
+    fun getCities(): LiveData<List<String>> {
         annonceModifyRepository.getCities().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
                 if (response.isSuccessful && response.body() != null)
-                    citiesList.postValue(response.body())
+                    _citiesList.postValue(response.body())
                 else {
                     val error = getError(response.errorBody()!!, response.code())
                     if (error != null)
@@ -66,25 +72,30 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
             }
 
         })
+        return _citiesList
     }
 
-    fun getCategories() {
-        annonceModifyRepository.getCategories().enqueue(object : Callback<List<String>> {
-            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
-                if (response.isSuccessful && response.body() != null)
-                    categoriesList.postValue(response.body())
-                else {
+    fun getCategories(): MutableLiveData<List<Category>> {
+        annonceModifyRepository.getCategories().enqueue(object : Callback<List<Category>> {
+            override fun onResponse(
+                call: Call<List<Category>>,
+                response: Response<List<Category>>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    _categoriesList.postValue(response.body())
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     if (error != null)
                         Log.e(TAG, "getCategories response error $error")
                 }
             }
 
-            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 Log.e(TAG, "getCategories onFailure : ${t.message}")
             }
 
         })
+        return _categoriesList
     }
 
     fun getAnnonce(annonceId: String): LiveData<Annonce> {
@@ -133,7 +144,7 @@ class AnnonceModifyModel(private val annonceModifyRepository: AnnonceModifyRepos
                         updatedAnnonce.postValue(true)
                     } else {
                         val error = getError(response.errorBody(), response.code())
-                        Log.e(TAG, "onResponse updateAnnonceInfo : ${error}")
+                        Log.e(TAG, "onResponse updateAnnonceInfo : $error")
                         updatedAnnonce.postValue(false)
                     }
                     isTurning.postValue(false)

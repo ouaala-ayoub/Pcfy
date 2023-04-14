@@ -44,17 +44,13 @@ class OrderPageFragment : Fragment() {
             OrderPageModel(OrdersRepository(RetrofitService.getInstance(requireContext())))
 
         val orderId = activity.intent.getStringExtra("orderId")
-        Log.d(TAG, "orderId from OrderPageFragment: $orderId")
-
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (orderId == null) {
-                        Log.d(TAG, "handleOnBackPressed: ${orderId}")
                         findNavController().popBackStack()
                     } else {
-                        Log.d(TAG, "handleOnBackPressed: ${orderId}")
                         activity.finish()
                     }
                 }

@@ -58,8 +58,6 @@ class AnnonceModifyFragment : Fragment() {
 
         viewModel = annonceActivity.viewModel.also {
             it.apply {
-                getCities()
-                getCategories()
                 getAnnonce(annonceToModifyId)
             }
         }
@@ -238,6 +236,7 @@ class AnnonceModifyFragment : Fragment() {
                         titleEditText.setText(annonce.title)
                         priceEditText.setText(annonce.price.toString())
                         setTheCategoriesEditText(annonce.category)
+                        setTheSubCategoriesEditText(annonce.subCategory)
                         setTheCitiesEditText(annonce.city)
                         setTheStatueEditTextView(annonce.status)
                         setTheAvailabilityEditText(getAvailabilityMessage(annonce.isAvailable))
@@ -256,6 +255,7 @@ class AnnonceModifyFragment : Fragment() {
                             val availability =
                                 getAvailabilityFromString(availabilityEditText.text.toString())
                             val category = categoryEditText.text.toString()
+                            val subCategory = subCategoryEditText.text.toString()
                             val status = statusEditText.text.toString()
                             val mark = markEditText.text.toString()
                             val description = descriptionEditText.text.toString()
@@ -281,6 +281,9 @@ class AnnonceModifyFragment : Fragment() {
 
                                 if (annonce.category != category)
                                     addFormDataPart("category", category)
+
+                                if (annonce.subCategory != subCategory && subCategory != "-")
+                                    addFormDataPart("subCategory", subCategory)
 
                                 if (annonce.status != status)
                                     addFormDataPart("status", status)
@@ -364,7 +367,31 @@ class AnnonceModifyFragment : Fragment() {
         binding.categoryTextField.editText?.setText(default)
         //set the adapter
         viewModel.categoriesList.observe(viewLifecycleOwner) { categories ->
-            setTheEditText(binding.categoryEditText, categories)
+            val values = categories.map { category ->
+                category.category
+            }
+            setTheEditText(binding.categoryEditText, values)
+        }
+    }
+
+    private fun setTheSubCategoriesEditText(default: String) {
+        binding.subCategoryEditText.setText(default)
+        viewModel.categoriesList.observe(viewLifecycleOwner) { categories ->
+            val subCategoriesDefault = categories.find { category ->
+                category.subcategories.contains(default)
+            }?.subcategories
+            setTheEditText(binding.subCategoryEditText, subCategoriesDefault!!)
+
+            binding.categoryEditText.doOnTextChanged { text, _, _, _ ->
+                val subCategories = categories.find { category ->
+                    category.category == text.toString()
+                }?.subcategories
+                if (!subCategories.isNullOrEmpty()) {
+                    setTheEditText(binding.subCategoryEditText, subCategories)
+                } else {
+                    setTheEditText(binding.subCategoryEditText, listOf("-"))
+                }
+            }
         }
     }
 

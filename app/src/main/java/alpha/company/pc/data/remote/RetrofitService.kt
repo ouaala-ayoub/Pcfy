@@ -33,7 +33,7 @@ interface RetrofitService {
 
 
     @GET("announces/categories")
-    fun getCategories(): Call<List<String>>
+    fun getCategories(): Call<List<Category>>
 
     @GET("announces")
     fun getAllAnnonces(

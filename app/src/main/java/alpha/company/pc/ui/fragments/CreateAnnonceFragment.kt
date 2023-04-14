@@ -149,6 +149,7 @@ class CreateAnnonceFragment : Fragment() {
                     setTheStatueEditTextView()
                     setTheCityEditText()
                     setTheCategoriesEditText()
+                    setTheSubCategoriesEditText()
                     validateTheData()
 
                     binding!!.apply {
@@ -200,6 +201,13 @@ class CreateAnnonceFragment : Fragment() {
                                                     "seller[picture]",
                                                     user.imageUrl
                                                 )
+                                            }
+                                            if (subCategoryEditText.text.toString() != "-") {
+                                                builder
+                                                    .addFormDataPart(
+                                                        "subCategory",
+                                                        subCategoryEditText.text.toString()
+                                                    )
                                             }
 
                                             val job = lifecycleScope.async {
@@ -371,7 +379,25 @@ class CreateAnnonceFragment : Fragment() {
 
     private fun setTheCategoriesEditText() {
         viewModel.categoriesList.observe(viewLifecycleOwner) { categories ->
-            setTheEditText(binding!!.categoryEditText, categories)
+            val values = categories.map { category ->
+                category.category
+            }
+            setTheEditText(binding!!.categoryEditText, values)
+        }
+    }
+
+    private fun setTheSubCategoriesEditText() {
+        viewModel.categoriesList.observe(viewLifecycleOwner) { categories ->
+            binding!!.categoryEditText.doOnTextChanged { text, _, _, _ ->
+                val subCategories = categories.find { category ->
+                    category.category == text.toString()
+                }?.subcategories
+                if (!subCategories.isNullOrEmpty()) {
+                    setTheEditText(binding!!.subCategoryEditText, subCategories)
+                } else {
+                    setTheEditText(binding!!.subCategoryEditText, listOf("-"))
+                }
+            }
         }
     }
 
@@ -421,6 +447,10 @@ class CreateAnnonceFragment : Fragment() {
 
             categoryEditText.doOnTextChanged { text, _, _, _ ->
                 viewModel.categoryLiveData.value = text.toString()
+            }
+
+            subCategoryEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.subCategoryLiveData.value = text.toString()
             }
 
             cityEditText.doOnTextChanged { text, _, _, _ ->

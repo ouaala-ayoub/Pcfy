@@ -18,6 +18,9 @@ data class Annonce(
     @SerializedName("category")
     val category: String,
 
+    @SerializedName("subCategory")
+    val subCategory: String,
+
     @SerializedName("status")
     val status: String,
 

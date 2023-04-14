@@ -43,10 +43,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    tools:listitem="@layout/single_image_modify"
-                    tools:orientation="horizontal"
+                    android:overScrollMode="never"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:overScrollMode="never" />
+                    tools:listitem="@layout/single_image_modify"
+                    tools:orientation="horizontal" />
             </LinearLayout>
 
 
@@ -166,6 +166,27 @@
                     android:fontFamily="@font/alata"
                     android:inputType="none"
                     android:labelFor="@id/categoryTextField"
+                    android:lines="1"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/subCategoryTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
+                android:hint="SubCategorie">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/subCategoryEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata"
+                    android:inputType="none"
+                    android:labelFor="@id/subCategoryTextField"
                     android:lines="1"
                     android:textSize="40sp"
                     android:textStyle="bold" />

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Annonce
+import alpha.company.pc.data.models.network.Category
 import alpha.company.pc.data.repositories.HomeRepository
 import alpha.company.pc.utils.getError
 import androidx.lifecycle.LiveData
@@ -39,18 +40,24 @@ class HomeModel(private val homeRepository: HomeRepository) : ViewModel() {
         get() = _newAnnoncesAdded
 
     fun getCategories() {
-        homeRepository.getCategories().enqueue(object : Callback<List<String>> {
-            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
-                if (response.isSuccessful && response.body() != null)
-                    _categoriesList.postValue(response.body())
-                else {
+        homeRepository.getCategories().enqueue(object : Callback<List<Category>> {
+            override fun onResponse(
+                call: Call<List<Category>>,
+                response: Response<List<Category>>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    val categoriesList = response.body()?.map { category ->
+                        category.category
+                    }
+                    _categoriesList.postValue(categoriesList!!)
+                } else {
                     val error = getError(response.errorBody()!!, response.code())
                     if (error != null)
                         Log.e(TAG, "getCategories response error $error")
                 }
             }
 
-            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 Log.e(TAG, "getCategories onFailure : ${t.message}")
             }
 

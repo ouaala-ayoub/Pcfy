@@ -1,17 +1,6 @@
 package alpha.company.pc.ui.fragments
 
 import alpha.company.pc.data.models.network.Annonce
-import android.content.Intent
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import alpha.company.pc.data.models.network.CategoryEnum
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.HomeRepository
@@ -23,6 +12,19 @@ import alpha.company.pc.ui.adapters.CategoryAdapter
 import alpha.company.pc.ui.adapters.PopularsAdapter
 import alpha.company.pc.ui.viewmodels.HomeModel
 import alpha.company.pc.utils.ERROR_MSG
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
+
 
 private const val NUM_ROWS = 2
 private const val TAG = "HomeFragment"
@@ -186,6 +188,13 @@ class HomeFragment : Fragment() {
             }
 
             annoncesList.observe(viewLifecycleOwner) { annonces ->
+                //handle collapsing bar behaviour
+                if (annonces.isNullOrEmpty()) {
+                    disableScroll()
+                } else {
+                    enableScroll()
+                }
+
                 if (annonces != null) {
                     binding.swiperefresh.isRefreshing = false
                     val annonceRv = binding.annonceRv.layoutManager
@@ -274,5 +283,20 @@ class HomeFragment : Fragment() {
         val intent = Intent(activity, AnnonceActivity::class.java)
         intent.putExtra("id", annonceId)
         startActivity(intent)
+    }
+
+    private fun enableScroll() {
+        val params = binding.collapsingBar.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = (
+                AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                        or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+                )
+        binding.collapsingBar.layoutParams = params
+    }
+
+    private fun disableScroll() {
+        val params = binding.collapsingBar.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
+        binding.collapsingBar.layoutParams = params
     }
 }
