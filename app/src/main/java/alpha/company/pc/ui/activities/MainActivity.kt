@@ -3,7 +3,6 @@ package alpha.company.pc.ui.activities
 import alpha.company.pc.R
 import alpha.company.pc.data.models.local.ImageLoader
 import alpha.company.pc.data.models.local.LoadPolicy
-import alpha.company.pc.data.models.network.Annonce
 import alpha.company.pc.data.remote.RetrofitService
 import alpha.company.pc.data.repositories.LoginRepository
 import alpha.company.pc.databinding.ActivityMainBinding
@@ -22,7 +21,6 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -35,15 +33,9 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
-import com.google.gson.Gson
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 private const val TAG = "MainActivity"
@@ -247,11 +239,19 @@ class MainActivity : AppCompatActivity() {
     private fun openEmailSending(email: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.apply {
-            putExtra(Intent.EXTRA_EMAIL, email)
-            putExtra(Intent.EXTRA_SUBJECT, "feedback")
             type = "message/rfc822"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            putExtra(Intent.EXTRA_SUBJECT, "feedback")
         }
-        startActivity(Intent.createChooser(intent, "Send Email using:"))
+        try {
+            startActivity(Intent.createChooser(intent, "Send mail..."))
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(
+                this,
+                "There are no email clients installed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun goToSubscriptionsActivity(userId: String) {
