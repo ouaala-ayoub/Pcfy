@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.PasswordRequest
 import alpha.company.pc.data.repositories.UserInfoRepository
 import alpha.company.pc.utils.getError
+import androidx.lifecycle.LiveData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,9 +18,16 @@ private const val ERROR_PASSWORD = "Données incorrectes"
 
 class ChangePasswordModel(private val userInfoRepository: UserInfoRepository) : ViewModel() {
 
-    val passwordModified = MutableLiveData<Boolean>()
-    val isTurning = MutableLiveData<Boolean>()
-    val errorMessage = MutableLiveData<String>()
+    private val _passwordModified = MutableLiveData<Boolean>()
+    private val _isTurning = MutableLiveData<Boolean>()
+    private val _errorMessage = MutableLiveData<String>()
+
+    val passwordModified: LiveData<Boolean>
+        get() = _passwordModified
+    val isTurning: LiveData<Boolean>
+        get() = _isTurning
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
 
     val oldPassword = MutableLiveData<String>("")
     val newPassword = MutableLiveData<String>("")
@@ -55,7 +63,7 @@ class ChangePasswordModel(private val userInfoRepository: UserInfoRepository) : 
 
     fun changePassword(userId: String, passwords: PasswordRequest) {
 
-        isTurning.postValue(true)
+        _isTurning.postValue(true)
 
         userInfoRepository.changePassword(userId, passwords)
             .enqueue(object : Callback<ResponseBody> {
@@ -64,34 +72,34 @@ class ChangePasswordModel(private val userInfoRepository: UserInfoRepository) : 
                     response: Response<ResponseBody>
                 ) {
                     if (response.isSuccessful && response.body() != null) {
-                        passwordModified.postValue(true)
+                        _passwordModified.postValue(true)
                     } else {
                         try {
 
                             if (response.code() == 500) {
                                 val error = getError(response.errorBody()!!, response.code())
                                 if (error?.message == "incorrect Password") {
-                                    errorMessage.postValue(ERROR_PASSWORD)
+                                    _errorMessage.postValue(ERROR_PASSWORD)
                                 } else {
-                                    errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
+                                    _errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
                                 }
 
                             }
                         } catch (e: Throwable) {
-                            errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
+                            _errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
                         }
 
-                        passwordModified.postValue(false)
+                        _passwordModified.postValue(false)
 
                     }
-                    isTurning.postValue(false)
+                    _isTurning.postValue(false)
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.e(TAG, "onFailure: ")
-                    isTurning.postValue(false)
-                    passwordModified.postValue(false)
-                    errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
+                    Log.e(TAG, "onFailure: ${t.message}")
+                    _isTurning.postValue(false)
+                    _passwordModified.postValue(false)
+                    _errorMessage.postValue(alpha.company.pc.utils.ERROR_MSG)
                 }
 
             })

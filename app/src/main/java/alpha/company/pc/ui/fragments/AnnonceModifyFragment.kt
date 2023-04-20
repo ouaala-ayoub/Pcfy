@@ -388,8 +388,10 @@ class AnnonceModifyFragment : Fragment() {
                 }?.subcategories
                 if (!subCategories.isNullOrEmpty()) {
                     setTheEditText(binding.subCategoryEditText, subCategories)
+                    binding.subCategoryEditText.setText(subCategories[0])
                 } else {
                     setTheEditText(binding.subCategoryEditText, listOf("-"))
+                    binding.subCategoryEditText.setText("-")
                 }
             }
         }

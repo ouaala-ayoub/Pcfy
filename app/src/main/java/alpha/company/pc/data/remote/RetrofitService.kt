@@ -17,13 +17,13 @@ interface RetrofitService {
     @GET("ayoub")
     fun test(): Call<ResponseBody>
 
-    //    @GET("infos")
-//
-//    fun getInfos(): Call<ResponseBody>
     //cities
     @GET("cities")
     fun getCities(): Call<List<String>>
-    // Announces
+
+    // numPages
+    @GET("announces/pages")
+    fun getNumPages(): Call<InfoResponse>
 
     //    @HTTP(method = "DELETE", path = "announces/{id}", hasBody = true)
     @DELETE("announces/{id}")
@@ -45,7 +45,7 @@ interface RetrofitService {
         @Query("n") filterByDate: String? = null,
         @Query("v") visited: String? = null,
         @Query("pg") page: String? = null
-    ): Call<List<Annonce>>
+    ): Call<AnnoncesResponse>
 
     @GET("announces/{id}")
     fun getAnnonceById(@Path("id") annonceId: String): Call<Annonce>

@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Annonce
-import alpha.company.pc.data.models.network.User
 import alpha.company.pc.data.repositories.FavouritesRepository
+import androidx.lifecycle.LiveData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,35 +19,44 @@ class FavouritesModel(
     private val favouritesRepository: FavouritesRepository,
 ) : ViewModel() {
 
-    var favouritesListLiveData = MutableLiveData<MutableList<Annonce>?>()
-    var deletedWithSuccess = MutableLiveData<Boolean>()
     private val errorMessage = MutableLiveData<String>()
-    val emptyMsg = MutableLiveData<String>()
-    val seller = MutableLiveData<User>()
-    val isProgressBarTurning = MutableLiveData<Boolean>()
+    private var _favouritesListLiveData = MutableLiveData<MutableList<Annonce>?>()
+    private var _deletedWithSuccess = MutableLiveData<Boolean>()
+    private val _emptyMsg = MutableLiveData<String>()
+    private val _isProgressBarTurning = MutableLiveData<Boolean>()
+
+    val favouritesListLiveData: LiveData<MutableList<Annonce>?>
+        get() = _favouritesListLiveData
+    val deletedWithSuccess: LiveData<Boolean>
+        get() = _deletedWithSuccess
+    val emptyMsg: LiveData<String>
+        get() = _emptyMsg
+    val isProgressBarTurning: LiveData<Boolean>
+        get() = _isProgressBarTurning
+
 
     fun getFavourites(userId: String) {
 
-        isProgressBarTurning.postValue(true)
+        _isProgressBarTurning.postValue(true)
 
         favouritesRepository.getFavourites(userId).enqueue(object : Callback<List<Annonce>> {
             override fun onResponse(call: Call<List<Annonce>>, response: Response<List<Annonce>>) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.i(TAG, "onResponse getFavourites: ${response.body()}")
-                    favouritesListLiveData.postValue((response.body()!!).toMutableList())
+                    _favouritesListLiveData.postValue((response.body()!!).toMutableList())
                 } else {
                     Log.e(TAG, "error body = ${response.errorBody()}")
                     Log.e(TAG, "error raw = ${response.raw()}")
-                    favouritesListLiveData.postValue(null)
+                    _favouritesListLiveData.postValue(null)
                 }
-                isProgressBarTurning.postValue(false)
+                _isProgressBarTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Annonce>>, t: Throwable) {
                 Log.e(TAG, "onFailure getFavourites : ${t.message}")
                 errorMessage.postValue(t.message)
-                favouritesListLiveData.postValue(null)
-                isProgressBarTurning.postValue(false)
+                _favouritesListLiveData.postValue(null)
+                _isProgressBarTurning.postValue(false)
             }
         })
     }
@@ -55,41 +64,44 @@ class FavouritesModel(
 
     fun deleteFavourite(userId: String, favouriteIdToDelete: String): MutableLiveData<Boolean> {
 
-        isProgressBarTurning.postValue(true)
+        _isProgressBarTurning.postValue(true)
 
         favouritesRepository.deleteFavourite(userId, favouriteIdToDelete)
             .enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
                     if (response.code() == 200) {
-                        deletedWithSuccess.postValue(true)
-                        val favourites = favouritesListLiveData.value
+                        _deletedWithSuccess.postValue(true)
+                        val favourites = _favouritesListLiveData.value
                         favourites?.removeAll { annonce ->
                             annonce.id == favouriteIdToDelete
                         }
-                        favouritesListLiveData.postValue(favourites)
+                        _favouritesListLiveData.postValue(favourites)
                     } else {
 //                        deletedWithSuccess.postValue(false)
                     }
-                    isProgressBarTurning.postValue(false)
+                    _isProgressBarTurning.postValue(false)
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG, "deleteFavourite onFailure: ${t.message}")
 //                    deletedWithSuccess.postValue(false)
-                    isProgressBarTurning.postValue(false)
+                    _isProgressBarTurning.postValue(false)
                 }
 
             })
-        return deletedWithSuccess
+        return _deletedWithSuccess
     }
 
     fun updateIsEmpty() {
-        if (favouritesListLiveData.value?.isEmpty() == true) {
-            emptyMsg.postValue(NO_ANNONCE)
-        } else if (favouritesListLiveData.value == null) {
-            emptyMsg.postValue(ERROR_MSG)
+        if (_favouritesListLiveData.value?.isEmpty() == true) {
+            _emptyMsg.postValue(NO_ANNONCE)
+        } else if (_favouritesListLiveData.value == null) {
+            _emptyMsg.postValue(ERROR_MSG)
         } else {
-            emptyMsg.postValue("")
+            _emptyMsg.postValue("")
         }
     }
 

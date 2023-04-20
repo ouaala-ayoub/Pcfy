@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import alpha.company.pc.data.models.network.Order
 import alpha.company.pc.data.repositories.OrdersRepository
 import alpha.company.pc.utils.INTERSTITIAL_ORDER_CLICKED_ID
+import androidx.lifecycle.LiveData
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -23,29 +24,36 @@ private const val TAG = "FullOrdersModel"
 class FullOrdersModel(private val ordersRepository: OrdersRepository) : ViewModel() {
 
     private var mInterstitialAd: InterstitialAd? = null
-    val isEmpty = MutableLiveData<Boolean>()
-    val sellerOrders = MutableLiveData<List<Order>?>()
-    val isTurning = MutableLiveData<Boolean>()
+    private val _isEmpty = MutableLiveData<Boolean>()
+    private val _sellerOrders = MutableLiveData<List<Order>?>()
+    private val _isTurning = MutableLiveData<Boolean>()
+
+    val isEmpty: LiveData<Boolean>
+        get() = _isEmpty
+    val sellerOrders: LiveData<List<Order>?>
+        get() = _sellerOrders
+    val isTurning: LiveData<Boolean>
+        get() = _isTurning
 
     fun getSellerOrders(sellerId: String) {
 
-        isTurning.postValue(true)
+        _isTurning.postValue(true)
 
         ordersRepository.getSellerOrders(sellerId).enqueue(object : Callback<List<Order>> {
             override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
                 if (response.isSuccessful && response.body() != null) {
-                    sellerOrders.postValue(response.body())
+                    _sellerOrders.postValue(response.body())
                     updateIsEmpty(response.body()!!)
                 } else {
-                    sellerOrders.postValue(null)
+                    _sellerOrders.postValue(null)
                 }
-                isTurning.postValue(false)
+                _isTurning.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Order>>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message}")
-                sellerOrders.postValue(null)
-                isTurning.postValue(false)
+                _sellerOrders.postValue(null)
+                _isTurning.postValue(false)
             }
 
         })
@@ -114,6 +122,6 @@ class FullOrdersModel(private val ordersRepository: OrdersRepository) : ViewMode
 
 
     private fun updateIsEmpty(list: List<Order>) {
-        isEmpty.postValue(list.isEmpty())
+        _isEmpty.postValue(list.isEmpty())
     }
 }

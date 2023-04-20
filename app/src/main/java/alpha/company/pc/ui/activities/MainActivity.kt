@@ -246,6 +246,7 @@ class MainActivity : AppCompatActivity() {
         try {
             startActivity(Intent.createChooser(intent, "Send mail..."))
         } catch (ex: ActivityNotFoundException) {
+            Log.e(TAG, "openEmailSending: ${ex.message}")
             Toast.makeText(
                 this,
                 "There are no email clients installed.",

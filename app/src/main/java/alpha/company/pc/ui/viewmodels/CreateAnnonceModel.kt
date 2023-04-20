@@ -19,9 +19,17 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
     ViewModel() {
 
     private val errorMessage = MutableLiveData<String>()
-    val requestSuccessful = MutableLiveData<Boolean>()
-    val categoriesList = MutableLiveData<List<Category>>()
-    val citiesList = MutableLiveData<List<String>>()
+    private val _requestSuccessful = MutableLiveData<Boolean>()
+    private val _categoriesList = MutableLiveData<List<Category>>()
+    private val _citiesList = MutableLiveData<List<String>>()
+
+    val requestSuccessful: LiveData<Boolean>
+        get() = _requestSuccessful
+    val categoriesList: LiveData<List<Category>>
+        get() = _categoriesList
+    val citiesList: LiveData<List<String>>
+        get() = _citiesList
+
     private val form = FormData()
     val titleLiveData = form.titleLiveData
     val priceLiveData = form.priceLiveData
@@ -43,7 +51,7 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
         createAnnonceRepository.getCities().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
                 if (response.isSuccessful && response.body() != null)
-                    citiesList.postValue(response.body())
+                    _citiesList.postValue(response.body())
                 else {
                     val error = getError(response.errorBody()!!, response.code())
                     if (error != null)
@@ -65,9 +73,9 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                 response: Response<List<Category>>
             ) {
                 if (response.isSuccessful && response.body() != null) {
-                    categoriesList.postValue(response.body())
+                    _categoriesList.postValue(response.body())
                 } else {
-                    val error = getError(response.errorBody()!!, response.code())
+                    val error = getError(response.errorBody(), response.code())
                     if (error != null)
                         Log.e(TAG, "getCategories response error $error")
                 }
@@ -94,12 +102,12 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                     if (response.isSuccessful && response.body()?.objectId != null) {
 
                         Log.i(TAG, "addAnnonce response body is ${response.body()}")
-                        requestSuccessful.postValue(true)
+                        _requestSuccessful.postValue(true)
 
                     } else {
                         val error = response.errorBody()?.let { getError(it, response.code()) }
                         Log.e(TAG, "onResponse addAnnonce : $error")
-                        requestSuccessful.postValue(false)
+                        _requestSuccessful.postValue(false)
                     }
                     isTurning.postValue(false)
                 }
@@ -107,12 +115,12 @@ class CreateAnnonceModel(private val createAnnonceRepository: CreateAnnonceRepos
                 override fun onFailure(call: Call<IdResponse>, t: Throwable) {
                     Log.e(TAG, "onFailure addAnnonce ${t.message!!}")
                     errorMessage.postValue(t.message)
-                    requestSuccessful.postValue(false)
+                    _requestSuccessful.postValue(false)
                     isTurning.postValue(false)
                 }
             })
 
-        return requestSuccessful
+        return _requestSuccessful
     }
 
 }

@@ -46,9 +46,7 @@ class HomeFragment : Fragment() {
 
         viewModel = HomeModel(HomeRepository(retrofitService)).also {
             it.apply {
-                getCategories()
-                getPopularAnnonces()
-                getAnnoncesListAll()
+                getNumPages()
             }
         }
 
@@ -68,18 +66,34 @@ class HomeFragment : Fragment() {
             object : CategoryAdapter.OnCategoryClickedListener {
                 override fun onCategoryClicked(title: String) {
                     annoncesAdapter.setAnnoncesListFromAdapter(listOf())
-                    if (title == CategoryEnum.ALL.title) {
-                        viewModel.apply {
-                            getAnnoncesListAll()
-                        }
-                    } else {
-                        viewModel.apply {
-                            getAnnoncesByCategory(title)
+                    viewModel.apply {
+                        pagesList.observe(viewLifecycleOwner) { pagesList ->
+                            Log.d(TAG, "onCategoryClicked: observer")
+                            val firstPage = pagesList[0].toString()
+                            if (title == CategoryEnum.ALL.title) {
+                                viewModel.apply {
+                                    getAnnoncesListAll(firstPage)
+                                }
+                            } else {
+                                viewModel.apply {
+                                    getAnnoncesByCategory(title)
+                                }
+                            }
                         }
                     }
                 }
             }
         )
+    }
+
+    fun RecyclerView.handleRefreshWithScrolling() {
+        this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val isRvDragging = newState == RecyclerView.SCROLL_STATE_DRAGGING
+                binding.swiperefresh.isEnabled = !isRvDragging
+            }
+        })
     }
 
     override fun onCreateView(
@@ -88,6 +102,10 @@ class HomeFragment : Fragment() {
     ): View {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+//        viewModel.pagesList.observe(viewLifecycleOwner) { pagesList ->
+//            viewModel.getAnnoncesListAll(pagesList[0].toString())
+//        }
 
         binding.categoryShimmerRv.apply {
             layoutManager = LinearLayoutManager(
@@ -107,17 +125,10 @@ class HomeFragment : Fragment() {
 
             vAppBar.addOnOffsetChangedListener { _, verticalOffset ->
                 val isScreenOnTop = verticalOffset == 0
-                Log.d(TAG, "addOnOffsetChangedListener isScreenOnTop : $isScreenOnTop")
                 swiperefresh.isEnabled = isScreenOnTop
             }
-            popularsShimmerRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    val isRvDragging = newState == RecyclerView.SCROLL_STATE_DRAGGING
-                    swiperefresh.isEnabled = !isRvDragging
-                    Log.d(TAG, "onScrollStateChanged isRvDragging : $isRvDragging")
-                }
-            })
+            popularsShimmerRv.handleRefreshWithScrolling()
+            categoryShimmerRv.handleRefreshWithScrolling()
 
             //setting the categories list
 
@@ -168,12 +179,17 @@ class HomeFragment : Fragment() {
                             !annoncesAdapter.isListEmpty() &&
                             newAnnoncesAdded
                         ) {
-                            Log.d(TAG, "onScrollStateChanged sending the requests")
                             val current = categoryAdapter.getCurrentCategory()
-                            if (current == CategoryEnum.ALL.title) {
-                                addAnnoncesListAll()
-                            } else {
-                                addAnnoncesByCategory(current)
+                            pagesList.observe(viewLifecycleOwner) { pagesList ->
+                                Log.d(TAG, "onScrollStateChanged: observer")
+                                if (current == CategoryEnum.ALL.title) {
+                                    if (pagesList.lastIndex >= currentIndex) {
+                                        val currentPage = pagesList[currentIndex].toString()
+                                        addAnnoncesListAll(currentPage)
+                                    }
+                                } else {
+                                    addAnnoncesByCategory(current, currentIndex.toString())
+                                }
                             }
                         }
                     }
@@ -235,7 +251,6 @@ class HomeFragment : Fragment() {
                 if (populars != null) {
                     popularsAdapter.setPopularsList(populars)
                     binding.popularsShimmerRv.hideShimmerAdapter()
-                    binding.popularsShimmerRv
                 }
             }
 
@@ -248,12 +263,21 @@ class HomeFragment : Fragment() {
                     if (categoryAdapter.isEmptyList()) {
                         viewModel.getCategories()
                     }
-                    if (currentCategory == CategoryEnum.ALL.title) {
-                        getAnnoncesListAll()
-                    } else {
-                        getAnnoncesByCategory(currentCategory)
+                    viewModel.apply {
+                        pagesList.observe(viewLifecycleOwner) { pagesList ->
+                            Log.d(TAG, "swiperefresh: observer")
+                            val firstPage = pagesList[0].toString()
+                            if (currentCategory == CategoryEnum.ALL.title) {
+                                viewModel.apply {
+                                    getAnnoncesListAll(firstPage)
+                                }
+                            } else {
+                                viewModel.apply {
+                                    getAnnoncesByCategory(currentCategory)
+                                }
+                            }
+                        }
                     }
-
                     //enhance authentication
                     val activity = requireActivity() as MainActivity
                     if (activity.isAuthRequestTimeout()) {
@@ -263,13 +287,11 @@ class HomeFragment : Fragment() {
                         }
                     }
 
-
+                    //popular annonces
                     getPopularAnnonces()
 
                 }
-                annoncesList.observe(viewLifecycleOwner) { annonces ->
 
-                }
             }
 
             isProgressBarTurning.observe(viewLifecycleOwner) {

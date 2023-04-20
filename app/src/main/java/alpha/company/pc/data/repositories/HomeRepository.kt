@@ -6,9 +6,10 @@ import alpha.company.pc.data.remote.RetrofitService
 import retrofit2.Call
 
 class HomeRepository(private val retrofitService: RetrofitService) {
-    fun getAnnonces(category: String?, searchKey: String?, page: String?): Call<List<Annonce>> =
+    fun getAnnonces(category: String?, searchKey: String?, page: String?) =
         retrofitService.getAllAnnonces(category, searchKey, page = page)
 
+    fun getNumPages() = retrofitService.getNumPages()
     fun getAnnoncesByCategory(category: String) =
         retrofitService.getAllAnnonces(category)
 
